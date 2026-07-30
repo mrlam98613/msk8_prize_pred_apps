@@ -54,8 +54,8 @@ RUN crontab /tmp/crontab.txt
 
 
 
-# 預設開放 8501 (Streamlit) 及 8080 (Flask/Gunicorn)
-EXPOSE 8501 8080
+# 預設開放 8502 (Streamlit) 及 8080 (Flask/Gunicorn)
+EXPOSE 8502 8080
 
 # 啟動 cron 和 Streamlit
-CMD service cron start && exec streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+CMD service cron start && exec streamlit run streamlit_app.py --server.port=8502 --server.address=0.0.0.0
