@@ -2,6 +2,7 @@ import pandas as pd
 from pathlib import Path
 import res_func_num_convert_RBG_Dict
 import os
+from typing import Any, Optional, cast
 
 '''
 14期不出現：死號，排除
@@ -15,8 +16,13 @@ import os
 # 取得目前檔案所在目錄
 current_dir = Path(__file__).resolve().parent
 
+ColorBallDict = dict[int, list[int]]
+ColorSubGroupDict = dict[int, dict[str, list[int]]]
+MissingWindowDict = dict[int, dict[str, set[int]]]
+RankedColorGroup = tuple[int, str, list[int]]
+
 # 讀取歷史開獎資料，包含日期和號碼。
-def load_data_func():
+def load_data_func() -> pd.DataFrame:
     df_ = pd.read_csv(
         current_dir.parent / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
     )
@@ -24,15 +30,14 @@ def load_data_func():
     return df_all
 
 
-def gen_RBG_1To49_group_list():
+def gen_RBG_1To49_group_list() -> ColorBallDict:
     ''' 自生產生 1-49 號球的 RBG 分組字典，key 是顏色索引（0=R, 1=B, 2=G），value 是該顏色的號碼列表。'''
     num_list = [num for num in range(1, 50)]
-    rbg_123_group = res_func_num_convert_RBG_Dict.res_List_To_rbg_Dict_func(num_list)
-    return rbg_123_group
+    return cast(ColorBallDict, res_func_num_convert_RBG_Dict.res_List_To_rbg_Dict_func(num_list))
    
     
     # 回傳指定日期前的窗口期數集合，以及該窗口內的 RBG 色球集合。
-def res_nDate_getPass_nRn_func(ndate, window_nRn, included_last_nRn=True):
+def res_nDate_getPass_nRn_func(ndate: Any, window_nRn: int, included_last_nRn: bool = True) -> pd.DataFrame:
     df_all = load_data_func()
     df = pd.DataFrame(df_all)
     if included_last_nRn:
@@ -43,17 +48,22 @@ def res_nDate_getPass_nRn_func(ndate, window_nRn, included_last_nRn=True):
     return get_pass_df
 
 # 將窗口期數集合，轉成 list array
-def get_x_val_list_func(res_df):
+def get_x_val_list_func(res_df: pd.DataFrame) -> Any:
     dfs = pd.DataFrame(res_df)
     res_df_list = dfs.iloc[:, 1:8].values # 取 N1..N6 + N7 的號碼列，轉成 numpy array，再轉成 list
     return res_df_list
 
-def sort_rbg_groups_by_count(r_balls, b_balls, g_balls, sel_colors=None):
+def sort_rbg_groups_by_count(
+    r_balls: Any,
+    b_balls: Any,
+    g_balls: Any,
+    sel_colors: Optional[list[int]] = None,
+) -> tuple[list[RankedColorGroup], list[int]]:
     """按 R/B/G 每色球數由多至少排序，同數量時維持 R、B、G 順序。"""
     if sel_colors is None:
         sel_colors = [1, 2, 3]
 
-    color_groups = [
+    color_groups: list[RankedColorGroup] = [
         (1, "R", list(r_balls)),
         (2, "B", list(b_balls)),
         (3, "G", list(g_balls)),
@@ -62,24 +72,24 @@ def sort_rbg_groups_by_count(r_balls, b_balls, g_balls, sel_colors=None):
         [group for group in color_groups if group[0] in sel_colors],
         key=lambda group: (-len(group[2]), group[0]),
     )
-    ranked_balls = []
+    ranked_balls: list[int] = []
     for _, _, balls in ranked_groups:
         ranked_balls.extend(balls)
 
     return ranked_groups, ranked_balls
 
 
-def wrap_lotto_num(num):
+def wrap_lotto_num(num: Any) -> int:
     """將數字循環回 1..49：49->49、50->1、51->2。"""
     return ((int(num) - 1) % 49) + 1
 
 
-def to_int_set(nums):
+def to_int_set(nums: Any) -> set[int]:
     """將 pandas/numpy 來源的號碼轉成 Python int set，避免印出 np.int64(...)。"""
     return {int(num) for num in nums}
 
 
-def get_rbg_sub_group_dict():
+def get_rbg_sub_group_dict() -> ColorSubGroupDict:
     """自定 RBG 分組 組合，回傳 R/B/G 的子分組字典。
     自定原則，是以 <10 and >40 分組，中間選號 11..38, 盡量平均分組，避免某些 R/B/G 顏色分組過多或過少。
     """
@@ -102,7 +112,7 @@ def get_rbg_sub_group_dict():
     }
 
 
-def group_candidates_by_rbg_sub_group(candidate_dict):
+def group_candidates_by_rbg_sub_group(candidate_dict: ColorBallDict) -> ColorSubGroupDict:
     """將 分組設定 RBG  {1:[...], 2:[...], 3:[...]} 
     候選號分成 R1/R2/R3 等子組。
     >>> R1: [1, 7, 8] /> 3 球
@@ -116,7 +126,7 @@ def group_candidates_by_rbg_sub_group(candidate_dict):
     >>> G3: [39, 43, 44] /> 3 球
     """
     sub_group_dict = get_rbg_sub_group_dict()
-    grouped_dict = {}
+    grouped_dict: ColorSubGroupDict = {}
 
     for color_key, sub_groups in sub_group_dict.items():
         candidate_set = set(candidate_dict.get(color_key, []))
@@ -130,7 +140,7 @@ def group_candidates_by_rbg_sub_group(candidate_dict):
 
 
 ''' -------- Main Function ------------------------------------------------ '''
-def main():
+def main() -> tuple[ColorBallDict, ColorBallDict, ColorBallDict]:
     os.system("clear")
     # print('\n' + "=" * 60)
     df_all = load_data_func()
@@ -141,10 +151,13 @@ def main():
     max_window_draw =[7,9,14] # 每期最多回測前幾期來找窗口期數集合
     included_last_nRn = True  # 是否包含當期號碼來找窗口期數集合 (True: 包含當期，False: 不包含當期)
     """按 R/B/G 每色球數由多至少排序，同數量時維持 R、B、G 順序。"""
+    dead_balls_dict: ColorBallDict = {}
+    cold_candidates_dict: ColorBallDict = {}
+    hot_candidates_dict: ColorBallDict = {}
     
     # Rnu RBG 1,2,3 集合球追蹤，依窗口期數增加，直到收集到足夠的顏色球為止。
     for idx in range(start_draw, len(df_all)):
-        dfs = df_all.iloc[:,0:].values  # 以最後一期為基準
+        dfs: Any = df_all.iloc[:,0:].values  # 以最後一期為基準
         
         y_date = dfs[idx][0]  # 假設日期欄位名稱為 'date'
         y_num7 = dfs[idx][1:8]  # 下一期的 N1..N6 + N7 號碼列
@@ -152,11 +165,14 @@ def main():
         print('-'*30)
         print(f'>>> 第 {idx} 期 {y_date} 開獎號碼: {y_num7}')
         ''' 分析 回測 7,9,14 窗口期數內沒有出現過的 RBG 色球，是否有冷門色球趨勢。'''
-        missing_by_window = {}
+        missing_by_window: MissingWindowDict = {}
+        red_all_balls: set[int] = set()
+        blue_all_balls: set[int] = set()
+        green_all_balls: set[int] = set()
         for max_window in max_window_draw:
-            r_color_balls = []  # 用來收集窗口期數內的 RBG 色球集合
-            b_color_balls = []
-            g_color_balls = []
+            r_color_balls: list[int] = []  # 用來收集窗口期數內的 RBG 色球集合
+            b_color_balls: list[int] = []
+            g_color_balls: list[int] = []
             # print(f'>>> 第 {idx+1} 期 {y_date} 開獎號碼: {y_num7}，回測窗口期數: {max_window}')
             # -----查詢期數窗口內的 RBG 色球集合-----
             for window in range(1, max_window +1):
@@ -171,7 +187,7 @@ def main():
                 sublist = res_xlist_arr[0]
                 # print(f'/> 窗口期數: {window}，回測資料：{sublist}')
                 
-                dictRBG = res_func_num_convert_RBG_Dict.res_List_To_rbg_Dict_func(sublist)
+                dictRBG = cast(ColorBallDict, res_func_num_convert_RBG_Dict.res_List_To_rbg_Dict_func(sublist))
                 r = dictRBG.get(0, [])
                 b = dictRBG.get(1, [])
                 g = dictRBG.get(2, [])
@@ -190,12 +206,9 @@ def main():
             # 自行產生 RBG 1-49 球 red, blue, green 分組 
             rbg_123_dict = gen_RBG_1To49_group_list()
             
-            red_all_balls = rbg_123_dict.get(0, [])  # 所有紅色球的集合
-            blue_all_balls = rbg_123_dict.get(1, [])  # 所有藍色球的集合
-            green_all_balls = rbg_123_dict.get(2, [])  # 所有綠色球的集合
-            red_all_balls = to_int_set(red_all_balls)
-            blue_all_balls = to_int_set(blue_all_balls)
-            green_all_balls = to_int_set(green_all_balls)
+            red_all_balls = to_int_set(rbg_123_dict.get(0, []))  # 所有紅色球的集合
+            blue_all_balls = to_int_set(rbg_123_dict.get(1, []))  # 所有藍色球的集合
+            green_all_balls = to_int_set(rbg_123_dict.get(2, []))  # 所有綠色球的集合
         
         
     
@@ -217,15 +230,15 @@ def main():
             # print(f'>>> 沒有出現過的-綠色球: {sorted(missing_green_balls)} /> {len(missing_green_balls)} 球\n')
 
         print('>>>>>>>> === 7,9,14 期,回測分析, RBG 冷門號分類 ===')
-        all_balls_by_color = {
+        all_balls_by_color: dict[str, set[int]] = {
             "R": red_all_balls,
             "B": blue_all_balls,
             "G": green_all_balls,
         }
-        dead_balls_dict = {}
-        cold_candidates_dict = {}
-        hot_candidates_dict = {}
-        color_key_map = {"R": 1, "B": 2, "G": 3}
+        dead_balls_dict: ColorBallDict = {}
+        cold_candidates_dict: ColorBallDict = {}
+        hot_candidates_dict: ColorBallDict = {}
+        color_key_map: dict[str, int] = {"R": 1, "B": 2, "G": 3}
         for color in ["R", "B", "G"]:
             color_key = color_key_map[color]
             dead_14 = missing_by_window[14][color]

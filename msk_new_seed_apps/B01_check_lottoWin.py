@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 import os
-import numpy as np
+from typing import Any
 # === 設定路徑 ===
 # ROOT = Path(__file__).resolve().parent
 current_dir = Path(__file__).resolve().parent
@@ -10,7 +10,7 @@ HISTORY_FILE = current_dir.parent / "A_msk_lottery_data_folder" / "M2_last_upgra
 RESULT_FILE = current_dir / "bet_data" / "my_win_results.csv"
 
 # 獎金對應表（以每注 $20 計）
-PRIZE_TABLE = {
+PRIZE_TABLE: dict[float, int] = {
     6.0: 10000000,
     5.5: 1100000,
     5.0: 300000,
@@ -22,37 +22,36 @@ PRIZE_TABLE = {
 
 
 
-def check_ticket():
+def check_ticket() -> None:
     os.system('clear')
     print("/>---<>--🎯 核對過往投注紀錄與中獎號碼 ---<>---<\\\n")
     if not BET_FILE.exists() or not HISTORY_FILE.exists():
         print("❌ 檔案不存在，請確認 my_bet_records.csv 與 M2_lotto_history.csv 是否正確")
         return
 
-    bets = pd.read_csv(BET_FILE)
-    history = pd.read_csv(HISTORY_FILE)
+    bets = pd.read_csv(BET_FILE, dtype={"bet_date": str})
+    history = pd.read_csv(HISTORY_FILE, dtype={"ndate": str})
     history = history.dropna(subset=["ndate"])
 
     total_bets = 0
     total_wins = 0
     total_prize = 0
-    no_result_dates = set()
-    results = []
+    no_result_dates: set[str] = set()
+    results: list[list[Any]] = []
 
     print("\n🎯 核對投注紀錄：")
 
-    for idx, row in bets.iterrows():
-        idx = int(idx)
+    for idx, (_, row) in enumerate(bets.iterrows()):
         total_bets += 1
-        bet_date = row["bet_date"]
-        bet_nums = [row[f"N{i}"] for i in range(1, 7)]
+        bet_date = str(row["bet_date"])
+        bet_nums = [int(row[f"N{i}"]) for i in range(1, 7)]
 
         # 找對應開獎號碼
         match_row = history[history["ndate"] == bet_date]
         if match_row.empty:
             print(f"{idx+1:>3} 注 /> {bet_date}:{bet_nums} ------------------- > 尚未有開獎結果")
             no_result_dates.add(bet_date)
-            results.append([bet_date] + ["未開獎"]*6 + [0, 0])
+            results.append([bet_date, *["未開獎"] * 6, 0.0, 0])
             continue
 
         draw = match_row.iloc[0]
@@ -61,7 +60,7 @@ def check_ticket():
 
         # 計算中獎數
         hit = sorted([int(x) for x in set(bet_nums) & set(win_nums)])
-        special_hit = 1 if special in bet_nums else 0
+        special_hit = special in bet_nums
         hit_score = len(hit) + 0.5 if special_hit and len(hit) in [3, 4, 5] else float(len(hit))
 
         # 計算獎金
@@ -83,7 +82,7 @@ def check_ticket():
 
         # 標記中獎號碼
         hit_marks = [n if n in hit else 0 for n in bet_nums]
-        results.append([bet_date] + hit_marks + [hit_score, prize])
+        results.append([bet_date, *hit_marks, hit_score, prize])
 
     print("=" * 50)
     if no_result_dates:
@@ -101,8 +100,8 @@ def check_ticket():
     # 儲存結果（僅保留號碼，不包含 score/prize）
     result_df = pd.DataFrame(results, columns=["bet_date", "N1", "N2", "N3", "N4", "N5", "N6", "score", "prize"])
     result_df.drop(columns=["score", "prize"], inplace=True)
-    # result_df.to_csv(RESULT_FILE, index=False, encoding="utf-8-sig")
-    # print(f"\n✅ 已儲存中獎分析至：{RESULT_FILE.name}")
+    result_df.to_csv(RESULT_FILE, index=False, encoding="utf-8-sig")
+    print(f"\n✅ 已儲存中獎分析至：{RESULT_FILE.name}")
 
    
 if __name__ == "__main__":

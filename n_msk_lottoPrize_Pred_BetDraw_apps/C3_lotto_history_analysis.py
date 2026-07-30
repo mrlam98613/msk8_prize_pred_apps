@@ -1,7 +1,7 @@
 import pandas as pd 
 from pathlib import Path
 import res_func_num_convert_RBG_Dict
-from collections import Counter
+from collections import Counter, defaultdict
 import random
 
 import os
@@ -300,8 +300,8 @@ def print_prize3_feature_analysis(df_prize3_top):
     """分析 3獎高頻期數的正號特色，特號只作次要參考。"""
     all_nums = []
     all_7_nums = []
-    frequency_weight_counter = Counter()
-    weighted_counter = Counter()
+    frequency_weight_counter = defaultdict(float)
+    weighted_counter = defaultdict(float)
     special_ball_counter = Counter()
     special_nums = {10, 20, 30, 40}
     special_counter = Counter()
@@ -322,9 +322,9 @@ def print_prize3_feature_analysis(df_prize3_top):
         for num in nums:
             frequency_weight_counter[num] += MAIN_NUM_WEIGHT
             weighted_counter[num] += prize3 * MAIN_NUM_WEIGHT
-        frequency_weight_counter[special_ball] += SPECIAL_NUM_WEIGHT
-        weighted_counter[special_ball] += prize3 * SPECIAL_NUM_WEIGHT
-        special_ball_counter[special_ball] += 1
+            frequency_weight_counter[special_ball] += SPECIAL_NUM_WEIGHT
+            weighted_counter[special_ball] += prize3 * SPECIAL_NUM_WEIGHT
+            special_ball_counter[special_ball] += 1
 
         consecutive_groups = get_consecutive_groups(nums)
         same_tail_groups = get_same_tail_groups(nums)
