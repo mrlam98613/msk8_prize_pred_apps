@@ -1,0 +1,30 @@
+
+# 系統每天自動執行 crontab.txt 格式
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Hong_Kong
+CRON_TZ=Asia/Hong_Kong
+
+# 分 小時 日 月 星期 命令  
+# 0   22   *  *   *    (每天 22:00)  
+# 0   6    *  *   *    (每天 06:00)  
+# 0   9    *  *   *    (每天 09:00)  
+# 30  14   *  *   *    (每天 14:30)  
+# 0   */6  *  *   *    (每 6 小時執行一次)  
+# 30 12,13,14,15 * * * (A0 下載) 轉換成東京時間 
+# 45 12,13,14,15 * * * (A1 預測) 轉換成東京時間 
+
+# --- 每 30， 33 分鐘執行。
+# */30 * * * * cd /app/Z3_ZH_lotto_2026_crawler && /usr/local/bin/python3 A0_main.py >> /var/log/cron/msk-lotto.log 2>&1
+# 3,33 * * * * cd /app && /usr/local/bin/python3 check_data_then_seed.py >> /var/log/cron/msk-seed.log 2>&1
+#---------------
+
+#---
+# Zeabur 下載開獎資料 排程。
+# A0：每 30 分鐘下載一次；沒有新資料時，A0 不會複製覆蓋資料。
+*/5 * * * * cd /app/Z3_ZH_lotto_2026_crawler && /usr/local/bin/python3 A0_main.py >> /var/log/cron/msk-lotto.log 2>&1
+#---
+# check_data_then_seed：配合 A0 後約 3 分鐘檢查。
+# 只有 M2/M3 發現新開獎資料時，才會執行 msk_new_seed_apps/A1_seedBet_main.py。
+3-59/5 * * * * cd /app && /usr/local/bin/python3 check_data_then_seed.py >> /var/log/cron/msk-seed.log 2>&1
+#---
