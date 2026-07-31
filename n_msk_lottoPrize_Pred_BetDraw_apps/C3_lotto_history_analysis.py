@@ -22,8 +22,11 @@ import os
 # 取得目前檔案所在目錄
 current_dir = Path(__file__).resolve().parent
 
+# M6_lotto_history_prize.csv 中的, 所有中獎開獎獎金紀錄
 PRIZE_CSV_DATA = current_dir.parent / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
+# M4_lotto_prize_summary.csv 中的, 提示下期多寶獎金。
 PRIZE_SUMMARY_DATA = current_dir.parent / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
+# 存檔 高頻特色投注單式儲存檔案
 PATTERN_BET_CSV = current_dir.parent / "msk_new_seed_apps" / "bet_data" / "pattern_bet.csv"
 
 # 3獎高頻投注預測參數
@@ -461,10 +464,13 @@ def get_lotto_history_prize(getDraw=3):
     """取得最近 N 期歷史開獎及 1,2,3 獎中獎紀錄。"""
     df_ = pd.read_csv(
         PRIZE_CSV_DATA,
-        dtype={'nDdate': str, 'N1': int, 'N2': int, 'N3': int, 'N4': int, 'N5': int, 'N6': int, 'N7': int, 'prize1': float, 'prize2': float, 'prize3': float}
+        dtype={'nDdate': str, 'N1': int, 'N2': int, 'N3': int, 'N4': int, 'N5': int, 'N6': int, 'N7': int, 
+               'prize1': float, 'prize2': float, 'prize3': float,
+               'prize1_unit': float, 'prize2_unit': float, 'prize3_unit': float
+               }
     )
     df_ = df_.rename(columns={"nDdate": "ndate"})
-    df_prize = df_.iloc[-getDraw:, [0,1,2,3,4,5,6,7,8,9,10]]  # ndate, N1..N6 + N7 + prize1 + prize2 + prize3
+    df_prize = df_.iloc[-getDraw:, [0,1,2,3,4,5,6,7,8,9,10,11,12,13]]  # ndate, N1..N6 + N7 + prize1 + prize2 + prize3
     # df1 = pd.DataFrame(df_prize)
     return df_prize
 
@@ -497,7 +503,7 @@ def main():
     print("====== 3獎高頻中獎分析 ======")
 
     # 取得最近 N 期開獎號碼及 1,2,3 獎中獎資料。
-    BACKTEST_DRAW = 14 # 最近 14 期。
+    BACKTEST_DRAW = 24 # 最近 24 期。
     df_history_prize = get_lotto_history_prize(getDraw=BACKTEST_DRAW)
     
     

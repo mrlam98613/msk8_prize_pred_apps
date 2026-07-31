@@ -2,23 +2,19 @@
 # -*- coding: utf-8 -*-
 """
 A2.py 下載邏輯。
-一次性建立 M0_2008_2025_history_prize.csv 舊開獎中獎紀錄。
+M0_2008_2025_history_prize.csv 舊開獎中獎紀錄由 A3.py 一次性建立。
 日常下載最近 N 期後，讀入 M0 舊資料，合併成完整 M6_lotto_history_prize.csv。
-最後再從 M6 讀入資料，篩選 prize1 + prize2 + prize3 最多中獎前 N 期，建立 M5。
 
-直接儲存最近 N 期開獎號碼，以及頭獎、二獎、三獎中獎注數。
-同時篩選 prize1 + prize2 + prize3 中獎注數最多的前 N 期，儲存為 M5。
+直接儲存最近 N 期開獎號碼，以及頭獎、二獎、三獎中獎注數與每注獎金。
 
 輸出：
 Lotto_Data_Folder/M0_2008_2025_history_prize.csv
 Lotto_Data_Folder/M6_lotto_history_prize.csv
 A_msk_lottery_data_folder/M6_lotto_history_prize.csv
-Lotto_Data_Folder/M5_lotto_prize_123.csv
-A_msk_lottery_data_folder/M5_lotto_prize_123.csv
 
 欄位：
 
-nDdate,N1,N2,N3,N4,N5,N6,N7,prize1,prize2,prize3
+nDdate,N1,N2,N3,N4,N5,N6,N7,prize1,prize2,prize3,prize1_unit,prize2_unit,prize3_unit
 
 """
 
@@ -28,9 +24,11 @@ import csv
 import re
 import shutil
 import sys
+import time
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import NamedTuple
+from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -38,7 +36,6 @@ REPO_ROOT = PROJECT_DIR.parent
 DATA_DIR = PROJECT_DIR / "Lotto_Data_Folder"
 WEBAPP_DATA_DIR = REPO_ROOT / "A_msk_lottery_data_folder"
 M0_HISTORY_PRIZE_CSV = DATA_DIR / "M0_2008_2025_history_prize.csv"
-M5_CSV = DATA_DIR / "M5_lotto_prize_123.csv"
 M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv"
 
 
@@ -49,7 +46,6 @@ DETAIL_VIEW_URL_TEMPLATE = (
 )
 
 RECENT_DRAW_LIMIT = 100  # 下載最近多少期。
-TOP_PRIZE_DRAW_LIMIT = 10  # M5 保留 prize1 + prize2 + prize3 中獎注數最多的前多少期。
 PER_PAGE_LIMIT = 50  # 每頁下載多少期；lottolyzer detail-view 建議保持 50。
 HISTORY_PAGE_START = 1  # 一次性 M0 舊資料下載起始頁。
 HISTORY_PAGE_END = 52  # 一次性 M0 舊資料下載結束頁。
@@ -57,6 +53,7 @@ M0_START_DATE = "2008-01-01"
 M0_END_DATE = "2025-12-31"
 
 REQUEST_TIMEOUT = 15
+REQUEST_RETRY_LIMIT = 3
 REQUEST_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -98,8 +95,25 @@ def fetch_detail_view_html(page: int) -> str:
 
     url = DETAIL_VIEW_URL_TEMPLATE.format(page=page, per_page=PER_PAGE_LIMIT)
     request = Request(url, headers=REQUEST_HEADERS)
-    with urlopen(request, timeout=REQUEST_TIMEOUT) as response:
-        return response.read().decode("utf-8", errors="replace")
+    last_error: Exception | None = None
+
+    for attempt in range(1, REQUEST_RETRY_LIMIT + 1):
+        try:
+            with urlopen(request, timeout=REQUEST_TIMEOUT) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except (TimeoutError, URLError, OSError) as exc:
+            last_error = exc
+            if attempt >= REQUEST_RETRY_LIMIT:
+                break
+            wait_seconds = attempt * 2
+            print(
+                f"page {page}: 下載失敗，第 {attempt}/{REQUEST_RETRY_LIMIT} 次，"
+                f"{wait_seconds} 秒後重試：{exc}",
+                flush=True,
+            )
+            time.sleep(wait_seconds)
+
+    raise RuntimeError(f"page {page}: 下載失敗，已重試 {REQUEST_RETRY_LIMIT} 次") from last_error
 
 
 def zh_date_to_iso(text: str) -> str:
@@ -122,22 +136,6 @@ def parse_winner_count(value: str) -> str:
     return value
 
 
-def winner_count_to_float(value: str) -> float:
-    """將中獎注數轉成 float，供 M5 排序使用。"""
-
-    return float(str(value).replace(",", "").strip() or 0)
-
-
-def total_top3_winner_count(row: dict[str, str]) -> float:
-    """計算頭獎 + 二獎 + 三獎中獎注數總和。"""
-
-    return (
-        winner_count_to_float(row["prize1"])
-        + winner_count_to_float(row["prize2"])
-        + winner_count_to_float(row["prize3"])
-    )
-
-
 def parse_prize_winner_count(record_text: str, prize_name: str) -> str:
     """從單期文字中抽出頭獎/二獎/三獎的中獎注數。"""
 
@@ -149,6 +147,28 @@ def parse_prize_winner_count(record_text: str, prize_name: str) -> str:
     if match is None:
         raise ValueError(f"找不到 {prize_name} 中獎注數：{record_text[:160]}")
     return parse_winner_count(match.group(1))
+
+
+def parse_money_amount(value: str) -> str:
+    """抽出金額，移除 $, 逗號與小數；'-' 視為 0。"""
+
+    value = value.strip().replace("$", "").replace(",", "")
+    if value == "-":
+        return "0"
+    return value.split(".", 1)[0]
+
+
+def parse_prize_unit_amount(record_text: str, prize_name: str) -> str:
+    """從單期文字中抽出頭獎/二獎/三獎的每注獎金。"""
+
+    if "暫時沒有獎項資料" in record_text:
+        return "0"
+
+    pattern = rf"{re.escape(prize_name)}\s+(?:\$[\d,.]+|-)\s+[\d,.-]+\s+(\$[\d,.]+|-)"
+    match = re.search(pattern, record_text)
+    if match is None:
+        raise ValueError(f"找不到 {prize_name} 每注獎金：{record_text[:160]}")
+    return parse_money_amount(match.group(1))
 
 
 def is_draw_number(value: str) -> bool:
@@ -220,6 +240,9 @@ def parse_detail_view_draws(html: str) -> list[dict[str, str]]:
                 "prize1": parse_prize_winner_count(record_text, "頭獎"),
                 "prize2": parse_prize_winner_count(record_text, "二獎"),
                 "prize3": parse_prize_winner_count(record_text, "三獎"),
+                "prize1_unit": parse_prize_unit_amount(record_text, "頭獎"),
+                "prize2_unit": parse_prize_unit_amount(record_text, "二獎"),
+                "prize3_unit": parse_prize_unit_amount(record_text, "三獎"),
             }
         )
 
@@ -240,7 +263,7 @@ def fetch_recent_draws(limit: int = RECENT_DRAW_LIMIT) -> list[dict[str, str]]:
 
         rows.extend(page_rows)
         used_count = min(len(rows), limit)
-        print(f"page {page}: 解析到 {len(page_rows)} 期，已取用 {used_count}/{limit} 期")
+        print(f"page {page}: 解析到 {len(page_rows)} 期，已取用 {used_count}/{limit} 期", flush=True)
         page += 1
 
     rows = rows[:limit]
@@ -258,7 +281,7 @@ def fetch_page_range_draws(page_start: int, page_end: int) -> list[dict[str, str
         html = fetch_detail_view_html(page)
         page_rows = parse_detail_view_draws(html)
         rows.extend(page_rows)
-        print(f"page {page}: 解析到 {len(page_rows)} 期，累計 {len(rows)} 期")
+        print(f"page {page}: 解析到 {len(page_rows)} 期，累計 {len(rows)} 期", flush=True)
 
     return rows
 
@@ -289,7 +312,16 @@ CSV_FIELDNAMES = [
     "prize1",
     "prize2",
     "prize3",
+    "prize1_unit",
+    "prize2_unit",
+    "prize3_unit",
 ]
+
+
+def normalize_row_fields(row: dict[str, str]) -> dict[str, str]:
+    """補齊 CSV 欄位，讓舊 M0 rows 也可合併寫入新版 M6。"""
+
+    return {field: str(row.get(field, "")) for field in CSV_FIELDNAMES}
 
 
 def dedupe_sort_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -297,7 +329,8 @@ def dedupe_sort_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
 
     deduped: dict[str, dict[str, str]] = {}
     for row in rows:
-        deduped[str(row["nDdate"])] = row
+        normalized_row = normalize_row_fields(row)
+        deduped[str(normalized_row["nDdate"])] = normalized_row
     return sorted(
         deduped.values(),
         key=lambda row: str(row["nDdate"]),
@@ -376,7 +409,7 @@ def read_m6_csv() -> list[dict[str, str]]:
     """從已建立的 M6 CSV 讀入開獎及中獎紀錄。"""
 
     if not M6_CSV.exists():
-        raise FileNotFoundError(f"找不到 M6 CSV，不能建立 M5：{M6_CSV}")
+        raise FileNotFoundError(f"找不到 M6 CSV：{M6_CSV}")
 
     with M6_CSV.open("r", encoding="utf-8-sig", newline="") as file:
         reader = csv.DictReader(file)
@@ -388,63 +421,45 @@ def read_m6_csv() -> list[dict[str, str]]:
     return rows
 
 
-def write_m5_csv(top_limit: int = TOP_PRIZE_DRAW_LIMIT) -> None:
-    """從 M6 讀入資料，篩選 prize1 + prize2 + prize3 中獎注數最多的前 N 期。"""
-
-    m6_rows = read_m6_csv()
-    top_rows = sorted(m6_rows, key=total_top3_winner_count, reverse=True)[:top_limit]
-    write_csv(M5_CSV, top_rows)
-
-
-def get_cli_limits() -> tuple[int, int]:
-    """測試用參數：python3 A2_lotto_history_prize.py 100 20。"""
+def get_cli_limit() -> int:
+    """測試用參數：python3 A2_lotto_history_prize.py 100。"""
 
     if len(sys.argv) <= 1:
-        return RECENT_DRAW_LIMIT, TOP_PRIZE_DRAW_LIMIT
+        return RECENT_DRAW_LIMIT
 
     try:
         recent_limit = int(sys.argv[1])
-        top_limit = int(sys.argv[2]) if len(sys.argv) >= 3 else TOP_PRIZE_DRAW_LIMIT
     except ValueError as exc:
         raise ValueError(
-            "參數必須是整數，例如：python3 A2_lotto_history_prize.py 100 20"
+            "參數必須是整數，例如：python3 A2_lotto_history_prize.py 100"
         ) from exc
 
     if recent_limit <= 0:
         raise ValueError("下載期數必須大於 0")
-    if top_limit <= 0:
-        raise ValueError("M5 篩選期數必須大於 0")
-    return recent_limit, top_limit
+    return recent_limit
 
 
-def run(
-    limit: int = RECENT_DRAW_LIMIT,
-    top_limit: int = TOP_PRIZE_DRAW_LIMIT,
-) -> tuple[Path, Path]:
-    """下載最近 N 期，合併 M0 舊資料，產生完整 M6 及 M5 CSV。"""
+def run(limit: int = RECENT_DRAW_LIMIT) -> Path:
+    """下載最近 N 期，合併 M0 舊資料，產生完整 M6 CSV。"""
 
     recent_rows = fetch_recent_draws(limit)
     rows = build_m6_rows(recent_rows)
     write_m6_csv(rows)
-    write_m5_csv(top_limit)
-    return M6_CSV, M5_CSV
+    return M6_CSV
 
 
 def main() -> None:
     if len(sys.argv) >= 2 and sys.argv[1] == "build-m0":
-        output_path = build_m0_history_prize_csv()
-        print(f"已儲存：{output_path}")
+        print("M0 一次性建立已改由 A3.py 執行。")
+        print("請執行：python3 A3.py")
         return
 
-    limit, top_limit = get_cli_limits()
+    limit = get_cli_limit()
     print(f"下載最近 {limit} 期開獎明細")
     print(f"讀入 M0 舊資料：{M0_HISTORY_PRIZE_CSV}")
-    print(f"M5 篩選 prize1 + prize2 + prize3 最多中獎前 {top_limit} 期")
-    m6_path, m5_path = run(limit, top_limit)
+    m6_path = run(limit)
     print(f"已儲存 M6：{m6_path}")
     print(f"已複製 M6：{WEBAPP_DATA_DIR / m6_path.name}")
-    print(f"已儲存 M5：{m5_path}")
-    print(f"已複製 M5：{WEBAPP_DATA_DIR / m5_path.name}")
 
     
     

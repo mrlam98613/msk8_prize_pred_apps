@@ -9,7 +9,7 @@ Z3 新版六合彩爬蟲主程式。
 3. 合併 M0 舊歷史資料與 M1 新下載資料，儲存為 Lotto_Data_Folder/M2_last_upgrade_lotto_data.csv
 4. 下載最新一期獎金及下一期資料，儲存為 Lotto_Data_Folder/M3_lotto_prize_results.csv
 5. 從 M3 摘要出下一期資訊，儲存為 Lotto_Data_Folder/M4_lotto_prize_summary.csv
-6. 下載最近 N 期獎項注數明細，儲存 M6 原始紀錄及 M5 最多中獎篩選結果
+6. 下載最近 N 期獎項注數明細，儲存 M6 原始紀錄
 7. 複製 CSV 到專案根目錄的 A_msk_lottery_data_folder/
 """
 
@@ -55,7 +55,6 @@ M1_CSV = DATA_DIR / "M1_ZH_lotto_data.csv"
 M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"
 M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv"
-M5_CSV = DATA_DIR / "M5_lotto_prize_123.csv"
 M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv"
 M7_CSV = DATA_DIR / "M7_lotto_open_days.csv"
 
@@ -519,7 +518,7 @@ def create_m4_prize_summary() -> None:
 
 
 def copy_m1_to_m4_to_webapp_folder() -> None:
-    """複製 M1-M4 與 M7 CSV 到 A_msk_lottery_data_folder；M5/M6 由 A2 產生時複製。"""
+    """複製 M1-M4 與 M7 CSV 到 A_msk_lottery_data_folder；M6 由 A2 產生時複製。"""
 
     for csv_path in [M1_CSV, M2_CSV, M3_CSV, M4_CSV, M7_CSV]:
         if not csv_path.exists():
@@ -528,7 +527,7 @@ def copy_m1_to_m4_to_webapp_folder() -> None:
 
 
 def create_m6_lotto_history_prize() -> None:
-    """產生 M6 最近明細，並產生 M5：prize1+prize2+prize3 注數最多前 N 期。"""
+    """產生 M6 最近獎項注數與每注獎金明細。"""
 
     A2_lotto_history_prize.run()
 
@@ -551,8 +550,9 @@ def run() -> bool:
         run_timed_step("M2 合併新舊歷史資料", create_m2_merged_history, timings)
         run_timed_step("M3 下載最新獎金和下一期資料", create_m3_prize_results, timings)
         run_timed_step("M4 產生下一期摘要", create_m4_prize_summary, timings)
-        run_timed_step("M7 產生/更新開獎日期 CSV", create_m7_open_days_csv, timings)
-        run_timed_step("M5/M6 下載獎項注數明細", create_m6_lotto_history_prize, timings)
+        run_timed_step("M6 下載獎項注數明細", create_m6_lotto_history_prize, timings)
+        run_timed_step("M7 馬會攪珠開獎日期 CSV", create_m7_open_days_csv, timings)
+        
         timing_report = format_timing_report(timings)
 
         latest_draw_date, next_draw_date, week = validate_generated_files()
