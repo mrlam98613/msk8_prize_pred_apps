@@ -12,7 +12,7 @@ import res_func_num_convert_RBG_Dict
 1. 讀入 M6_lotto_history_prize.csv。
 2. 最近 BACKTEST_DRAW 期作為 3獎、2獎分析單位，預設 24 期。
 3. 3獎分析：依 prize3 中獎注數最多排序，同分再依 prize3_unit 獎金最多排序。
-4. 2獎分析：依 prize2 中獎注數最多排序，重點分析特別號 N7。
+4. 2獎分析：最近 24 期內依 prize2 中獎注數最多取前 7 期，再由日期遠至近列出 N1-N7。
 5. 頭獎分析：由最後一期往前，取最近 HEAD_PRIZE_ZERO_TOP_DRAW 期 prize1 = 0 的資料。
 6. 本程式只做分析輸出，不產生投注檔、不修改網站功能。
 """
@@ -24,7 +24,7 @@ PRIZE_CSV_DATA = current_dir.parent / "A_msk_lottery_data_folder" / "M6_lotto_hi
 # 手動參數
 BACKTEST_DRAW = 24  # 最近 24 期為開獎紀錄單位。
 PRIZE3_TOP_DRAW = 7  # 3獎中獎注數最多，取前幾期分析。
-PRIZE2_TOP_DRAW = 12  # 2獎中獎注數最多，取前幾期分析特別號。
+PRIZE2_TOP_DRAW = 7  # 2獎中獎注數最多，取前幾期分析 N1-N7。
 HEAD_PRIZE_ZERO_TOP_DRAW = 7  # 由最後一期往前，取最近幾期頭獎無人中資料。
 
 
@@ -71,6 +71,11 @@ def get_recent_draws(df, draw_count):
 def get_main_nums(row):
     """取得 N1-N6 正號。"""
     return [int(row[f"N{i}"]) for i in range(1, 7)]
+
+
+def get_all_nums(row):
+    """取得 N1-N7 正號連特號。"""
+    return [int(row[f"N{i}"]) for i in range(1, 8)]
 
 
 def get_num49_interval_map(nums):
@@ -147,8 +152,8 @@ def print_prize3_table(title, df):
 
 
 def print_prize2_table(title, df):
-    """列印 2獎特號分析表，只顯示 N7 特號及 prize2。"""
-    cols = ["ndate", "N7", "prize2"]
+    """列印 2獎分析表，顯示 N1-N7 及 prize2。"""
+    cols = ["ndate", "N1", "N2", "N3", "N4", "N5", "N6", "N7", "prize2", "prize2_unit"]
     table_df = df[cols].copy()
     table_df.insert(0, "檔位", range(1, len(table_df) + 1))
     print(f"\n====== {title} ======")
@@ -213,15 +218,20 @@ def main():
     )
 
     # 2 獎打印分項
-    prize2_top = sort_prize2_top(df_recent_24).head(PRIZE2_TOP_DRAW)
+    prize2_top = sort_prize2_top(df_recent_24).head(PRIZE2_TOP_DRAW).sort_values(
+        by=["ndate"],
+        ascending=[True],
+    ).reset_index(drop=True)
     print_prize2_table(
-        f"最近 {BACKTEST_DRAW} 期，中2獎注數最多前 {len(prize2_top)} 期",
+        f"最近 {BACKTEST_DRAW} 期，中2獎注數最多前 {len(prize2_top)} 期開獎號，日期遠至近",
         prize2_top,
     )
-    prize2_special_nums = [int(row["N7"]) for _, row in prize2_top.iterrows()]
+    prize2_all_nums = []
+    for _, row in prize2_top.iterrows():
+        prize2_all_nums.extend(get_all_nums(row))
     print_rbg_groups(
-        f"中2獎前 {len(prize2_top)} 期 N7 特號 RBG 三色分組",
-        prize2_special_nums,
+        f"中2獎前 {len(prize2_top)} 期 X 7 開獎號 = {len(prize2_all_nums)} 球 RBG 三色分組",
+        prize2_all_nums,
     )
     # 頭獎打印分項
     head_prize_zero_top = get_recent_head_prize_zero(df, HEAD_PRIZE_ZERO_TOP_DRAW)

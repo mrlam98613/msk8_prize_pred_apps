@@ -25,6 +25,11 @@ PAGES = [
         "icon": "🍀",
         "path": CONTENT_DIR / "2_lotto_lucky_day.py",
     },
+    {
+        "label": "特式預測",
+        "icon": "🎯",
+        "path": CONTENT_DIR / "3_nextdraw_prize123_pred_bet.py",
+    },
 ]
 
 
@@ -107,7 +112,7 @@ def run_page_file(path: Path) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="MSK 下期預測", page_icon="🎯", layout="centered")
+    st.set_page_config(page_title="MSK 8 下期預測", page_icon="🎯", layout="centered")
     
     apply_styles()
 

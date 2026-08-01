@@ -236,13 +236,13 @@ def predict_next_draw_intervals(
     # print('\n\n')
     # print('='*40)
     # # print('[0,x,x,x,x,4]/[x,x,x,x,x,4],[x,x,x,x,x,x] 依馬可夫隨機預測, 區間模式')
-    # print(
-    #     f"\n /> (最後一期 :{anchor_date})"
-    #     f"\n /> 下一期預測 日期:{next_draw_date} 星期:{next_draw_week} "
-    #     f"\n /> 窗口:{window_list} , 區間模式:{fixed_interval_mode}"
-    #     f"\n /> 預測區間:{final_pred_sorted}"
-    # )
-    # print('='*40)
+    print(
+        f"\n /> (最後一期 :{anchor_date})"
+        f"\n /> 下一期預測 日期:{next_draw_date} 星期:{next_draw_week} "
+        f"\n /> 窗口:{window_list} , 區間模式:{fixed_interval_mode}"
+        f"\n /> 預測區間:{final_pred_sorted}"
+    )
+    print('='*40)
     
     # 回傳以下區間預測
     return {
@@ -256,22 +256,22 @@ def predict_next_draw_intervals(
     }
     
     
-# def main():
-#     '''
-#     主程式入口 N1..N6 區間預測, 最終輸出結果：
-#     /> 下一期預測(anchor=2026-06-14) => 日期:2026-06-18 星期:4 窗口:[7] 預測區間:[0, 0, 1, 2, 3, 4]
+def main():
+    '''
+    主程式入口 N1..N6 區間預測, 最終輸出結果：
+    /> 下一期預測(anchor=2026-06-14) => 日期:2026-06-18 星期:4 窗口:[7] 預測區間:[0, 0, 1, 2, 3, 4]
     
-#     '''
+    '''
     
-#     clear_screen()
-#     # print('[0,x,x,x,x,4]/[x,x,x,x,x,4],[x,x,x,x,x,x] 依馬可夫隨機預測, 區間模式')
-#     fixed_interval_mode = "none"  # "head_tail" / "tail_only" / "none"
-#     predict_next_draw_intervals(
-#         window_list=[6],
-#         alpha=1.0,
-#         fixed_interval_mode=fixed_interval_mode,
-#     )
-#     return
+    clear_screen()
+    # print('[0,x,x,x,x,4]/[x,x,x,x,x,4],[x,x,x,x,x,x] 依馬可夫隨機預測, 區間模式')
+    fixed_interval_mode = "none"  # "head_tail" / "tail_only" / "none"
+    predict_next_draw_intervals(
+        window_list=[6],
+        alpha=1.0,
+        fixed_interval_mode=fixed_interval_mode,
+    )
+    return
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

@@ -110,7 +110,7 @@ def format_seed_numbers(nums):
     return "[ " + "，".join(str(n) for n in nums) + " ]"
 
 
-def render_balls(nums, label: str = "", highlight=None):
+def render_balls(nums, label: str = "", highlight=None, show_numbers: bool = True):
     if highlight is None:
         highlight = {}
     if not nums:
@@ -145,11 +145,13 @@ def render_balls(nums, label: str = "", highlight=None):
     label_html = ""
     if label:
         label_html = f"<span style='font-weight:600;margin-right:8px;'>{label}</span>"
-    nums_text = " ".join(str(n) for n in nums)
-    nums_text_html = (
-        f"<span style='font-size:0.9rem;font-weight:600;margin-right:8px;"
-        f"white-space:nowrap;color:#444;'>[{nums_text}]</span>"
-    )
+    nums_text_html = ""
+    if show_numbers:
+        nums_text = " ".join(str(n) for n in nums)
+        nums_text_html = (
+            f"<span style='font-size:0.9rem;font-weight:600;margin-right:8px;"
+            f"white-space:nowrap;color:#444;'>[{nums_text}]</span>"
+        )
 
     st.markdown(
         f"<div style='display:flex;align-items:center;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;'>"
@@ -320,7 +322,7 @@ def render_home_page():
     pred_rows = load_next_bet_draw_records(NEXT_BET_DRAW_RECORD_PATH)
     if pred_rows:
         for idx, nums in enumerate(pred_rows, start=1):
-            render_balls(nums, label=f"{idx}注:")
+            render_balls(nums, label=f"{idx}注:", show_numbers=False)
     else:
         st.info("目前沒有找到 nextBetDraw_record.csv 內的預測號碼。")
 
@@ -409,7 +411,7 @@ def render_home_page():
             highlight = {"main": win_main_set}
             if win_special:
                 highlight["special"] = win_special
-            render_balls(nums, label="過去投注號：", highlight=highlight)
+            render_balls(nums, label="過去投注號：", highlight=highlight, show_numbers=False)
             # 中獎行
             if win_score == 0:
                 st.markdown(f"<div style='margin-bottom:2px'><span style='font-weight:bold;'> 中 = {win_score} 球 |  獎項: {prize} | 派彩:$ {payout} --  😊</span></div>", unsafe_allow_html=True)
@@ -420,7 +422,7 @@ def render_home_page():
             elif win_score > 3:
                 st.markdown(f"<div style='margin-bottom:2px'><span style='font-weight:bold;'> 中 > {win_score} 球 |  獎項:{prize} | 派彩:$ {payout} --  🏆🏆🏆</span></div>", unsafe_allow_html=True)
         else:
-            render_balls(nums, label="最新投注號：", highlight={})
+            render_balls(nums, label="最新投注號：", highlight={}, show_numbers=False)
             # st.markdown("---")
             st.markdown("<div style='margin-bottom:2px'><span style='font-weight:bold;'> | 最新投注預測： 未開獎 👀 | </span></div>", unsafe_allow_html=True)
             st.markdown("---")
