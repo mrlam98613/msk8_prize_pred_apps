@@ -316,7 +316,7 @@ def next_month(year: int, month: int) -> tuple[int, int]:
 def target_months(today: date | None = None) -> list[tuple[int, int]]:
     today = today or date.today()
     months = [(today.year, today.month)]
-    if today.day > 15:
+    if today.day >= 15:
         months.append(next_month(today.year, today.month))
     return months
 
@@ -343,13 +343,6 @@ def month_dates(year: int, month: int) -> list[str]:
         current = date(year, month, day)
         if current.isoweekday() in DRAW_WEEKDAYS:
             dates.append(current.strftime("%Y-%m-%d"))
-    return dates
-
-
-def fixed_dates_for_months(months: list[tuple[int, int]]) -> list[str]:
-    dates = []
-    for year, month in months:
-        dates.extend(month_dates(year, month))
     return dates
 
 
@@ -464,8 +457,8 @@ def download_fixtures_to_csv(today: date | None = None) -> bool:
     months = target_months(today)
     dates = fetch_hkjc_fixture_dates(months)
     if dates is None:
-        dates = fixed_dates_for_months(months)
-        print("🧱 已使用固定 Tue/Thu/Sat 開獎日產生 M7。")
+        print("⚠️ 未能取得馬會已公布開獎日，保留現有 M7，不使用推算日期。")
+        return False
 
     write_m7(dates)
     print(f"✅ 已更新 M7_lotto_open_days.csv，共 {len(dates)} 個開獎日。")

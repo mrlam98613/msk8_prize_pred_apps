@@ -9,6 +9,20 @@ import streamlit as st
 TIAN_GAN = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
 
+def analysis_date_range(months_ahead=1, today=None):
+    today = today or datetime.date.today()
+    start_date = datetime.date(today.year, today.month, 1)
+    if months_ahead < 0:
+        months_ahead = 0
+
+    month_index = (today.year * 12 + today.month - 1) + months_ahead
+    year = month_index // 12
+    month = month_index % 12 + 1
+    last_day = calendar.monthrange(year, month)[1]
+    end_date = datetime.date(year, month, last_day)
+    return start_date, end_date
+
+
 def render_lucky_day_table(rows):
     headers = ["日期", "星期", "六合彩狀態", "提示"]
     col_classes = {
@@ -114,18 +128,10 @@ def get_lottery_dates_from_csv(months_ahead=1):
     csv_path = dir_path / "A_msk_lottery_data_folder" / "M7_lotto_open_days.csv"
 
     if not csv_path.exists():
-        return None, csv_path
+        return None, csv_path, None
 
-    today = datetime.date.today()
-    start_date = datetime.date(today.year, today.month, 1)
-    if months_ahead < 0:
-        months_ahead = 0
-
-    month_index = (today.year * 12 + today.month - 1) + months_ahead
-    year = month_index // 12
-    month = month_index % 12 + 1
-    last_day = calendar.monthrange(year, month)[1]
-    end_date = datetime.date(year, month, last_day)
+    start_date, end_date = analysis_date_range(months_ahead=months_ahead)
+    latest_csv_date = None
 
     with open(csv_path, "r", encoding="utf-8-sig", newline="") as csv_file:
         reader = csv.DictReader(csv_file)
@@ -137,10 +143,12 @@ def get_lottery_dates_from_csv(months_ahead=1):
                 parsed_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
             except ValueError:
                 continue
+            if latest_csv_date is None or parsed_date > latest_csv_date:
+                latest_csv_date = parsed_date
             if start_date <= parsed_date <= end_date:
                 lottery_dates.add(date_str)
 
-    return lottery_dates, csv_path
+    return lottery_dates, csv_path, latest_csv_date
 
 
 def get_day_tian_gan(target_date):
@@ -184,7 +192,9 @@ def main():
         )
         st.write("目前僅顯示本月與下月的開獎日。")
 
-    lottery_dates, csv_path = get_lottery_dates_from_csv(months_ahead=1)
+    months_ahead = 1
+    start_date, end_date = analysis_date_range(months_ahead=months_ahead)
+    lottery_dates, csv_path, latest_csv_date = get_lottery_dates_from_csv(months_ahead=months_ahead)
     if lottery_dates is None:
         st.warning(
             f"找不到 M7 開獎日期檔案：{csv_path}\n請先執行 A4_mark_six_open_days.py 產生檔案。"
@@ -192,6 +202,12 @@ def main():
         return
 
     st.success(f"已從 {csv_path.name} 讀取 {len(lottery_dates)} 個開獎日。")
+    if latest_csv_date and latest_csv_date < end_date:
+        st.warning(
+            f"M7 開獎日只更新至 {latest_csv_date.strftime('%Y-%m-%d')}，"
+            f"本頁只會顯示已公布日期範圍內的分析。"
+        )
+        end_date = latest_csv_date
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -235,13 +251,6 @@ def main():
     user_tg = get_day_tian_gan(birth_date)
     zheng_tg, pian_tg = get_fortune_gan(user_tg)
     st.write(f"**日主天干**：{user_tg}，**正財**：{zheng_tg}，**偏財**：{pian_tg}")
-
-    today = datetime.date.today()
-    start_date = datetime.date(today.year, today.month, 1)
-    if today.month >= 11:
-        end_date = datetime.date(today.year + 1, (today.month + 2) % 12, 1) - datetime.timedelta(days=1)
-    else:
-        end_date = datetime.date(today.year, today.month + 2, 1) - datetime.timedelta(days=1)
 
     st.write(f"篩選日期範圍：{start_date.strftime('%Y-%m-%d')} 至 {end_date.strftime('%Y-%m-%d')}")
 
