@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""檢查 M2/M3 是否有新資料；有新資料才執行 A1_seedBet_main.py。"""
+"""檢查 M2/M3 是否有新資料；有新資料才執行 A1 與 C6 預測。"""
 
 from __future__ import annotations
 
@@ -20,6 +20,8 @@ DATA_DIR = ROOT / "A_msk_lottery_data_folder"
 M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"
 A1_SCRIPT = ROOT / "msk_new_seed_apps" / "A1_seedBet_main.py"
+C6_DIR = ROOT / "n_msk_lotto_prize123_backtest_pred"
+C6_SCRIPT = C6_DIR / "C6_lotto_prize_123_pred_bet.py"
 STATE_DIR = ROOT / "msk_new_seed_apps" / "bet_data"
 STATE_FILE = STATE_DIR / "check_data_state.json"
 LOG_FILE = ROOT / "msk_new_seed_apps" / "bet_data" / "check_data_log.txt"
@@ -105,10 +107,12 @@ def write_last_processed_date(latest_date: str) -> None:
     )
 
 
-def run_a1() -> int:
+def run_script(script: Path, args: list[str] | None = None, cwd: Path | None = None) -> int:
+    if args is None:
+        args = []
     result = subprocess.run(
-        [sys.executable, str(A1_SCRIPT)],
-        cwd=str(ROOT),
+        [sys.executable, str(script), *args],
+        cwd=str(cwd or ROOT),
         text=True,
         capture_output=True,
         check=False,
@@ -117,6 +121,14 @@ def run_a1() -> int:
     if output:
         print(output)
     return result.returncode
+
+
+def run_a1() -> int:
+    return run_script(A1_SCRIPT)
+
+
+def run_c6() -> int:
+    return run_script(C6_SCRIPT, ["predict", "all"], cwd=C6_DIR)
 
 
 def main() -> int:
@@ -129,16 +141,21 @@ def main() -> int:
 
         last_processed = read_last_processed_date()
         if last_processed == m2_latest:
-            write_log(f"{now_string()} 沒有新資料，略過 A1。最新期={m2_latest}；下期={m3_next}")
+            write_log(f"{now_string()} 沒有新資料，略過 A1/C6。最新期={m2_latest}；下期={m3_next}")
             return 0
 
-        code = run_a1()
-        if code != 0:
-            write_log(f"{now_string()} A1 執行失敗，未更新狀態。最新期={m2_latest}；returncode={code}")
-            return code
+        a1_code = run_a1()
+        if a1_code != 0:
+            write_log(f"{now_string()} A1 執行失敗，未更新狀態。最新期={m2_latest}；returncode={a1_code}")
+            return a1_code
+
+        c6_code = run_c6()
+        if c6_code != 0:
+            write_log(f"{now_string()} C6 執行失敗，未更新狀態。最新期={m2_latest}；returncode={c6_code}")
+            return c6_code
 
         write_last_processed_date(m2_latest)
-        write_log(f"{now_string()} 發現新資料並已執行 A1。最新期={m2_latest}；下期={m3_next}")
+        write_log(f"{now_string()} 發現新資料並已執行 A1/C6。最新期={m2_latest}；下期={m3_next}")
         return 0
     except Exception as exc:
         write_log(f"{now_string()} 檢查資料失敗：{exc}")

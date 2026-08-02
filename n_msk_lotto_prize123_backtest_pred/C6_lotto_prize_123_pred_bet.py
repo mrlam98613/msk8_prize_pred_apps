@@ -35,7 +35,7 @@ PRIZE123_WIN_RESULTS_CSV = BET_PRIZE_DATA_DIR / "prize123_win_results.csv"
 
 # ---------------------------- 手動參數 ----------------------------
 RUN_MODE = "predict"  # "predict" / "backtest"
-BET_MODE = "prize3"  # "prize3" / "prize2" / "prize1" / "all"
+BET_MODE = "all"  # "prize3" / "prize2" / "prize1" / "all"
 BACKTEST_DRAW = 24
 
 # ---------------------------- 分析參數 ----------------------------
@@ -178,6 +178,18 @@ def append_next_draw_bets_if_missing(bet_date, mode_results):
         print(f"prize123_nextDraw_bet.csv 已有 {bet_date} 紀錄，不重複加入。")
         return
     append_csv_rows(PRIZE123_NEXT_DRAW_BET_CSV, rows_from_mode_results(bet_date, mode_results))
+
+
+def replace_next_draw_bets(bet_date, mode_results):
+    """下期預測檔只保留目前最新下期，供 Streamlit 頁面直接讀取。"""
+
+    BET_PRIZE_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    rows = rows_from_mode_results(bet_date, mode_results)
+    pd.DataFrame(rows, columns=BET_COLUMNS).to_csv(
+        PRIZE123_NEXT_DRAW_BET_CSV,
+        index=False,
+        encoding="utf-8-sig",
+    )
 
 
 def append_bet_records_if_missing(bet_date, mode_results):
@@ -653,7 +665,7 @@ def run_predict(bet_mode):
     print_strategy_result(result)
     if bet_mode == "all":
         append_bet_records_if_missing(result["next_draw_date"], result["mode_results"])
-        append_next_draw_bets_if_missing(result["next_draw_date"], result["mode_results"])
+        replace_next_draw_bets(result["next_draw_date"], result["mode_results"])
     else:
         replace_predict_records_for_date(result["next_draw_date"], result["mode_results"])
 
