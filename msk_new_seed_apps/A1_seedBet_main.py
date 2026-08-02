@@ -94,6 +94,12 @@ WEEK_ZH = {
 ZH_WEEK_TO_NUM = {"一": "1", "二": "2", "三": "3", "四": "4", "五": "5", "六": "6", "日": "7"}
 
 
+def iso_week_from_date(date_text: str) -> str:
+    """由 YYYY-MM-DD 日期推算星期數字；星期一=1，星期日=7。"""
+
+    return str(dt.datetime.strptime(date_text, "%Y-%m-%d").isoweekday())
+
+
 @dataclass(frozen=True)
 class NextDrawInfo:
     """下一期開獎資料。"""
@@ -136,6 +142,20 @@ def read_csv_required(path: Path, required_columns: list[str]) -> pd.DataFrame:
     if df.empty:
         raise ValueError(f"{path.name} 沒有資料")
     return df
+
+
+def positive_int_or_none(value: object) -> int | None:
+    """把中獎紀錄欄位轉成正整數；非數字例如「未開獎」會略過。"""
+
+    if value is None:
+        return None
+    if not isinstance(value, (int, float, str, bytes)):
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number > 0 else None
 
 
 def load_draw_history() -> pd.DataFrame:
@@ -194,7 +214,7 @@ def load_next_draw_info(df_all: pd.DataFrame) -> NextDrawInfo:
     anchor_date, _ = parse_zh_date(row_map["日期"][0])
     next_draw_date, next_week = parse_zh_date(row_map["開獎日期"][0])
     if next_week is None:
-        raise ValueError(f"M3 下期開獎日期缺少星期：{row_map['開獎日期'][0]}")
+        next_week = iso_week_from_date(next_draw_date)
 
     m3_numbers = [int(n.strip()) for n in row_map["號碼"][0].split(",") if n.strip()]
     if len(m3_numbers) != 7:
@@ -362,10 +382,10 @@ def latest_seed_numbers_from_win_record() -> list[int]:
     last_date = str(valid_df["bet_date"].max())
     last_rows = valid_df[valid_df["bet_date"] == last_date]
     seeds = {
-        int(value)
+        number
         for _, row in last_rows.iterrows()
         for value in row.iloc[1:7]
-        if pd.notna(value) and int(value) > 0
+        if (number := positive_int_or_none(value)) is not None
     }
     return sorted(seeds)
 
@@ -575,7 +595,12 @@ def rebuild_next_prediction(df_all: pd.DataFrame, next_info: NextDrawInfo) -> bo
 
     last_settled_date = str(win_df["bet_date"].astype(str).max())
     win_rows = win_df[win_df["bet_date"].astype(str) == last_settled_date]
-    matched = sorted({int(v) for _, row in win_rows.iterrows() for v in row.iloc[1:7] if int(v) > 0})
+    matched = sorted({
+        number
+        for _, row in win_rows.iterrows()
+        for value in row.iloc[1:7]
+        if (number := positive_int_or_none(value)) is not None
+    })
 
     bet_rows = read_bets_for_date(last_settled_date)
     last_bet = bet_values(bet_rows.iloc[-1]) if not bet_rows.empty else random_base_draw()

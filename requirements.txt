@@ -112,7 +112,9 @@ typing-extensions==4.16.0
     #   starlette
     #   streamlit
 urllib3==2.7.0
-    # via requests
+    # via
+    #   msk-prize-lotto-pred-apps (pyproject.toml)
+    #   requests
 uvicorn==0.52.0
     # via streamlit
 websockets==17.0

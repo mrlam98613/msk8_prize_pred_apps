@@ -37,10 +37,11 @@ PRIZE_NEXT_DRAW_BET_CSV = BET_DATA_DIR / "prize_nextDraw_bet.csv"
 # ---------------------------- 手動參數 ----------------------------
 RUN_MODE = "predict"  # "predict" / "backtest"
 BACKTEST_DRAW = 10  # 回測最近幾期。
+
 # ---------------------------- 內部參數 ----------------------------
 FEATURE_LOOKBACK_DRAW = 24  # 每次分析 3獎時，往前看最近幾期。
 PRIZE3_TOP_DRAW = 7  # 3獎中獎注數最多，取前幾期作特徵。
-BET_COUNT = 3  # 每期產生 1-3 注單式。
+BET_COUNT = 1  # 每期產生 1-3 注單式。
 INTERVAL_WINDOW_LIST = [6]  # 區間預測窗口。
 FIXED_INTERVAL_MODE = "none"  # "head_tail" / "tail_only" / "none"
 RANDOM_SEED = 42
@@ -463,10 +464,6 @@ def run_predict():
     print_strategy_result(result)
     append_bet_records_if_missing(result["next_draw_date"], result["bets"])
     append_next_draw_bets_if_missing(result["next_draw_date"], result["bets"])
-    print(f"\n已更新投注 CSV:")
-    print(f"- {PRIZE_BET_CSV}")
-    print(f"- {PRIZE_WIN_RESULTS_CSV}")
-    print(f"- {PRIZE_NEXT_DRAW_BET_CSV}")
 
 
 def run_backtest():

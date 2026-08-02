@@ -35,7 +35,7 @@ PRIZE123_WIN_RESULTS_CSV = BET_PRIZE_DATA_DIR / "prize123_win_results.csv"
 
 # ---------------------------- 手動參數 ----------------------------
 RUN_MODE = "predict"  # "predict" / "backtest"
-BET_MODE = "all"  # "prize3" / "prize2" / "prize1" / "all"
+BET_MODE = "prize3"  # "prize3" / "prize2" / "prize1" / "all"
 BACKTEST_DRAW = 24
 
 # ---------------------------- 分析參數 ----------------------------
@@ -656,10 +656,6 @@ def run_predict(bet_mode):
         append_next_draw_bets_if_missing(result["next_draw_date"], result["mode_results"])
     else:
         replace_predict_records_for_date(result["next_draw_date"], result["mode_results"])
-    print("\n已更新投注 CSV:")
-    print(f"- {PRIZE123_BET_CSV}")
-    print(f"- {PRIZE123_NEXT_DRAW_BET_CSV}")
-    print(f"- {PRIZE123_WIN_RESULTS_CSV}")
 
 
 def run_backtest(bet_mode):

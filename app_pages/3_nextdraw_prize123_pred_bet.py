@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
 LOTTO_RESULTS_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
 PRIZE_SUMMARY_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
-BET_PRIZE_DATA_DIR = PROJECT_ROOT / "n_msk_lottoPrize_Pred_BetDraw_apps" / "bet_prize_data"
+BET_PRIZE_DATA_DIR = PROJECT_ROOT / "n_msk_lotto_prize123_backtest_pred" / "bet_prize_data"
 PRIZE123_BET_CSV = BET_PRIZE_DATA_DIR / "prize123_bet.csv"
 PRIZE123_NEXT_DRAW_BET_CSV = BET_PRIZE_DATA_DIR / "prize123_nextDraw_bet.csv"
 

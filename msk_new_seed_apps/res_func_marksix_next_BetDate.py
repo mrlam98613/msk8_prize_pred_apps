@@ -14,6 +14,7 @@ M3 內同時保存：
 from __future__ import annotations
 
 import csv
+import datetime as dt
 import re
 from pathlib import Path
 
@@ -38,6 +39,12 @@ def parse_zh_date(value: str) -> tuple[str, str | None]:
     return date_text, ZH_WEEK_TO_NUM.get(week_text) if week_text else None
 
 
+def iso_week_from_date(date_text: str) -> str:
+    """由 YYYY-MM-DD 日期推算星期數字；星期一=1，星期日=7。"""
+
+    return str(dt.datetime.strptime(date_text, "%Y-%m-%d").isoweekday())
+
+
 def read_m3_rows() -> list[list[str]]:
     """讀取 M3 原始列。"""
 
@@ -58,7 +65,7 @@ def get_JC_next_Date() -> tuple[str, str]:
 
     next_draw_date, next_draw_week = parse_zh_date(row_map["開獎日期"][0])
     if next_draw_week is None:
-        raise ValueError(f"M3 下一期開獎日期缺少星期：{row_map['開獎日期'][0]}")
+        next_draw_week = iso_week_from_date(next_draw_date)
 
     return next_draw_date, next_draw_week
 
