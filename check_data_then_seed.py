@@ -123,10 +123,13 @@ def run_script(script: Path, args: list[str] | None = None, cwd: Path | None = N
     return result.returncode
 
 
+# 執行 A1.py，傳入參數 []，
+# 並指定工作目錄為 A1.py 所在目錄 DIR\ msk_new_seed_apps\A1_seedBet_main.py
 def run_a1() -> int:
     return run_script(A1_SCRIPT)
 
-
+# 執行 C6.py，傳入參數 ["predict", "all"]，
+# 並指定工作目錄為 C6_DIR\ n_msk_lotto_prize123_backtest_pred\c6_lotto_prize_123_pred_bet.py
 def run_c6() -> int:
     return run_script(C6_SCRIPT, ["predict", "all"], cwd=C6_DIR)
 
@@ -136,26 +139,26 @@ def main() -> int:
         m2_latest = latest_m2_date()
         m3_latest, m3_next = m3_dates()
         if m2_latest != m3_latest:
-            write_log(f"{now_string()} M2/M3 最新期不一致，略過 A1。M2={m2_latest}；M3={m3_latest}")
+            write_log(f"{now_string()} M2/M3 最新期不一致，略過 A1_seedBet_main.py。M2={m2_latest}；M3={m3_latest}")
             return 1
 
         last_processed = read_last_processed_date()
         if last_processed == m2_latest:
-            write_log(f"{now_string()} 沒有新資料，略過 A1/C6。最新期={m2_latest}；下期={m3_next}")
+            write_log(f"{now_string()} 沒有新資料，略過 A1_seedBet_main.py/C6_lotto_prize_123_pred_bet.py。最新期={m2_latest}；下期={m3_next}")
             return 0
 
         a1_code = run_a1()
         if a1_code != 0:
-            write_log(f"{now_string()} A1 執行失敗，未更新狀態。最新期={m2_latest}；returncode={a1_code}")
+            write_log(f"{now_string()} A1_seedBet_main.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={a1_code}")
             return a1_code
 
         c6_code = run_c6()
         if c6_code != 0:
-            write_log(f"{now_string()} C6 執行失敗，未更新狀態。最新期={m2_latest}；returncode={c6_code}")
+            write_log(f"{now_string()} C6_lotto_prize_123_pred_bet.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={c6_code}")
             return c6_code
 
         write_last_processed_date(m2_latest)
-        write_log(f"{now_string()} 發現新資料並已執行 A1/C6。最新期={m2_latest}；下期={m3_next}")
+        write_log(f"{now_string()} 發現新資料並已執行 A1_seedBet_main.py/C6_lotto_prize_123_pred_bet.py。最新期={m2_latest}；下期={m3_next}")
         return 0
     except Exception as exc:
         write_log(f"{now_string()} 檢查資料失敗：{exc}")

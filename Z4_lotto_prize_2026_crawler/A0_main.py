@@ -233,7 +233,43 @@ def now_string() -> str:
 
 
 def write_log(message: str) -> None:
-    LOG_PATH.write_text(message + "\n", encoding="utf-8")
+    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with LOG_PATH.open("a", encoding="utf-8") as f:
+        f.write(message.rstrip() + "\n\n")
+
+
+def read_latest_date_from_csv(path: Path, date_column: str) -> str:
+    if not path.exists():
+        return "-"
+    try:
+        df = pd.read_csv(path, encoding="utf-8-sig")
+    except Exception:
+        return "讀取失敗"
+    if date_column not in df.columns or df.empty:
+        return "-"
+    value = str(df[date_column].dropna().astype(str).max()).strip()
+    return value or "-"
+
+
+def local_data_status() -> str:
+    return "\n".join([
+        "本地資料狀態：",
+        f"- Z4 M2 最新期：{read_latest_date_from_csv(M2_CSV, 'ndate')}",
+        f"- WebApp M2 最新期：{read_latest_date_from_csv(WEBAPP_M2_CSV, 'ndate')}",
+        f"- Z4 M6 最新派彩：{read_latest_date_from_csv(M6_CSV, 'nDdate')}",
+        f"- WebApp M6 最新派彩：{read_latest_date_from_csv(WEBAPP_M6_CSV, 'nDdate')}",
+    ])
+
+
+def describe_response(response: requests.Response) -> str:
+    request_id = response.headers.get("x-request-id") or response.headers.get("X-Request-ID") or "-"
+    content_type = response.headers.get("content-type", "-")
+    return (
+        f"HTTP 狀態：{response.status_code} {response.reason}\n"
+        f"Content-Type：{content_type}\n"
+        f"Request-ID：{request_id}\n"
+        f"URL：{response.url}"
+    )
 
 
 def run_timed_step(label: str, func, timings: list[tuple[str, float]], *args, **kwargs):
@@ -361,6 +397,7 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> list[str] | None:
     end_date = f"{end_year}{end_month:02d}{monthrange(end_year, end_month)[1]:02d}"
 
     print("🌐 正在嘗試下載馬會開獎日網頁資料，可能需要一些時間...")
+    response: requests.Response | None = None
     try:
         response = make_session().post(
             HKJC_GRAPHQL_URL,
@@ -377,7 +414,10 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> list[str] | None:
         response.raise_for_status()
         data: dict[str, Any] = response.json()
     except (requests.RequestException, ValueError) as exc:
-        print(f"⚠️ 馬會開獎日下載失敗：{exc}")
+        detail = f"{exc}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        print(f"⚠️ 馬會開獎日下載失敗：{detail}")
         return None
     finally:
         print(f"⏱️ 開獎日下載耗時：{time.perf_counter() - start_time:.2f} 秒")
@@ -503,18 +543,33 @@ def parse_next_draw(draw: dict[str, Any]) -> NextDrawInfo | None:
 
 def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], NextDrawInfo | None]:
     session = make_session()
-    response = session.post(
-        HKJC_GRAPHQL_URL,
-        json={
-            "query": MARKSIX_RESULT_QUERY,
-            "variables": {"lastNDraw": limit, "drawType": "All"},
-        },
-        timeout=REQUEST_TIMEOUT,
-    )
-    response.raise_for_status()
-    data = response.json()
+    response: requests.Response | None = None
+    try:
+        response = session.post(
+            HKJC_GRAPHQL_URL,
+            json={
+                "query": MARKSIX_RESULT_QUERY,
+                "variables": {"lastNDraw": limit, "drawType": "All"},
+            },
+            timeout=REQUEST_TIMEOUT,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as exc:
+        detail = f"馬會 GraphQL 連線/HTTP 失敗：{exc}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        raise RuntimeError(detail) from exc
+    except ValueError as exc:
+        detail = f"馬會 GraphQL 回傳不是有效 JSON：{exc}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        raise RuntimeError(detail) from exc
     if data.get("errors"):
-        raise ValueError(f"馬會 GraphQL 回傳錯誤：{data['errors']}")
+        detail = f"馬會 GraphQL 回傳錯誤：{data['errors']}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        raise RuntimeError(detail)
 
     records = []
     next_draw = None
@@ -786,7 +841,12 @@ def run() -> bool:
         latest_date, next_date = run_timed_step("輸出核對", validate_outputs, timings)
     except Exception as exc:
         timing_report = format_timing_report(timings)
-        message = f"{now_string()} Z4 執行失敗：{exc}"
+        message = (
+            f"{now_string()} Z4 執行失敗。\n"
+            f"錯誤原因：{exc}\n"
+            f"{local_data_status()}\n"
+            "保護狀態：本次失敗未完成同步，WebApp 會保留上一次成功的 CSV。"
+        )
         if timing_report:
             message = f"{message}\n{timing_report}"
         write_log(message)
