@@ -16,19 +16,19 @@ PAGES = [
         "path": CONTENT_DIR / "0_predict_nextdraw.py",
     },
     {
-        "label": "開獎紀錄",
-        "icon": "📊",
-        "path": CONTENT_DIR / "1_lotto_results.py",
-    },
-    {
-        "label": "幸運日分析",
-        "icon": "🍀",
-        "path": CONTENT_DIR / "2_lotto_lucky_day.py",
-    },
-    {
-        "label": "特式預測",
+        "label": "中獎特式下期預測",
         "icon": "🎯",
-        "path": CONTENT_DIR / "3_nextdraw_prize123_pred_bet.py",
+        "path": CONTENT_DIR / "1_nextdraw_prize123_pred_bet.py",
+    },
+    {
+        "label": "派彩特色紀錄",
+        "icon": "💰",
+        "path": CONTENT_DIR / "2_lotto_prize_results.py",
+    },
+    {
+        "label": "你幸運日分析",
+        "icon": "🍀",
+        "path": CONTENT_DIR / "3_lotto_lucky_day.py",
     },
 ]
 

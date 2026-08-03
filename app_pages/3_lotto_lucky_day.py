@@ -201,7 +201,8 @@ def main():
         )
         return
 
-    st.success(f"已從 {csv_path.name} 讀取 {len(lottery_dates)} 個開獎日。")
+    # st.success(f"已從 {csv_path.name} 讀取 {len(lottery_dates)} 個開獎日。")
+    
     if latest_csv_date and latest_csv_date < end_date:
         st.warning(
             f"M7 開獎日只更新至 {latest_csv_date.strftime('%Y-%m-%d')}，"

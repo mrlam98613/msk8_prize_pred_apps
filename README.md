@@ -10,7 +10,7 @@
 
 ### 1、2、3 獎特式投注預測
 
-`app_pages/3_nextdraw_prize123_pred_bet.py` 主要顯示由以下程式產生的特式預測結果：
+`app_pages/1_nextdraw_prize123_pred_bet.py` 主要顯示由以下程式產生的特式預測結果：
 
 ```text
 n_msk_lotto_prize123_backtest_pred/C6_lotto_prize_123_pred_bet.py

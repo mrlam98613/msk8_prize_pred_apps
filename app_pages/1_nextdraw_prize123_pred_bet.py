@@ -293,6 +293,15 @@ def render_home_page():
     st.markdown(
         """
         <style>
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"] {
+            background-color: #ffffff !important;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #ffffff !important;
+        }
         .stMarkdown p, .stMarkdown h6 {
             margin-bottom: 4px !important;
             margin-top: 4px !important;
