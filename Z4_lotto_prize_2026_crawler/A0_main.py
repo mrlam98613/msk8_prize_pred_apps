@@ -217,6 +217,7 @@ class NextDrawInfo:
     draw_id: str
     draw_date: str
     week: int
+    jackpot: int
     estimated_prize: int
     turnover: int
     close_time: str
@@ -526,6 +527,7 @@ def parse_next_draw(draw: dict[str, Any]) -> NextDrawInfo | None:
         draw_id=draw_id,
         draw_date=draw_date,
         week=dt.isoweekday(),
+        jackpot=clean_int(lottery_pool.get("jackpot", 0)),
         estimated_prize=clean_int(lottery_pool.get("estimatedPrize", 0))
         or clean_int(lottery_pool.get("derivedFirstPrizeDiv", 0))
         or 8_000_000,
@@ -677,6 +679,12 @@ def estimate_next_prize_fund(latest: DrawRecord, next_draw: NextDrawInfo | None 
     return max(8_000_000, first_prize)
 
 
+def estimate_next_jackpot(next_draw: NextDrawInfo | None = None) -> int:
+    if next_draw and next_draw.jackpot > 0:
+        return next_draw.jackpot
+    return 0
+
+
 def record_to_m6_row(record: DrawRecord) -> dict[str, Any]:
     return {
         "nDdate": record.draw_date,
@@ -791,7 +799,8 @@ def create_m3_prize_results(records: list[DrawRecord], next_draw: NextDrawInfo |
     rows.extend([
         ["🟢 下一期"],
         ["開獎日期", format_zh_date_with_week(next_draw_date)],
-        ["下期頭獎基金", str(estimate_next_prize_fund(latest, next_draw=next_draw))],
+        ["多寶 / 金多寶", str(estimate_next_jackpot(next_draw=next_draw))],
+        ["估計頭獎基金", str(estimate_next_prize_fund(latest, next_draw=next_draw))],
     ])
     with M3_CSV.open("w", newline="", encoding="utf-8-sig") as f:
         csv.writer(f).writerows(rows)

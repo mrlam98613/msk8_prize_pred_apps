@@ -1,5 +1,36 @@
 # css.py
 
+white_black_style = """
+<style>
+    .stApp,
+    [data-testid="stAppViewContainer"],
+    [data-testid="stHeader"],
+    [data-testid="stToolbar"],
+    [data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+    }
+    .stApp,
+    .stApp *,
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
+    input,
+    textarea,
+    select,
+    [data-baseweb="select"] > div,
+    [data-baseweb="input"] > div,
+    [data-baseweb="textarea"] > div {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    button,
+    [role="button"] {
+        color: #000000 !important;
+    }
+</style>
+"""
+
 card_style = """
 <style>
     .my-card {

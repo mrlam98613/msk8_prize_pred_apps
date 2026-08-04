@@ -8,6 +8,11 @@ import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from css import white_black_style
+
 PRIZE_RESULTS_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M3_lotto_prize_results.csv"
 LOTTO_RESULTS_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
 BET_RECORDS_PATH = PROJECT_ROOT / "msk_new_seed_apps" / "bet_data" / "my_bet_records.csv"
@@ -275,6 +280,8 @@ def load_predictions_for_date(path: Path, target_date: str):
 
 
 def render_home_page():
+
+    st.markdown(white_black_style, unsafe_allow_html=True)
 
     # 加入自訂 CSS，縮小行距與分隔線間距
     st.markdown("""

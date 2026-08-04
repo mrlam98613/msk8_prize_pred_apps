@@ -108,6 +108,7 @@ class MingpaoDraw:
     prizes: dict[str, int]
     winning_units: dict[str, float]
     next_draw_date: str
+    next_jackpot: int
     next_prize_fund: int
 
 
@@ -238,7 +239,14 @@ def parse_next_draw_date(text: str) -> str:
 
 
 def parse_next_prize_fund(text: str) -> int:
-    match = re.search(r"(?:估計頭獎基金|下期頭獎基金|頭獎獨贏)[:：]?\s*\$?([0-9,]+)", text)
+    match = re.search(r"估計頭獎基金[:：]?\s*\*{0,2}\$?([0-9,.]+)", text)
+    if not match:
+        match = re.search(r"(?:下期頭獎基金|頭獎獨贏)[:：]?\s*\*{0,2}\$?([0-9,.]+)", text)
+    return clean_int(match.group(1), 0) if match else 0
+
+
+def parse_next_jackpot(text: str) -> int:
+    match = re.search(r"(?:多寶\s*/\s*金多寶|金多寶|多寶)[:：]?\s*\*{0,2}\$?([0-9,.]+)", text)
     return clean_int(match.group(1), 0) if match else 0
 
 
@@ -272,6 +280,7 @@ def parse_mingpao_draw(html: str) -> MingpaoDraw:
         prizes=prizes,
         winning_units=winning_units,
         next_draw_date=parse_next_draw_date(text),
+        next_jackpot=parse_next_jackpot(text),
         next_prize_fund=parse_next_prize_fund(text),
     )
 
@@ -339,7 +348,8 @@ def write_m3(draw: MingpaoDraw, path: Path) -> None:
     rows.extend([
         ["🟢 下一期"],
         ["開獎日期", format_zh_date_with_week(draw.next_draw_date)],
-        ["下期頭獎基金", str(draw.next_prize_fund)],
+        ["多寶 / 金多寶", str(draw.next_jackpot)],
+        ["估計頭獎基金", str(draw.next_prize_fund)],
     ])
     with path.open("w", newline="", encoding="utf-8-sig") as f:
         csv.writer(f).writerows(rows)
@@ -419,7 +429,8 @@ def run(apply: bool = False) -> bool:
             f"/> 開獎日期：{draw.draw_date}\n"
             f"/> 號碼：{', '.join(str(num) for num in draw.numbers)} + 特{draw.extra_number}\n"
             f"/> 下期開獎日期：{draw.next_draw_date}\n"
-            f"/> 下期頭獎基金：{draw.next_prize_fund}"
+            f"/> 多寶 / 金多寶：{draw.next_jackpot}\n"
+            f"/> 估計頭獎基金：{draw.next_prize_fund}"
         )
         print(message)
         write_log(message)

@@ -3,11 +3,17 @@ import csv
 from datetime import datetime
 from pathlib import Path
 import base64
+import sys
 
 import streamlit as st
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from css import white_black_style
+
 PRIZE_HISTORY_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
 
@@ -155,15 +161,10 @@ def render_draw_record(draw_no, row):
 
 
 def main():
+    st.markdown(white_black_style, unsafe_allow_html=True)
     st.markdown(
         """
         <style>
-        .stApp,
-        [data-testid="stAppViewContainer"],
-        [data-testid="stHeader"],
-        [data-testid="stToolbar"] {
-            background-color: #ffffff !important;
-        }
         .draw-title {
             font-size: 1.08rem;
             font-weight: 800;

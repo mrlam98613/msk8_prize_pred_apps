@@ -3,8 +3,15 @@ import csv
 import datetime
 import html
 from pathlib import Path
+import sys
 
 import streamlit as st
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from css import white_black_style
 
 TIAN_GAN = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
@@ -179,6 +186,7 @@ def get_fortune_gan(biaz_tg):
 
 
 def main():
+    st.markdown(white_black_style, unsafe_allow_html=True)
     st.title("六合彩幸運日分析")
     st.markdown(
         """

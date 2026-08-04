@@ -3,11 +3,17 @@ import base64
 import csv
 from collections import defaultdict
 from datetime import datetime
+import sys
 
 import streamlit as st
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from css import white_black_style
+
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
 LOTTO_RESULTS_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
 PRIZE_SUMMARY_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
@@ -290,18 +296,10 @@ def render_history_section():
 
 
 def render_home_page():
+    st.markdown(white_black_style, unsafe_allow_html=True)
     st.markdown(
         """
         <style>
-        .stApp,
-        [data-testid="stAppViewContainer"],
-        [data-testid="stHeader"],
-        [data-testid="stToolbar"] {
-            background-color: #ffffff !important;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #ffffff !important;
-        }
         .stMarkdown p, .stMarkdown h6 {
             margin-bottom: 4px !important;
             margin-top: 4px !important;

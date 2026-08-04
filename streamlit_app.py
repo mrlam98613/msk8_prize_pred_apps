@@ -11,6 +11,11 @@ CONTENT_DIR = PROJECT_ROOT / "app_pages"
 
 PAGES = [
     {
+        "label": "六合彩最新資訊",
+        "icon": "📌",
+        "path": CONTENT_DIR / "0_lotto_info.py",
+    },
+    {
         "label": "下期預測",
         "icon": "🏆",
         "path": CONTENT_DIR / "0_predict_nextdraw.py",
