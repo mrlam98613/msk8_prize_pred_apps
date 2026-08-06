@@ -63,7 +63,7 @@ NEXT_SUMMARY_CSV = BET_DATA_DIR / "nextBetDraw_summary.csv" # 下期日期及種
 BACKTEST_LAST_DRAW = 30 # 刪除data, 重新輸入回測期數
 BET_UNIT = 10 # 計算以 10 元投注為單位。
 COLLECT_BALLS_BREAK = 9 # RBG 三種顏色球收集 9 球以上就停止。
-DRAW_SAME_COLOR = 2 #收集該期有周一顏色的球數。例如該期紅色球有 3 球以上。
+DRAW_SAME_COLOR = 3 #收集該期有周一顏色的球數。例如該期紅色球有 3 球以上。
 # ===============================================================================
 DRAW_COLUMNS = ["ndate", "N1", "N2", "N3", "N4", "N5", "N6", "N7"]
 BET_COLUMNS = ["bet_date", "N1", "N2", "N3", "N4", "N5", "N6"]
