@@ -1,0 +1,2 @@
+﻿next_draw_date,selected_window,pred_interval_rule,pred_rbg_rule,rule_display,candidate_pools,candidate_pool_counts,single_bet_nums,P1_candidates,P2_candidates,P3_candidates,P4_candidates,P5_candidates,P6_candidates
+2026-08-06,8,"[0,0,1,2,3,4]","[R,R,B,B,G,B]","[0,0,1,2,3,4] + [R,R,B,B,G,B]","P1:[1,2,7,8] | P2:[1,2,7,8] | P3:[14,15,20] | P4:[25,26] | P5:[32,33,38,39] | P6:[41,42,47,48]",P1=4球，P2=4球，P3=3球，P4=2球，P5=4球，P6=4球 / 合共21球，不重複17球,"[1,7,14,26,32,42]","[1,2,7,8]","[1,2,7,8]","[14,15,20]","[25,26]","[32,33,38,39]","[41,42,47,48]"
