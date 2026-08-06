@@ -16,6 +16,14 @@
 2. 只讀取 A_msk_lottery_data_folder/ 內已由 Z3 驗證/複製的開獎資料。
 3. 所有投注結果只寫入本資料夾 bet_data/。
 4. 刪除 bet_data/*.csv 後，下次執行會自動重新初始化回測。
+
+目前種子投注規則：
+1. 重設時隨機產生 1 注 1-49 六號單式。
+2. 1 注全不命中時，原注沿用至下期，直到命中正號產生種子。
+3. 1 個種子產生 1 注，2 個種子產生 2 注，最多只產生 3 注。
+4. 一注命中 3 球時，3 個命中號分成 3 注單種子投注。
+5. 若 3 注合計命中 4 球或以上，從命中種子混合產生最多 3 注。
+6. 3 注全不命中時，下期重設為隨機 1 注單式。
 """
 
 from __future__ import annotations
@@ -52,10 +60,10 @@ NEXT_RECORD_CSV = BET_DATA_DIR / "nextBetDraw_record.csv" # 下期投注紀錄
 NEXT_SUMMARY_CSV = BET_DATA_DIR / "nextBetDraw_summary.csv" # 下期日期及種子提示
 
 # ---------------------------------------- parmater -----------------------------|
-BACKTEST_LAST_DRAW = 40 # 刪除data, 重新輸入回測期數
+BACKTEST_LAST_DRAW = 30 # 刪除data, 重新輸入回測期數
 BET_UNIT = 10 # 計算以 10 元投注為單位。
 COLLECT_BALLS_BREAK = 9 # RBG 三種顏色球收集 9 球以上就停止。
-DRAW_SAME_COLOR = 3 #收集該期有周一顏色的球數。例如該期紅色球有 3 球以上。
+DRAW_SAME_COLOR = 2 #收集該期有周一顏色的球數。例如該期紅色球有 3 球以上。
 # ===============================================================================
 DRAW_COLUMNS = ["ndate", "N1", "N2", "N3", "N4", "N5", "N6", "N7"]
 BET_COLUMNS = ["bet_date", "N1", "N2", "N3", "N4", "N5", "N6"]
@@ -119,6 +127,7 @@ class SettlementResult:
     total_prize: int
     total_bets: int
     hit_counter: dict[float, int]
+    max_score: float
 
 
 def is_valid_date(value: object) -> bool:
@@ -458,12 +467,14 @@ def settle_draw(bet_date: str, bets: pd.DataFrame, draw_balls: list[int], specia
     total_prize = 0
     total_bets = 0
     hit_counter = {score: 0 for score in PRIZE_TABLE}
+    max_score = 0.0
 
     for _, bet_row in bets.iterrows():
         total_bets += 1
         bet = bet_values(bet_row)
         last_bet = bet
         matched, special_hit, score, prize = check_and_score(bet, draw_balls, special)
+        max_score = max(max_score, score)
         total_prize += prize
         if prize > 0:
             hit_counter[score] += 1
@@ -487,7 +498,15 @@ def settle_draw(bet_date: str, bets: pd.DataFrame, draw_balls: list[int], specia
         total_prize=total_prize,
         total_bets=total_bets,
         hit_counter=hit_counter,
+        max_score=max_score,
     )
+
+
+def should_reset_to_single_bet(result: SettlementResult) -> bool:
+    """依種子投注規則判斷下期是否重設為一注全新單式。"""
+
+    # 最多 3 注；若 3 注投注全不命中，下一期重設一注。
+    return result.total_bets >= 3 and not result.matched_numbers
 
 
 def print_next_header(next_info: NextDrawInfo) -> None:
@@ -549,13 +568,16 @@ def run_backtest_init(df_all: pd.DataFrame, next_info: NextDrawInfo) -> None:
             hit_counter[score] += count
 
         next_bet_date = next_info.date if pos == len(recent) - 1 else str(recent.iloc[pos + 1]["ndate"])
-        next_bets = build_next_bets(
-            matched_numbers=result.matched_numbers,
-            last_bet=result.last_bet,
-            seed_base=start_seed + pos + 1000,
-            anchor_date=draw_date,
-            df_all=df_all,
-        )
+        if should_reset_to_single_bet(result):
+            next_bets = [random_base_draw(seed_val=start_seed + pos + 1000)]
+        else:
+            next_bets = build_next_bets(
+                matched_numbers=result.matched_numbers,
+                last_bet=result.last_bet,
+                seed_base=start_seed + pos + 1000,
+                anchor_date=draw_date,
+                df_all=df_all,
+            )
         save_bet_record(next_bet_date, next_bets)
 
         if pos == len(recent) - 1:
@@ -647,13 +669,16 @@ def run_live_check(df_all: pd.DataFrame, next_info: NextDrawInfo) -> None:
         print(f"本期派彩: ${result.total_prize:,}")
 
     seed_base = int(dt.datetime.now().timestamp()) % 100000
-    next_bets = build_next_bets(
-        matched_numbers=result.matched_numbers,
-        last_bet=result.last_bet,
-        seed_base=seed_base,
-        anchor_date=pending_date,
-        df_all=df_all,
-    )
+    if should_reset_to_single_bet(result):
+        next_bets = [random_base_draw(seed_val=seed_base)]
+    else:
+        next_bets = build_next_bets(
+            matched_numbers=result.matched_numbers,
+            last_bet=result.last_bet,
+            seed_base=seed_base,
+            anchor_date=pending_date,
+            df_all=df_all,
+        )
     save_bet_record(next_info.date, next_bets)
     save_next_prediction(next_info.date, next_bets)
     save_next_prediction_summary(next_info, result.matched_numbers)

@@ -147,6 +147,9 @@ fragment lotteryDrawsFragment on LotteryDraw {
   closeDate
   drawDate
   status
+  snowballCode
+  snowballName_en
+  snowballName_ch
   lotteryPool {
     sell
     status
@@ -166,7 +169,11 @@ fragment lotteryDrawsFragment on LotteryDraw {
     xDrawnNo
   }
 }
-query marksix {
+query marksixDraw {
+  timeOffset {
+    m6
+    ts
+  }
   lotteryDraws {
     ...lotteryDrawsFragment
   }
@@ -529,8 +536,7 @@ def parse_next_draw(draw: dict[str, Any]) -> NextDrawInfo | None:
         week=dt.isoweekday(),
         jackpot=clean_int(lottery_pool.get("jackpot", 0)),
         estimated_prize=clean_int(lottery_pool.get("estimatedPrize", 0))
-        or clean_int(lottery_pool.get("derivedFirstPrizeDiv", 0))
-        or 8_000_000,
+        or clean_int(lottery_pool.get("derivedFirstPrizeDiv", 0)),
         turnover=clean_int(lottery_pool.get("totalInvestment", 0)),
         close_time=close_time,
     )
@@ -583,6 +589,11 @@ def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], NextD
     records = sorted(records, key=lambda item: item.draw_date)
     if next_draw is None:
         next_draw = download_next_draw_from_home(session, records[-1].draw_date)
+    if next_draw is None:
+        next_draw = download_next_draw_by_recent_range(session, records[-1].draw_date)
+    if next_draw is None:
+        next_draw = download_next_draw_by_date_range(session, records[-1].draw_date)
+    log_next_draw_status(records[-1].draw_date, next_draw)
     return records, next_draw
 
 
@@ -610,6 +621,133 @@ def download_next_draw_from_home(session: requests.Session, latest_draw_date: st
     if not candidates:
         return None
     return sorted(candidates, key=lambda item: item.draw_date)[0]
+
+
+def download_next_draw_by_recent_range(session: requests.Session, latest_draw_date: str) -> NextDrawInfo | None:
+    """跟馬會前端相同，用最近約 60 日範圍補抓下一期資料。"""
+    end_dt = date.today()
+    start_dt = end_dt - timedelta(days=60)
+    start_date = start_dt.strftime("%Y%m%d")
+    end_date = end_dt.strftime("%Y%m%d")
+    response: requests.Response | None = None
+    try:
+        response = session.post(
+            HKJC_GRAPHQL_URL,
+            json={
+                "query": MARKSIX_RESULT_QUERY,
+                "variables": {
+                    "startDate": start_date,
+                    "endDate": end_date,
+                    "drawType": "All",
+                },
+            },
+            timeout=REQUEST_TIMEOUT,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        detail = f"{exc}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        write_log(f"{now_string()} ⚠️ 下一期最近 60 日補抓失敗。\n{detail}")
+        return None
+
+    if data.get("errors"):
+        write_log(f"{now_string()} ⚠️ 下一期最近 60 日 GraphQL 回傳錯誤：{data['errors']}")
+        return None
+
+    candidates = []
+    for draw in data.get("data", {}).get("lotteryDraws") or []:
+        candidate = parse_next_draw(draw)
+        if candidate and candidate.draw_date > latest_draw_date:
+            candidates.append(candidate)
+    if not candidates:
+        write_log(
+            f"{now_string()} ⚠️ 下一期最近 60 日沒有找到 draw。\n"
+            f"/> latest_draw_date={latest_draw_date}\n"
+            f"/> startDate={start_date}, endDate={end_date}"
+        )
+        return None
+    return sorted(candidates, key=lambda item: item.draw_date)[0]
+
+
+def download_next_draw_by_date_range(session: requests.Session, latest_draw_date: str) -> NextDrawInfo | None:
+    """用最新一期日期後 7 日範圍補抓下一期，避免首頁 query 沒帶下一期資料。"""
+    latest_dt = datetime.strptime(latest_draw_date, "%Y-%m-%d").date()
+    start_date = (latest_dt + timedelta(days=1)).strftime("%Y%m%d")
+    end_date = (latest_dt + timedelta(days=7)).strftime("%Y%m%d")
+    response: requests.Response | None = None
+    try:
+        response = session.post(
+            HKJC_GRAPHQL_URL,
+            json={
+                "query": MARKSIX_RESULT_QUERY,
+                "variables": {
+                    "startDate": start_date,
+                    "endDate": end_date,
+                    "drawType": "All",
+                },
+            },
+            timeout=REQUEST_TIMEOUT,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        detail = f"{exc}"
+        if response is not None:
+            detail = f"{detail}\n{describe_response(response)}"
+        write_log(f"{now_string()} ⚠️ 下一期日期範圍補抓失敗。\n{detail}")
+        return None
+
+    if data.get("errors"):
+        write_log(f"{now_string()} ⚠️ 下一期日期範圍 GraphQL 回傳錯誤：{data['errors']}")
+        return None
+
+    candidates = []
+    for draw in data.get("data", {}).get("lotteryDraws") or []:
+        candidate = parse_next_draw(draw)
+        if candidate and candidate.draw_date > latest_draw_date:
+            candidates.append(candidate)
+    if not candidates:
+        write_log(
+            f"{now_string()} ⚠️ 下一期日期範圍沒有找到 draw。\n"
+            f"/> latest_draw_date={latest_draw_date}\n"
+            f"/> startDate={start_date}, endDate={end_date}"
+        )
+        return None
+    return sorted(candidates, key=lambda item: item.draw_date)[0]
+
+
+def log_next_draw_status(latest_draw_date: str, next_draw: NextDrawInfo | None) -> None:
+    """記錄下一期資料是否齊全，避免 M3/M4 靜默套用舊資料。"""
+    expected_date, _ = get_next_draw_date(latest_draw_date)
+    if next_draw is None:
+        write_log(
+            f"{now_string()} ⚠️ 未獲取下一期最新資訊。\n"
+            f"/> 最新一期：{latest_draw_date}\n"
+            f"/> 預計下一期：{expected_date}\n"
+            "/> M3 多寶 / 金多寶及估計頭獎基金會標示未獲取最新資訊。"
+        )
+        return
+
+    warnings = []
+    if next_draw.draw_date != expected_date:
+        warnings.append(f"下一期日期不一致：expected={expected_date}, got={next_draw.draw_date}")
+    if next_draw.jackpot <= 0:
+        warnings.append("Jackpot / Snowball 缺失或為 0")
+    if next_draw.estimated_prize <= 0:
+        warnings.append("Estimated 1st Division Prize Fund 缺失或為 0")
+
+    if warnings:
+        write_log(
+            f"{now_string()} ⚠️ 下一期資料不齊全。\n"
+            f"/> latest_draw_date={latest_draw_date}\n"
+            f"/> next_draw_date={next_draw.draw_date}\n"
+            f"/> draw_id={next_draw.draw_id or '-'}\n"
+            f"/> jackpot={next_draw.jackpot}\n"
+            f"/> estimatedPrize={next_draw.estimated_prize}\n"
+            f"/> warnings：{'；'.join(warnings)}"
+        )
 
 
 def draw_to_m2_row(record: DrawRecord) -> dict[str, Any]:
@@ -671,18 +809,18 @@ def get_next_draw_date(last_draw_date: str, next_draw: NextDrawInfo | None = Non
 def estimate_next_prize_fund(latest: DrawRecord, next_draw: NextDrawInfo | None = None) -> int:
     if next_draw and next_draw.estimated_prize > 0:
         return next_draw.estimated_prize
-    if latest.estimated_prize > 0:
-        return latest.estimated_prize
-    if latest.derived_first_prize_div > 0:
-        return latest.derived_first_prize_div
-    first_prize = latest.prizes.get("1", 0)
-    return max(8_000_000, first_prize)
+    return 0
 
 
 def estimate_next_jackpot(next_draw: NextDrawInfo | None = None) -> int:
     if next_draw and next_draw.jackpot > 0:
         return next_draw.jackpot
     return 0
+
+
+def format_next_money_or_warning(value: int) -> str:
+    """M3 顯示用：下一期資料缺失時不要套用舊資料。"""
+    return str(value) if value > 0 else "未獲取最新資訊"
 
 
 def record_to_m6_row(record: DrawRecord) -> dict[str, Any]:
@@ -799,8 +937,8 @@ def create_m3_prize_results(records: list[DrawRecord], next_draw: NextDrawInfo |
     rows.extend([
         ["🟢 下一期"],
         ["開獎日期", format_zh_date_with_week(next_draw_date)],
-        ["多寶 / 金多寶", str(estimate_next_jackpot(next_draw=next_draw))],
-        ["估計頭獎基金", str(estimate_next_prize_fund(latest, next_draw=next_draw))],
+        ["多寶 / 金多寶", format_next_money_or_warning(estimate_next_jackpot(next_draw=next_draw))],
+        ["估計頭獎基金", format_next_money_or_warning(estimate_next_prize_fund(latest, next_draw=next_draw))],
     ])
     with M3_CSV.open("w", newline="", encoding="utf-8-sig") as f:
         csv.writer(f).writerows(rows)
