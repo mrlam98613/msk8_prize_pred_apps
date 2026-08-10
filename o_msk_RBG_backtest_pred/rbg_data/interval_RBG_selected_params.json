@@ -1,47 +1,47 @@
 {
   "selected_window": 8,
   "metric": "combined_avg_score",
-  "combined_avg_score": 6.3,
-  "avg_interval_qty_hits": 3.8333,
-  "avg_rbg_qty_hits": 0.0,
-  "avg_rbg_pos_hits": 0.0,
-  "avg_candidate_pool_hits": 2.4667,
-  "avg_candidate_position_hits": 1.2667,
-  "avg_single_bet_hits": 1.0,
-  "single_bet_3plus_hit_rate": 0.0667,
-  "single_bet_prize_hit_rate": 0.0667,
+  "combined_avg_score": 12.7334,
+  "avg_interval_qty_hits": 3.7667,
+  "avg_rbg_qty_hits": 4.4333,
+  "avg_rbg_pos_hits": 2.1667,
+  "avg_candidate_pool_hits": 2.3667,
+  "avg_candidate_position_hits": 1.0333,
+  "avg_single_bet_hits": 0.8667,
+  "single_bet_3plus_hit_rate": 0.0333,
+  "single_bet_prize_hit_rate": 0.0333,
   "prize_stats": {
-    "一獎  6 正號": {
+    "一獎  6": {
       "hits": 0,
       "hit_rate": 0.0
     },
-    "二獎  5 正 + 特別號": {
+    "二獎  5 +": {
       "hits": 0,
       "hit_rate": 0.0
     },
-    "三獎  5 正號": {
+    "三獎  5": {
       "hits": 0,
       "hit_rate": 0.0
     },
-    "四獎  4 正 + 特別號": {
+    "四獎  4 +": {
       "hits": 0,
       "hit_rate": 0.0
     },
-    "五獎  4 正號": {
+    "五獎  4": {
       "hits": 1,
       "hit_rate": 0.0333
     },
-    "六獎  3 正 + 特別號": {
+    "六獎  3  +": {
       "hits": 0,
       "hit_rate": 0.0
     },
-    "七獎  3 正號": {
-      "hits": 1,
-      "hit_rate": 0.0333
+    "七獎  3": {
+      "hits": 0,
+      "hit_rate": 0.0
     },
     "未中獎": {
-      "hits": 28,
-      "hit_rate": 0.9333
+      "hits": 29,
+      "hit_rate": 0.9667
     }
   },
   "score_stats": {
@@ -51,6 +51,6 @@
     "4.5": 0,
     "4.0": 1,
     "3.5": 0,
-    "3.0": 1
+    "3.0": 0
   }
 }

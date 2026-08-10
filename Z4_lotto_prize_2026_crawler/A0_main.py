@@ -242,7 +242,7 @@ def now_string() -> str:
 
 def write_log(message: str) -> None:
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with LOG_PATH.open("a", encoding="utf-8") as f:
+    with LOG_PATH.open("w", encoding="utf-8") as f:
         f.write(message.rstrip() + "\n\n")
 
 

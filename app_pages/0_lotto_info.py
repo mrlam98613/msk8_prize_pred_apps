@@ -70,8 +70,17 @@ def format_date_with_weekday(value: str) -> str:
     return f"{dt.year}年{dt.month:02d}月{dt.day:02d}日 ({weekday})"
 
 
+def get_file_signature(path: Path) -> tuple[int, int]:
+    """回傳檔案更新指紋，避免 Streamlit 長駐服務讀到舊 cache。"""
+
+    if not path.exists():
+        return (0, 0)
+    stat = path.stat()
+    return (stat.st_mtime_ns, stat.st_size)
+
+
 @st.cache_data(show_spinner=False)
-def load_m3_info(path: Path) -> dict[str, object]:
+def load_m3_info(path: Path, file_signature: tuple[int, int]) -> dict[str, object]:
     info = {
         "period": "",
         "latest_date": "",
@@ -81,6 +90,7 @@ def load_m3_info(path: Path) -> dict[str, object]:
         "estimated_prize": "",
         "prizes": [],
     }
+    _ = file_signature
     if not path.exists():
         return info
 
@@ -231,7 +241,7 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    info = load_m3_info(M3_CSV)
+    info = load_m3_info(M3_CSV, get_file_signature(M3_CSV))
     if not M3_CSV.exists():
         st.warning(f"找不到 M3 檔案：{M3_CSV}")
         return
