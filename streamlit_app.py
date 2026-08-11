@@ -15,11 +15,11 @@ PAGES = [
         "icon": "📌",
         "path": CONTENT_DIR / "0_lotto_info.py",
     },
-    {
-        "label": "種子投注法-下期投注預測",
-        "icon": "🏆",
-        "path": CONTENT_DIR / "0_predict_nextdraw.py",
-    },
+    # {
+    #     "label": "種子投注法-下期投注預測",
+    #     "icon": "🏆",
+    #     "path": CONTENT_DIR / "0_predict_nextdraw.py",
+    # },
     {
         "label": "天機借運-下期投注預測",
         "icon": "🎯",
@@ -117,11 +117,11 @@ def run_page_file(path: Path) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="MSK 8 下期預測", page_icon="🎯", layout="centered")
+    st.set_page_config(page_title="MSK 8 投注預測", page_icon="🎯", layout="centered")
     
     apply_styles()
 
-    st.title("六合彩預測與分析")
+    st.title("MSK 8 六合彩預測")
     st.caption("以下內容直接顯示在同一頁")
 
     page_labels = [f"{page['icon']} {page['label']}" for page in PAGES]
