@@ -126,7 +126,7 @@ def main() -> None:
 
     page_labels = [f"{page['icon']} {page['label']}" for page in PAGES]
     selected_label = st.selectbox(
-        "請選擇內容",
+        "請拉下選單-選擇網頁功能",
         page_labels,
         index=0,
         key="main_page_selector",
