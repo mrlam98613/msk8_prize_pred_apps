@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 from collections import Counter
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -25,7 +26,7 @@ PRIZE_CSV_DATA = current_dir.parent / "A_msk_lottery_data_folder" / "M6_lotto_hi
 OUTPUT_JSON = current_dir / "birthday_num_backtest_params.json"
 DEFAULT_BACKTEST_DRAW = 10
 DEFAULT_WINDOW_DRAW = 30
-DEFAULT_COLLECT_LIMIT = [20]
+DEFAULT_COLLECT_LIMIT = [25]
 DEFAULT_MIN_DRAW_BIRTHDAY_COUNT = [5]
 BIRTHDAY_MIN = 1
 BIRTHDAY_MAX = 31
@@ -127,6 +128,170 @@ def calc_prize_result(candidate_pool: list[int], nums: list[int], special_num: i
     }
 
 
+def score_birthday_pool(
+    df_all: pd.DataFrame,
+    target_idx: int,
+    window_draws: int,
+    candidate_pool: list[int],
+) -> Counter:
+    """用目標期前窗口內生日號出現次數替候選球排序。"""
+
+    candidate_set = set(candidate_pool)
+    start_idx = max(0, target_idx - window_draws)
+    score_counter: Counter = Counter()
+    for idx in range(target_idx - 1, start_idx - 1, -1):
+        row = df_all.iloc[idx]
+        for num in get_birthday_nums(get_main_nums(row) + [int(row["N7"])]):
+            if num in candidate_set:
+                score_counter.update([num])
+    return score_counter
+
+
+def pick_ranked_nums(
+    candidates: list[int],
+    score_counter: Counter,
+    quota: int,
+    used_nums: set[int],
+    overlap_base: set[int] | None = None,
+    overlap_state: list[int] | None = None,
+    max_overlap: int = 6,
+) -> list[int]:
+    """按近期分數從候選球中取指定數量，不重複。"""
+
+    picks = []
+    overlap_base = overlap_base or set()
+    overlap_state = overlap_state or [0]
+    ranked = sorted(candidates, key=lambda num: (-score_counter.get(num, 0), num))
+    for num in ranked:
+        if num in used_nums:
+            continue
+        if num in overlap_base and overlap_state[0] >= max_overlap:
+            continue
+        picks.append(num)
+        used_nums.add(num)
+        if num in overlap_base:
+            overlap_state[0] += 1
+        if len(picks) >= quota:
+            break
+    return picks
+
+
+def build_single_bet_by_groups(
+    group_pool: dict[str, list[int]],
+    score_counter: Counter,
+    quota_map: dict[str, int],
+    overlap_base: list[int] | None = None,
+    max_overlap: int = 6,
+) -> list[int]:
+    """依指定分組配額產生 6 球單式。"""
+
+    selected = []
+    used_nums: set[int] = set()
+    overlap_base_set = set(overlap_base or [])
+    overlap_state = [0]
+    for group_name, quota in quota_map.items():
+        selected.extend(
+            pick_ranked_nums(
+                group_pool.get(group_name, []),
+                score_counter,
+                quota,
+                used_nums,
+                overlap_base=overlap_base_set,
+                overlap_state=overlap_state,
+                max_overlap=max_overlap,
+            )
+        )
+
+    if len(selected) < 6:
+        all_candidates = sorted({num for nums in group_pool.values() for num in nums})
+        selected.extend(
+            pick_ranked_nums(
+                all_candidates,
+                score_counter,
+                6 - len(selected),
+                used_nums,
+                overlap_base=overlap_base_set,
+                overlap_state=overlap_state,
+                max_overlap=max_overlap,
+            )
+        )
+    return sorted(selected[:6])
+
+
+def build_interval_single_bet(group_pool: dict[str, list[int]], score_counter: Counter) -> list[int]:
+    """用 0-9 / 10-20 / 21-31 分段產生一注 2-2-2 單式。"""
+
+    return build_single_bet_by_groups(
+        group_pool=group_pool,
+        score_counter=score_counter,
+        quota_map={"0-9": 2, "10-20": 2, "21-31": 2},
+    )
+
+
+def build_two_color_single_bet(
+    rbg_pool: dict[str, list[int]],
+    score_counter: Counter,
+    colors: tuple[str, str],
+    overlap_base: list[int] | None = None,
+    max_overlap: int = 2,
+) -> list[int]:
+    """用兩種 RBG 顏色產生一注 6 球單式，不採用三色 2-2-2。"""
+
+    return build_single_bet_by_groups(
+        group_pool=rbg_pool,
+        score_counter=score_counter,
+        quota_map={colors[0]: 3, colors[1]: 3},
+        overlap_base=overlap_base,
+        max_overlap=max_overlap,
+    )
+
+
+def build_best_two_color_single_bet(
+    rbg_pool: dict[str, list[int]],
+    score_counter: Counter,
+    overlap_base: list[int] | None = None,
+    max_overlap: int = 2,
+) -> tuple[str, list[int]]:
+    """用窗口分數在 R+B / R+G / G+B 三種兩色單式中選一注。"""
+
+    candidates = []
+    for color_pair in [("R", "B"), ("R", "G"), ("G", "B")]:
+        bet = build_two_color_single_bet(
+            rbg_pool,
+            score_counter,
+            colors=color_pair,
+            overlap_base=overlap_base,
+            max_overlap=max_overlap,
+        )
+        candidates.append((
+            "+".join(color_pair),
+            bet,
+            sum(score_counter.get(num, 0) for num in bet),
+        ))
+    color_name, bet, _ = max(candidates, key=lambda item: (item[2], -sum(item[1])))
+    return color_name, bet
+
+
+def build_mid_high_single_bet(
+    group_pool: dict[str, list[int]],
+    score_counter: Counter,
+    overlap_base: list[int] | None = None,
+    max_overlap: int = 1,
+) -> list[int]:
+    """用 10-31 分段產生一注 6 球單式，不取 1-9。"""
+
+    return build_single_bet_by_groups(
+        group_pool={
+            "10-20": group_pool.get("10-20", []),
+            "21-31": group_pool.get("21-31", []),
+        },
+        score_counter=score_counter,
+        quota_map={"10-20": 3, "21-31": 3},
+        overlap_base=overlap_base,
+        max_overlap=max_overlap,
+    )
+
+
 def collect_birthday_pool(
     df_all: pd.DataFrame,
     target_idx: int,
@@ -165,6 +330,65 @@ def collect_birthday_pool(
     return sorted(birthday_pool), used_draws
 
 
+def calc_next_draw_date(last_date: str) -> str:
+    """根據最後一期日期推算下一個 Tue/Thu/Sat 開獎日。"""
+
+    dt = datetime.strptime(last_date, "%Y-%m-%d") + timedelta(days=1)
+    while dt.isoweekday() not in {2, 4, 6}:
+        dt += timedelta(days=1)
+    return dt.strftime("%Y-%m-%d")
+
+
+def build_prediction_record(
+    df_all: pd.DataFrame,
+    window_draws: int,
+    collect_limit: int,
+    min_draw_birthday_count: int,
+) -> dict[str, Any]:
+    """用最新一期已知資料產生下一期生日號候選池及三注單式預測。"""
+
+    target_idx = len(df_all)
+    latest_row = df_all.iloc[-1]
+    latest_date = str(latest_row["ndate"])
+    next_draw_date = calc_next_draw_date(latest_date)
+    birthday_pool, used_draws = collect_birthday_pool(
+        df_all=df_all,
+        target_idx=target_idx,
+        window_draws=window_draws,
+        collect_limit=collect_limit,
+        min_draw_birthday_count=min_draw_birthday_count,
+    )
+    group_pool = group_birthday_pool(birthday_pool)
+    rbg_pool = group_rbg_pool(birthday_pool)
+    score_counter = score_birthday_pool(df_all, target_idx, window_draws, birthday_pool)
+    interval_single_bet = build_interval_single_bet(group_pool, score_counter)
+    rbg_color_pair, rbg_single_bet = build_best_two_color_single_bet(
+        rbg_pool,
+        score_counter,
+        overlap_base=interval_single_bet,
+        max_overlap=2,
+    )
+    mid_high_single_bet = build_mid_high_single_bet(
+        group_pool,
+        score_counter,
+        overlap_base=sorted(set(interval_single_bet) | set(rbg_single_bet)),
+        max_overlap=1,
+    )
+    return {
+        "latest_date": latest_date,
+        "next_draw_date": next_draw_date,
+        "used_draws": used_draws,
+        "birthday_pool": birthday_pool,
+        "birthday_pool_count": len(birthday_pool),
+        "group_pool": group_pool,
+        "rbg_pool": rbg_pool,
+        "interval_single_bet": interval_single_bet,
+        "rbg_color_pair": rbg_color_pair,
+        "rbg_single_bet": rbg_single_bet,
+        "mid_high_single_bet": mid_high_single_bet,
+    }
+
+
 def evaluate_birthday_pool_params(
     df_all: pd.DataFrame,
     backtest_draws: int,
@@ -187,7 +411,7 @@ def evaluate_birthday_pool_params(
         ndate = str(target_row["ndate"])
         nums = get_main_nums(target_row)
         special_num = int(target_row["N7"])
-        actual_birthday_nums = get_birthday_nums(nums)
+        actual_birthday_nums = get_birthday_nums(nums + [special_num])
 
         birthday_pool, used_draws = collect_birthday_pool(
             df_all=df_all,
@@ -200,6 +424,26 @@ def evaluate_birthday_pool_params(
         rbg_pool = group_rbg_pool(birthday_pool)
         hit_nums = sorted(set(actual_birthday_nums) & set(birthday_pool))
         prize_result = calc_prize_result(birthday_pool, nums, special_num)
+        score_counter = score_birthday_pool(df_all, target_idx, window_draws, birthday_pool)
+        interval_single_bet = build_interval_single_bet(group_pool, score_counter)
+        rbg_color_pair, rbg_single_bet = build_best_two_color_single_bet(
+            rbg_pool,
+            score_counter,
+            overlap_base=interval_single_bet,
+            max_overlap=2,
+        )
+        mid_high_single_bet = build_mid_high_single_bet(
+            group_pool,
+            score_counter,
+            overlap_base=sorted(set(interval_single_bet) | set(rbg_single_bet)),
+            max_overlap=1,
+        )
+        single_bet_overlap_nums = sorted(set(interval_single_bet) & set(rbg_single_bet))
+        mid_high_interval_overlap_nums = sorted(set(mid_high_single_bet) & set(interval_single_bet))
+        mid_high_rbg_overlap_nums = sorted(set(mid_high_single_bet) & set(rbg_single_bet))
+        interval_bet_result = calc_prize_result(interval_single_bet, nums, special_num)
+        rbg_bet_result = calc_prize_result(rbg_single_bet, nums, special_num)
+        mid_high_bet_result = calc_prize_result(mid_high_single_bet, nums, special_num)
 
         total_hits += len(hit_nums)
         total_actual_birthday_nums += len(actual_birthday_nums)
@@ -226,6 +470,31 @@ def evaluate_birthday_pool_params(
             "special_hit": prize_result["special_hit"],
             "prize_score": prize_result["score"],
             "prize_label": prize_result["prize_label"],
+            "interval_single_bet": interval_single_bet,
+            "interval_single_hit_nums": interval_bet_result["main_hit_nums"],
+            "interval_single_hit_count": interval_bet_result["main_hit_count"],
+            "interval_single_special_hit": interval_bet_result["special_hit"],
+            "interval_single_score": interval_bet_result["score"],
+            "interval_single_prize_label": interval_bet_result["prize_label"],
+            "rbg_single_bet": rbg_single_bet,
+            "rbg_color_pair": rbg_color_pair,
+            "rbg_single_hit_nums": rbg_bet_result["main_hit_nums"],
+            "rbg_single_hit_count": rbg_bet_result["main_hit_count"],
+            "rbg_single_special_hit": rbg_bet_result["special_hit"],
+            "rbg_single_score": rbg_bet_result["score"],
+            "rbg_single_prize_label": rbg_bet_result["prize_label"],
+            "single_bet_overlap_nums": single_bet_overlap_nums,
+            "single_bet_overlap_count": len(single_bet_overlap_nums),
+            "mid_high_single_bet": mid_high_single_bet,
+            "mid_high_single_hit_nums": mid_high_bet_result["main_hit_nums"],
+            "mid_high_single_hit_count": mid_high_bet_result["main_hit_count"],
+            "mid_high_single_special_hit": mid_high_bet_result["special_hit"],
+            "mid_high_single_score": mid_high_bet_result["score"],
+            "mid_high_single_prize_label": mid_high_bet_result["prize_label"],
+            "mid_high_interval_overlap_nums": mid_high_interval_overlap_nums,
+            "mid_high_interval_overlap_count": len(mid_high_interval_overlap_nums),
+            "mid_high_rbg_overlap_nums": mid_high_rbg_overlap_nums,
+            "mid_high_rbg_overlap_count": len(mid_high_rbg_overlap_nums),
         })
 
     total_cases = len(detail_rows)
@@ -263,6 +532,78 @@ def print_prize_summary(stats: dict[str, Any]) -> None:
     print(f">>> 未中獎: {prize_dist.get('未中獎', 0)} 次")
 
 
+def summarize_single_bets(details: list[dict[str, Any]], prefix: str) -> dict[str, Any]:
+    """統計單式回測命中率與獎項。"""
+
+    hit_dist: Counter = Counter()
+    prize_dist: Counter = Counter()
+    total_hits = 0
+    for row in details:
+        hit_count = int(row[f"{prefix}_single_hit_count"])
+        total_hits += hit_count
+        hit_dist.update([hit_count])
+        prize_dist.update([row[f"{prefix}_single_prize_label"]])
+
+    total_cases = len(details)
+    return {
+        "total_cases": total_cases,
+        "total_hits": total_hits,
+        "avg_hits": round(total_hits / total_cases, 4) if total_cases else 0,
+        "hit_3plus_count": sum(count for hit, count in hit_dist.items() if hit >= 3),
+        "hit_3plus_rate": round(
+            sum(count for hit, count in hit_dist.items() if hit >= 3) / total_cases,
+            4,
+        ) if total_cases else 0,
+        "hit_dist": dict(sorted(hit_dist.items())),
+        "prize_dist": dict(prize_dist),
+    }
+
+
+def print_single_bet_summary(details: list[dict[str, Any]]) -> None:
+    """打印分段單式與 RBG 單式回測比較。"""
+
+    interval_stats = summarize_single_bets(details, "interval")
+    rbg_stats = summarize_single_bets(details, "rbg")
+    rbg_pair_dist = Counter(row["rbg_color_pair"] for row in details)
+
+    print("\n====== 生日號單式回測統計 ======")
+    print(
+        f">>> 分段單式：平均命中 {interval_stats['avg_hits']:.3f}，"
+        f"3+ 命中 {interval_stats['hit_3plus_count']}/{interval_stats['total_cases']} "
+        f"({interval_stats['hit_3plus_rate']:.2%})，命中分佈 {interval_stats['hit_dist']}"
+    )
+    print(
+        f">>> RBG 單式：平均命中 {rbg_stats['avg_hits']:.3f}，"
+        f"3+ 命中 {rbg_stats['hit_3plus_count']}/{rbg_stats['total_cases']} "
+        f"({rbg_stats['hit_3plus_rate']:.2%})，命中分佈 {rbg_stats['hit_dist']}，"
+        f"兩色選用 {dict(rbg_pair_dist)}"
+    )
+    mid_high_stats = summarize_single_bets(details, "mid_high")
+    print(
+        f">>> 10-31單式：平均命中 {mid_high_stats['avg_hits']:.3f}，"
+        f"3+ 命中 {mid_high_stats['hit_3plus_count']}/{mid_high_stats['total_cases']} "
+        f"({mid_high_stats['hit_3plus_rate']:.2%})，命中分佈 {mid_high_stats['hit_dist']}"
+    )
+
+
+def print_prediction_record(prediction: dict[str, Any]) -> None:
+    """打印下一期未開獎預測，不做核對。"""
+
+    print("\n====== 下一期生日號預測 ======")
+    print(
+        f"最新開獎日={prediction['latest_date']}，"
+        f"預測下期={prediction['next_draw_date']}，"
+        f"候選池 /> {prediction['birthday_pool_count']} 球"
+    )
+    print(f"分組球號池 : {format_group_pool(prediction['group_pool'])}")
+    print(f"R: {prediction['rbg_pool']['R']} /> {len(prediction['rbg_pool']['R'])} 球")
+    print(f"B: {prediction['rbg_pool']['B']} /> {len(prediction['rbg_pool']['B'])} 球")
+    print(f"G: {prediction['rbg_pool']['G']} /> {len(prediction['rbg_pool']['G'])} 球")
+    print(f"分段單式 : {prediction['interval_single_bet']}")
+    print(f"RBG單式({prediction['rbg_color_pair']}) : {prediction['rbg_single_bet']}")
+    print(f"10-31單式 : {prediction['mid_high_single_bet']}")
+
+
 def choose_best_param(param_results: list[dict[str, Any]]) -> dict[str, Any]:
     """依命中率自動選最佳參數，平手取較小球池與較嚴入池條件。"""
 
@@ -295,7 +636,7 @@ def print_birthday_backtest(df_history: pd.DataFrame) -> Counter:
         ndate = str(row["ndate"])
         nums = get_main_nums(row)
         special_num = int(row["N7"])
-        birthday_nums = get_birthday_nums(nums)
+        birthday_nums = get_birthday_nums(nums + [special_num])
         birthday_counter.update(birthday_nums)
         count_dist.update([len(birthday_nums)])
 
@@ -333,14 +674,29 @@ def print_birthday_pool_backtest(
 
     for row in detail_rows:
         print(
-            f"\n{row['seq']:>2}, {row['target_date']} {row['nums']} {row['special_num']},  "
-            f"下期生日號組 : {row['actual_birthday_nums']} /> {row['actual_birthday_count']} 球"
+            f"\n{row['seq']:>2}, 回測預測期 ： {row['target_date']} {row['nums']} {row['special_num']},  "
+            f"生日號分析 : {row['actual_birthday_nums']} /> {row['actual_birthday_count']} 球"
         )
         print(f"   分組球號池 : {format_group_pool(row['group_pool'])}")
         print(f"   R: {row['rbg_pool']['R']} /> {len(row['rbg_pool']['R'])} 球")
         print(f"   B: {row['rbg_pool']['B']} /> {len(row['rbg_pool']['B'])} 球")
         print(f"   G: {row['rbg_pool']['G']} /> {len(row['rbg_pool']['G'])} 球")
-        print(f"   核對命中 : {row['hit_nums']} /> {row['hit_count']} 球")
+        print(f"   候選池命中 : {row['hit_nums']} /> {row['hit_count']} 球")
+        print(
+            f"   分段單式 : {row['interval_single_bet']} /> "
+            f"命中 {row['interval_single_hit_nums']} / {row['interval_single_hit_count']} 球，"
+            f"特號 {row['interval_single_special_hit']}，獎項 {row['interval_single_prize_label']}"
+        )
+        print(
+            f"   RBG單式({row['rbg_color_pair']}) : {row['rbg_single_bet']} /> "
+            f"命中 {row['rbg_single_hit_nums']} / {row['rbg_single_hit_count']} 球，"
+            f"特號 {row['rbg_single_special_hit']}，獎項 {row['rbg_single_prize_label']}"
+        )
+        print(
+            f"   10-31單式 : {row['mid_high_single_bet']} /> "
+            f"命中 {row['mid_high_single_hit_nums']} / {row['mid_high_single_hit_count']} 球，"
+            f"特號 {row['mid_high_single_special_hit']}，獎項 {row['mid_high_single_prize_label']}"
+        )
     return {"details": detail_rows, "stats": stats}
 
 
@@ -374,12 +730,20 @@ def run_param_grid_backtest(
             })
 
     best = choose_best_param(param_results)
+    best_stats = best["stats"]
+    prediction = build_prediction_record(
+        df_all=df_all,
+        window_draws=window_draws,
+        collect_limit=best_stats["collect_limit"],
+        min_draw_birthday_count=best_stats["min_draw_birthday_count"],
+    )
     output = {
         "backtest_draws": backtest_draws,
         "window_draws": window_draws,
         "collect_limits": collect_limits,
         "min_draw_birthday_counts": min_draw_birthday_counts,
         "best": best,
+        "prediction": prediction,
         "param_results": param_results,
     }
     write_json(OUTPUT_JSON, output)
@@ -443,6 +807,8 @@ def main() -> None:
         min_draw_birthday_count=best_stats["min_draw_birthday_count"],
     )
     print_prize_summary(final_result["stats"])
+    print_single_bet_summary(final_result["details"])
+    print_prediction_record(param_result["prediction"])
 
 
 if __name__ == "__main__":

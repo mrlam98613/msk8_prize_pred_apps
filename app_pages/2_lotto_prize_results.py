@@ -18,6 +18,7 @@ PRIZE_HISTORY_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_hist
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
 
 
+# 本身會影響更新，但現在加了檔案指紋後，可以保留 cache，又能更新資料。
 @st.cache_data(show_spinner=False)
 def load_ball_image_base64(num: int):
     img_path = BALLS_DIR / f"{num}.png"
@@ -26,8 +27,19 @@ def load_ball_image_base64(num: int):
     return base64.b64encode(img_path.read_bytes()).decode("utf-8")
 
 
+def get_file_signature(path: Path) -> tuple[int, int]:
+    """回傳檔案更新指紋，避免 Streamlit 長駐服務讀到舊 cache。"""
+
+    if not path.exists():
+        return (0, 0)
+    stat = path.stat()
+    return (stat.st_mtime_ns, stat.st_size)
+
+# 本身會影響更新，但現在加了檔案指紋後，可以保留 cache，又能更新資料。
 @st.cache_data(show_spinner=False)
-def load_prize_history():
+
+def load_prize_history(file_signature: tuple[int, int]):
+    _ = file_signature
     if not PRIZE_HISTORY_PATH.exists():
         return []
     with PRIZE_HISTORY_PATH.open("r", encoding="utf-8-sig") as f:
@@ -213,7 +225,10 @@ def main():
         unsafe_allow_html=True,
     )
 
-    rows = load_prize_history()
+    # 重要：將 M6 檔案修改時間/大小放入 cache key。
+    # Zeabur 網站是 Streamlit 長駐服務；crawler 更新 CSV 後，這行會令網頁重新讀取最新資料。
+    rows = load_prize_history(get_file_signature(PRIZE_HISTORY_PATH))
+    
     if not rows:
         st.warning(f"找不到資料檔：{PRIZE_HISTORY_PATH}")
         return

@@ -16,22 +16,22 @@ PAGES = [
         "path": CONTENT_DIR / "0_lotto_info.py",
     },
     {
-        "label": "下期預測",
+        "label": "種子投注法-下期投注預測",
         "icon": "🏆",
         "path": CONTENT_DIR / "0_predict_nextdraw.py",
     },
     {
-        "label": "中獎特式下期預測",
+        "label": "天機借運-下期投注預測",
         "icon": "🎯",
         "path": CONTENT_DIR / "1_nextdraw_prize123_pred_bet.py",
     },
     {
-        "label": "派彩特色紀錄",
+        "label": "中獎號碼-組合特色分析",
         "icon": "💰",
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
     },
     {
-        "label": "你幸運日分析",
+        "label": "你的財日分析",
         "icon": "🍀",
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
     },
