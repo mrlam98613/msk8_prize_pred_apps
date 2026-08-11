@@ -39,19 +39,17 @@ DATA_DIR = PROJECT_DIR / "Lotto_Data_Folder"
 LOG_PATH = PROJECT_DIR / "log" / "lotto_download_log.txt"
 WEBAPP_DATA_DIR = REPO_ROOT / "A_msk_lottery_data_folder"
 
-M1_CSV = DATA_DIR / "M1_Z4_lotto_data.csv"
-M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"
-M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"
-M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv"
-M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv"
-M7_CSV = DATA_DIR / "M7_lotto_open_days.csv"
+M1_CSV = DATA_DIR / "M1_Z4_lotto_data.csv" # M1-Z4.csv 馬會抓取最新資料 合併至 M2.csv
+M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv" # M2.csv 最後更新的開獎資料
+M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv" # M3.csv 1,2,3獎中獎注數及每注獎金
+M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv" # M4.csv 1,2,3獎中獎注數及每注獎金統計
+M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv" # M6.csv 1,2,3獎中獎注數及每注獎金歷史紀錄
+M7_CSV = DATA_DIR / "M7_lotto_open_days.csv" # M7.csv 馬會公布的開獎日，固定每週二、四、六，若有非固定開獎日，則以馬會公布為準。
 
 WEBAPP_M2_CSV = WEBAPP_DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 WEBAPP_M4_CSV = WEBAPP_DATA_DIR / "M4_lotto_prize_summary.csv"
 WEBAPP_M7_CSV = WEBAPP_DATA_DIR / "M7_lotto_open_days.csv"
 WEBAPP_M6_CSV = WEBAPP_DATA_DIR / "M6_lotto_history_prize.csv"
-
-LOCAL_HISTORY_CSV = DATA_DIR / "M0_MSK_2002_2024.csv"
 
 HKJC_GRAPHQL_URL = "https://info.cld.hkjc.com/graphql/base/"
 DOWNLOAD_LIMIT = 100
@@ -768,18 +766,17 @@ def create_m1_latest_history(records: list[DrawRecord]) -> None:
     pd.DataFrame(rows, columns=M2_COLUMNS).to_csv(M1_CSV, index=False, encoding="utf-8-sig")
 
 
-def ensure_local_history_csv() -> None:
-    if LOCAL_HISTORY_CSV.exists():
-        return
-    if WEBAPP_M2_CSV.exists():
-        shutil.copy2(WEBAPP_M2_CSV, LOCAL_HISTORY_CSV)
-        return
-    raise FileNotFoundError("找不到 M0/M2 歷史底表，無法合併 M2")
+def load_existing_m2_history() -> pd.DataFrame:
+    """讀取現有 M2 歷史底表；優先使用 Z4 本地 M2，否則使用 WebApp M2。"""
+
+    for path in [M2_CSV, WEBAPP_M2_CSV]:
+        if path.exists():
+            return pd.read_csv(path, encoding="utf-8-sig")
+    raise FileNotFoundError("找不到 M2 歷史底表，無法合併 M2")
 
 
 def create_m2_merged_history() -> None:
-    ensure_local_history_csv()
-    base_df = pd.read_csv(LOCAL_HISTORY_CSV, encoding="utf-8-sig")
+    base_df = load_existing_m2_history()
     m1_df = pd.read_csv(M1_CSV, encoding="utf-8-sig")
     for df in [base_df, m1_df]:
         df.columns = [str(col).strip().lstrip("\ufeff") for col in df.columns]
@@ -945,11 +942,10 @@ def create_m3_prize_results(records: list[DrawRecord], next_draw: NextDrawInfo |
 
 
 def copy_to_webapp() -> None:
-    for path in [M1_CSV, M2_CSV, M3_CSV, M4_CSV, M6_CSV, M7_CSV]:
+    for path in [M2_CSV, M3_CSV, M4_CSV, M6_CSV, M7_CSV]:
         if not path.exists():
             raise FileNotFoundError(f"找不到要複製的檔案：{path}")
-        target_name = "M1_ZH_lotto_data.csv" if path == M1_CSV else path.name
-        shutil.copy2(path, WEBAPP_DATA_DIR / target_name)
+        shutil.copy2(path, WEBAPP_DATA_DIR / path.name)
 
 
 def validate_outputs() -> tuple[str, str]:
@@ -999,7 +995,7 @@ def run() -> bool:
         f"/> 最新一期：{latest_date}\n"
         f"/> 下期開獎日期：{next_date}\n"
         f"/> 下期期號：{next_draw.draw_id if next_draw else '-'}\n"
-        f"/> 已同步 M1/M2/M3/M4/M6/M7 到 A_msk_lottery_data_folder。"
+        f"/> 已同步 M2/M3/M4/M6/M7 到 A_msk_lottery_data_folder。"
     )
     if timing_report:
         message = f"{message}\n{timing_report}"
