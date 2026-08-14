@@ -23,10 +23,46 @@ white_black_style = """
     [data-baseweb="textarea"] > div {
         background-color: #ffffff !important;
         color: #000000 !important;
+        border-color: #b8b8b8 !important;
     }
     button,
     [role="button"] {
         color: #000000 !important;
+    }
+    [data-baseweb="input"] button,
+    [data-baseweb="select"] button,
+    [data-baseweb="input"] [role="button"],
+    [data-baseweb="select"] [role="button"] {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border-color: #b8b8b8 !important;
+    }
+    [data-baseweb="input"] svg,
+    [data-baseweb="select"] svg,
+    [data-baseweb="input"] svg *,
+    [data-baseweb="select"] svg * {
+        color: #000000 !important;
+        fill: #000000 !important;
+        stroke: #000000 !important;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        opacity: 1 !important;
+        filter: none !important;
+    }
+    @media (max-width: 430px) {
+        [data-baseweb="select"] > div,
+        [data-baseweb="input"] > div,
+        [data-baseweb="textarea"] > div {
+            min-height: 42px !important;
+        }
+        [data-baseweb="input"] button,
+        [data-baseweb="select"] button,
+        [data-baseweb="input"] [role="button"],
+        [data-baseweb="select"] [role="button"] {
+            min-width: 38px !important;
+            min-height: 38px !important;
+        }
     }
 </style>
 """

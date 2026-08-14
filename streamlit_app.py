@@ -35,6 +35,11 @@ PAGES = [
         "icon": "🍀",
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
     },
+    {
+        "label": "獎項組合關鍵分析",
+        "icon": "🔎",
+        "path": CONTENT_DIR / "4_prize_comb_key.py",
+    },
 ]
 
 
