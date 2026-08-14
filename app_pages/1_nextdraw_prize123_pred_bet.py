@@ -15,8 +15,10 @@ if str(PROJECT_ROOT) not in sys.path:
 from css import white_black_style
 
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
+# 基本開獎紀錄與獎金統計檔案
 LOTTO_RESULTS_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
 PRIZE_SUMMARY_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
+# 1，2，3 中獎特式投注預測檔案  
 BET_PRIZE_DATA_DIR = PROJECT_ROOT / "n_msk_lotto_prize123_backtest_pred" / "bet_prize_data"
 PRIZE123_BET_CSV = BET_PRIZE_DATA_DIR / "prize123_bet.csv"
 PRIZE123_NEXT_DRAW_BET_CSV = BET_PRIZE_DATA_DIR / "prize123_nextDraw_bet.csv"

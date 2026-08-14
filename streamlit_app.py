@@ -31,7 +31,7 @@ PAGES = [
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
     },
     {
-        "label": "你的財日分析",
+        "label": "你的生日算出-旺財星日 + 開獎日",
         "icon": "🍀",
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
     },

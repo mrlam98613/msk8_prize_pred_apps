@@ -28,7 +28,7 @@ CURRENT_DIR = Path(__file__).resolve().parent
 DATA_PATH = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M2_last_upgrade_lotto_data.csv"
 OUTPUT_DIR = CURRENT_DIR / "rbg_data"
 
-DEFAULT_WINDOWS = [6, 7, 8, 9,10]
+DEFAULT_WINDOWS = [6, 7, 8]
 DEFAULT_BACKTEST_DRAWS = 30
 DEFAULT_TOP_N = 5
 INTERVAL_IDS = [0, 1, 2, 3, 4]
