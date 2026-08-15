@@ -111,6 +111,21 @@ def apply_styles() -> None:
         .block-container {
             padding-top: 0.75rem;
         }
+        h1,
+        [data-testid="stHeading"] h1 {
+            font-size: 1.75rem !important;
+            line-height: 1.25 !important;
+        }
+        h2,
+        [data-testid="stHeading"] h2 {
+            font-size: 1.45rem !important;
+            line-height: 1.3 !important;
+        }
+        h3,
+        [data-testid="stHeading"] h3 {
+            font-size: 1.15rem !important;
+            line-height: 1.35 !important;
+        }
         div[data-testid="stTabs"] [role="tablist"] {
             gap: 0.35rem;
             margin-bottom: 0.75rem;
@@ -138,6 +153,18 @@ def apply_styles() -> None:
             }
             div[data-testid="stTabs"] [role="tab"] p {
                 font-size: 13px;
+            }
+            h1,
+            [data-testid="stHeading"] h1 {
+                font-size: 1.55rem !important;
+            }
+            h2,
+            [data-testid="stHeading"] h2 {
+                font-size: 1.3rem !important;
+            }
+            h3,
+            [data-testid="stHeading"] h3 {
+                font-size: 1.05rem !important;
             }
         }
         </style>

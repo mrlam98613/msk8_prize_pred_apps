@@ -22,6 +22,7 @@ from db import (  # noqa: E402
     reset_password,
     update_member,
 )
+from css import white_black_style  # noqa: E402
 
 
 ADMIN_EMAIL = "mrlam98613@gmail.com"
@@ -211,6 +212,7 @@ def render_forgot_password_tab() -> None:
 
 
 def main() -> None:
+    st.markdown(white_black_style, unsafe_allow_html=True)
     init_db()
     ensure_first_admin(ADMIN_EMAIL, ADMIN_PHONE, ADMIN_PASSWORD)
     init_login_state()

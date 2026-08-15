@@ -27,6 +27,7 @@ from db import (  # noqa: E402
     member_bet_exists,
     update_member,
 )
+from css import white_black_style  # noqa: E402
 from member.member_custom_bet import render_custom_bet_page  # noqa: E402
 
 
@@ -759,6 +760,7 @@ def render_admin_member_bets_tab() -> None:
 
 
 def main() -> None:
+    st.markdown(white_black_style, unsafe_allow_html=True)
     email = require_login()
     if not email:
         return

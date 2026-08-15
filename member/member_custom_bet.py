@@ -16,6 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from db import add_member_bet, member_bet_exists  # noqa: E402
+from css import white_black_style  # noqa: E402
 from custom_components.number_picker import number_picker  # noqa: E402
 
 
@@ -750,6 +751,7 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
 def render_custom_bet_page(email: str) -> None:
     """會員自定投注頁。"""
 
+    st.markdown(white_black_style, unsafe_allow_html=True)
     init_custom_bet_state()
     render_custom_action_styles()
     st.subheader("B. 會員自定種類投注")
