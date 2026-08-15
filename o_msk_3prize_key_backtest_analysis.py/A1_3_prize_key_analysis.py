@@ -31,10 +31,10 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-RECENT_DRAW_COUNT = 10 # 回測期數
+RECENT_DRAW_COUNT = 14 # 回測期數
 # ---
 MIN_BIRTHDAY_NUM_COUNT = 4 # 每注開獎號，符合查詢範圍的號碼數量
-BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
+BIRTHDAY_NUM_MATCH_MODE = "=="  # 可選：">=" 或 "=="
 BIRTHDAY_NUM_MIN = 1 # 查詢範圍最小號碼，例如 1、10、20
 BIRTHDAY_NUM_MAX = 31 # 查詢範圍最大號碼，例如 9、19、29
 PRIZE_OPTION = 3  # 可選：1、2、3=3獎 中獎注數顯示

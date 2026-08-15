@@ -187,6 +187,21 @@ def get_fortune_gan(biaz_tg):
 
 def main():
     st.markdown(white_black_style, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <style>
+        @media (max-width: 430px) {
+            [data-testid="stNumberInput"] {
+                margin-bottom: 0.35rem;
+            }
+            [data-testid="stNumberInput"] input {
+                min-height: 40px !important;
+            }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     st.title("六合彩幸運日分析")
     st.markdown(
         """
@@ -218,34 +233,30 @@ def main():
         )
         end_date = latest_csv_date
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        birth_year = st.number_input(
-            "出生年份 1950",
-            min_value=1950,
-            max_value=2100,
-            value=1950,
-            step=1,
-            key="lucky_birth_year",
-        )
-    with col2:
-        birth_month = st.number_input(
-            "出生月份 1-12",
-            min_value=1,
-            max_value=12,
-            value=1,
-            step=1,
-            key="lucky_birth_month",
-        )
-    with col3:
-        birth_day = st.number_input(
-            "出生日 1-31",
-            min_value=1,
-            max_value=31,
-            value=1,
-            step=1,
-            key="lucky_birth_day",
-        )
+    birth_year = st.number_input(
+        "出生年份 1950",
+        min_value=1950,
+        max_value=2100,
+        value=1950,
+        step=1,
+        key="lucky_birth_year",
+    )
+    birth_month = st.number_input(
+        "出生月份 1-12",
+        min_value=1,
+        max_value=12,
+        value=1,
+        step=1,
+        key="lucky_birth_month",
+    )
+    birth_day = st.number_input(
+        "出生日 1-31",
+        min_value=1,
+        max_value=31,
+        value=1,
+        step=1,
+        key="lucky_birth_day",
+    )
 
     analyse = st.button("開始分析", key="lucky_start_analysis")
     if not analyse:

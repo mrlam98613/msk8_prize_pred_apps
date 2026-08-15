@@ -24,23 +24,57 @@ white_black_style = """
         background-color: #ffffff !important;
         color: #000000 !important;
         border-color: #b8b8b8 !important;
+        -webkit-text-fill-color: #000000 !important;
     }
     button,
-    [role="button"] {
+    [role="button"],
+    [data-testid="stButton"] button,
+    [data-testid="stFormSubmitButton"] button {
+        background-color: #ffffff !important;
         color: #000000 !important;
+        border: 1px solid #b8b8b8 !important;
+        opacity: 1 !important;
     }
     [data-baseweb="input"] button,
     [data-baseweb="select"] button,
+    [data-testid="stNumberInput"] button,
+    [data-testid="stSelectbox"] button,
     [data-baseweb="input"] [role="button"],
     [data-baseweb="select"] [role="button"] {
         background-color: #ffffff !important;
         color: #000000 !important;
         border-color: #b8b8b8 !important;
+        opacity: 1 !important;
     }
     [data-baseweb="input"] svg,
     [data-baseweb="select"] svg,
+    [data-testid="stNumberInput"] svg,
+    [data-testid="stSelectbox"] svg,
     [data-baseweb="input"] svg *,
     [data-baseweb="select"] svg * {
+        color: #000000 !important;
+        fill: #000000 !important;
+        stroke: #000000 !important;
+        opacity: 1 !important;
+    }
+    [data-testid="stNumberInput"] button svg *,
+    [data-testid="stSelectbox"] svg * {
+        fill: #000000 !important;
+        stroke: #000000 !important;
+    }
+    [data-testid="stNumberInput"] > div,
+    [data-testid="stSelectbox"] > div {
+        background-color: #ffffff !important;
+    }
+    [data-testid="stNumberInput"] input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+    [data-testid="stButton"] button *,
+    [data-testid="stFormSubmitButton"] button *,
+    [data-testid="stNumberInput"] button *,
+    [data-testid="stSelectbox"] button * {
         color: #000000 !important;
         fill: #000000 !important;
         stroke: #000000 !important;
@@ -58,10 +92,27 @@ white_black_style = """
         }
         [data-baseweb="input"] button,
         [data-baseweb="select"] button,
+        [data-testid="stNumberInput"] button,
+        [data-testid="stSelectbox"] button,
         [data-baseweb="input"] [role="button"],
         [data-baseweb="select"] [role="button"] {
             min-width: 38px !important;
             min-height: 38px !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        [data-testid="stNumberInput"] {
+            min-width: 0 !important;
+        }
+        [data-testid="stNumberInput"] button {
+            border-left: 1px solid #b8b8b8 !important;
+        }
+        [data-testid="stButton"] button,
+        [data-testid="stFormSubmitButton"] button {
+            width: 100% !important;
+            min-height: 42px !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
         }
     }
 </style>

@@ -1,5 +1,6 @@
 from pathlib import Path
 import csv
+import html
 import sys
 from typing import TypedDict
 
@@ -134,7 +135,38 @@ def render_text_result(rows: list[MatchedDraw]) -> None:
         st.info("沒有符合條件的期數。")
         return
 
-    st.code("\n".join(row["display_text"] for row in rows), language="text")
+    lines = "<br>".join(html.escape(row["display_text"]) for row in rows)
+    st.markdown(
+        f"<div class='prize-text-result'>{lines}</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def render_result_table(table_rows: list[dict[str, object]]) -> None:
+    if not table_rows:
+        return
+
+    headers = list(table_rows[0].keys())
+    header_html = "".join(f"<th>{html.escape(str(header))}</th>" for header in headers)
+    body_rows = []
+    for row in table_rows:
+        cells = "".join(
+            f"<td>{html.escape(str(row.get(header, '')))}</td>"
+            for header in headers
+        )
+        body_rows.append(f"<tr>{cells}</tr>")
+
+    st.markdown(
+        f"""
+        <div class="prize-table-wrap">
+            <table class="prize-result-table">
+                <thead><tr>{header_html}</tr></thead>
+                <tbody>{''.join(body_rows)}</tbody>
+            </table>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def reset_query_state() -> None:
@@ -159,6 +191,66 @@ def main() -> None:
             font-weight: 900;
             margin: 1rem 0 0.45rem;
         }
+        .prize-text-result {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin: 0.35rem 0 0.85rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .prize-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px;
+            background: #ffffff !important;
+            margin-top: 0.6rem;
+        }
+        .prize-result-table {
+            width: 100%;
+            min-width: 520px;
+            border-collapse: collapse;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-size: 0.92rem;
+        }
+        .prize-result-table th,
+        .prize-result-table td {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border-bottom: 1px solid #dddddd;
+            padding: 7px 8px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .prize-result-table th {
+            font-weight: 900;
+            background: #f3f5f7 !important;
+        }
+        @media (max-width: 430px) {
+            [data-testid="stNumberInput"],
+            [data-testid="stSelectbox"] {
+                margin-bottom: 0.35rem;
+            }
+            [data-testid="stNumberInput"] input {
+                min-height: 40px !important;
+            }
+            .prize-text-result {
+                font-size: 0.84rem;
+                padding: 9px 10px;
+            }
+            .prize-result-table {
+                min-width: 480px;
+                font-size: 0.84rem;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -169,47 +261,41 @@ def main() -> None:
 
     st.markdown("<div class='param-title'>分析參數</div>", unsafe_allow_html=True)
     with st.form("prize_comb_key_form"):
-        col1, col2 = st.columns(2)
-        with col1:
-            recent_draw_count = st.number_input(
-                "回測期數",
-                min_value=1,
-                max_value=2000,
-                value=DEFAULT_RECENT_DRAW_COUNT,
-                step=1,
-            )
-            min_selected_count = st.number_input(
-                "符合號碼數量",
-                min_value=1,
-                max_value=6,
-                value=DEFAULT_MIN_SELECTED_COUNT,
-                step=1,
-            )
-            match_mode = st.selectbox("數量條件", [">=", "=="], index=0)
-        with col2:
-            num_min = st.number_input(
-                "查詢範圍最小號碼",
-                min_value=1,
-                max_value=49,
-                value=DEFAULT_NUM_MIN,
-                step=1,
-            )
-            num_max = st.number_input(
-                "查詢範圍最大號碼",
-                min_value=1,
-                max_value=49,
-                value=DEFAULT_NUM_MAX,
-                step=1,
-            )
-            prize_option = st.selectbox("顯示獎項注數", [1, 2, 3], index=2)
+        recent_draw_count = st.number_input(
+            "回測期數",
+            min_value=1,
+            max_value=2000,
+            value=DEFAULT_RECENT_DRAW_COUNT,
+            step=1,
+        )
+        min_selected_count = st.number_input(
+            "符合號碼數量",
+            min_value=1,
+            max_value=6,
+            value=DEFAULT_MIN_SELECTED_COUNT,
+            step=1,
+        )
+        match_mode = st.selectbox("數量條件", [">=", "=="], index=0)
+        num_min = st.number_input(
+            "查詢範圍最小號碼",
+            min_value=1,
+            max_value=49,
+            value=DEFAULT_NUM_MIN,
+            step=1,
+        )
+        num_max = st.number_input(
+            "查詢範圍最大號碼",
+            min_value=1,
+            max_value=49,
+            value=DEFAULT_NUM_MAX,
+            step=1,
+        )
+        prize_option = st.selectbox("顯示獎項注數", [1, 2, 3], index=2)
 
         show_prize_count = st.checkbox("顯示中獎注數", value=DEFAULT_SHOW_PRIZE_COUNT)
 
-        btn_col1, btn_col2 = st.columns(2)
-        with btn_col1:
-            submitted = st.form_submit_button("查詢")
-        with btn_col2:
-            reset_clicked = st.form_submit_button("Reset")
+        submitted = st.form_submit_button("查詢")
+        reset_clicked = st.form_submit_button("Reset")
 
     if reset_clicked:
         reset_query_state()
@@ -285,7 +371,7 @@ def main() -> None:
             for row in table_rows:
                 row.pop(f"prize{prize_option} 注數", None)
 
-        st.dataframe(table_rows, width="stretch", hide_index=True)
+        render_result_table(table_rows)
 
 
 if __name__ == "__main__":
