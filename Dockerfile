@@ -6,6 +6,7 @@ WORKDIR /app
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Hong_Kong
+ENV MEMBER_DATA_DIR=/data/member
 
 # 安裝必要套件（包括 cron）及 Node.js LTS。
 # Node.js 主要預留給日後 Streamlit custom component / 前端 build 使用。
@@ -34,8 +35,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 複製所有程式碼
 COPY . .
 
-# 建立日誌目錄
-RUN mkdir -p /var/log/cron
+# 建立日誌及會員資料目錄
+RUN mkdir -p /var/log/cron /data/member/member_bet_dbs
 RUN echo "/var/log/cron/*.log {\n\
     daily\n\
     rotate 7\n\

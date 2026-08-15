@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .picker {
+      width: 100%;
+      max-width: 390px;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 1px;
+      align-items: center;
+      justify-content: start;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .ball {
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 1 / 0.92;
+      min-height: 28px;
+      border-radius: 8px;
+      border: 1px solid rgba(17, 24, 39, 0.12);
+      background: #fff;
+      font-size: clamp(15px, 5vw, 20px);
+      line-height: 1;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      transition: transform 0.08s ease, border-color 0.08s ease, opacity 0.08s ease;
+    }
+    @media (max-width: 360px) {
+      .ball {
+        min-height: 25px;
+        border-radius: 6px;
+        font-size: clamp(13px, 4.8vw, 16px);
+      }
+      .selected {
+        border-width: 2px;
+        box-shadow: inset 0 0 0 1px #facc15, 0 1px 2px rgba(0, 0, 0, 0.12);
+      }
+    }
+    .ball:hover {
+      transform: translateY(-1px);
+      border-color: #111827;
+    }
+    .red { color: #dc2626; }
+    .blue { color: #2563eb; }
+    .green { color: #16a34a; }
+    .selected {
+      border: 3px solid #111827;
+      box-shadow: inset 0 0 0 2px #facc15, 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+    .disabled {
+      opacity: 0.28;
+      cursor: not-allowed;
+      transform: none !important;
+      border-color: rgba(17, 24, 39, 0.08);
+    }
+  </style>
+</head>
+<body>
+  <div id="picker" class="picker"></div>
+
+  <script>
+    const RED = new Set([1, 2, 7, 8, 12, 13, 18, 19, 23, 24, 29, 30, 34, 35, 40, 45, 46]);
+    const BLUE = new Set([3, 4, 9, 10, 14, 15, 20, 25, 26, 31, 36, 37, 41, 42, 47, 48]);
+
+    let selected = [];
+    let maxSelect = 3;
+    let lastResetToken = null;
+
+    function send(type, data) {
+      window.parent.postMessage({ isStreamlitMessage: true, type, ...data }, "*");
+    }
+
+    function setFrameHeight() {
+      send("streamlit:setFrameHeight", { height: document.body.scrollHeight });
+    }
+
+    function setValue() {
+      send("streamlit:setComponentValue", { value: selected });
+      setFrameHeight();
+    }
+
+    function colorClass(num) {
+      if (RED.has(num)) return "red";
+      if (BLUE.has(num)) return "blue";
+      return "green";
+    }
+
+    function render() {
+      const root = document.getElementById("picker");
+      root.innerHTML = "";
+
+      for (let num = 1; num <= 49; num += 1) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = String(num);
+        btn.className = `ball ${colorClass(num)}`;
+
+        const isSelected = selected.includes(num);
+        const isDisabled = !isSelected && selected.length >= maxSelect;
+        if (isSelected) btn.classList.add("selected");
+        if (isDisabled) btn.classList.add("disabled");
+
+        btn.addEventListener("click", () => {
+          if (selected.includes(num)) {
+            selected = selected.filter((value) => value !== num);
+          } else if (selected.length < maxSelect) {
+            selected = [...selected, num].sort((a, b) => a - b);
+          }
+          render();
+          setValue();
+        });
+
+        root.appendChild(btn);
+      }
+      setFrameHeight();
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.data.type !== "streamlit:render") return;
+      const args = event.data.args || {};
+      if (lastResetToken !== args.reset_token) {
+        lastResetToken = args.reset_token;
+        selected = Array.isArray(args.selected) ? args.selected.map(Number) : [];
+      } else if (Array.isArray(args.selected)) {
+        const incoming = args.selected.map(Number);
+        if (incoming.length === 0 && selected.length > 0) {
+          selected = [];
+        }
+      }
+      maxSelect = Number(args.max_select || 3);
+      render();
+    });
+
+    send("streamlit:componentReady", { apiVersion: 1 });
+    setFrameHeight();
+  </script>
+</body>
+</html>

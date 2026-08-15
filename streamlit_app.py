@@ -11,6 +11,12 @@ CONTENT_DIR = PROJECT_ROOT / "app_pages"
 
 PAGES = [
     {
+        "label": "會員登入投注",
+        "icon": "👤",
+        "path": PROJECT_ROOT / "member" / "member_login.py",
+        "bet_path": PROJECT_ROOT / "member" / "member_bet_center.py",
+    },
+    {
         "label": "六合彩最新資訊",
         "icon": "📌",
         "path": CONTENT_DIR / "0_lotto_info.py",
@@ -41,6 +47,52 @@ PAGES = [
         "path": CONTENT_DIR / "4_prize_comb_key.py",
     },
 ]
+
+
+def init_member_state() -> None:
+    st.session_state.setdefault("login_state", None)
+    st.session_state.setdefault("login_email_val", None)
+    st.session_state.setdefault("login_member_id", None)
+    st.session_state.setdefault("redirect_to_member_bet_center", False)
+
+
+def reset_member_custom_bet_state() -> None:
+    for key in [
+        "custom_seed_numbers",
+        "custom_picker_seed_numbers",
+        "custom_generated_numbers",
+        "custom_generated_signature",
+        "custom_banker_numbers",
+        "custom_leg_numbers",
+        "custom_saved_notice",
+        "custom_save_locked",
+    ]:
+        st.session_state.pop(key, None)
+    for key in [
+        "custom_seed_reset_token",
+        "custom_banker_reset_token",
+        "custom_leg_reset_token",
+    ]:
+        st.session_state[key] = int(st.session_state.get(key, 0)) + 1
+
+
+def render_member_status() -> None:
+    email = st.session_state.get("login_email_val")
+    login_state = st.session_state.get("login_state")
+
+    if not email:
+        st.caption("會員狀態：尚未登入")
+        return
+
+    role = "管理員" if login_state == "admin" else "會員"
+    st.caption(f"會員狀態：{email}（{role}）")
+    if st.button("登出", key="main_member_logout"):
+        reset_member_custom_bet_state()
+        st.session_state["login_state"] = None
+        st.session_state["login_email_val"] = None
+        st.session_state["login_member_id"] = None
+        st.session_state["redirect_to_member_bet_center"] = False
+        st.rerun()
 
 
 def apply_styles() -> None:
@@ -101,7 +153,11 @@ def run_page_file(path: Path) -> None:
         st.stop()
 
     try:
-        module_name = f"app_pages.{path.stem}"
+        try:
+            relative_path = path.relative_to(PROJECT_ROOT)
+            module_name = ".".join(relative_path.with_suffix("").parts)
+        except ValueError:
+            module_name = f"dynamic_pages.{path.stem}"
         module = sys.modules.get(module_name)
         if module is None:
             spec = importlib.util.spec_from_file_location(module_name, path)
@@ -121,15 +177,34 @@ def run_page_file(path: Path) -> None:
         st.stop()
 
 
+def select_page_path(page: dict) -> Path:
+    if (
+        page["path"].name == "member_login.py"
+        and st.session_state.get("login_state") in ("user", "admin")
+        and page.get("bet_path")
+    ):
+        return page["bet_path"]
+    return page["path"]
+
+
 def main() -> None:
     st.set_page_config(page_title="MSK 8 投注預測", page_icon="🎯", layout="centered")
     
+    init_member_state()
     apply_styles()
 
     st.title("MSK 8 六合彩預測")
     st.caption("以下內容直接顯示在同一頁")
+    render_member_status()
 
     page_labels = [f"{page['icon']} {page['label']}" for page in PAGES]
+    if (
+        st.session_state.get("redirect_to_member_bet_center")
+        and st.session_state.get("login_state") in ("user", "admin")
+    ):
+        st.session_state["redirect_to_member_bet_center"] = False
+        st.session_state["main_page_selector"] = "👤 會員登入投注"
+
     selected_label = st.selectbox(
         "請拉下選單-選擇網頁功能",
         page_labels,
@@ -140,7 +215,7 @@ def main() -> None:
     selected_page = next(
         page for page in PAGES if f"{page['icon']} {page['label']}" == selected_label
     )
-    run_page_file(selected_page["path"])
+    run_page_file(select_page_path(selected_page))
 
 
 if __name__ == "__main__":
