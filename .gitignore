@@ -8,3 +8,12 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Local lottery data snapshots
+A_msk_lottery_data_folder/M2_last_upgrade_lotto_data.csv
+A_msk_lottery_data_folder/M3_lotto_prize_results.csv
+A_msk_lottery_data_folder/M4_lotto_prize_summary.csv
+A_msk_lottery_data_folder/M6_lotto_history_prize.csv
+A_msk_lottery_data_folder/M7_lotto_open_days.csv
+Z4_lotto_prize_2026_crawler/log/
+Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*
