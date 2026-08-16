@@ -1,0 +1,321 @@
+{
+  "1-9|2": {
+    "window": 24,
+    "group": "1-9",
+    "take_count": 2,
+    "total_combos": 36,
+    "preferred_ranges": [
+      [
+        1,
+        6
+      ]
+    ],
+    "hit_indexes": {
+      "1": {
+        "combo": "1,2",
+        "hit_count": 1
+      },
+      "2": {
+        "combo": "1,3",
+        "hit_count": 1
+      },
+      "5": {
+        "combo": "1,6",
+        "hit_count": 1
+      },
+      "6": {
+        "combo": "1,7",
+        "hit_count": 3
+      },
+      "11": {
+        "combo": "2,5",
+        "hit_count": 1
+      },
+      "13": {
+        "combo": "2,7",
+        "hit_count": 1
+      },
+      "19": {
+        "combo": "3,7",
+        "hit_count": 1
+      },
+      "24": {
+        "combo": "4,7",
+        "hit_count": 2
+      },
+      "28": {
+        "combo": "5,7",
+        "hit_count": 4
+      }
+    },
+    "last_update_date": "2026-08-11"
+  },
+  "1-9|3": {
+    "window": 24,
+    "group": "1-9",
+    "take_count": 3,
+    "total_combos": 84,
+    "preferred_ranges": [],
+    "hit_indexes": {
+      "11": {
+        "combo": "1,3,7",
+        "hit_count": 1
+      },
+      "41": {
+        "combo": "2,5,7",
+        "hit_count": 1
+      }
+    },
+    "last_update_date": "2026-08-11"
+  },
+  "10-19|2": {
+    "window": 24,
+    "group": "10-19",
+    "take_count": 2,
+    "total_combos": 45,
+    "preferred_ranges": [
+      [
+        2,
+        27
+      ],
+      [
+        33,
+        36
+      ]
+    ],
+    "hit_indexes": {
+      "2": {
+        "combo": "10,12",
+        "hit_count": 1
+      },
+      "5": {
+        "combo": "10,15",
+        "hit_count": 1
+      },
+      "6": {
+        "combo": "10,16",
+        "hit_count": 2
+      },
+      "7": {
+        "combo": "10,17",
+        "hit_count": 1
+      },
+      "9": {
+        "combo": "10,19",
+        "hit_count": 1
+      },
+      "11": {
+        "combo": "11,13",
+        "hit_count": 1
+      },
+      "14": {
+        "combo": "11,16",
+        "hit_count": 1
+      },
+      "17": {
+        "combo": "11,19",
+        "hit_count": 1
+      },
+      "19": {
+        "combo": "12,14",
+        "hit_count": 1
+      },
+      "21": {
+        "combo": "12,16",
+        "hit_count": 1
+      },
+      "22": {
+        "combo": "12,17",
+        "hit_count": 2
+      },
+      "23": {
+        "combo": "12,18",
+        "hit_count": 1
+      },
+      "24": {
+        "combo": "12,19",
+        "hit_count": 1
+      },
+      "27": {
+        "combo": "13,16",
+        "hit_count": 1
+      },
+      "33": {
+        "combo": "14,17",
+        "hit_count": 2
+      },
+      "34": {
+        "combo": "14,18",
+        "hit_count": 1
+      },
+      "35": {
+        "combo": "14,19",
+        "hit_count": 1
+      },
+      "36": {
+        "combo": "15,16",
+        "hit_count": 1
+      },
+      "42": {
+        "combo": "16,19",
+        "hit_count": 2
+      },
+      "43": {
+        "combo": "17,18",
+        "hit_count": 1
+      }
+    },
+    "last_update_date": "2026-08-11"
+  },
+  "10-19|3": {
+    "window": 24,
+    "group": "10-19",
+    "take_count": 3,
+    "total_combos": 120,
+    "preferred_ranges": [],
+    "hit_indexes": {
+      "13": {
+        "combo": "10,12,17",
+        "hit_count": 1
+      },
+      "27": {
+        "combo": "10,15,16",
+        "hit_count": 1
+      },
+      "33": {
+        "combo": "10,16,19",
+        "hit_count": 1
+      },
+      "46": {
+        "combo": "11,13,16",
+        "hit_count": 1
+      },
+      "73": {
+        "combo": "12,14,17",
+        "hit_count": 1
+      },
+      "74": {
+        "combo": "12,14,18",
+        "hit_count": 1
+      },
+      "82": {
+        "combo": "12,16,19",
+        "hit_count": 1
+      },
+      "83": {
+        "combo": "12,17,18",
+        "hit_count": 1
+      },
+      "108": {
+        "combo": "14,17,18",
+        "hit_count": 1
+      }
+    },
+    "last_update_date": "2026-08-11"
+  },
+  "20-31|2": {
+    "window": 24,
+    "group": "20-31",
+    "take_count": 2,
+    "total_combos": 66,
+    "preferred_ranges": [
+      [
+        6,
+        11
+      ],
+      [
+        60,
+        64
+      ]
+    ],
+    "hit_indexes": {
+      "1": {
+        "combo": "20,21",
+        "hit_count": 1
+      },
+      "6": {
+        "combo": "20,26",
+        "hit_count": 1
+      },
+      "8": {
+        "combo": "20,28",
+        "hit_count": 1
+      },
+      "10": {
+        "combo": "20,30",
+        "hit_count": 2
+      },
+      "11": {
+        "combo": "20,31",
+        "hit_count": 2
+      },
+      "16": {
+        "combo": "21,26",
+        "hit_count": 1
+      },
+      "20": {
+        "combo": "21,30",
+        "hit_count": 2
+      },
+      "43": {
+        "combo": "24,29",
+        "hit_count": 1
+      },
+      "44": {
+        "combo": "24,30",
+        "hit_count": 1
+      },
+      "55": {
+        "combo": "26,30",
+        "hit_count": 1
+      },
+      "56": {
+        "combo": "26,31",
+        "hit_count": 3
+      },
+      "60": {
+        "combo": "27,31",
+        "hit_count": 1
+      },
+      "62": {
+        "combo": "28,30",
+        "hit_count": 1
+      },
+      "64": {
+        "combo": "29,30",
+        "hit_count": 1
+      }
+    },
+    "last_update_date": "2026-08-11"
+  },
+  "20-31|3": {
+    "window": 24,
+    "group": "20-31",
+    "take_count": 3,
+    "total_combos": 220,
+    "preferred_ranges": [],
+    "hit_indexes": {
+      "9": {
+        "combo": "20,21,30",
+        "hit_count": 1
+      },
+      "45": {
+        "combo": "20,26,31",
+        "hit_count": 1
+      },
+      "51": {
+        "combo": "20,28,30",
+        "hit_count": 1
+      },
+      "89": {
+        "combo": "21,26,30",
+        "hit_count": 1
+      },
+      "183": {
+        "combo": "24,29,30",
+        "hit_count": 1
+      }
+    },
+    "last_update_date": "2026-08-11"
+  }
+}

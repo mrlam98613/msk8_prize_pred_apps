@@ -2,11 +2,21 @@
 
 white_black_style = """
 <style>
+    :root,
+    html,
+    body {
+        color-scheme: light !important;
+        background-color: #ffffff !important;
+    }
     .stApp,
     [data-testid="stAppViewContainer"],
     [data-testid="stHeader"],
     [data-testid="stToolbar"],
-    [data-testid="stSidebar"] {
+    [data-testid="stSidebar"],
+    [data-testid="stMain"],
+    [data-testid="stMainBlockContainer"],
+    [data-testid="stVerticalBlock"],
+    [data-testid="stHorizontalBlock"] {
         background-color: #ffffff !important;
     }
     .stApp,
@@ -18,13 +28,17 @@ white_black_style = """
     input,
     textarea,
     select,
+    option,
+    label,
     [data-baseweb="select"] > div,
     [data-baseweb="input"] > div,
-    [data-baseweb="textarea"] > div {
+    [data-baseweb="textarea"] > div,
+    [data-baseweb="radio"] {
         background-color: #ffffff !important;
         color: #000000 !important;
         border-color: #b8b8b8 !important;
         -webkit-text-fill-color: #000000 !important;
+        color-scheme: light !important;
     }
     button,
     [role="button"],
@@ -37,6 +51,8 @@ white_black_style = """
     }
     [data-baseweb="input"] button,
     [data-baseweb="select"] button,
+    [data-baseweb="radio"] [role="radio"],
+    [data-testid="stRadio"] [role="radio"],
     [data-testid="stNumberInput"] button,
     [data-testid="stSelectbox"] button,
     [data-baseweb="input"] [role="button"],
@@ -45,11 +61,41 @@ white_black_style = """
         color: #000000 !important;
         border-color: #b8b8b8 !important;
         opacity: 1 !important;
+        color-scheme: light !important;
+    }
+    [data-testid="stRadio"],
+    [data-testid="stRadio"] *,
+    [data-baseweb="radio"],
+    [data-baseweb="radio"] *,
+    [role="radiogroup"],
+    [role="radiogroup"] * {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        color-scheme: light !important;
+    }
+    [data-testid="stRadio"] [role="radio"],
+    [data-baseweb="radio"] [role="radio"] {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        border: 2px solid #4b5563 !important;
+        border-radius: 999px !important;
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+    }
+    [data-testid="stRadio"] [aria-checked="true"],
+    [data-baseweb="radio"] [aria-checked="true"] {
+        border-color: #2563eb !important;
+        background-color: #ffffff !important;
     }
     [data-baseweb="input"] svg,
     [data-baseweb="select"] svg,
+    [data-baseweb="radio"] svg,
     [data-testid="stNumberInput"] svg,
     [data-testid="stSelectbox"] svg,
+    [data-testid="stRadio"] svg,
     [data-baseweb="input"] svg *,
     [data-baseweb="select"] svg * {
         color: #000000 !important;
@@ -74,7 +120,8 @@ white_black_style = """
     [data-testid="stButton"] button *,
     [data-testid="stFormSubmitButton"] button *,
     [data-testid="stNumberInput"] button *,
-    [data-testid="stSelectbox"] button * {
+    [data-testid="stSelectbox"] button *,
+    [data-testid="stRadio"] * {
         color: #000000 !important;
         fill: #000000 !important;
         stroke: #000000 !important;

@@ -4,6 +4,8 @@ import sys
 
 import streamlit as st
 
+from css import white_black_style
+
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -97,6 +99,7 @@ def render_member_status() -> None:
 
 def apply_styles() -> None:
     """套用簡潔的樣式，避免出現多頁側邊欄。"""
+    st.markdown(white_black_style, unsafe_allow_html=True)
     st.markdown(
         """
         <style>

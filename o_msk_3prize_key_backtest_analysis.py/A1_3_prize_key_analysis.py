@@ -31,19 +31,19 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-RECENT_DRAW_COUNT = 14 # 回測期數
+RECENT_DRAW_COUNT = 50 # 回測期數
 # ---
-MIN_BIRTHDAY_NUM_COUNT = 4 # 每注開獎號，符合查詢範圍的號碼數量
+MIN_BIRTHDAY_NUM_COUNT = 2 # 每注開獎號，符合查詢範圍的號碼數量
 BIRTHDAY_NUM_MATCH_MODE = "=="  # 可選：">=" 或 "=="
-BIRTHDAY_NUM_MIN = 1 # 查詢範圍最小號碼，例如 1、10、20
+BIRTHDAY_NUM_MIN = 20 # 查詢範圍最小號碼，例如 1、10、20
 BIRTHDAY_NUM_MAX = 31 # 查詢範圍最大號碼，例如 9、19、29
 PRIZE_OPTION = 3  # 可選：1、2、3=3獎 中獎注數顯示
 
 # ====
 SHOW_PRIZE_COUNT = True  # 可選：True 顯示中獎注數；False 不顯示
 # ---------------------
-COMBINATION_TAKE_COUNT = 3 # 可選：號碼組合核對統計，取幾個號碼組合
-SHOW_COMBINATION_STATS = False  # 可選：True 顯示號碼組合核對統計
+COMBINATION_TAKE_COUNT = 2 # 可選：號碼組合核對統計，取幾個號碼組合
+SHOW_COMBINATION_STATS = True  # 可選：True 顯示命中的號碼組合核對統計
 # ----
 
 
@@ -214,15 +214,19 @@ def print_combination_stats(rows: list[MatchedDraw]) -> None:
         f"====== {BIRTHDAY_NUM_MIN}-{BIRTHDAY_NUM_MAX} 選 {COMBINATION_TAKE_COUNT} "
         f"組合核對統計，共 {total_group} 組 ======"
     )
-    headers = ",".join(f"N{i}" for i in range(1, COMBINATION_TAKE_COUNT + 1))
-    print(f"index {headers},Sum")
-    
-    for idx, (combo, hit_count) in enumerate(build_combination_stats(rows), start=1):
+    hit_stats = [
+        (idx, combo, hit_count)
+        for idx, (combo, hit_count) in enumerate(build_combination_stats(rows), start=1)
+        if hit_count > 0
+    ]
+
+    if not hit_stats:
+        print("沒有命中的組合。")
+        return
+
+    for idx, combo, hit_count in hit_stats:
         combo_text = ",".join(str(num) for num in combo)
-        if hit_count > 0:
-            print(f"{idx:>3}.  {combo_text}, -----> {hit_count}")
-        else:
-            print(f"{idx:>3}.  {combo_text}, 0")
+        print(f"{idx:>4}. {combo_text}, -----> {hit_count}")
         
 
 
