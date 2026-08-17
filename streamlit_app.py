@@ -12,12 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = PROJECT_ROOT / "app_pages"
 
 PAGES = [
-    {
-        "label": "會員登入投注",
-        "icon": "👤",
-        "path": PROJECT_ROOT / "member" / "member_login.py",
-        "bet_path": PROJECT_ROOT / "member" / "member_bet_center.py",
-    },
+    
     {
         "label": "六合彩最新資訊",
         "icon": "📌",
@@ -47,6 +42,12 @@ PAGES = [
         "label": "獎項組合關鍵分析",
         "icon": "🔎",
         "path": CONTENT_DIR / "4_prize_comb_key.py",
+    },
+    {
+            "label": "會員登入投注",
+            "icon": "👤",
+            "path": PROJECT_ROOT / "member" / "member_login.py",
+            "bet_path": PROJECT_ROOT / "member" / "member_bet_center.py",
     },
 ]
 
