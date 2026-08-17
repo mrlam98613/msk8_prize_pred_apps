@@ -294,8 +294,8 @@ def main() -> None:
 
         show_prize_count = st.checkbox("顯示中獎注數", value=DEFAULT_SHOW_PRIZE_COUNT)
 
-        submitted = st.form_submit_button("查詢")
-        reset_clicked = st.form_submit_button("Reset")
+        submitted = st.form_submit_button("查詢", type="primary")
+        reset_clicked = st.form_submit_button("Reset", type="secondary")
 
     if reset_clicked:
         reset_query_state()

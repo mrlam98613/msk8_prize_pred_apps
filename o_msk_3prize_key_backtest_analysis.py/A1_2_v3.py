@@ -14,7 +14,7 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-BACKTEST_WINDOW = 24  # 4 week. x 3(2,4,6) = 12 x 3(Month) = 48 期，回測窗口期數：每次只用目標期之前最近多少期做分析
+BACKTEST_WINDOW = 50  # 4 week. x 3(2,4,6) = 12 x 3(Month) = 48 期，回測窗口期數：每次只用目標期之前最近多少期做分析
 PREDICT_BET_COUNT = 4  # 每一期產生多少注模擬投注；第 4 注為分區隨機 6 球
 PREDICT_NUM_COUNT_PATTERN = [4, 5, 6]  # 前 3 注分別產生 4球、5球、6球單注組合
 BIRTHDAY_NUM_MIN = 1  # 分析號碼範圍最小值

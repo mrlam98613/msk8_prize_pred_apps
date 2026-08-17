@@ -40,13 +40,47 @@ white_black_style = """
         -webkit-text-fill-color: #000000 !important;
         color-scheme: light !important;
     }
-    button,
-    [role="button"],
-    [data-testid="stButton"] button,
-    [data-testid="stFormSubmitButton"] button {
+    [data-testid="stButton"] button[kind="secondary"],
+    [data-testid="stFormSubmitButton"] button[kind="secondary"] {
         background-color: #ffffff !important;
         color: #000000 !important;
         border: 1px solid #b8b8b8 !important;
+        opacity: 1 !important;
+    }
+    [data-testid="stButton"] button[kind="primary"],
+    [data-testid="stFormSubmitButton"] button[kind="primary"] {
+        background-color: #ff4b4b !important;
+        color: #ffffff !important;
+        border: 1px solid #ff4b4b !important;
+        opacity: 1 !important;
+        color-scheme: light !important;
+    }
+    [data-testid="stButton"] button[kind="primary"] *,
+    [data-testid="stFormSubmitButton"] button[kind="primary"] * {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    [data-testid="stButton"] button[kind="primary"]:hover,
+    [data-testid="stFormSubmitButton"] button[kind="primary"]:hover {
+        background-color: #e63b3b !important;
+        border-color: #e63b3b !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stButton"] button[kind="primary"]:active,
+    [data-testid="stFormSubmitButton"] button[kind="primary"]:active {
+        background-color: #c92f2f !important;
+        border-color: #c92f2f !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stButton"] button:disabled,
+    [data-testid="stFormSubmitButton"] button:disabled,
+    [data-testid="stButton"] button[disabled],
+    [data-testid="stFormSubmitButton"] button[disabled] {
+        background-color: #f3f4f6 !important;
+        color: #9ca3af !important;
+        border-color: #d1d5db !important;
         opacity: 1 !important;
     }
     [data-baseweb="input"] button,
@@ -64,15 +98,22 @@ white_black_style = """
         color-scheme: light !important;
     }
     [data-testid="stRadio"],
-    [data-testid="stRadio"] *,
     [data-baseweb="radio"],
-    [data-baseweb="radio"] *,
-    [role="radiogroup"],
-    [role="radiogroup"] * {
+    [role="radiogroup"] {
         background-color: #ffffff !important;
         color: #000000 !important;
         -webkit-text-fill-color: #000000 !important;
         color-scheme: light !important;
+    }
+    [data-testid="stRadio"] label,
+    [data-testid="stRadio"] p,
+    [data-baseweb="radio"] label,
+    [data-baseweb="radio"] p,
+    [role="radiogroup"] label,
+    [role="radiogroup"] p {
+        background-color: transparent !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
     }
     [data-testid="stRadio"] [role="radio"],
     [data-baseweb="radio"] [role="radio"] {
@@ -84,11 +125,21 @@ white_black_style = """
         border-radius: 999px !important;
         background-color: #ffffff !important;
         box-shadow: none !important;
+        accent-color: #ff4b4b !important;
     }
     [data-testid="stRadio"] [aria-checked="true"],
     [data-baseweb="radio"] [aria-checked="true"] {
-        border-color: #2563eb !important;
-        background-color: #ffffff !important;
+        border-color: #ff4b4b !important;
+        background: radial-gradient(circle, #ff4b4b 0 42%, #ffffff 46% 100%) !important;
+    }
+    [data-testid="stRadio"] [aria-checked="true"] svg,
+    [data-baseweb="radio"] [aria-checked="true"] svg,
+    [data-testid="stRadio"] [aria-checked="true"] svg *,
+    [data-baseweb="radio"] [aria-checked="true"] svg * {
+        color: #ff4b4b !important;
+        fill: #ff4b4b !important;
+        stroke: #ff4b4b !important;
+        opacity: 1 !important;
     }
     [data-baseweb="input"] svg,
     [data-baseweb="select"] svg,
@@ -117,11 +168,10 @@ white_black_style = """
         color: #000000 !important;
         -webkit-text-fill-color: #000000 !important;
     }
-    [data-testid="stButton"] button *,
-    [data-testid="stFormSubmitButton"] button *,
+    [data-testid="stButton"] button[kind="secondary"] *,
+    [data-testid="stFormSubmitButton"] button[kind="secondary"] *,
     [data-testid="stNumberInput"] button *,
-    [data-testid="stSelectbox"] button *,
-    [data-testid="stRadio"] * {
+    [data-testid="stSelectbox"] button * {
         color: #000000 !important;
         fill: #000000 !important;
         stroke: #000000 !important;
@@ -158,8 +208,16 @@ white_black_style = """
         [data-testid="stFormSubmitButton"] button {
             width: 100% !important;
             min-height: 42px !important;
+        }
+        [data-testid="stButton"] button[kind="secondary"],
+        [data-testid="stFormSubmitButton"] button[kind="secondary"] {
             background-color: #ffffff !important;
             color: #000000 !important;
+        }
+        [data-testid="stButton"] button[kind="primary"],
+        [data-testid="stFormSubmitButton"] button[kind="primary"] {
+            background-color: #ff4b4b !important;
+            color: #ffffff !important;
         }
     }
 </style>
