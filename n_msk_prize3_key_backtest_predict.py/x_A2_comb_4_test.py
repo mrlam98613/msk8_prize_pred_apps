@@ -7,8 +7,8 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR
 CSV_OUTPUT_DIR = PROJECT_ROOT / "data"
 
-NUM_MIN = 1
-NUM_MAX = 9
+NUM_MIN = 10
+NUM_MAX = 20
 TAKE_COUNT = 3
 
 CSV_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -20,11 +20,11 @@ numbers = list(range(NUM_MIN, NUM_MAX + 1))
 combinations = list(itertools.combinations(numbers, TAKE_COUNT))
 
 
-comb_list = []
-for combo in combinations:
-    comb_list.append(combo)
+# comb_list = []
+# for combo in combinations:
+#     comb_list.append(combo)
     # print(combo, end=' ')
     
-dfs = pd.DataFrame(comb_list, columns=[f"Num{i}" for i in range(1, TAKE_COUNT + 1)])
-dfs.to_csv(CSV_OUTPUT_DIR / "comb_1_to_9_take_3.csv", index=False)
+# dfs = pd.DataFrame(comb_list, columns=[f"Num{i}" for i in range(1, TAKE_COUNT + 1)])
+# dfs.to_csv(CSV_OUTPUT_DIR / "comb_1_to_9_take_3.csv", index=False)
     

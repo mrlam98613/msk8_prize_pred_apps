@@ -48,7 +48,7 @@
         "hit_count": 4
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   },
   "1-9|3": {
     "window": 24,
@@ -66,7 +66,7 @@
         "hit_count": 1
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   },
   "10-19|2": {
     "window": 24,
@@ -75,7 +75,7 @@
     "total_combos": 45,
     "preferred_ranges": [
       [
-        2,
+        5,
         27
       ],
       [
@@ -84,10 +84,6 @@
       ]
     ],
     "hit_indexes": {
-      "2": {
-        "combo": "10,12",
-        "hit_count": 1
-      },
       "5": {
         "combo": "10,15",
         "hit_count": 1
@@ -95,10 +91,6 @@
       "6": {
         "combo": "10,16",
         "hit_count": 2
-      },
-      "7": {
-        "combo": "10,17",
-        "hit_count": 1
       },
       "9": {
         "combo": "10,19",
@@ -126,7 +118,7 @@
       },
       "22": {
         "combo": "12,17",
-        "hit_count": 2
+        "hit_count": 1
       },
       "23": {
         "combo": "12,18",
@@ -165,7 +157,7 @@
         "hit_count": 1
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   },
   "10-19|3": {
     "window": 24,
@@ -174,10 +166,6 @@
     "total_combos": 120,
     "preferred_ranges": [],
     "hit_indexes": {
-      "13": {
-        "combo": "10,12,17",
-        "hit_count": 1
-      },
       "27": {
         "combo": "10,15,16",
         "hit_count": 1
@@ -211,7 +199,7 @@
         "hit_count": 1
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   },
   "20-31|2": {
     "window": 24,
@@ -220,21 +208,25 @@
     "total_combos": 66,
     "preferred_ranges": [
       [
-        6,
+        8,
         11
       ],
       [
-        60,
+        16,
+        20
+      ],
+      [
+        43,
+        48
+      ],
+      [
+        55,
         64
       ]
     ],
     "hit_indexes": {
       "1": {
         "combo": "20,21",
-        "hit_count": 1
-      },
-      "6": {
-        "combo": "20,26",
         "hit_count": 1
       },
       "8": {
@@ -247,10 +239,14 @@
       },
       "11": {
         "combo": "20,31",
-        "hit_count": 2
+        "hit_count": 1
       },
       "16": {
         "combo": "21,26",
+        "hit_count": 1
+      },
+      "17": {
+        "combo": "21,27",
         "hit_count": 1
       },
       "20": {
@@ -265,13 +261,25 @@
         "combo": "24,30",
         "hit_count": 1
       },
+      "47": {
+        "combo": "25,27",
+        "hit_count": 1
+      },
+      "48": {
+        "combo": "25,28",
+        "hit_count": 1
+      },
       "55": {
         "combo": "26,30",
         "hit_count": 1
       },
       "56": {
         "combo": "26,31",
-        "hit_count": 3
+        "hit_count": 2
+      },
+      "57": {
+        "combo": "27,28",
+        "hit_count": 1
       },
       "60": {
         "combo": "27,31",
@@ -286,7 +294,7 @@
         "hit_count": 1
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   },
   "20-31|3": {
     "window": 24,
@@ -297,10 +305,6 @@
     "hit_indexes": {
       "9": {
         "combo": "20,21,30",
-        "hit_count": 1
-      },
-      "45": {
-        "combo": "20,26,31",
         "hit_count": 1
       },
       "51": {
@@ -314,8 +318,12 @@
       "183": {
         "combo": "24,29,30",
         "hit_count": 1
+      },
+      "191": {
+        "combo": "25,27,28",
+        "hit_count": 1
       }
     },
-    "last_update_date": "2026-08-11"
+    "last_update_date": "2026-08-15"
   }
 }

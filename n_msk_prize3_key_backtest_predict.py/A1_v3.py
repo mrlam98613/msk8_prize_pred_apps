@@ -14,8 +14,8 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-BACKTEST_WINDOW = 50  # 4 week. x 3(2,4,6) = 12 x 3(Month) = 48 期，回測窗口期數：每次只用目標期之前最近多少期做分析
-PREDICT_BET_COUNT = 4  # 每一期產生多少注模擬投注；第 4 注為分區隨機 6 球
+BACKTEST_WINDOW = 24  # 4 week. x 3(2,4,6) = 12 x 3(Month) = 48 期，回測窗口期數：每次只用目標期之前最近多少期做分析
+PREDICT_BET_COUNT = 6  # 每一期產生多少注模擬投注；第 4 注為分區隨機 6 球
 PREDICT_NUM_COUNT_PATTERN = [4, 5, 6]  # 前 3 注分別產生 4球、5球、6球單注組合
 BIRTHDAY_NUM_MIN = 1  # 分析號碼範圍最小值
 BIRTHDAY_NUM_MAX = 31  # 分析號碼範圍最大值
@@ -34,7 +34,10 @@ SHOW_TOP_COMBOS = True  # 是否顯示最後一期窗口的熱門/冷門組合�
 TOP_COMBO_PRINT_COUNT = 12  # 熱門/冷門組合排名顯示多少組
 
 USE_COMBO_INDEX_MEMORY = True  # 是否啟用組合索引記憶加權
-COMBO_INDEX_MEMORY_PATH = CURRENT_DIR / "combo_index_memory.json"  # 組合索引記憶 JSON
+JSON_DIR = CURRENT_DIR / "json_folder"  # JSON 輸出資料夾
+COMBO_INDEX_MEMORY_PATH = JSON_DIR / "combo_index_memory.json"  # 組合索引記憶 JSON
+PRIZE3_COMB_PRED_DIR = CURRENT_DIR / "prize3_comb_pred_data"  # 下期預測組合輸出資料夾
+NEXTDRAW_COMB_PRED_CSV = PRIZE3_COMB_PRED_DIR / "nextdraw_comb_pred.csv"  # 下期預測組合 CSV
 MEMORY_WINDOW = 24  # 更新記憶時，取最近多少期做組合核對統計
 MEMORY_HIT_MIN_COUNT = 1  # 組合出現幾次或以上，才納入 index 記憶
 MEMORY_CLUSTER_GAP = 3  # 命中 index 相隔多少以內，視為同一群組
@@ -154,6 +157,7 @@ def save_combo_index_memory(memory: dict[str, dict[str, object]]) -> None:
 
     if not USE_COMBO_INDEX_MEMORY:
         return
+    COMBO_INDEX_MEMORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     with COMBO_INDEX_MEMORY_PATH.open("w", encoding="utf-8") as f:
         json.dump(memory, f, ensure_ascii=False, indent=2)
 
@@ -760,6 +764,25 @@ def build_next_draw_prediction(
     return bets[:PREDICT_BET_COUNT]
 
 
+def write_next_draw_prediction_csv(bets: list[tuple[int, ...]]) -> None:
+    """覆寫儲存下期未開獎預測組合，不累加舊預測紀錄。"""
+
+    PRIZE3_COMB_PRED_DIR.mkdir(parents=True, exist_ok=True)
+    r_nums, b_nums, g_nums = build_merged_rgb_groups(bets)
+
+    lines = ["bet_comb,N1,N2,N3,N4,N5,N6"]
+    for idx, bet_nums in enumerate(bets, start=1):
+        num_texts = [str(num) for num in bet_nums[:6]]
+        num_texts.extend([""] * (6 - len(num_texts)))
+        lines.append(",".join([str(idx), *num_texts]).rstrip(","))
+
+    lines.append(f"R:{format_nums(r_nums)}")
+    lines.append(f"B:{format_nums(b_nums)}")
+    lines.append(f"G:{format_nums(g_nums)}")
+
+    NEXTDRAW_COMB_PRED_CSV.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def print_next_draw_prediction(
     rows: list[DrawRow],
     combo_index_memory: dict[str, dict[str, object]],
@@ -770,6 +793,7 @@ def print_next_draw_prediction(
         return
 
     bets = build_next_draw_prediction(rows, combo_index_memory)
+    write_next_draw_prediction_csv(bets)
     print()
     print("====== 下期組合號預測 ======")
     for idx, bet_nums in enumerate(bets, start=1):

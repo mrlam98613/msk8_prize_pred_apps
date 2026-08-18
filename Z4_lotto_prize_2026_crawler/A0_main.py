@@ -352,6 +352,15 @@ def month_dates(year: int, month: int) -> list[str]:
     return dates
 
 
+def build_fixed_fixture_dates(months: list[tuple[int, int]]) -> list[str]:
+    """以六合彩固定二、四、六開獎日，補齊指定月份。"""
+
+    dates: list[str] = []
+    for year, month in months:
+        dates.extend(month_dates(year, month))
+    return sorted(set(dates))
+
+
 def has_month(existing_dates: set[str], year: int, month: int) -> bool:
     expected = set(month_dates(year, month))
     return bool(expected) and expected.issubset(existing_dates)
@@ -463,8 +472,16 @@ def download_fixtures_to_csv(today: date | None = None) -> bool:
     months = target_months(today)
     dates = fetch_hkjc_fixture_dates(months)
     if dates is None:
-        print("⚠️ 未能取得馬會已公布開獎日，保留現有 M7，不使用推算日期。")
-        return False
+        fallback_dates = sorted(existing_dates | set(build_fixed_fixture_dates(months)))
+        if not fallback_dates:
+            print("⚠️ 未能取得馬會已公布開獎日，保留現有 M7。")
+            return False
+        write_m7(fallback_dates)
+        print(
+            "⚠️ 未能取得馬會已公布開獎日，"
+            f"已用固定二、四、六補齊 M7，共 {len(fallback_dates)} 個開獎日。"
+        )
+        return True
 
     write_m7(dates)
     print(f"✅ 已更新 M7_lotto_open_days.csv，共 {len(dates)} 個開獎日。")

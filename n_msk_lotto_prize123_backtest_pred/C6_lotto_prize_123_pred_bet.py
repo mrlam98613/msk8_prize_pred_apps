@@ -620,24 +620,24 @@ def print_mode_result(mode_result):
     for _, row in mode_result["feature_rows"].iterrows():
         nums.extend(nums_for_mode_row(row, mode))
 
-    print(f"\n====== {mode_result['label']} ======")
-    print_feature_table(mode_result)
-    print_rbg_groups(f"{mode_result['label']} 特徵球 RBG 分組", nums)
+    # print(f"\n====== {mode_result['label']} ======")
+    # print_feature_table(mode_result)
+    # print_rbg_groups(f"{mode_result['label']} 特徵球 RBG 分組", nums)
 
-    print("\ninterval pattern 統計:")
-    for pattern, count in mode_result["pattern_counter"].most_common():
-        print(f"{list(pattern)}: {count}")
-    print(f"選用投注區間: {mode_result['interval_slots']}")
+    # print("\ninterval pattern 統計:")
+    # for pattern, count in mode_result["pattern_counter"].most_common():
+    #     print(f"{list(pattern)}: {count}")
+    # print(f"選用投注區間: {mode_result['interval_slots']}")
 
-    print("\n候選球權重 Top 15:")
-    for num, score in mode_result["feature_counter"].most_common(15):
-        print(f"{num}: {score}")
+    # print("\n候選球權重 Top 15:")
+    # for num, score in mode_result["feature_counter"].most_common(15):
+    #     print(f"{num}: {score}")
 
-    print("\n選球特式:")
-    for num, score, tags in mode_result["details"]:
-        tag_text = ",".join(tags) if tags else "-"
-        print(f"{num}: score={score:.1f} / {tag_text}")
-    print(f"投注號碼: {mode_result['bet']}")
+    # print("\n選球特式:")
+    # for num, score, tags in mode_result["details"]:
+    #     tag_text = ",".join(tags) if tags else "-"
+    #     print(f"{num}: score={score:.1f} / {tag_text}")
+    # print(f"投注號碼: {mode_result['bet']}")
 
 
 def print_strategy_result(result):
@@ -715,9 +715,9 @@ def run_backtest(bet_mode):
     print(f"總中獎注數: {total_win} 注")
     if total_bets:
         print(f"總中獎率: {(total_win / total_bets) * 100:.2f}%")
-    # print("\n已更新回測 CSV:")
-    # print(f"- {PRIZE123_BET_CSV}")
-    # print(f"- {PRIZE123_WIN_RESULTS_CSV}")
+    print("\n已更新回測 CSV:")
+    print(f"- {PRIZE123_BET_CSV}")
+    print(f"- {PRIZE123_WIN_RESULTS_CSV}")
 
 
 def parse_args():

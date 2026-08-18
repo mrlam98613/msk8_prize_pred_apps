@@ -6,8 +6,7 @@ import streamlit as st
 
 from css import white_black_style
 
-
-
+''' 網頁 / 手機版 由 streamlit coding '''
 PROJECT_ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = PROJECT_ROOT / "app_pages"
 
