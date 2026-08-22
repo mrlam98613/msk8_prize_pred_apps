@@ -8,7 +8,7 @@ PROJECT_ROOT = CURRENT_DIR
 CSV_OUTPUT_DIR = PROJECT_ROOT / "data"
 
 NUM_MIN = 10
-NUM_MAX = 20
+NUM_MAX = 31
 TAKE_COUNT = 3
 
 CSV_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

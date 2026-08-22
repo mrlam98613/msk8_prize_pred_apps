@@ -34,9 +34,9 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 RECENT_DRAW_COUNT = 50 # 回測期數
 # ---
 MIN_BIRTHDAY_NUM_COUNT = 3 # 每注開獎號，符合查詢範圍的號碼數量
-BIRTHDAY_NUM_MATCH_MODE = "=="  # 可選：">=" 或 "=="
+BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
 BIRTHDAY_NUM_MIN = 1 # 查詢範圍最小號碼，例如 1、10、20
-BIRTHDAY_NUM_MAX = 9 # 查詢範圍最大號碼，例如 9、19、29
+BIRTHDAY_NUM_MAX = 19 # 查詢範圍最大號碼，例如 9、19、29
 PRIZE_OPTION = 3  # 可選：1、2、3=3獎 中獎注數顯示
 
 # ====
@@ -209,16 +209,18 @@ def print_combination_stats(rows: list[MatchedDraw]) -> None:
             )
         )
     )
-    print()
-    print(
-        f"====== {BIRTHDAY_NUM_MIN}-{BIRTHDAY_NUM_MAX} 選 {COMBINATION_TAKE_COUNT} "
-        f"組合核對統計，共 {total_group} 組 ======"
-    )
     hit_stats = [
         (idx, combo, hit_count)
         for idx, (combo, hit_count) in enumerate(build_combination_stats(rows), start=1)
         if hit_count > 0
     ]
+
+    print()
+    print(
+        f"====== {BIRTHDAY_NUM_MIN}-{BIRTHDAY_NUM_MAX} 選 {COMBINATION_TAKE_COUNT} "
+        f"組合核對統計，共 {total_group} 組 ======"
+    )
+    print(f"命中組合 hit >= 1：{len(hit_stats)} 組")
 
     if not hit_stats:
         print("沒有命中的組合。")
@@ -263,4 +265,3 @@ if __name__ == "__main__":
  321. 1,16,22, -----> 1
  347. 1,18,21, -----> 1
 '''
-

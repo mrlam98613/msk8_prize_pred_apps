@@ -6,6 +6,10 @@ from pathlib import Path
 import sys
 
 import streamlit as st
+'''
+會員查詢自已生日算出來的正財 / 偏財日，並與開獎日交集，找出幸運日。
+'''
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -31,11 +35,11 @@ def analysis_date_range(months_ahead=1, today=None):
 
 
 def render_lucky_day_table(rows):
-    headers = ["日期", "星期", "六合彩狀態", "提示"]
+    headers = ["會員財日", "星期", "六合彩開獎日", "提示"]
     col_classes = {
-        "日期": "date",
+        "會員財日": "date",
         "星期": "weekday",
-        "六合彩狀態": "status",
+        "六合彩開獎日": "lottery_date",
         "提示": "remark",
     }
 
@@ -270,7 +274,7 @@ def main():
 
     user_tg = get_day_tian_gan(birth_date)
     zheng_tg, pian_tg = get_fortune_gan(user_tg)
-    st.write(f"**日主天干**：{user_tg}，**正財**：{zheng_tg}，**偏財**：{pian_tg}")
+    st.write(f"**會員日主天干**：{user_tg}，**正財**：{zheng_tg}，**偏財**：{pian_tg}")
 
     st.write(f"篩選日期範圍：{start_date.strftime('%Y-%m-%d')} 至 {end_date.strftime('%Y-%m-%d')}")
 
@@ -302,11 +306,11 @@ def main():
 
             rows.append(
                 {
-                    "日期": date_str,
+                    "會員財日": date_str,
                     "星期": weekday_str,
                     "日天干": tg,
                     "財星類型": fortune_type,
-                    "六合彩狀態": lottery_str,
+                    "六合彩開獎日": lottery_str,
                     "提示": remark,
                 }
             )

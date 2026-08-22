@@ -16,9 +16,9 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 COMB_DATA_DIR = CURRENT_DIR / "comb_data"
 
 BACKTEST_DRAW_COUNT = 1  # 回測核對最近多少期，例如 1 = 用最新 1 期核對
-WINDOW_DRAW_COUNT = 12  # 每次回測前，向前取多少期作窗口樣本統計
+WINDOW_DRAW_COUNT = 20  # 每次回測前，向前取多少期作窗口樣本統計
 BIRTHDAY_NUM_MIN = 1  # 分析號碼範圍最小值
-BIRTHDAY_NUM_MAX = 31  # 分析號碼範圍最大值
+BIRTHDAY_NUM_MAX = 20  # 分析號碼範圍最大值
 COMBINATION_TAKE_COUNT = 3  # 組合取幾個號碼，例如 2 或 3
 # --
 FOCUS_HIT_MIN_COUNT = 1  # 重點打印：3 球組合出現次數至少多少
