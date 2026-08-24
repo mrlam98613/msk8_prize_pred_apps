@@ -34,9 +34,9 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 RECENT_DRAW_COUNT = 50 # 回測期數
 # ---
 MIN_BIRTHDAY_NUM_COUNT = 3 # 每注開獎號，符合查詢範圍的號碼數量
-BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
+BIRTHDAY_NUM_MATCH_MODE = "=="  # 可選：">=" 或 "=="
 BIRTHDAY_NUM_MIN = 1 # 查詢範圍最小號碼，例如 1、10、20
-BIRTHDAY_NUM_MAX = 19 # 查詢範圍最大號碼，例如 9、19、29
+BIRTHDAY_NUM_MAX = 20 # 查詢範圍最大號碼，例如 9、19、29
 PRIZE_OPTION = 3  # 可選：1、2、3=3獎 中獎注數顯示
 
 # ====

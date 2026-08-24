@@ -2,64 +2,123 @@
   {
     "rank": 1,
     "pair": [
-      14,
-      17
+      7,
+      9
     ],
     "group_count": 4,
     "total_hit_count": 4,
     "combo_units": [
       {
-        "index": 153,
+        "index": 777,
         "nums": [
-          1,
-          14,
-          17
+          7,
+          8,
+          9
         ],
         "hit_count": 1,
         "hit_dates": [
-          "2026-07-30"
+          "2026-08-18"
         ]
       },
       {
-        "index": 306,
+        "index": 789,
         "nums": [
-          2,
-          14,
-          17
+          7,
+          9,
+          10
         ],
         "hit_count": 1,
         "hit_dates": [
-          "2026-07-30"
+          "2026-08-20"
         ]
       },
       {
-        "index": 1066,
+        "index": 793,
         "nums": [
-          12,
-          14,
-          17
+          7,
+          9,
+          14
         ],
         "hit_count": 1,
         "hit_dates": [
-          "2026-06-30"
+          "2026-08-18"
         ]
       },
       {
-        "index": 1115,
+        "index": 794,
         "nums": [
-          14,
-          17,
-          18
+          7,
+          9,
+          15
         ],
         "hit_count": 1,
         "hit_dates": [
-          "2026-06-30"
+          "2026-08-20"
         ]
       }
     ]
   },
   {
     "rank": 2,
+    "pair": [
+      7,
+      14
+    ],
+    "group_count": 4,
+    "total_hit_count": 4,
+    "combo_units": [
+      {
+        "index": 496,
+        "nums": [
+          4,
+          7,
+          14
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-28"
+        ]
+      },
+      {
+        "index": 782,
+        "nums": [
+          7,
+          8,
+          14
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-18"
+        ]
+      },
+      {
+        "index": 793,
+        "nums": [
+          7,
+          9,
+          14
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-18"
+        ]
+      },
+      {
+        "index": 839,
+        "nums": [
+          7,
+          14,
+          20
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-28"
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 3,
     "pair": [
       14,
       20
@@ -118,7 +177,7 @@
     ]
   },
   {
-    "rank": 3,
+    "rank": 4,
     "pair": [
       1,
       7
@@ -165,7 +224,7 @@
     ]
   },
   {
-    "rank": 4,
+    "rank": 5,
     "pair": [
       4,
       7
@@ -212,7 +271,7 @@
     ]
   },
   {
-    "rank": 5,
+    "rank": 6,
     "pair": [
       5,
       7
@@ -254,6 +313,53 @@
         "hit_count": 1,
         "hit_dates": [
           "2026-07-25"
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 7,
+    "pair": [
+      7,
+      15
+    ],
+    "group_count": 3,
+    "total_hit_count": 3,
+    "combo_units": [
+      {
+        "index": 497,
+        "nums": [
+          4,
+          7,
+          15
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-23"
+        ]
+      },
+      {
+        "index": 794,
+        "nums": [
+          7,
+          9,
+          15
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-20"
+        ]
+      },
+      {
+        "index": 804,
+        "nums": [
+          7,
+          10,
+          15
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-20"
         ]
       }
     ]
