@@ -17,10 +17,10 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
 # ---- 重點參數
-BACKTEST_DRAW_COUNT = 3  # 回測核對最近多少期，例如 10 = 用最近 10 期核對
+BACKTEST_DRAW_COUNT = 1  # 回測核對最近多少期，例如 10 = 用最近 10 期核對
 WINDOW_DRAW_COUNT = 24  # 每次回測前，向前取多少期作窗口樣本統計
 COMBINATION_TAKE_COUNT = 2  # 查詢開獎號符合範圍的號碼數量，例如 3
-BIRTHDAY_NUM_MATCH_MODE = "=="  # 可選：">=" 或 "=="
+BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
 
 # ---- 顯示核對參數
 SHOW_BACKTEST_CHECK = True  # 可選：True 顯示每期回測核對明細；False 不顯示回測核對
@@ -410,9 +410,6 @@ def print_one_backtest_window_detail(
         matched_rows = build_matched_rows(rows, group_option, target_index=target_index)
         group_results[group_option] = matched_rows
         print_result(matched_rows, group_option, target_date, backtest_rank)
-
-    print_group_summary(group_results)
-    print_rbg_summary(group_results)
 
 
 def print_backtest_group_line(
