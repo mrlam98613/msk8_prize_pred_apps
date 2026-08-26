@@ -19,7 +19,7 @@ NEXT_BET_CSV = BET_DATA_DIR / "nextBetDraw_record.csv"
 WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
 
 # ---- 回測 / 預測模式
-RUN_MODE = "backtest"  # 可選："backtest" 重建回測CSV；"predict" 更新下期預測及追加投注記錄
+RUN_MODE = "predict"  # 可選："backtest" 重建回測CSV；"predict" 更新下期預測及追加投注記錄
 BACKTEST_DRAW_COUNT = 30  # 回測最近多少期
 TREND_PERIODS = [12, 6, 2]  # 分組趨勢期數：月、兩星期、一星期
 PRINT_GROUP_OPTIONS = [1, 2, 3]  # 分組：1=1-9，2=10-20，3=21-31
