@@ -23,9 +23,9 @@ PAGES = [
     #     "path": CONTENT_DIR / "0_predict_nextdraw.py",
     # },
     {
-        "label": "天機借運-下期投注預測",
+        "label": "生日號分組-下期投注預測",
         "icon": "🎯",
-        "path": CONTENT_DIR / "1_nextdraw_prize123_pred_bet.py",
+        "path": CONTENT_DIR / "1_brithday_pred.py",
     },
     {
         "label": "中獎號碼-組合特色分析",

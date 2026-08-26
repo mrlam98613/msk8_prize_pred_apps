@@ -8,32 +8,37 @@
 
 網站會讀取最新一期開獎資料、下期開獎日期、下期頭獎基金，以及已產生的預測投注號碼。一般下期投注預測由 `msk_new_seed_apps/A1_seedBet_main.py` 產生。
 
-### 1、2、3 獎特式投注預測
+### 生日號分組投注預測
 
-`app_pages/1_nextdraw_prize123_pred_bet.py` 主要顯示由以下程式產生的特式預測結果：
+`app_pages/1_brithday_pred.py` 主要顯示由以下程式產生的生日號分組預測結果：
 
 ```text
-n_msk_lotto_prize123_backtest_pred/C6_lotto_prize_123_pred_bet.py
+n_v1_msk_prize_31_num_backtest_pred/A1_v2_brithday_group_quota_pred.py
 ```
 
-C6 策略會分析最近約 50 期開獎及派彩資料，並在最近 24 期內，根據頭獎、二獎、三獎的中獎注數及中獎獎金變化，取出具參考價值的特式組合投注。
+A1_v2 策略會以 1-9、10-20、21-31 三個分組，按 12 / 6 / 2 期近期趨勢、prize3 人氣及特號輔助分產生下期投注參考。
 
-系統會分別針對以下三種獎金特式產生預測：
+目錄分工：
 
-- 三獎特式預測：分析三獎派彩及中獎注數走勢，產生 1 注參考投注。
-- 二獎特式預測：分析二獎派彩及中獎注數走勢，產生 1 注參考投注。
-- 頭獎特式預測：分析頭獎派彩、無人中獎及獎金累積情況，產生 1 注參考投注。
+```text
+n_v1_msk_prize_31_num_backtest_pred/
+  A1 系列：生日號分組趨勢、回測投注及下期預測
+  bet_prize_data/：網站讀取的投注與核對 CSV
 
-預設模式會同時產生 3 注投注號碼，分別對應三獎、二獎及頭獎特式。用戶亦可按自己的投注偏好，選擇指定的獎金特式作預測投注參考。
+n_v2_msk_prize_31_num_backtest_pred/
+  A0 系列：組合分析、權重回測及研究記錄
+  comb_data/、json_data/：A0 分析輸出資料
+```
 
 網站頁面會讀取：
 
 ```text
-n_msk_lotto_prize123_backtest_pred/bet_prize_data/prize123_nextDraw_bet.csv
-n_msk_lotto_prize123_backtest_pred/bet_prize_data/prize123_bet.csv
+n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/nextBetDraw_record.csv
+n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/bet_records.csv
+n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/win_results.csv
 ```
 
-其中 `prize123_nextDraw_bet.csv` 只保留目前最新下期的 1、2、3 獎特式預測投注，方便網站直接顯示。
+其中 `nextBetDraw_record.csv` 只保留目前最新下期預測投注，`bet_records.csv` 記錄歷史及最新投注，`win_results.csv` 記錄回測核對結果。
 
 ### 歷史投注及中獎統計
 
@@ -51,7 +56,7 @@ check_data_then_seed.py
 
 ```text
 msk_new_seed_apps/A1_seedBet_main.py
-n_msk_lotto_prize123_backtest_pred/C6_lotto_prize_123_pred_bet.py predict all
+n_v1_msk_prize_31_num_backtest_pred/A1_v2_brithday_group_quota_pred.py
 ```
 
 兩個程式都成功後，才會更新處理狀態。若其中一個失敗，下一次排程會再次嘗試。

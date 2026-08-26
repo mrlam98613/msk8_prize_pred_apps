@@ -5,8 +5,8 @@
       7,
       9
     ],
-    "group_count": 4,
-    "total_hit_count": 4,
+    "group_count": 5,
+    "total_hit_count": 5,
     "combo_units": [
       {
         "index": 777,
@@ -30,6 +30,18 @@
         "hit_count": 1,
         "hit_dates": [
           "2026-08-20"
+        ]
+      },
+      {
+        "index": 791,
+        "nums": [
+          7,
+          9,
+          12
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-22"
         ]
       },
       {
@@ -120,65 +132,6 @@
   {
     "rank": 3,
     "pair": [
-      14,
-      20
-    ],
-    "group_count": 4,
-    "total_hit_count": 4,
-    "combo_units": [
-      {
-        "index": 445,
-        "nums": [
-          3,
-          14,
-          20
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-05"
-        ]
-      },
-      {
-        "index": 565,
-        "nums": [
-          4,
-          14,
-          20
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-28"
-        ]
-      },
-      {
-        "index": 839,
-        "nums": [
-          7,
-          14,
-          20
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-28"
-        ]
-      },
-      {
-        "index": 1120,
-        "nums": [
-          14,
-          19,
-          20
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-05"
-        ]
-      }
-    ]
-  },
-  {
-    "rank": 4,
-    "pair": [
       1,
       7
     ],
@@ -224,7 +177,7 @@
     ]
   },
   {
-    "rank": 5,
+    "rank": 4,
     "pair": [
       4,
       7
@@ -271,7 +224,7 @@
     ]
   },
   {
-    "rank": 6,
+    "rank": 5,
     "pair": [
       5,
       7
@@ -318,7 +271,7 @@
     ]
   },
   {
-    "rank": 7,
+    "rank": 6,
     "pair": [
       7,
       15

@@ -21,7 +21,7 @@ WINDOW_DRAW_COUNT = 24  # 每個回測期之前，向前取多少期作窗口樣
 SHOW_ANALYSIS_ADVICE = False  # 可選：True 顯示本版分析建議；False 不顯示
 
 # ---- 查詢條件參數
-PRINT_GROUP_OPTIONS = [1, 2, 3]  # 可選：[1]、[2]、[3]、[1, 2, 3]
+PRINT_GROUP_OPTIONS = [1]  # 可選：[1]、[2]、[3]、[1, 2, 3]
 COMBINATION_TAKE_COUNT = 2  # 每期開獎號在分組範圍內符合幾個號碼
 BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
 TOP_PRIZE_DRAW_COUNT = 5  # 每個分組取 prize 注數最高多少期作 pair 分析
@@ -31,7 +31,7 @@ SAMPLE_SORT_MODE = "date"  # 可選："prize" 中獎注數多至少；"date" 日
 # ---- 2 球組合加權參數
 PAIR_HIT_WEIGHT = 7  # 2 球組合本身出現次數權重
 NUM_HIT_WEIGHT = 1  # 單號在樣本內出現次數權重
-RECENT_NUM_BONUS = [7, 6, 5, 4, 3, 2, 1]  # 最近符合條件期數的單號額外加分
+RECENT_NUM_BONUS = [7,6,5, 4, 3, 2, 1]  # 最近符合條件期數的單號額外加分
 MIN_PAIR_HIT_COUNT = 1  # 只顯示出現次數 >= 此值的 2 球組合
 MAX_PAIR_DISPLAY_COUNT = 7  # 每組最多顯示多少個 2 球組合
 GROUP_PREDICT_NUM_COUNT = 3  # 每個分組產生幾個預測號碼
@@ -55,6 +55,14 @@ class PairScore(TypedDict):
     pair: tuple[int, int]
     pair_hit_count: int
     score: int
+    hit_nums: list[int]
+
+
+class BacktestSummary(TypedDict):
+    backtest_rank: int
+    target_date: str
+    check_date: str
+    predictions: list[list[int]]
     hit_nums: list[int]
 
 
@@ -318,6 +326,26 @@ def print_group_prediction(predicted_nums: list[int], check_nums: list[int], gro
     print(f"下期預測號[{pred_text}]，命中 {hit_text} /> {len(hit_nums)} 球")
 
 
+def print_backtest_summary(summary_rows: list[BacktestSummary]) -> None:
+    """打印多期回測預測核對總結。"""
+
+    if not summary_rows:
+        return
+
+    print()
+    print("====== 多期回測預測核對總結 ======")
+    for item in summary_rows:
+        prediction_text = "，".join(
+            f"[{','.join(str(num) for num in prediction)}]" for prediction in item["predictions"]
+        )
+        hit_text = ",".join(str(num) for num in item["hit_nums"]) if item["hit_nums"] else "-"
+        print(
+            f"回測最近第 {item['backtest_rank']} 期: {item['target_date']} ，"
+            f"核對： {item['check_date']} ：{prediction_text}，"
+            f"命中[{hit_text}] /> {len(item['hit_nums'])} 球"
+        )
+
+
 def print_backtest_window_details(rows: list[dict[str, str]]) -> None:
     """最近 BACKTEST_DRAW_COUNT 期逐期打印窗口分析及加權 pair 核對。"""
 
@@ -334,6 +362,7 @@ def print_backtest_window_details(rows: list[dict[str, str]]) -> None:
     )
 
     total_targets = len(target_indices)
+    summary_rows: list[BacktestSummary] = []
     for display_index, target_index in enumerate(target_indices, start=1):
         backtest_rank = total_targets - display_index + 1
         target_row = rows[target_index]
@@ -341,6 +370,8 @@ def print_backtest_window_details(rows: list[dict[str, str]]) -> None:
         check_row = rows[target_index + 1]
         check_date = check_row.get("nDdate", "")
         check_nums = parse_nums(check_row)
+        summary_predictions: list[list[int]] = []
+        summary_hit_nums: set[int] = set()
         if display_index > 1:
             print()
 
@@ -356,6 +387,20 @@ def print_backtest_window_details(rows: list[dict[str, str]]) -> None:
             print_pair_scores(pair_scores)
             predicted_nums = build_group_prediction(matched_rows, pair_scores)
             print_group_prediction(predicted_nums, check_nums, group_option)
+            summary_predictions.append(predicted_nums)
+            summary_hit_nums.update(set(predicted_nums) & set(selected_nums(check_nums, group_option)))
+
+        summary_rows.append(
+            {
+                "backtest_rank": backtest_rank,
+                "target_date": target_date,
+                "check_date": check_date,
+                "predictions": summary_predictions,
+                "hit_nums": sorted(summary_hit_nums),
+            }
+        )
+
+    print_backtest_summary(summary_rows)
 
 
 def print_analysis_advice() -> None:

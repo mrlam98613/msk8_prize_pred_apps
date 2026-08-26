@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""檢查 M2/M3 是否有新資料；有新資料才執行 A1 與 C6 預測。"""
+"""檢查 M2/M3 是否有新資料；有新資料才執行 A1 與生日號分組預測。"""
 
 from __future__ import annotations
 
@@ -20,8 +20,7 @@ DATA_DIR = ROOT / "A_msk_lottery_data_folder"
 M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"
 A1_SCRIPT = ROOT / "msk_new_seed_apps" / "A1_seedBet_main.py"
-C6_DIR = ROOT / "n_msk_lotto_prize123_backtest_pred"
-C6_SCRIPT = C6_DIR / "C6_lotto_prize_123_pred_bet.py"
+BIRTHDAY_PRED_SCRIPT = ROOT / "n_v1_msk_prize_31_num_backtest_pred" / "A1_v2_brithday_group_quota_pred.py"
 STATE_DIR = ROOT / "msk_new_seed_apps" / "bet_data"
 STATE_FILE = STATE_DIR / "check_data_state.json"
 LOG_FILE = ROOT / "msk_new_seed_apps" / "bet_data" / "check_data_log.txt"
@@ -128,10 +127,9 @@ def run_script(script: Path, args: list[str] | None = None, cwd: Path | None = N
 def run_a1() -> int:
     return run_script(A1_SCRIPT)
 
-# 執行 C6.py，傳入參數 ["predict", "all"]，
-# 並指定工作目錄為 C6_DIR\ n_msk_lotto_prize123_backtest_pred\c6_lotto_prize_123_pred_bet.py
-def run_c6() -> int:
-    return run_script(C6_SCRIPT, ["predict", "all"], cwd=C6_DIR)
+# 執行生日號分組預測，產生 nextBetDraw_record.csv 並追加 bet_records.csv。
+def run_birthday_pred() -> int:
+    return run_script(BIRTHDAY_PRED_SCRIPT)
 
 
 def main() -> int:
@@ -144,7 +142,7 @@ def main() -> int:
 
         last_processed = read_last_processed_date()
         if last_processed == m2_latest:
-            write_log(f"{now_string()} 沒有新資料，略過 A1_seedBet_main.py/C6_lotto_prize_123_pred_bet.py。最新期={m2_latest}；下期={m3_next}")
+            write_log(f"{now_string()} 沒有新資料，略過 A1_seedBet_main.py/生日號分組預測。最新期={m2_latest}；下期={m3_next}")
             return 0
 
         a1_code = run_a1()
@@ -152,13 +150,13 @@ def main() -> int:
             write_log(f"{now_string()} A1_seedBet_main.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={a1_code}")
             return a1_code
 
-        c6_code = run_c6()
-        if c6_code != 0:
-            write_log(f"{now_string()} C6_lotto_prize_123_pred_bet.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={c6_code}")
-            return c6_code
+        birthday_pred_code = run_birthday_pred()
+        if birthday_pred_code != 0:
+            write_log(f"{now_string()} A1_v2_brithday_group_quota_pred.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={birthday_pred_code}")
+            return birthday_pred_code
 
         write_last_processed_date(m2_latest)
-        write_log(f"{now_string()} 發現新資料並已執行 A1_seedBet_main.py/C6_lotto_prize_123_pred_bet.py。最新期={m2_latest}；下期={m3_next}")
+        write_log(f"{now_string()} 發現新資料並已執行 A1_seedBet_main.py/生日號分組預測。最新期={m2_latest}；下期={m3_next}")
         return 0
     except Exception as exc:
         write_log(f"{now_string()} 檢查資料失敗：{exc}")
