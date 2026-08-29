@@ -4,6 +4,7 @@ import csv
 from collections import defaultdict
 from datetime import datetime
 import sys
+from typing import TypedDict
 
 import streamlit as st
 
@@ -28,11 +29,28 @@ PRIZE_TABLE = {
     6.0: ("頭獎", 10_000_000),
     5.5: ("二獎", 1_100_000),
     5.0: ("三獎", 300_000),
-    4.5: ("四獎", 9_600),
-    4.0: ("五獎", 640),
-    3.5: ("六獎", 320),
-    3.0: ("七獎", 40),
+    4.5: ("四獎", 4_800),
+    4.0: ("五獎", 320),
+    3.5: ("六獎", 160),
+    3.0: ("七獎", 20),
 }
+
+BET_UNIT_AMOUNT = 5
+
+
+class BetRow(TypedDict):
+    date: str
+    nums: list[int]
+
+
+class DrawResult(TypedDict):
+    nums: set[int]
+    special: int
+
+
+class BallHighlight(TypedDict, total=False):
+    main: set[int]
+    special: int
 
 
 @st.cache_data(show_spinner=False)
@@ -64,14 +82,16 @@ def format_date_with_weekday(date_text: str) -> str:
     return f"{date_text}  {weekday_map[dt.weekday()]}"
 
 
-def format_money(value: object) -> str:
+def format_money(value: str | int | float | None) -> str:
+    if value is None:
+        return "-"
     try:
         return f"${int(float(value)):,}"
     except (TypeError, ValueError):
         return "-"
 
 
-def row_to_bet(row: dict[str, str]) -> dict[str, object] | None:
+def row_to_bet(row: dict[str, str]) -> BetRow | None:
     nums: list[int] = []
     for idx in range(1, 7):
         value = row.get(f"N{idx}", "")
@@ -88,8 +108,8 @@ def row_to_bet(row: dict[str, str]) -> dict[str, object] | None:
     return {"date": bet_date, "nums": nums}
 
 
-def load_bets(path: Path) -> list[dict[str, object]]:
-    bets: list[dict[str, object]] = []
+def load_bets(path: Path) -> list[BetRow]:
+    bets: list[BetRow] = []
     for row in read_dict_rows(path):
         bet = row_to_bet(row)
         if bet:
@@ -102,8 +122,8 @@ def load_latest_prize_summary() -> dict[str, str]:
     return rows[-1] if rows else {}
 
 
-def load_lotto_results() -> dict[str, dict[str, object]]:
-    results: dict[str, dict[str, object]] = {}
+def load_lotto_results() -> dict[str, DrawResult]:
+    results: dict[str, DrawResult] = {}
     for row in read_dict_rows(M6_HISTORY_PATH):
         date = row.get("nDdate", "").strip()
         try:
@@ -116,11 +136,9 @@ def load_lotto_results() -> dict[str, dict[str, object]]:
     return results
 
 
-def get_prize_result(nums: list[int], draw_result: dict[str, object]) -> tuple[set[int], int | None, float, str, int]:
+def get_prize_result(nums: list[int], draw_result: DrawResult) -> tuple[set[int], int | None, float, str, int]:
     draw_nums = draw_result["nums"]
     special = draw_result["special"]
-    if not isinstance(draw_nums, set) or not isinstance(special, int):
-        return set(), None, 0.0, "0", 0
 
     win_main_set = set(nums) & draw_nums
     win_special = special if special in nums else None
@@ -134,7 +152,7 @@ def get_prize_result(nums: list[int], draw_result: dict[str, object]) -> tuple[s
     return win_main_set, win_special, win_score, prize_name, payout
 
 
-def render_balls(nums: list[int], label: str = "", highlight: dict[str, object] | None = None) -> None:
+def render_balls(nums: list[int], label: str = "", highlight: BallHighlight | None = None) -> None:
     highlight = highlight or {}
     main_hits = highlight.get("main", set())
     special_hit = highlight.get("special")
@@ -143,7 +161,7 @@ def render_balls(nums: list[int], label: str = "", highlight: dict[str, object] 
     for num in nums:
         b64 = load_ball_image_base64(num)
         style = "width:32px;height:32px;object-fit:contain;margin-right:3px;"
-        if isinstance(main_hits, set) and num in main_hits:
+        if num in main_hits:
             style += "border:2.5px solid red;border-radius:50%;box-sizing:border-box;"
         elif num == special_hit:
             style += "border:2.5px solid #0074D9;border-radius:6px;box-sizing:border-box;"
@@ -152,7 +170,7 @@ def render_balls(nums: list[int], label: str = "", highlight: dict[str, object] 
             parts.append(f"<img src='data:image/png;base64,{b64}' style='{style}'/>")
         else:
             span_style = "display:inline-block;margin-right:6px;font-weight:800;"
-            if isinstance(main_hits, set) and num in main_hits:
+            if num in main_hits:
                 span_style += "border:2.5px solid red;border-radius:50%;padding:2px;"
             elif num == special_hit:
                 span_style += "border:2.5px solid #0074D9;border-radius:6px;padding:2px;"
@@ -196,7 +214,7 @@ def render_next_draw_section() -> None:
         unsafe_allow_html=True,
     )
     for idx, bet in enumerate(next_bets, start=1):
-        render_balls(bet["nums"], label=f"{idx}注：")  # type: ignore[arg-type]
+        render_balls(bet["nums"], label=f"{idx}注：")
 
 
 def render_history_section() -> None:
@@ -219,14 +237,14 @@ def render_history_section() -> None:
         return
 
     lotto_results = load_lotto_results()
-    grouped: dict[str, list[dict[str, object]]] = defaultdict(list)
+    grouped: dict[str, list[BetRow]] = defaultdict(list)
     for bet in bets:
         grouped[str(bet["date"])].append(bet)
 
     total_bet = 0
     total_win = 0
     win_count = 0
-    bet_amount = 10
+    bet_amount = BET_UNIT_AMOUNT
 
     for date in sorted(grouped.keys(), reverse=True):
         st.markdown(
@@ -237,15 +255,13 @@ def render_history_section() -> None:
         for idx, bet in enumerate(grouped[date], start=1):
             total_bet += bet_amount
             nums = bet["nums"]
-            if not isinstance(nums, list):
-                continue
 
             if date in lotto_results:
                 win_main_set, win_special, win_score, prize_name, payout = get_prize_result(nums, lotto_results[date])
                 if payout > 0:
                     win_count += 1
                     total_win += payout
-                highlight: dict[str, object] = {"main": win_main_set}
+                highlight: BallHighlight = {"main": win_main_set}
                 if win_special:
                     highlight["special"] = win_special
                 render_balls(nums, label=f"{idx}注：", highlight=highlight)
@@ -263,7 +279,7 @@ def render_history_section() -> None:
         st.markdown("<hr style='margin:6px 0;border:0;border-top:1px solid #e0e0e0;'>", unsafe_allow_html=True)
 
     st.markdown("---")
-    st.write(f"投注注數：{len(bets)} 注 * 每注 $10")
+    st.write(f"投注注數：{len(bets)} 注 * 每注 ${BET_UNIT_AMOUNT}")
     st.write(f"投注總金額：{format_money(total_bet)}")
     st.write(f"中獎注數：{win_count} 注，派彩總金額 = {format_money(total_win)}")
     st.write(f"損益金額 = {format_money(total_win - total_bet)}")

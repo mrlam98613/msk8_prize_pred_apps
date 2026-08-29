@@ -17,15 +17,20 @@ PAGES = [
         "icon": "📌",
         "path": CONTENT_DIR / "0_lotto_info.py",
     },
+    {
+        "label": "A1_v1 手動趨勢投注",
+        "icon": "📈",
+        "path": CONTENT_DIR / "1_A1_v1_manuel_pred.py",
+    },
     # {
     #     "label": "種子投注法-下期投注預測",
     #     "icon": "🏆",
     #     "path": CONTENT_DIR / "0_predict_nextdraw.py",
     # },
     {
-        "label": "生日號分組-下期投注預測",
+        "label": "A1_v2 12/6/3 分組預測",
         "icon": "🎯",
-        "path": CONTENT_DIR / "1_brithday_pred.py",
+        "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
     },
     {
         "label": "中獎號碼-組合特色分析",

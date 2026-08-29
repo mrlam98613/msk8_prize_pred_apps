@@ -11,13 +11,16 @@ _number_picker = components.declare_component(
 )
 
 
-def number_picker(selected=None, max_select=3, reset_token=0, key=None):
+def number_picker(selected=None, max_select=3, reset_token=0, key=None, max_number=49, dim_numbers=None):
     """顯示 1-49 緊湊選號盤，回傳已選號碼 list[int]。"""
 
     selected = selected or []
+    dim_numbers = dim_numbers or []
     value = _number_picker(
         selected=selected,
         max_select=max_select,
+        max_number=max_number,
+        dim_numbers=dim_numbers,
         reset_token=reset_token,
         default=selected,
         key=key,

@@ -59,15 +59,38 @@
     .red { color: #dc2626; }
     .blue { color: #2563eb; }
     .green { color: #16a34a; }
+    .dim {
+      color: #9ca3af !important;
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      box-shadow: none;
+    }
     .selected {
       border: 3px solid #111827;
+      color: #111827 !important;
+      background: #fef3c7;
       box-shadow: inset 0 0 0 2px #facc15, 0 1px 2px rgba(0, 0, 0, 0.12);
     }
+    .selected.dim {
+      color: #111827 !important;
+      background: #fde68a;
+      border-color: #111827;
+    }
     .disabled {
-      opacity: 0.28;
+      opacity: 1;
+      color: #cbd5e1 !important;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          #f8fafc,
+          #f8fafc 5px,
+          #e5e7eb 5px,
+          #e5e7eb 7px
+        );
       cursor: not-allowed;
       transform: none !important;
-      border-color: rgba(17, 24, 39, 0.08);
+      border-color: #e5e7eb;
+      box-shadow: none;
     }
   </style>
 </head>
@@ -80,6 +103,8 @@
 
     let selected = [];
     let maxSelect = 3;
+    let maxNumber = 49;
+    let dimNumbers = new Set();
     let lastResetToken = null;
 
     function send(type, data) {
@@ -105,11 +130,12 @@
       const root = document.getElementById("picker");
       root.innerHTML = "";
 
-      for (let num = 1; num <= 49; num += 1) {
+      for (let num = 1; num <= maxNumber; num += 1) {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = String(num);
         btn.className = `ball ${colorClass(num)}`;
+        if (dimNumbers.has(num)) btn.classList.add("dim");
 
         const isSelected = selected.includes(num);
         const isDisabled = !isSelected && selected.length >= maxSelect;
@@ -144,6 +170,9 @@
         }
       }
       maxSelect = Number(args.max_select || 3);
+      maxNumber = Number(args.max_number || 49);
+      dimNumbers = new Set(Array.isArray(args.dim_numbers) ? args.dim_numbers.map(Number) : []);
+      selected = selected.filter((value) => value >= 1 && value <= maxNumber);
       render();
     });
 

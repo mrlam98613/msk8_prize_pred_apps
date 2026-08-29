@@ -10,7 +10,7 @@
 
 ### 生日號分組投注預測
 
-`app_pages/1_brithday_pred.py` 主要顯示由以下程式產生的生日號分組預測結果：
+`app_pages/1_A1_v2_12_6_3_pred.py` 主要顯示由以下程式產生的生日號分組預測結果：
 
 ```text
 n_v1_msk_prize_31_num_backtest_pred/A1_v2_brithday_group_quota_pred.py

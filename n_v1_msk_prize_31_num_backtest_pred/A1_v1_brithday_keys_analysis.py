@@ -14,8 +14,8 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
 # ---- 分析參數
-PERIOD_COUNTS = [12, 6, 3]  # 分段期數，例如最近 12、6、3 期
-PRINT_GROUP_OPTIONS = [1, 2, 3]  # 可選：[1]、[2]、[3]、[1, 2, 3]
+PERIOD_COUNTS = [12, 6, 2]  # 分段期數，例如最近 12、6、3 期
+PRINT_GROUP_OPTIONS = [1]  # 可選：[1]、[2]、[3]、[1, 2, 3]
 SHOW_NUM_FREQ = True  # 可選：True 顯示每組單號出現次數
 SHOW_SPECIAL_FREQ = True  # 可選：True 顯示每組特號出現次數
 

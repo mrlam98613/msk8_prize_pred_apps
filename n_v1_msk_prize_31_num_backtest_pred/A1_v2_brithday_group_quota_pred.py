@@ -1,5 +1,6 @@
 from pathlib import Path
 import csv
+import json
 from typing import TypedDict
 
 """
@@ -14,22 +15,32 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 BET_DATA_DIR = CURRENT_DIR / "bet_prize_data"
+JSON_DATA_DIR = CURRENT_DIR / "json_data"
 BET_RECORDS_CSV = BET_DATA_DIR / "bet_records.csv"
 NEXT_BET_CSV = BET_DATA_DIR / "nextBetDraw_record.csv"
 WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
+BACKTEST_SCORE_JSON = JSON_DATA_DIR / "A1_v2_backtest_score.json"
 
 # ---- 回測 / 預測模式
 RUN_MODE = "predict"  # 可選："backtest" 重建回測CSV；"predict" 更新下期預測及追加投注記錄
-BACKTEST_DRAW_COUNT = 30  # 回測最近多少期
-TREND_PERIODS = [12, 6, 2]  # 分組趨勢期數：月、兩星期、一星期
+BACKTEST_DRAW_COUNT = 20  # 回測最近多少期
+'''
+比較穩的範圍：最高權重：10
+[(12, 2), (6, 3), (2, 5)]
+[(12, 3), (6, 4), (2, 5)]
+[(12, 1), (6, 3), (2, 6)]
+[(14, 3), (7, 4), (3, 5)]
+'''
+TREND_PERIOD_WEIGHTS = [(14, 3), (7, 4), (3, 5)]  # 分組趨勢期數及權重（1-10)  ：越近期權重越高
+TREND_PERIODS = [period for period, _weight in TREND_PERIOD_WEIGHTS]
+PERIOD_WEIGHTS = dict(TREND_PERIOD_WEIGHTS)
 PRINT_GROUP_OPTIONS = [1, 2, 3]  # 分組：1=1-9，2=10-20，3=21-31
 TOTAL_PREDICT_NUM_COUNT = 9  # 三組合共預測球數，標準 9 球
 SHOW_DETAIL_COUNT = 20  # 顯示最近多少期回測明細；0 = 不顯示
 SAVE_BET_CSV = True  # 可選：True 將 A1_v2 回測及下期預測寫入 bet_prize_data
-HIGH_JACKPOT_FUND = 30000000  # 下期估計頭獎達到此金額，多加一注 2組+3組
+HIGH_JACKPOT_FUND = 20_000_000  # 下期估計頭獎達到此金額，多加一注 2組+3組
 
 # ---- 權重參數
-PERIOD_WEIGHTS = {12: 1, 6: 3, 2: 5}  # 越近期權重越高
 SPECIAL_NUM_WEIGHT = 2  # 特號只作輔助加分，不壓過正號
 ZERO_PENALTY_WEIGHT = 2  # 分組 0 球期數扣分
 LOW_PRIZE_PENALTY_WEIGHT = 1  # 低人氣輕微扣分，初版保守
@@ -70,6 +81,24 @@ class BacktestResult(TypedDict):
 class NextDrawInfo(TypedDict):
     next_draw_date: str
     next_draw_prize_fund: float
+
+
+HIT_LEVELS = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0]
+MODEL_SCORE_WEIGHTS = {
+    6: 80,
+    5.5: 60,
+    5: 45,
+    4.5: 30,
+    4: 20,
+    3.5: 12,
+    3: 8,
+    2.5: 5,
+    2: 3,
+    1.5: 2,
+    1: 1,
+    0.5: 0.5,
+    0: -2,
+}
 
 
 def birthday_range(group_option: int) -> tuple[int, int]:
@@ -350,12 +379,44 @@ def format_hit_score(hit_score: float) -> str:
     return f"{hit_score:g}"
 
 
+def hit_score_key(hit_score: float) -> str:
+    """JSON 統一用字串 key 儲存 3、3.5、4 等命中檔位。"""
+
+    return format_hit_score(hit_score)
+
+
 def get_hit_score(normal_hit_count: int, has_special_hit: bool) -> float:
     """中特號加 0.5 球，6 個正號時仍以 6 球計。"""
 
     if normal_hit_count >= 6:
         return 6.0
     return normal_hit_count + (0.5 if has_special_hit else 0.0)
+
+
+def summarize_hits(results: list[BacktestResult]) -> dict[str, object]:
+    """統計命中分佈及模型評分，供打印和 JSON 比較。"""
+
+    total_count = len(results)
+    distribution: dict[str, dict[str, float]] = {}
+    score = 0.0
+    for level in HIT_LEVELS:
+        count = sum(1 for item in results if item["hit_score"] == level)
+        rate = count / total_count * 100 if total_count else 0.0
+        distribution[hit_score_key(level)] = {
+            "count": count,
+            "rate": round(rate, 2),
+        }
+        score += count * MODEL_SCORE_WEIGHTS[level]
+
+    return {
+        "total_count": total_count,
+        "distribution": distribution,
+        "score": round(score, 2),
+        "hit_4_or_above": sum(1 for item in results if item["hit_score"] >= 4),
+        "hit_3_or_above": sum(1 for item in results if item["hit_score"] >= 3),
+        "hit_2_or_above": sum(1 for item in results if item["hit_score"] >= 2),
+        "zero_count": sum(1 for item in results if item["hit_score"] == 0),
+    }
 
 
 def run_backtest(rows: list[dict[str, str]], *, dynamic_quota: bool) -> list[BacktestResult]:
@@ -495,19 +556,266 @@ def print_detail_results(results: list[BacktestResult], title: str) -> None:
 def print_hit_summary(results: list[BacktestResult], title: str) -> None:
     """打印命中率總結。"""
 
-    levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0]
-    total_count = len(results)
+    summary = summarize_hits(results)
+    distribution = summary["distribution"]
+    assert isinstance(distribution, dict)
     print()
     print(f"====== {title} ======")
-    print(f"總回測期數：{total_count}")
-    for level in levels:
-        count = sum(1 for item in results if item["hit_score"] == level)
-        rate = count / total_count * 100 if total_count else 0
+    print(f"總回測期數：{summary['total_count']}")
+    print(f"模型分數：{summary['score']}")
+    print(
+        f"3球以上：{summary['hit_3_or_above']} 期，"
+        f"4球以上：{summary['hit_4_or_above']} 期，"
+        f"0球：{summary['zero_count']} 期"
+    )
+    for level in HIT_LEVELS:
+        level_info = distribution[hit_score_key(level)]
+        count = int(level_info["count"])
+        rate = float(level_info["rate"])
         level_text = f"{format_hit_score(level)} 球"
         print(f"{level_text:<6} = {count} 期，{rate:.2f}%")
 
 
-def print_next_prediction(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+def build_model_report(mode_key: str, mode_label: str, results: list[BacktestResult]) -> dict[str, object]:
+    """建立單一模式精簡回測報告，只保留七獎以上比較數據。"""
+
+    summary = summarize_hits(results)
+
+    return {
+        "mode_key": mode_key,
+        "mode_label": mode_label,
+        "score": summary["score"],
+        "total_count": summary["total_count"],
+        "hit_4_or_above": summary["hit_4_or_above"],
+        "hit_3_or_above": summary["hit_3_or_above"],
+        "hit_2_or_above": summary["hit_2_or_above"],
+        "zero_count": summary["zero_count"],
+    }
+
+
+def to_float(value: object, default: float = 0.0) -> float:
+    """將 JSON 讀出的分數安全轉成 float，避免型別檢查誤判。"""
+
+    if not isinstance(value, (int, float, str)):
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def model_report_score(report: dict[str, object]) -> float:
+    """取得模型報告分數。"""
+
+    return to_float(report.get("score", 0))
+
+
+def choose_best_model_report(reports: dict[str, dict[str, object]]) -> dict[str, object]:
+    """由固定及動態模式中選最高模型分數。"""
+
+    return max(reports.values(), key=model_report_score)
+
+
+def read_backtest_score_history() -> list[dict[str, object]]:
+    """讀取歷史 JSON 回測結果。"""
+
+    if not BACKTEST_SCORE_JSON.exists():
+        return []
+    with BACKTEST_SCORE_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data if isinstance(data, list) else []
+
+
+def compact_model_report(report: object) -> dict[str, object]:
+    """將舊 JSON 的完整明細壓縮成七獎以上比較摘要。"""
+
+    if not isinstance(report, dict):
+        return {}
+    summary = report.get("summary", {})
+    if isinstance(summary, dict):
+        return {
+            "mode_key": report.get("mode_key", ""),
+            "mode_label": report.get("mode_label", ""),
+            "score": summary.get("score", 0),
+            "total_count": summary.get("total_count", 0),
+            "hit_4_or_above": summary.get("hit_4_or_above", 0),
+            "hit_3_or_above": summary.get("hit_3_or_above", 0),
+            "hit_2_or_above": summary.get("hit_2_or_above", 0),
+            "zero_count": summary.get("zero_count", 0),
+        }
+    return {
+        "mode_key": report.get("mode_key", ""),
+        "mode_label": report.get("mode_label", ""),
+        "score": report.get("score", 0),
+        "total_count": report.get("total_count", 0),
+        "hit_4_or_above": report.get("hit_4_or_above", 0),
+        "hit_3_or_above": report.get("hit_3_or_above", 0),
+        "hit_2_or_above": report.get("hit_2_or_above", 0),
+        "zero_count": report.get("zero_count", 0),
+    }
+
+
+def compact_backtest_entry(entry: dict[str, object]) -> dict[str, object]:
+    """清走舊 JSON 每期 details，只保留參數及模型摘要。"""
+
+    models = entry.get("models", {})
+    compact_models = {}
+    if isinstance(models, dict):
+        compact_models = {
+            str(mode_key): compact_model_report(report)
+            for mode_key, report in models.items()
+        }
+
+    return {
+        "trend_period_weights": entry.get("trend_period_weights", []),
+        "period_weights": entry.get("period_weights", {}),
+        "backtest_draw_count": entry.get("backtest_draw_count", 0),
+        "print_group_options": entry.get("print_group_options", []),
+        "total_predict_num_count": entry.get("total_predict_num_count", 0),
+        "special_num_weight": entry.get("special_num_weight", 0),
+        "zero_penalty_weight": entry.get("zero_penalty_weight", 0),
+        "low_prize_penalty_weight": entry.get("low_prize_penalty_weight", 0),
+        "latest_data_date": entry.get("latest_data_date", ""),
+        "models": compact_models,
+        "best_model_key": entry.get("best_model_key", ""),
+        "best_model_label": entry.get("best_model_label", ""),
+        "best_model_score": entry.get("best_model_score", 0),
+    }
+
+
+def write_backtest_score_json(rows: list[dict[str, str]], fixed_results: list[BacktestResult], dynamic_results: list[BacktestResult]) -> None:
+    """將本次回測兩大模式精簡寫入 JSON，供 predict 選最佳參數。"""
+
+    JSON_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    reports = {
+        "fixed_3_3_3": build_model_report("fixed_3_3_3", "固定 3+3+3", fixed_results),
+        "dynamic_quota": build_model_report("dynamic_quota", "動態 2/3/4 配額", dynamic_results),
+    }
+    best_report = choose_best_model_report(reports)
+    entry = {
+        "trend_period_weights": [[period, weight] for period, weight in TREND_PERIOD_WEIGHTS],
+        "period_weights": {str(period): weight for period, weight in PERIOD_WEIGHTS.items()},
+        "backtest_draw_count": BACKTEST_DRAW_COUNT,
+        "print_group_options": PRINT_GROUP_OPTIONS,
+        "total_predict_num_count": TOTAL_PREDICT_NUM_COUNT,
+        "special_num_weight": SPECIAL_NUM_WEIGHT,
+        "zero_penalty_weight": ZERO_PENALTY_WEIGHT,
+        "low_prize_penalty_weight": LOW_PRIZE_PENALTY_WEIGHT,
+        "latest_data_date": rows[-1].get("nDdate", "") if rows else "",
+        "models": reports,
+        "best_model_key": best_report["mode_key"],
+        "best_model_label": best_report["mode_label"],
+        "best_model_score": model_report_score(best_report),
+    }
+
+    history = [compact_backtest_entry(entry) for entry in read_backtest_score_history()]
+    signature = (
+        entry["trend_period_weights"],
+        entry["backtest_draw_count"],
+        entry["print_group_options"],
+        entry["total_predict_num_count"],
+        entry["special_num_weight"],
+        entry["zero_penalty_weight"],
+        entry["low_prize_penalty_weight"],
+    )
+
+    updated = False
+    for idx, old_entry in enumerate(history):
+        old_signature = (
+            old_entry.get("trend_period_weights"),
+            old_entry.get("backtest_draw_count"),
+            old_entry.get("print_group_options"),
+            old_entry.get("total_predict_num_count"),
+            old_entry.get("special_num_weight"),
+            old_entry.get("zero_penalty_weight"),
+            old_entry.get("low_prize_penalty_weight"),
+        )
+        if old_signature == signature:
+            history[idx] = entry
+            updated = True
+            break
+    if not updated:
+        history.append(entry)
+
+    history = sorted(history, key=lambda item: to_float(item.get("best_model_score", 0)), reverse=True)
+    with BACKTEST_SCORE_JSON.open("w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False, indent=2)
+
+    print()
+    print("====== 回測 JSON 已更新 ======")
+    print(f"檔案：{BACKTEST_SCORE_JSON}")
+    print(f"本次最佳模式：{entry['best_model_label']}，分數：{entry['best_model_score']}")
+    print(f"JSON 已保存參數組數：{len(history)}")
+
+
+def read_best_backtest_entry() -> dict[str, object] | None:
+    """讀取 JSON 最高分參數。"""
+
+    history = read_backtest_score_history()
+    if not history:
+        return None
+    return max(history, key=lambda item: to_float(item.get("best_model_score", 0)))
+
+
+def apply_best_backtest_entry() -> tuple[bool, str]:
+    """predict 模式套用 JSON 最佳期數權重及模式。"""
+
+    global TREND_PERIOD_WEIGHTS, TREND_PERIODS, PERIOD_WEIGHTS
+
+    best_entry = read_best_backtest_entry()
+    if best_entry is None:
+        return True, "dynamic_quota"
+
+    raw_weights = best_entry.get("trend_period_weights", [])
+    if not isinstance(raw_weights, list):
+        return True, "dynamic_quota"
+
+    parsed_weights: list[tuple[int, int]] = []
+    for item in raw_weights:
+        if not isinstance(item, (list, tuple)) or len(item) != 2:
+            continue
+        try:
+            parsed_weights.append((int(item[0]), int(item[1])))
+        except (TypeError, ValueError):
+            continue
+    if parsed_weights:
+        TREND_PERIOD_WEIGHTS = parsed_weights
+        TREND_PERIODS = [period for period, _weight in TREND_PERIOD_WEIGHTS]
+        PERIOD_WEIGHTS = dict(TREND_PERIOD_WEIGHTS)
+
+    best_model_key = str(best_entry.get("best_model_key", "dynamic_quota") or "dynamic_quota")
+    dynamic_quota = best_model_key != "fixed_3_3_3"
+
+    print()
+    print("====== 已讀入 JSON 最佳回測參數 ======")
+    print(f"最佳期數權重：{TREND_PERIOD_WEIGHTS}")
+    print(f"最佳投注模式：{best_entry.get('best_model_label', best_model_key)}")
+    print(f"最佳模型分數：{best_entry.get('best_model_score', 0)}")
+    return dynamic_quota, best_model_key
+
+
+def print_model_compare(fixed_results: list[BacktestResult], dynamic_results: list[BacktestResult]) -> None:
+    """打印固定及動態模式高層比較。"""
+
+    fixed_report = build_model_report("fixed_3_3_3", "固定 3+3+3", fixed_results)
+    dynamic_report = build_model_report("dynamic_quota", "動態 2/3/4 配額", dynamic_results)
+    best_report = choose_best_model_report({
+        "fixed_3_3_3": fixed_report,
+        "dynamic_quota": dynamic_report,
+    })
+    print()
+    print("====== 模型比較 ======")
+    for report in [fixed_report, dynamic_report]:
+        print(
+            f"{report['mode_label']}：{report['score']} 分，"
+            f"3球以上 {report['hit_3_or_above']} 期，"
+            f"4球以上 {report['hit_4_or_above']} 期，"
+            f"0球 {report['zero_count']} 期"
+        )
+    print(f"建議採用：{best_report['mode_label']}")
+
+
+def print_next_prediction(rows: list[dict[str, str]], *, dynamic_quota: bool) -> list[dict[str, str]]:
     """用最新已開獎資料，產生真正下期分組預測。"""
 
     target_index = len(rows)
@@ -517,14 +825,17 @@ def print_next_prediction(rows: list[dict[str, str]]) -> list[dict[str, str]]:
         group_option: build_group_strength(rows, target_index, group_option)
         for group_option in PRINT_GROUP_OPTIONS
     }
-    quotas = allocate_dynamic_quotas(group_scores)
+    quotas = allocate_dynamic_quotas(group_scores) if dynamic_quota else {
+        group_option: 3 for group_option in PRINT_GROUP_OPTIONS
+    }
     predictions: dict[int, list[int]] = {}
     for group_option in PRINT_GROUP_OPTIONS:
         num_scores = build_group_num_scores(rows, target_index, group_option)
         predictions[group_option] = build_group_prediction(num_scores, quotas[group_option])
 
     print()
-    print("====== 下期分組配額預測 ======")
+    mode_label = "動態 2/3/4 配額" if dynamic_quota else "固定 3+3+3"
+    print(f"====== 下期分組配額預測：{mode_label} ======")
     print(
         f"下期投注日期：{next_draw_info['next_draw_date']}，"
         f"下期估計頭獎：{next_draw_info['next_draw_prize_fund']:g}"
@@ -612,6 +923,31 @@ def append_next_bet_to_bet_records(next_bet_records: list[dict[str, str]]) -> No
     print(f"bet_records.csv 現有總行數：{len(updated_records)} 行")
 
 
+def sync_win_results_from_bet_records(rows: list[dict[str, str]]) -> None:
+    """用最新 M6 開獎資料同步核對 bet_records.csv，重建 win_results.csv。"""
+
+    if not SAVE_BET_CSV:
+        return
+
+    bet_records = read_csv_rows(BET_RECORDS_CSV)
+    old_win_count = len(read_csv_rows(WIN_RESULTS_CSV))
+    win_results = build_win_results(bet_records, rows)
+    write_bet_csv(WIN_RESULTS_CSV, win_results)
+
+    opened_count = sum(
+        1
+        for record in win_results
+        if record.get("N1", "") != "未開獎"
+    )
+    pending_count = len(win_results) - opened_count
+
+    print()
+    print("====== win_results.csv 已同步最新開獎結果 ======")
+    print(f"讀入 bet_records.csv：{len(bet_records)} 行")
+    print(f"讀入舊 win_results.csv：{old_win_count} 行，重建寫入：{len(win_results)} 行")
+    print(f"已核對開獎：{opened_count} 行，未開獎：{pending_count} 行")
+
+
 def main() -> None:
     """主程式入口。"""
 
@@ -626,16 +962,28 @@ def main() -> None:
         print(f"回測期數：{BACKTEST_DRAW_COUNT}")
         fixed_results = run_backtest(rows, dynamic_quota=False)
         dynamic_results = run_backtest(rows, dynamic_quota=True)
+        fixed_report = build_model_report("fixed_3_3_3", "固定 3+3+3", fixed_results)
+        dynamic_report = build_model_report("dynamic_quota", "動態 2/3/4 配額", dynamic_results)
+        best_report = choose_best_model_report({
+            "fixed_3_3_3": fixed_report,
+            "dynamic_quota": dynamic_report,
+        })
+        best_results = fixed_results if best_report["mode_key"] == "fixed_3_3_3" else dynamic_results
 
-        print_detail_results(dynamic_results, "動態 2/3/4 配額")
+        print_detail_results(dynamic_results, "動態 2/3/4 配額預測")
+        print_detail_results(fixed_results, "固定 3+3+3 預測")
         print_hit_summary(fixed_results, "固定 3+3+3 回測命中率")
         print_hit_summary(dynamic_results, "動態 2/3/4 配額回測命中率")
-        save_backtest_csv(rows, dynamic_results)
+        print_model_compare(fixed_results, dynamic_results)
+        save_backtest_csv(rows, best_results)
+        write_backtest_score_json(rows, fixed_results, dynamic_results)
 
     if RUN_MODE == "predict":
-        next_bet_records = print_next_prediction(rows)
+        dynamic_quota, _best_model_key = apply_best_backtest_entry()
+        next_bet_records = print_next_prediction(rows, dynamic_quota=dynamic_quota)
         save_next_bet_csv(next_bet_records)
         append_next_bet_to_bet_records(next_bet_records)
+        sync_win_results_from_bet_records(rows)
 
 
 if __name__ == "__main__":

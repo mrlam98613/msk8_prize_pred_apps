@@ -6,11 +6,20 @@ import random
 from typing import TypedDict
 
 """
-A0_v4：
+A0_v4_backtest_with_json：
 以 1-9、10-20、21-31 三組生日號做回測。
 每個回測期用之前 WINDOW_DRAW_COUNT 期做窗口，不包含核對期。
 每個分組先獨立比較 hot / delay / middle 權重，選出該組最佳模式後寫入 JSON。
 正式合併回測時，每組使用自己的最佳權重模式。
+
+以加入 特號分析 N1..N6 + N7 的命中結果，計算每期最高命中球數，並統計總回測命中率。
+
+WINDOW_DRAW_COUNT
+COMBINATION_TAKE_COUNT
+TOP_PRIZE_DRAW_COUNT
+PRIZE_OPTION
+RECENT_BONUS_MODES
+
 """
 
 
@@ -19,11 +28,15 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 JSON_DATA_DIR = CURRENT_DIR / "json_data"
 GROUP_WEIGHT_JSON = JSON_DATA_DIR / "group_weight_best_modes.json"
+BET_DATA_DIR = CURRENT_DIR / "bet_data"
+BET_RECORDS_CSV = BET_DATA_DIR / "bet_records.csv"
+WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
 
 # ---- 回測及窗口參數
-BACKTEST_DRAW_COUNT = 30  # 回測最近多少期
-WINDOW_DRAW_COUNT = 18  # 每個回測期之前，向前取多少期作窗口樣本
+BACKTEST_DRAW_COUNT = 10  # 回測最近多少期
+WINDOW_DRAW_COUNT = 40  # 每個回測期之前，向前取多少期作窗口樣本
 SHOW_ANALYSIS_ADVICE = False  # 可選：True 顯示本版分析建議；False 不顯示
+SAVE_BACKTEST_BET_CSV = True  # 可選：True 將回測預測及命中結果寫入 bet_data
 
 # ---- 查詢條件參數
 PRINT_GROUP_OPTIONS = [1, 2, 3]  # 可選：[1]、[2]、[3]、[1, 2, 3]
@@ -38,7 +51,7 @@ PAIR_HIT_WEIGHT = 7  # 2 球組合本身出現次數權重
 NUM_HIT_WEIGHT = 1  # 單號在樣本內出現次數權重
 RECENT_BONUS_MODE = "hot"  # 單組 fallback 模式："hot" 最近最高；"delay" 隔期較高；"middle" 中段最高
 AUTO_SELECT_GROUP_BEST_MODES = True  # 可選：True 每個分組自動選最佳權重模式並寫入 JSON
-SHOW_GROUP_MODE_COMPARE = True  # 可選：True 顯示每個分組 hot / delay / middle 比較
+SHOW_GROUP_MODE_COMPARE = False  # 可選：True 顯示每個分組 hot / delay / middle 比較
 RECENT_BONUS_MODES: dict[str, list[int]] = {
     "hot": [13, 11, 9, 7, 5, 3, 1],
     "delay": [1, 2, 3, 4, 5, 6, 7],
@@ -445,6 +458,103 @@ def get_prize_level(normal_hit_count: int, has_special_hit: bool) -> str:
     return "未中獎"
 
 
+def format_list_for_csv(nums: list[int]) -> str:
+    """將號碼 list 格式化成 CSV 欄位文字。"""
+
+    return "[" + ",".join(str(num) for num in nums) + "]"
+
+
+def group_csv_field_names() -> list[str]:
+    """取得回測 CSV 欄位名稱。"""
+
+    return ["bet_date", "1-9", "10-20", "21-31"]
+
+
+def predictions_to_group_record(
+    bet_date: str,
+    predictions: list[list[int]],
+    group_options: list[int],
+) -> dict[str, str]:
+    """將分組預測轉成 bet_records.csv 格式。"""
+
+    group_map = {group_option: nums for group_option, nums in zip(group_options, predictions)}
+    return {
+        "bet_date": bet_date,
+        "1-9": format_list_for_csv(group_map.get(1, [])),
+        "10-20": format_list_for_csv(group_map.get(2, [])),
+        "21-31": format_list_for_csv(group_map.get(3, [])),
+    }
+
+
+def hits_to_group_record(
+    bet_date: str,
+    predictions: list[list[int]],
+    group_options: list[int],
+    check_nums: list[int],
+    special_num: int | None,
+) -> dict[str, str]:
+    """將每組命中號碼轉成 win_results.csv 格式。"""
+
+    record = {
+        "bet_date": bet_date,
+        "1-9": "[]",
+        "10-20": "[]",
+        "21-31": "[]",
+    }
+    for group_option, predicted_nums in zip(group_options, predictions):
+        start_num, end_num = birthday_range(group_option)
+        group_name = f"{start_num}-{end_num}"
+        group_check_nums = set(selected_nums(check_nums, group_option))
+        hit_nums = sorted(set(predicted_nums) & group_check_nums)
+        if special_num is not None and start_num <= special_num <= end_num and special_num in predicted_nums:
+            hit_nums.append(special_num)
+            hit_nums = sorted(set(hit_nums))
+        record[group_name] = format_list_for_csv(hit_nums)
+    return record
+
+
+def write_group_csv(csv_path: Path, records: list[dict[str, str]]) -> None:
+    """重建分組格式 CSV。"""
+
+    BET_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=group_csv_field_names())
+        writer.writeheader()
+        writer.writerows(records)
+
+
+def save_backtest_group_csv(summary_rows: list[BacktestSummary], group_options: list[int]) -> None:
+    """保存 A0 回測預測及核對命中結果。"""
+
+    if not SAVE_BACKTEST_BET_CSV:
+        return
+
+    bet_records: list[dict[str, str]] = []
+    win_records: list[dict[str, str]] = []
+    for item in summary_rows:
+        check_nums = [num for num in item["check_nums_1_31_slots"][:6] if num is not None]
+        special_num = item["check_nums_1_31_slots"][6] if len(item["check_nums_1_31_slots"]) > 6 else None
+        bet_records.append(
+            predictions_to_group_record(item["check_date"], item["predictions"], group_options)
+        )
+        win_records.append(
+            hits_to_group_record(
+                item["check_date"],
+                item["predictions"],
+                group_options,
+                check_nums,
+                special_num,
+            )
+        )
+
+    write_group_csv(BET_RECORDS_CSV, bet_records)
+    write_group_csv(WIN_RESULTS_CSV, win_records)
+    print()
+    print("====== A0 回測分組 CSV 已重新建立 ======")
+    print(f"bet_records.csv：{len(bet_records)} 行")
+    print(f"win_results.csv：{len(win_records)} 行")
+
+
 def print_matched_rows(rows: list[DrawRow], group_option: int, target_date: str, backtest_rank: int) -> None:
     """打印每個回測期的窗口樣本。"""
 
@@ -524,7 +634,7 @@ def print_backtest_hit_rate_summary(summary_rows: list[BacktestSummary], title: 
 
     total_count = len(summary_rows)
     hit_counts = [item["hit_score"] for item in summary_rows]
-    exact_levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0]
+    exact_levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0]
 
     print()
     print(f"====== {title} ======")
@@ -540,7 +650,7 @@ def print_backtest_hit_rate_summary(summary_rows: list[BacktestSummary], title: 
 def build_exact_hit_counts(summary_rows: list[BacktestSummary]) -> dict[float, int]:
     """統計每期最高命中球數。"""
 
-    levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0]
+    levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0]
     counts = {float(level): 0 for level in levels}
     for item in summary_rows:
         hit_count = item["hit_score"]
@@ -600,13 +710,12 @@ def select_best_recent_bonus_modes(rows: list[dict[str, str]]) -> dict[int, Grou
                 print(
                     f"{mode_name} {bonus_scores} /> "
                     f"3.5球 {exact_counts.get(3.5, 0)} / "
-                    f"3. 球 {exact_counts.get(3, 0)} / "
-                    f"------------------------------/ "
+                    f"3.球 {exact_counts.get(3, 0)} / "
                     f"2.5球 {exact_counts.get(2.5, 0)} / "
-                    f"2. 球 {exact_counts.get(2, 0)} / "
+                    f"2.球 {exact_counts.get(2, 0)} / "
                     f"1.5球 {exact_counts.get(1.5, 0)} / "
-                    f"1  球 {exact_counts.get(1, 0)} / "
-                    f"0  球 {exact_counts.get(0, 0)} / "
+                    f"1 球 {exact_counts.get(1, 0)} / "
+                    f"0 球 {exact_counts.get(0, 0)} / "
                     f"分數 {score:g}"
                 )
 
@@ -650,13 +759,12 @@ def print_group_weight_best_modes(best_results: dict[int, GroupModeResult]) -> N
             f"[{group_option}] {result['group_range']} /> "
             f"{result['mode']} {result['bonus_scores']} / "
             f"3.5球 {counts.get(3.5, 0)} / "
-            f"3  球 {counts.get(3, 0)} / "
-            f"------------------------------/ "
+            f"3球 {counts.get(3, 0)} / "
             f"2.5球 {counts.get(2.5, 0)} / "
-            f"2  球 {counts.get(2, 0)} / "
+            f"2球 {counts.get(2, 0)} / "
             f"1.5球 {counts.get(1.5, 0)} / "
-            f"1  球 {counts.get(1, 0)} / "
-            f"0  球 {counts.get(0, 0)} / "
+            f"1球 {counts.get(1, 0)} / "
+            f"0球 {counts.get(0, 0)} / "
             f"分數 {result['score']:g}"
         )
     print(f"已寫入 JSON：{GROUP_WEIGHT_JSON}")
@@ -779,13 +887,15 @@ def main() -> None:
         print_backtest_window_details(rows)
         return
 
-    print("====== V4 每分組獨立最佳權重分析 ======")
-    print(f"回測期數：{BACKTEST_DRAW_COUNT}，窗口期數：{WINDOW_DRAW_COUNT}")
-    print(f"正式合併分組：{PRINT_GROUP_OPTIONS}，每組預測 {GROUP_PREDICT_NUM_COUNT} 球")
+    if SHOW_GROUP_MODE_COMPARE:
+        print("====== V4 每分組獨立最佳權重分析 ======")
+        print(f"回測期數：{BACKTEST_DRAW_COUNT}，窗口期數：{WINDOW_DRAW_COUNT}")
+        print(f"正式合併分組：{PRINT_GROUP_OPTIONS}，每組預測 {GROUP_PREDICT_NUM_COUNT} 球")
 
     best_results = select_best_recent_bonus_modes(rows)
     save_group_weight_best_modes(best_results)
-    print_group_weight_best_modes(best_results)
+    if SHOW_GROUP_MODE_COMPARE:
+        print_group_weight_best_modes(best_results)
 
     CURRENT_GROUP_RECENT_BONUS = {
         group_option: result["bonus_scores"]
@@ -804,6 +914,7 @@ def main() -> None:
         summary_rows,
         title=f"每分組最佳權重合併回測命中率：{format_group_options(PRINT_GROUP_OPTIONS)}",
     )
+    save_backtest_group_csv(summary_rows, PRINT_GROUP_OPTIONS)
 
 
 if __name__ == "__main__":

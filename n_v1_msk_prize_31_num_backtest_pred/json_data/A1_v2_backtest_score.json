@@ -1,0 +1,173 @@
+[
+  {
+    "trend_period_weights": [
+      [
+        14,
+        3
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "period_weights": {
+      "14": 3,
+      "7": 4,
+      "2": 5
+    },
+    "backtest_draw_count": 30,
+    "print_group_options": [
+      1,
+      2,
+      3
+    ],
+    "total_predict_num_count": 9,
+    "special_num_weight": 2,
+    "zero_penalty_weight": 2,
+    "low_prize_penalty_weight": 1,
+    "latest_data_date": "2026-08-29",
+    "models": {
+      "fixed_3_3_3": {
+        "mode_key": "fixed_3_3_3",
+        "mode_label": "固定 3+3+3",
+        "score": 0,
+        "total_count": 0,
+        "hit_4_or_above": 0,
+        "hit_3_or_above": 0,
+        "hit_2_or_above": 0,
+        "zero_count": 0
+      },
+      "dynamic_quota": {
+        "mode_key": "dynamic_quota",
+        "mode_label": "動態 2/3/4 配額",
+        "score": 0,
+        "total_count": 0,
+        "hit_4_or_above": 0,
+        "hit_3_or_above": 0,
+        "hit_2_or_above": 0,
+        "zero_count": 0
+      }
+    },
+    "best_model_key": "fixed_3_3_3",
+    "best_model_label": "固定 3+3+3",
+    "best_model_score": 79.5
+  },
+  {
+    "trend_period_weights": [
+      [
+        14,
+        3
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "period_weights": {
+      "14": 3,
+      "7": 4,
+      "3": 5
+    },
+    "backtest_draw_count": 20,
+    "print_group_options": [
+      1,
+      2,
+      3
+    ],
+    "total_predict_num_count": 9,
+    "special_num_weight": 2,
+    "zero_penalty_weight": 2,
+    "low_prize_penalty_weight": 1,
+    "latest_data_date": "2026-08-29",
+    "models": {
+      "fixed_3_3_3": {
+        "mode_key": "fixed_3_3_3",
+        "mode_label": "固定 3+3+3",
+        "score": 62.5,
+        "total_count": 20,
+        "hit_4_or_above": 1,
+        "hit_3_or_above": 4,
+        "hit_2_or_above": 5,
+        "zero_count": 0
+      },
+      "dynamic_quota": {
+        "mode_key": "dynamic_quota",
+        "mode_label": "動態 2/3/4 配額",
+        "score": 43.5,
+        "total_count": 20,
+        "hit_4_or_above": 0,
+        "hit_3_or_above": 3,
+        "hit_2_or_above": 5,
+        "zero_count": 1
+      }
+    },
+    "best_model_key": "fixed_3_3_3",
+    "best_model_label": "固定 3+3+3",
+    "best_model_score": 62.5
+  },
+  {
+    "trend_period_weights": [
+      [
+        14,
+        3
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "period_weights": {
+      "14": 3,
+      "7": 4,
+      "2": 5
+    },
+    "backtest_draw_count": 20,
+    "print_group_options": [
+      1,
+      2,
+      3
+    ],
+    "total_predict_num_count": 9,
+    "special_num_weight": 2,
+    "zero_penalty_weight": 2,
+    "low_prize_penalty_weight": 1,
+    "latest_data_date": "2026-08-29",
+    "models": {
+      "fixed_3_3_3": {
+        "mode_key": "fixed_3_3_3",
+        "mode_label": "固定 3+3+3",
+        "score": 0,
+        "total_count": 0,
+        "hit_4_or_above": 0,
+        "hit_3_or_above": 0,
+        "hit_2_or_above": 0,
+        "zero_count": 0
+      },
+      "dynamic_quota": {
+        "mode_key": "dynamic_quota",
+        "mode_label": "動態 2/3/4 配額",
+        "score": 0,
+        "total_count": 0,
+        "hit_4_or_above": 0,
+        "hit_3_or_above": 0,
+        "hit_2_or_above": 0,
+        "zero_count": 0
+      }
+    },
+    "best_model_key": "fixed_3_3_3",
+    "best_model_label": "固定 3+3+3",
+    "best_model_score": 58.0
+  }
+]
