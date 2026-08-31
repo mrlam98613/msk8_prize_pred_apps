@@ -2,6 +2,7 @@ from pathlib import Path
 import csv
 import itertools
 import json
+import math
 import subprocess
 import sys
 from typing import TypedDict
@@ -44,20 +45,34 @@ TOTAL_PREDICT_NUM_COUNT = 9  # 三組合共候選球數
 GROUP_QUOTA_MODE = "dynamic"  # 可選："fixed" 固定3+3+3；"dynamic" 動態2/3/4
 
 # ---- B0_v4_backtest_with_json 權重選號參數
-WINDOW_DRAW_COUNT = 18  # 取最近多少期作權重樣本
+WINDOW_DRAW_COUNT = 12  # 取最近多少期作權重樣本
 COMBINATION_TAKE_COUNT = 2  # 每期分組範圍內至少幾個號碼才納入樣本
 BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
 TOP_PRIZE_DRAW_COUNT = 5  # 取 prize3 注數最高多少期作 pair 分析
+PRIZE_OPTION = 3  # 跟 B0_v4 同步，可選：1、2、3
+SAMPLE_SORT_MODE = "prize"  # 跟 B0_v4 JSON 同步，作為預測計分樣本排序口徑
+
+
+# --預測參數
 PAIR_HIT_WEIGHT = 7  # 2 球組合出現次數權重
 NUM_HIT_WEIGHT = 1  # 單號出現次數權重
+# 因為 PAIR_HIT_WEIGHT = 7 ，所以以下權重不會壓過 PAIR_HIT_WEIGHT，僅作輔助分數。
 RECENT_NUM_BONUS = [13, 11, 9, 7, 5, 3, 1]  # 最近符合期數的單號額外權重
+
+# 讀取 B0_v4_backtest_with_json 產生的每組最佳權重
 USE_B0_JSON_BONUS = True  # 可選：True 讀取 B0_v4_backtest_with_json 產生的每組最佳權重
 SPECIAL_NUM_WEIGHT = 2  # 特號輔助分，不壓過正號
 ZERO_PENALTY_WEIGHT = 2  # 動態配額時，分組 0 球扣分
+
+# -輸出預測結果參數
 SAVE_NEXTDRAW_PRED_CSV = True  # 可選：True 將分組預測寫入 bet_data/nextdraw_pred.csv
+
+# -- B0_v4_backtest_with_json.py 先跑，確保 JSON 權重是最新
 RUN_B0_BACKTEST_FIRST = True  # 可選：True 執行 B1 前先跑 B0，更新 JSON 權重
+DISPLAY_SORT_MODE = "prize"  # 只影響窗口期列表顯示，可選："prize" 或 "date"
 
 
+# -----
 BIRTHDAY_GROUPS: dict[int, tuple[int, int]] = {
     1: (1, 9),
     2: (10, 20),
@@ -99,6 +114,12 @@ def validate_params() -> None:
         raise ValueError('GROUP_QUOTA_MODE 只可選 "fixed" 或 "dynamic"')
     if BIRTHDAY_NUM_MATCH_MODE not in {">=", "=="}:
         raise ValueError('BIRTHDAY_NUM_MATCH_MODE 只可選 ">=" 或 "=="')
+    if PRIZE_OPTION not in {1, 2, 3}:
+        raise ValueError("PRIZE_OPTION 只可選 1、2、3")
+    if SAMPLE_SORT_MODE not in {"prize", "date"}:
+        raise ValueError('SAMPLE_SORT_MODE 只可選 "prize" 或 "date"')
+    if DISPLAY_SORT_MODE not in {"prize", "date"}:
+        raise ValueError('DISPLAY_SORT_MODE 只可選 "prize" 或 "date"')
     if TOTAL_PREDICT_NUM_COUNT != 9:
         raise ValueError("本版暫定 TOTAL_PREDICT_NUM_COUNT = 9")
     for group_option in PRINT_GROUP_OPTIONS:
@@ -199,6 +220,215 @@ def load_group_json_bonus() -> dict[int, tuple[str, list[int]]]:
     return group_bonus
 
 
+def to_int(value: object, default: int) -> int:
+    """安全讀取 JSON 整數參數。"""
+
+    if not isinstance(value, (int, float, str)):
+        return default
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def to_float(value: object, default: float = 0.0) -> float:
+    """安全讀取 JSON 浮點數參數。"""
+
+    if not isinstance(value, (int, float, str)):
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def read_b0_json_data() -> dict[str, object]:
+    """讀取 B0_v4 JSON 參數及回測比較結果。"""
+
+    if not GROUP_WEIGHT_JSON.exists():
+        return {}
+    try:
+        data = json.loads(GROUP_WEIGHT_JSON.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def format_window_sample_item(item: DrawRow) -> str:
+    """整理窗口樣本顯示文字。"""
+
+    selected = ",".join(str(num) for num in item["selected_nums"])
+    prize_count = item["prize3_count"]
+    return f"{item['date']}:[{selected}]/p{prize_count:g}"
+
+
+def selected_birthday_nums(nums: list[int]) -> list[int]:
+    """只保留 1-31 生日號正號。"""
+
+    return sorted(num for num in nums if 1 <= num <= 31)
+
+
+def format_birthday_draw_slots(item: DrawRow) -> tuple[str, int]:
+    """將 N1-N6 + N7 顯示成 1-31 生日號位置，32-49 以 _ 代表。"""
+
+    slot_values: list[str] = []
+    birthday_count = 0
+    for num in item["nums"]:
+        if 1 <= num <= 31:
+            slot_values.append(str(num))
+            birthday_count += 1
+        else:
+            slot_values.append("_")
+
+    special_num = item["special_num"]
+    if special_num is not None and 1 <= special_num <= 31:
+        slot_values.append(str(special_num))
+        birthday_count += 1
+    else:
+        slot_values.append("_")
+
+    return f"[{','.join(slot_values)}]", birthday_count
+
+
+def format_prize_option_label() -> str:
+    """整理 prize 選項中文顯示。"""
+
+    labels = {1: "1 獎中獎注數", 2: "2 獎中獎注數", 3: "3 獎中獎注數"}
+    return labels.get(PRIZE_OPTION, f"{PRIZE_OPTION} 獎中獎注數")
+
+
+def build_window_summary_rows(rows: list[dict[str, str]], sort_mode: str) -> list[DrawRow]:
+    """建立 1-31 生日號窗口期明細，用於 date / prize 兩種排序顯示。"""
+
+    window_rows: list[DrawRow] = []
+    for row in rows[-WINDOW_DRAW_COUNT:]:
+        nums = parse_nums(row)
+        selected = selected_birthday_nums(nums)
+        if not is_matched(len(selected)):
+            continue
+        window_rows.append(
+            {
+                "date": row.get("nDdate", ""),
+                "nums": nums,
+                "selected_nums": selected,
+                "special_num": parse_special_num(row),
+                "prize3_count": parse_prize_count(row),
+            }
+        )
+
+    if sort_mode == "date":
+        return sorted(window_rows, key=lambda item: item["date"])
+    return sorted(window_rows, key=lambda item: (-item["prize3_count"], item["date"]))
+
+
+def print_window_sample_lists() -> None:
+    """按 DISPLAY_SORT_MODE 打印最佳窗口期樣本，只作觀看排序。"""
+
+    rows = read_m6_rows()
+    print(f"====== 最佳窗口期樣本列表：最近 {WINDOW_DRAW_COUNT} 期 ======")
+    print(
+        f"取樣條件：分組生日號 1-31，{BIRTHDAY_NUM_MATCH_MODE}{COMBINATION_TAKE_COUNT} 球，"
+        f"{format_prize_option_label()}"
+    )
+    print(f"-- {DISPLAY_SORT_MODE}排序 --")
+    sample_rows = build_window_summary_rows(rows, DISPLAY_SORT_MODE)
+    if not sample_rows:
+        print("沒有符合樣本")
+        print()
+        return
+
+    for idx, item in enumerate(sample_rows, start=1):
+        draw_text, birthday_count = format_birthday_draw_slots(item)
+        print(
+            f"{idx}，{item['date']}，{draw_text} > "
+            f"{birthday_count} 球，{item['prize3_count']:g} 注"
+        )
+    print()
+
+
+def print_b0_optimize_summary() -> None:
+    """打印 B0_v4 多期回測列表及系統選出的最佳參數。"""
+
+    if not USE_B0_JSON_BONUS:
+        return
+
+    data = read_b0_json_data()
+    settings = data.get("__settings__", {})
+    if not isinstance(settings, dict):
+        return
+
+    optimize_results = settings.get("optimize_results", [])
+    if not isinstance(optimize_results, list) or not optimize_results:
+        return
+
+    print("====== B0_v4 多期回測參數比較 ======")
+    print("排名 | 回測期 | 窗口期 | 5球+ | 4球+ | 3球+ | 0球 | 分數")
+    for rank, item in enumerate(optimize_results, start=1):
+        if not isinstance(item, dict):
+            continue
+        print(
+            f"{rank:>2} | "
+            f"{to_int(item.get('backtest_draw_count'), 0):>4} | "
+            f"{to_int(item.get('window_draw_count'), 0):>4} | "
+            f"{to_int(item.get('hit_5_or_above'), 0):>3} | "
+            f"{to_int(item.get('hit_4_or_above'), 0):>3} | "
+            f"{to_int(item.get('hit_3_or_above'), 0):>3} | "
+            f"{to_int(item.get('zero_count'), 0):>2} | "
+            f"{to_float(item.get('score')):>5g}"
+        )
+
+    best_backtest_count = to_int(settings.get("backtest_draw_count"), 0)
+    best_window_count = to_int(settings.get("window_draw_count"), WINDOW_DRAW_COUNT)
+    best_match_mode = str(settings.get("birthday_num_match_mode", BIRTHDAY_NUM_MATCH_MODE))
+    best_match_count = to_int(settings.get("combination_take_count"), COMBINATION_TAKE_COUNT)
+    best_prize_option = to_int(settings.get("prize_option"), PRIZE_OPTION)
+    best_sort_mode = str(settings.get("sample_sort_mode", SAMPLE_SORT_MODE))
+
+    print()
+    print(
+        f"系統選出最佳參數：回測期 {best_backtest_count}，"
+        f"窗口期 {best_window_count}，"
+        f"取樣條件 {best_match_mode}{best_match_count}，"
+        f"prize{best_prize_option}，"
+        f"排序 {best_sort_mode}"
+    )
+    print()
+
+
+def apply_b0_json_settings() -> None:
+    """套用 B0_v4 JSON 保存的回測核心參數，令 B1 預測與最佳回測口徑一致。"""
+
+    global WINDOW_DRAW_COUNT, COMBINATION_TAKE_COUNT, BIRTHDAY_NUM_MATCH_MODE
+    global TOP_PRIZE_DRAW_COUNT, PRIZE_OPTION, SAMPLE_SORT_MODE
+    global PAIR_HIT_WEIGHT, NUM_HIT_WEIGHT
+
+    if not USE_B0_JSON_BONUS or not GROUP_WEIGHT_JSON.exists():
+        return
+
+    data = read_b0_json_data()
+    if not data:
+        return
+
+    settings = data.get("__settings__", {})
+    if not isinstance(settings, dict):
+        return
+
+    WINDOW_DRAW_COUNT = to_int(settings.get("window_draw_count"), WINDOW_DRAW_COUNT)
+    COMBINATION_TAKE_COUNT = to_int(settings.get("combination_take_count"), COMBINATION_TAKE_COUNT)
+    TOP_PRIZE_DRAW_COUNT = to_int(settings.get("top_prize_draw_count"), TOP_PRIZE_DRAW_COUNT)
+    PRIZE_OPTION = to_int(settings.get("prize_option"), PRIZE_OPTION)
+    PAIR_HIT_WEIGHT = to_int(settings.get("pair_hit_weight"), PAIR_HIT_WEIGHT)
+    NUM_HIT_WEIGHT = to_int(settings.get("num_hit_weight"), NUM_HIT_WEIGHT)
+
+    match_mode = settings.get("birthday_num_match_mode", BIRTHDAY_NUM_MATCH_MODE)
+    if match_mode in {">=", "=="}:
+        BIRTHDAY_NUM_MATCH_MODE = str(match_mode)
+
+    sample_sort_mode = settings.get("sample_sort_mode", SAMPLE_SORT_MODE)
+    if sample_sort_mode in {"prize", "date"}:
+        SAMPLE_SORT_MODE = str(sample_sort_mode)
+
+
 def get_group_bonus_config(
     group_bonus: dict[int, tuple[str, list[int]]],
     group_option: int,
@@ -230,11 +460,11 @@ def parse_special_num(row: dict[str, str]) -> int | None:
     return special_num if 1 <= special_num <= 49 else None
 
 
-def parse_prize3(row: dict[str, str]) -> float:
-    """抽取 prize3 中獎注數。"""
+def parse_prize_count(row: dict[str, str]) -> float:
+    """抽取 B0 JSON 指定 prize 選項的中獎注數。"""
 
     try:
-        return float(row.get("prize3", "0") or 0)
+        return float(row.get(f"prize{PRIZE_OPTION}", "0") or 0)
     except ValueError:
         return 0.0
 
@@ -255,7 +485,7 @@ def is_matched(count: int) -> bool:
 
 
 def build_window_rows(rows: list[dict[str, str]], group_option: int) -> list[DrawRow]:
-    """取最近 WINDOW_DRAW_COUNT 期，建立符合條件的分組樣本。"""
+    """取最近 WINDOW_DRAW_COUNT 期，按 SAMPLE_SORT_MODE 排序後建立分組計分樣本。"""
 
     window_rows: list[DrawRow] = []
     for row in rows[-WINDOW_DRAW_COUNT:]:
@@ -269,9 +499,11 @@ def build_window_rows(rows: list[dict[str, str]], group_option: int) -> list[Dra
                 "nums": nums,
                 "selected_nums": selected,
                 "special_num": parse_special_num(row),
-                "prize3_count": parse_prize3(row),
+                "prize3_count": parse_prize_count(row),
             }
         )
+    if SAMPLE_SORT_MODE == "date":
+        return sorted(window_rows, key=lambda item: item["date"])
     return sorted(window_rows, key=lambda item: (-item["prize3_count"], item["date"]))
 
 
@@ -321,7 +553,7 @@ def build_num_scores(
     group_option: int,
     bonus_scores: list[int],
 ) -> dict[int, float]:
-    """用 pair、單號、prize3 人氣及特號輔助分建立號碼分數。"""
+    """用 pair、單號、指定獎項注數及特號輔助分建立號碼分數。"""
 
     start_num, end_num = birthday_range(group_option)
     scores = {num: 0.0 for num in range(start_num, end_num + 1)}
@@ -417,13 +649,31 @@ def print_prediction(bet_date: str, group_predictions: list[GroupPrediction]) ->
         f"{format_list_for_csv(group_map.get(3, []))}"
     )
 
-    banker_3 = group_map.get(2, [])
-    legs_3 = sorted(num for num in candidate_pool if num not in banker_3)
-    banker_4 = group_map.get(3, [])
-    legs_4 = sorted(num for num in candidate_pool if num not in banker_4)
     print("膽拖組合：")
-    print(f"1，3膽 {format_list_for_csv(banker_3)} + {format_list_for_csv(legs_3)} 腳，$5 x 20 注，$100")
-    print(f"2，4膽 {format_list_for_csv(banker_4)} + {format_list_for_csv(legs_4)} 腳，$5 x 10 注，$50")
+    banker_groups = [
+        group for group in group_predictions
+        if len(group["predicted_nums"]) in {3, 4}
+    ]
+    if not banker_groups:
+        print("沒有 3 或 4 膽分組可產生膽拖投注")
+        return
+
+    for index, group in enumerate(banker_groups, start=1):
+        print_banker_leg_combo(index, group["predicted_nums"], candidate_pool)
+
+
+def print_banker_leg_combo(index: int, bankers: list[int], candidate_pool: list[int]) -> None:
+    """按實際膽號數自動計算腳數、注數及投注額。"""
+
+    banker_count = len(bankers)
+    legs = sorted(num for num in candidate_pool if num not in bankers)
+    leg_take_count = 6 - banker_count
+    bet_count = math.comb(len(legs), leg_take_count) if 0 <= leg_take_count <= len(legs) else 0
+    bet_amount = bet_count * 5
+    print(
+        f"{index}，{banker_count}膽 {format_list_for_csv(bankers)} + "
+        f"{format_list_for_csv(legs)} 腳，$5 x {bet_count} 注，${bet_amount}"
+    )
 
 
 def format_list_for_csv(nums: list[int]) -> str:
@@ -458,6 +708,10 @@ def main() -> None:
 
     validate_params()
     run_b0_backtest_first()
+    apply_b0_json_settings()
+    validate_params()
+    print_b0_optimize_summary()
+    print_window_sample_lists()
     rows = read_m6_rows()
     group_bonus = load_group_json_bonus()
     group_scores = {

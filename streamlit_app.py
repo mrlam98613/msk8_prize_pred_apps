@@ -27,11 +27,11 @@ PAGES = [
     #     "icon": "🏆",
     #     "path": CONTENT_DIR / "0_predict_nextdraw.py",
     # },
-    {
-        "label": "A1_v2 12/6/3 分組預測",
-        "icon": "🎯",
-        "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
-    },
+    # {
+    #     "label": "A1_v2 12/6/3 分組預測",
+    #     "icon": "🎯",
+    #     "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
+    # },
     {
         "label": "中獎號碼-組合特色分析",
         "icon": "💰",

@@ -6,7 +6,7 @@ import random
 from typing import TypedDict
 
 """
-A0_v4_backtest_with_json：
+B0_v4_backtest_with_json：
 以 1-9、10-20、21-31 三組生日號做回測。
 每個回測期用之前 WINDOW_DRAW_COUNT 期做窗口，不包含核對期。
 每個分組先獨立比較 hot / delay / middle 權重，選出該組最佳模式後寫入 JSON。
@@ -31,20 +31,25 @@ GROUP_WEIGHT_JSON = JSON_DATA_DIR / "group_weight_best_modes.json"
 BET_DATA_DIR = CURRENT_DIR / "bet_data"
 BET_RECORDS_CSV = BET_DATA_DIR / "bet_records.csv"
 WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
+BACKTEST_WINDOW_CHECK_CSV = BET_DATA_DIR / "backtest_window_check_rows.csv"
 
 # ---- 回測及窗口參數
 BACKTEST_DRAW_COUNT = 10  # 回測最近多少期
-WINDOW_DRAW_COUNT = 40  # 每個回測期之前，向前取多少期作窗口樣本
-SHOW_ANALYSIS_ADVICE = False  # 可選：True 顯示本版分析建議；False 不顯示
+WINDOW_DRAW_COUNT = 18  # 每個回測期之前，向前取多少期作窗口樣本
+# ---- 回測及窗口參數自動比較
+AUTO_OPTIMIZE_BACKTEST_WINDOW = True  # 可選：True 自動比較回測期及窗口期列表
+BACKTEST_DRAW_COUNT_LIST = [50, 24, 12]  # 自動比較用回測期數
+WINDOW_DRAW_COUNT_LIST = [12, 21, 36]  # 自動比較用窗口期數
+SHOW_ANALYSIS_ADVICE = True  # 可選：True 顯示本版分析建議；False 不顯示
 SAVE_BACKTEST_BET_CSV = True  # 可選：True 將回測預測及命中結果寫入 bet_data
-
+# ----
 # ---- 查詢條件參數
 PRINT_GROUP_OPTIONS = [1, 2, 3]  # 可選：[1]、[2]、[3]、[1, 2, 3]
 COMBINATION_TAKE_COUNT = 2  # 每期開獎號在分組範圍內符合幾個號碼
 BIRTHDAY_NUM_MATCH_MODE = ">="  # 可選：">=" 或 "=="
 TOP_PRIZE_DRAW_COUNT = 5  # 每個分組取 prize 注數最高多少期作 pair 分析
 PRIZE_OPTION = 3  # 可選：1、2、3；顯示 prize1 / prize2 / prize3 注數
-SAMPLE_SORT_MODE = "date"  # 可選："prize" 中獎注數多至少；"date" 日期遠至近
+SAMPLE_SORT_MODE = "prize"  # 可選："prize" 中獎注數多至少；"date" 日期遠至近
 
 # ---- 2 球組合加權參數
 PAIR_HIT_WEIGHT = 7  # 2 球組合本身出現次數權重
@@ -109,6 +114,18 @@ class GroupModeResult(TypedDict):
     bonus_scores: list[int]
     exact_counts: dict[float, int]
     score: float
+
+
+class OptimizeResult(TypedDict):
+    backtest_draw_count: int
+    window_draw_count: int
+    best_results: dict[int, GroupModeResult]
+    exact_counts: dict[float, int]
+    score: float
+    hit_5_or_above: int
+    hit_4_or_above: int
+    hit_3_or_above: int
+    zero_count: int
 
 
 def birthday_range(group_option: int) -> tuple[int, int]:
@@ -523,8 +540,59 @@ def write_group_csv(csv_path: Path, records: list[dict[str, str]]) -> None:
         writer.writerows(records)
 
 
+def backtest_window_check_field_names() -> list[str]:
+    """取得多組合窗口回測核對 CSV 欄位名稱。"""
+
+    return ["backtest_draw_count", "window_draw_count", "date", "1-9", "10-20", "21-31", "hit_score"]
+
+
+def build_backtest_window_check_records(
+    backtest_draw_count: int,
+    window_draw_count: int,
+    summary_rows: list[BacktestSummary],
+    group_options: list[int],
+) -> list[dict[str, str]]:
+    """將單一回測/窗口組合的逐期核對結果轉成 CSV 記錄。"""
+
+    records: list[dict[str, str]] = []
+    for item in summary_rows:
+        if item["hit_score"] < 3:
+            continue
+        check_nums = [num for num in item["check_nums_1_31_slots"][:6] if num is not None]
+        special_num = item["check_nums_1_31_slots"][6] if len(item["check_nums_1_31_slots"]) > 6 else None
+        record = hits_to_group_record(
+            item["check_date"],
+            item["predictions"],
+            group_options,
+            check_nums,
+            special_num,
+        )
+        records.append(
+            {
+                "backtest_draw_count": str(backtest_draw_count),
+                "window_draw_count": str(window_draw_count),
+                "date": record["bet_date"],
+                "1-9": record["1-9"],
+                "10-20": record["10-20"],
+                "21-31": record["21-31"],
+                "hit_score": format_hit_score(item["hit_score"]),
+            }
+        )
+    return records
+
+
+def save_backtest_window_check_csv(records: list[dict[str, str]]) -> None:
+    """重建多組合窗口回測核對 CSV。"""
+
+    BET_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with BACKTEST_WINDOW_CHECK_CSV.open("w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=backtest_window_check_field_names())
+        writer.writeheader()
+        writer.writerows(records)
+
+
 def save_backtest_group_csv(summary_rows: list[BacktestSummary], group_options: list[int]) -> None:
-    """保存 A0 回測預測及核對命中結果。"""
+    """保存 B0 回測預測及核對命中結果。"""
 
     if not SAVE_BACKTEST_BET_CSV:
         return
@@ -550,7 +618,7 @@ def save_backtest_group_csv(summary_rows: list[BacktestSummary], group_options: 
     write_group_csv(BET_RECORDS_CSV, bet_records)
     write_group_csv(WIN_RESULTS_CSV, win_records)
     print()
-    print("====== A0 回測分組 CSV 已重新建立 ======")
+    print("====== B0 回測分組 CSV 已重新建立 ======")
     print(f"bet_records.csv：{len(bet_records)} 行")
     print(f"win_results.csv：{len(win_records)} 行")
 
@@ -672,6 +740,65 @@ def calc_group_mode_score(exact_counts: dict[float, int]) -> float:
     )
 
 
+def calc_total_model_score(exact_counts: dict[float, int]) -> float:
+    """計算三組合併模型分數，重點比較七獎 3 球以上。"""
+
+    return (
+        exact_counts.get(6, 0) * 80
+        + exact_counts.get(5.5, 0) * 60
+        + exact_counts.get(5, 0) * 45
+        + exact_counts.get(4.5, 0) * 30
+        + exact_counts.get(4, 0) * 20
+        + exact_counts.get(3.5, 0) * 12
+        + exact_counts.get(3, 0) * 8
+        + exact_counts.get(2.5, 0) * 5
+        + exact_counts.get(2, 0) * 3
+        + exact_counts.get(1.5, 0) * 2
+        + exact_counts.get(1, 0)
+        + exact_counts.get(0.5, 0) * 0.5
+        - exact_counts.get(0, 0) * 2
+    )
+
+
+def build_optimize_result(
+    backtest_draw_count: int,
+    window_draw_count: int,
+    best_results: dict[int, GroupModeResult],
+    summary_rows: list[BacktestSummary],
+) -> OptimizeResult:
+    """建立單一參數組合的成績。"""
+
+    exact_counts = build_exact_hit_counts(summary_rows)
+    return {
+        "backtest_draw_count": backtest_draw_count,
+        "window_draw_count": window_draw_count,
+        "best_results": best_results,
+        "exact_counts": exact_counts,
+        "score": calc_total_model_score(exact_counts),
+        "hit_5_or_above": sum(count for level, count in exact_counts.items() if level >= 5),
+        "hit_4_or_above": sum(count for level, count in exact_counts.items() if level >= 4),
+        "hit_3_or_above": sum(count for level, count in exact_counts.items() if level >= 3),
+        "zero_count": exact_counts.get(0, 0),
+    }
+
+
+def sort_optimize_results(results: list[OptimizeResult]) -> list[OptimizeResult]:
+    """按 3 球以上、5 球以上、4 球以上及分數排序，選出最有用的參數組合。"""
+
+    return sorted(
+        results,
+        key=lambda item: (
+            -item["hit_3_or_above"],
+            -item["hit_5_or_above"],
+            -item["hit_4_or_above"],
+            -item["score"],
+            item["zero_count"],
+            item["backtest_draw_count"],
+            item["window_draw_count"],
+        ),
+    )
+
+
 def select_best_recent_bonus_modes(rows: list[dict[str, str]]) -> dict[int, GroupModeResult]:
     """每個生日號分組獨立比較權重模式，選出最佳模式。"""
 
@@ -736,13 +863,51 @@ def select_best_recent_bonus_modes(rows: list[dict[str, str]]) -> dict[int, Grou
     return best_results
 
 
-def save_group_weight_best_modes(best_results: dict[int, GroupModeResult]) -> None:
+def save_group_weight_best_modes(
+    best_results: dict[int, GroupModeResult],
+    optimize_results: list[OptimizeResult] | None = None,
+) -> None:
     """將每個分組最佳權重模式寫入 JSON。"""
 
     JSON_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    data = {
+    optimize_rows = []
+    for result in sort_optimize_results(optimize_results or []):
+        optimize_rows.append(
+            {
+                "backtest_draw_count": result["backtest_draw_count"],
+                "window_draw_count": result["window_draw_count"],
+                "score": result["score"],
+                "hit_5_or_above": result["hit_5_or_above"],
+                "hit_4_or_above": result["hit_4_or_above"],
+                "hit_3_or_above": result["hit_3_or_above"],
+                "zero_count": result["zero_count"],
+                "exact_counts": {format_hit_score(level): count for level, count in result["exact_counts"].items()},
+            }
+        )
+    data: dict[str, object] = {
+        "__settings__": {
+            "backtest_draw_count": BACKTEST_DRAW_COUNT,
+            "window_draw_count": WINDOW_DRAW_COUNT,
+            "auto_optimize_backtest_window": AUTO_OPTIMIZE_BACKTEST_WINDOW,
+            "backtest_draw_count_list": BACKTEST_DRAW_COUNT_LIST,
+            "window_draw_count_list": WINDOW_DRAW_COUNT_LIST,
+            "print_group_options": PRINT_GROUP_OPTIONS,
+            "combination_take_count": COMBINATION_TAKE_COUNT,
+            "birthday_num_match_mode": BIRTHDAY_NUM_MATCH_MODE,
+            "top_prize_draw_count": TOP_PRIZE_DRAW_COUNT,
+            "prize_option": PRIZE_OPTION,
+            "sample_sort_mode": SAMPLE_SORT_MODE,
+            "pair_hit_weight": PAIR_HIT_WEIGHT,
+            "num_hit_weight": NUM_HIT_WEIGHT,
+            "group_predict_num_count": GROUP_PREDICT_NUM_COUNT,
+            "predict_mode": PREDICT_MODE,
+            "predict_candidate_pool_size": PREDICT_CANDIDATE_POOL_SIZE,
+            "optimize_results": optimize_rows,
+        },
+        **{
         f"group_{group_option}": result
         for group_option, result in sorted(best_results.items())
+        },
     }
     with GROUP_WEIGHT_JSON.open("w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -862,7 +1027,7 @@ def print_analysis_advice() -> None:
     if not SHOW_ANALYSIS_ADVICE:
         return
 
-    print("====== A0_v3 分析建議 ======")
+    print("====== B0_v4 分析建議 ======")
     print("1. 本版以 prize3 中獎注數作人氣組合球分析。")
     print("2. prize3 主要條件是中 5 個正號，所以本版只分析 N1-N6，不分析特號。")
     print("3. 生日號分成 1-9、10-20、21-31 三組，先在每組內找人氣球及 2 球關係。")
@@ -870,6 +1035,102 @@ def print_analysis_advice() -> None:
     print("5. 候選範圍由 49 球收窄到 1-31，再可只取三組其中兩組合併作預測。")
     print("6. 本版重點不是線性預測，而是用近期 prize3 人氣集合與 2 球加權作投注參考。")
     print()
+
+
+def print_optimize_result_table(results: list[OptimizeResult]) -> None:
+    """打印多組合回測參數的 3 球以上最高命中獎球數成績。"""
+
+    if not results:
+        return
+
+    print()
+    print("====== 回測參數多組合 3球以上最高命中獎球數成績 ======")
+    print("排名 | 回測期 | 窗口期 | 5球+ | 4球+ | 3球+ | 0球 | 分數 | 6球 | 5.5球 | 5球 | 4.5球 | 4球 | 3.5球 | 3球")
+    for rank, result in enumerate(sort_optimize_results(results), start=1):
+        counts = result["exact_counts"]
+        print(
+            f"{rank:>2} | "
+            f"{result['backtest_draw_count']:>4} | "
+            f"{result['window_draw_count']:>4} | "
+            f"{result['hit_5_or_above']:>3} | "
+            f"{result['hit_4_or_above']:>3} | "
+            f"{result['hit_3_or_above']:>3} | "
+            f"{result['zero_count']:>2} | "
+            f"{result['score']:>5g} | "
+            f"{counts.get(6, 0):>2} | "
+            f"{counts.get(5.5, 0):>4} | "
+            f"{counts.get(5, 0):>2} | "
+            f"{counts.get(4.5, 0):>4} | "
+            f"{counts.get(4, 0):>2} | "
+            f"{counts.get(3.5, 0):>4} | "
+            f"{counts.get(3, 0):>2}"
+        )
+
+
+def run_optimized_backtest(rows: list[dict[str, str]]) -> OptimizeResult:
+    """比較多組回測期及窗口期，回傳最佳組合。"""
+
+    global BACKTEST_DRAW_COUNT, WINDOW_DRAW_COUNT, CURRENT_GROUP_RECENT_BONUS
+
+    original_backtest_draw_count = BACKTEST_DRAW_COUNT
+    original_window_draw_count = WINDOW_DRAW_COUNT
+    optimize_results: list[OptimizeResult] = []
+    window_check_records: list[dict[str, str]] = []
+
+    for backtest_draw_count in BACKTEST_DRAW_COUNT_LIST:
+        for window_draw_count in WINDOW_DRAW_COUNT_LIST:
+            BACKTEST_DRAW_COUNT = backtest_draw_count
+            WINDOW_DRAW_COUNT = window_draw_count
+            best_results = select_best_recent_bonus_modes(rows)
+            CURRENT_GROUP_RECENT_BONUS = {
+                group_option: result["bonus_scores"]
+                for group_option, result in best_results.items()
+            }
+            summary_rows = print_backtest_window_details(
+                rows,
+                group_options=PRINT_GROUP_OPTIONS,
+                show_window_details=False,
+                show_backtest_summary=False,
+                show_hit_rate_summary=False,
+            )
+            window_check_records.extend(
+                build_backtest_window_check_records(
+                    backtest_draw_count,
+                    window_draw_count,
+                    summary_rows,
+                    PRINT_GROUP_OPTIONS,
+                )
+            )
+            optimize_results.append(
+                build_optimize_result(backtest_draw_count, window_draw_count, best_results, summary_rows)
+            )
+
+    save_backtest_window_check_csv(window_check_records)
+    print_optimize_result_table(optimize_results)
+    best_result = sort_optimize_results(optimize_results)[0]
+
+    BACKTEST_DRAW_COUNT = best_result["backtest_draw_count"]
+    WINDOW_DRAW_COUNT = best_result["window_draw_count"]
+    CURRENT_GROUP_RECENT_BONUS = {
+        group_option: result["bonus_scores"]
+        for group_option, result in best_result["best_results"].items()
+    }
+    save_group_weight_best_modes(best_result["best_results"], optimize_results)
+
+    print()
+    print(
+        f"最佳組合：回測期 {BACKTEST_DRAW_COUNT}，窗口期 {WINDOW_DRAW_COUNT}，"
+        f"5球以上 {best_result['hit_5_or_above']} 期，"
+        f"4球以上 {best_result['hit_4_or_above']} 期，"
+        f"3球以上 {best_result['hit_3_or_above']} 期，"
+        f"分數 {best_result['score']:g}"
+    )
+
+    if not AUTO_OPTIMIZE_BACKTEST_WINDOW:
+        BACKTEST_DRAW_COUNT = original_backtest_draw_count
+        WINDOW_DRAW_COUNT = original_window_draw_count
+
+    return best_result
 
 
 def main() -> None:
@@ -887,13 +1148,18 @@ def main() -> None:
         print_backtest_window_details(rows)
         return
 
+    if AUTO_OPTIMIZE_BACKTEST_WINDOW:
+        best_optimize_result = run_optimized_backtest(rows)
+        best_results = best_optimize_result["best_results"]
+    else:
+        best_results = select_best_recent_bonus_modes(rows)
+        save_group_weight_best_modes(best_results)
+
     if SHOW_GROUP_MODE_COMPARE:
         print("====== V4 每分組獨立最佳權重分析 ======")
         print(f"回測期數：{BACKTEST_DRAW_COUNT}，窗口期數：{WINDOW_DRAW_COUNT}")
         print(f"正式合併分組：{PRINT_GROUP_OPTIONS}，每組預測 {GROUP_PREDICT_NUM_COUNT} 球")
 
-    best_results = select_best_recent_bonus_modes(rows)
-    save_group_weight_best_modes(best_results)
     if SHOW_GROUP_MODE_COMPARE:
         print_group_weight_best_modes(best_results)
 
