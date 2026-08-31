@@ -33,8 +33,8 @@ def run_b1_text(group_quota_mode: str, display_sort_mode: str) -> str:
     """執行 B1_v1 並捕捉 console 文字輸出。"""
 
     b1 = load_b1_module()
-    b1.GROUP_QUOTA_MODE = group_quota_mode
-    b1.DISPLAY_SORT_MODE = display_sort_mode
+    setattr(b1, "GROUP_QUOTA_MODE", group_quota_mode)
+    setattr(b1, "DISPLAY_SORT_MODE", display_sort_mode)
 
     output = StringIO()
     with redirect_stdout(output):
