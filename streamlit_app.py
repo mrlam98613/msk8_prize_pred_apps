@@ -38,6 +38,11 @@ PAGES = [
         "path": CONTENT_DIR / "1_B1-v1.py",
     },
     {
+        "label": "B0_v4 回測命中關鍵",
+        "icon": "📊",
+        "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",
+    },
+    {
         "label": "中獎號碼-組合特色分析",
         "icon": "💰",
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
