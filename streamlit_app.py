@@ -33,6 +33,11 @@ PAGES = [
     #     "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
     # },
     {
+        "label": "B1_v1 生日號動態預測",
+        "icon": "🎯",
+        "path": CONTENT_DIR / "1_B1-v1.py",
+    },
+    {
         "label": "中獎號碼-組合特色分析",
         "icon": "💰",
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
