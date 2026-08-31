@@ -14,6 +14,7 @@ wheels/
 *.sqlite
 *.sqlite3
 member/member_bet_dbs/
+n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/admin_bet.csv
 
 # Local lottery data snapshots
 Z4_lotto_prize_2026_crawler/log/

@@ -633,15 +633,12 @@ def print_prediction(bet_date: str, group_predictions: list[GroupPrediction]) ->
     print("====== B1_v1 生日號動態分組預測 ======")
 
     for group in group_predictions:
-        nums_text = ",".join(str(num) for num in group["predicted_nums"])
         print(
             f"[{group['group_option']}] {group['group_range']}:"
-            f"{nums_text} /> {group['quota']} 球，"
-            f"熱門pair {group['top_pair_text']}"
+            f" {format_list_for_csv(group['predicted_nums'])} /> {group['quota']} 球"
         )
 
     print()
-    print(f"9球候選池：{','.join(str(num) for num in candidate_pool)}")
     print(
         f"下期開獎日期：{bet_date}，預測 "
         f"{format_list_for_csv(group_map.get(1, []))},"
@@ -670,10 +667,8 @@ def print_banker_leg_combo(index: int, bankers: list[int], candidate_pool: list[
     leg_take_count = 6 - banker_count
     bet_count = math.comb(len(legs), leg_take_count) if 0 <= leg_take_count <= len(legs) else 0
     bet_amount = bet_count * 5
-    print(
-        f"{index}，{banker_count}膽 {format_list_for_csv(bankers)} + "
-        f"{format_list_for_csv(legs)} 腳，$5 x {bet_count} 注，${bet_amount}"
-    )
+    print(f"{index}，{format_list_for_csv(bankers)} + {format_list_for_csv(legs)}")
+    print(f"   投注 {banker_count} 膽 {len(legs)} 配腳 ：$5 x {bet_count} 注，${bet_amount}")
 
 
 def format_list_for_csv(nums: list[int]) -> str:
