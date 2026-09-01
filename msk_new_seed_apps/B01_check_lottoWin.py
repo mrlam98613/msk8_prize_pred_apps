@@ -2,6 +2,7 @@ import pandas as pd
 from pathlib import Path
 import os
 from typing import Any
+
 # === 設定路徑 ===
 # ROOT = Path(__file__).resolve().parent
 current_dir = Path(__file__).resolve().parent
@@ -23,7 +24,7 @@ PRIZE_TABLE: dict[float, int] = {
 
 
 def check_ticket() -> None:
-    os.system('clear')
+    # os.system('clear')
     print("/>---<>--🎯 核對過往投注紀錄與中獎號碼 ---<>---<\\\n")
     if not BET_FILE.exists() or not HISTORY_FILE.exists():
         print("❌ 檔案不存在，請確認 my_bet_records.csv 與 M2_lotto_history.csv 是否正確")

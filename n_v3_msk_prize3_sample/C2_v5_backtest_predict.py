@@ -18,8 +18,8 @@ WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
 NEXTDRAW_CSV = BET_DATA_DIR / "nextdraw_pred.csv"
 
 # C2_v5 只需要修改以下 2 個參數。
-RUN_MODE = "backtest"  # 可選："backtest" 或 "predict"
-BACKTEST_DETAIL_COUNT = 49
+RUN_MODE = "predict"  # 可選："backtest" 或 "predict"
+BACKTEST_DETAIL_COUNT = 30
 
 # 以下是 C2_v4 演算法固定設定，C2_v5 由 JSON 讀入最佳窗口期 / topN / 權重，不在此處手動調參。
 PRIZE_OPTION = 3

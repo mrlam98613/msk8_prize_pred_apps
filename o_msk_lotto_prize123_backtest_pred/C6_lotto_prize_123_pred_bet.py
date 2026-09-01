@@ -34,7 +34,7 @@ PRIZE123_NEXT_DRAW_BET_CSV = BET_PRIZE_DATA_DIR / "prize123_nextDraw_bet.csv"
 PRIZE123_WIN_RESULTS_CSV = BET_PRIZE_DATA_DIR / "prize123_win_results.csv"
 
 # ---------------------------- 手動參數 ----------------------------
-RUN_MODE = "predict"  # "predict" / "backtest"
+RUN_MODE = "backtest"  # "predict" / "backtest"
 BET_MODE = "all"  # "prize3" / "prize2" / "prize1" / "all"
 BACKTEST_DRAW = 24
 

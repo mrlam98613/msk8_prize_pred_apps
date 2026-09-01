@@ -18,7 +18,7 @@ PAGES = [
         "path": CONTENT_DIR / "0_lotto_info.py",
     },
     {
-        "label": "A1_v1 手動趨勢投注",
+        "label": "A1V1_生日號-手動趨勢投注",
         "icon": "📈",
         "path": CONTENT_DIR / "1_A1_v1_manuel_pred.py",
     },
@@ -33,17 +33,17 @@ PAGES = [
     #     "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
     # },
     {
-        "label": "B1_v1 生日號動態預測",
+        "label": "B1V1_生日號-回測窗口期最佳化",
         "icon": "🎯",
-        "path": CONTENT_DIR / "1_B1-v1.py",
+        "path": CONTENT_DIR / "1_B1_v1.py",
     },
     {
-        "label": "B0_v4 回測命中關鍵",
+        "label": "B0V4_生日號-回測中獎分析",
         "icon": "📊",
         "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",
     },
     {
-        "label": "中獎號碼-組合特色分析",
+        "label": "生日號中獎號碼-組合特色分析",
         "icon": "💰",
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
     },
@@ -53,7 +53,7 @@ PAGES = [
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
     },
     {
-        "label": "獎項組合關鍵分析",
+        "label": "1,2,3獎中獎注數生日號分析",
         "icon": "🔎",
         "path": CONTENT_DIR / "4_prize_comb_key.py",
     },

@@ -16,7 +16,7 @@ BEST_PARAMS_JSON = JSON_DIR / "C2_v4_best_params.json"
 NEXTDRAW_CSV = BET_DATA_DIR / "C2_v4_nextdraw_pred.csv"
 
 # 第一步：只驗證回測窗口期及 prize3 取樣資料。
-BACKTEST_DRAW_COUNT_LIST = [49]
+BACKTEST_DRAW_COUNT_LIST = [6]
 # 窗口期 必須大於 TOP_PRIZE_DRAW_COUNT_LIST ＝7 X 3 倍= 21期 
 WINDOW_DRAW_COUNT_LIST = [21,28]
 TOP_PRIZE_DRAW_COUNT_LIST = [5,7] # 窗口期，3獎中獎注數最多前N期
