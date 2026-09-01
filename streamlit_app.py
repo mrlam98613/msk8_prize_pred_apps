@@ -38,6 +38,11 @@ PAGES = [
         "path": CONTENT_DIR / "1_B1_v1.py",
     },
     {
+        "label": "C1V1 財庫密碼-回測窗口期最佳化",
+        "icon": "🔑",
+        "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
+    },
+    {
         "label": "B0V4_生日號-回測中獎分析",
         "icon": "📊",
         "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",

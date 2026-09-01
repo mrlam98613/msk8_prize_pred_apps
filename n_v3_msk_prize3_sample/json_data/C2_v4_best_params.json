@@ -3,11 +3,6 @@
     "backtest_count": 30,
     "window_count": 28,
     "top_prize_count": 5,
-    "group_quota": [
-      3,
-      3,
-      3
-    ],
     "pair_core_score": 10,
     "single_hit_score": 1,
     "date_score_list": [
@@ -31,11 +26,6 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 5,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 10,
       "single_hit_score": 1,
       "date_score_list": [
@@ -58,11 +48,6 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 5,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 15,
       "single_hit_score": 1,
       "date_score_list": [
@@ -85,11 +70,6 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 5,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 20,
       "single_hit_score": 1,
       "date_score_list": [
@@ -107,97 +87,11 @@
       "hit_3_plus": 2,
       "zero_hit": 4,
       "score": 25.0
-    },
-    {
-      "backtest_count": 30,
-      "window_count": 28,
-      "top_prize_count": 5,
-      "group_quota": [
-        2,
-        2,
-        3
-      ],
-      "pair_core_score": 10,
-      "single_hit_score": 1,
-      "date_score_list": [
-        10,
-        8,
-        6,
-        3,
-        2,
-        1,
-        1
-      ],
-      "checked_count": 30,
-      "hit_5_plus": 1,
-      "hit_4_plus": 1,
-      "hit_3_plus": 1,
-      "zero_hit": 5,
-      "score": -30.0
-    },
-    {
-      "backtest_count": 30,
-      "window_count": 28,
-      "top_prize_count": 5,
-      "group_quota": [
-        2,
-        2,
-        3
-      ],
-      "pair_core_score": 15,
-      "single_hit_score": 1,
-      "date_score_list": [
-        10,
-        8,
-        6,
-        3,
-        2,
-        1,
-        1
-      ],
-      "checked_count": 30,
-      "hit_5_plus": 1,
-      "hit_4_plus": 1,
-      "hit_3_plus": 1,
-      "zero_hit": 5,
-      "score": -30.0
-    },
-    {
-      "backtest_count": 30,
-      "window_count": 28,
-      "top_prize_count": 5,
-      "group_quota": [
-        2,
-        2,
-        3
-      ],
-      "pair_core_score": 20,
-      "single_hit_score": 1,
-      "date_score_list": [
-        10,
-        8,
-        6,
-        3,
-        2,
-        1,
-        1
-      ],
-      "checked_count": 30,
-      "hit_5_plus": 1,
-      "hit_4_plus": 1,
-      "hit_3_plus": 1,
-      "zero_hit": 5,
-      "score": -30.0
     },
     {
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 7,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 10,
       "single_hit_score": 1,
       "date_score_list": [
@@ -220,11 +114,6 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 7,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 10,
       "single_hit_score": 2,
       "date_score_list": [
@@ -247,11 +136,6 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 7,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 10,
       "single_hit_score": 2,
       "date_score_list": [
@@ -274,12 +158,73 @@
       "backtest_count": 30,
       "window_count": 28,
       "top_prize_count": 7,
-      "group_quota": [
-        3,
-        3,
-        3
-      ],
       "pair_core_score": 15,
+      "single_hit_score": 1,
+      "date_score_list": [
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "checked_count": 30,
+      "hit_5_plus": 0,
+      "hit_4_plus": 2,
+      "hit_3_plus": 5,
+      "zero_hit": 3,
+      "score": 45.0
+    },
+    {
+      "backtest_count": 30,
+      "window_count": 28,
+      "top_prize_count": 7,
+      "pair_core_score": 15,
+      "single_hit_score": 2,
+      "date_score_list": [
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "checked_count": 30,
+      "hit_5_plus": 0,
+      "hit_4_plus": 2,
+      "hit_3_plus": 5,
+      "zero_hit": 3,
+      "score": 45.0
+    },
+    {
+      "backtest_count": 30,
+      "window_count": 28,
+      "top_prize_count": 7,
+      "pair_core_score": 15,
+      "single_hit_score": 2,
+      "date_score_list": [
+        10,
+        8,
+        6,
+        3,
+        2,
+        1,
+        1
+      ],
+      "checked_count": 30,
+      "hit_5_plus": 0,
+      "hit_4_plus": 2,
+      "hit_3_plus": 5,
+      "zero_hit": 3,
+      "score": 45.0
+    },
+    {
+      "backtest_count": 30,
+      "window_count": 28,
+      "top_prize_count": 7,
+      "pair_core_score": 20,
       "single_hit_score": 1,
       "date_score_list": [
         7,

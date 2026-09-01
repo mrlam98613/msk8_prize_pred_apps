@@ -38,8 +38,8 @@ BACKTEST_DRAW_COUNT = 10  # 回測最近多少期
 WINDOW_DRAW_COUNT = 18  # 每個回測期之前，向前取多少期作窗口樣本
 # ---- 回測及窗口參數自動比較
 AUTO_OPTIMIZE_BACKTEST_WINDOW = True  # 可選：True 自動比較回測期及窗口期列表
-BACKTEST_DRAW_COUNT_LIST = [50, 24, 12]  # 自動比較用回測期數
-WINDOW_DRAW_COUNT_LIST = [12, 21, 36]  # 自動比較用窗口期數
+BACKTEST_DRAW_COUNT_LIST = [12]  # 自動比較用回測期數
+WINDOW_DRAW_COUNT_LIST = [21, 36]  # 自動比較用窗口期數
 SHOW_ANALYSIS_ADVICE = True  # 可選：True 顯示本版分析建議；False 不顯示
 SAVE_BACKTEST_BET_CSV = True  # 可選：True 將回測預測及命中結果寫入 bet_data
 # ----
