@@ -16,9 +16,10 @@ BEST_PARAMS_JSON = JSON_DIR / "C2_v4_best_params.json"
 NEXTDRAW_CSV = BET_DATA_DIR / "C2_v4_nextdraw_pred.csv"
 
 # 第一步：只驗證回測窗口期及 prize3 取樣資料。
-BACKTEST_DRAW_COUNT_LIST = [30]
+BACKTEST_DRAW_COUNT_LIST = [20]
+BEST_PARAM_SCORE_BACKTEST_COUNT = 30  # 固定用多少期核對結果選最佳參數；避免顯示回測期改變最後一期預測
 # 窗口期 必須大於 TOP_PRIZE_DRAW_COUNT_LIST ＝7 X 3 倍= 21期 
-WINDOW_DRAW_COUNT_LIST = [21,28]
+WINDOW_DRAW_COUNT_LIST = [21,28, 36]  # 可選：21,28,36
 TOP_PRIZE_DRAW_COUNT_LIST = [5,7] # 窗口期，3獎中獎注數最多前N期
 PRIZE_OPTION = 3 # 目標以每期 3獎中獎注數 取樣驗證
 MATCH_COUNT = 2 # 取樣條件：每開獎期如有生日號 >= 2 球
@@ -232,7 +233,8 @@ def count_group_matched_rows(window_rows: list[DrawRow], group_id: int) -> int:
 
 def print_step_1_setting() -> None:
     print("====== C2_v3 第一步：回測窗口及 prize3 取樣驗證 ======")
-    print(f"回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
+    print(f"顯示回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
+    print(f"最佳參數評分期：{BEST_PARAM_SCORE_BACKTEST_COUNT}")
     print(f"窗口期列表：{WINDOW_DRAW_COUNT_LIST}")
     print(f"3獎注數前N期列表：{TOP_PRIZE_DRAW_COUNT_LIST}")
     print("參數檢查：窗口期必須 >= 3獎中獎注數前N期，否則分析資料不足。")
@@ -620,25 +622,25 @@ def evaluate_param_set(
 
 def run_param_backtests(draws: list[DrawRow]) -> list[dict[str, object]]:
     results: list[dict[str, object]] = []
-    for backtest_count in BACKTEST_DRAW_COUNT_LIST:
-        for window_count in WINDOW_DRAW_COUNT_LIST:
-            for top_prize_count in TOP_PRIZE_DRAW_COUNT_LIST:
-                if window_count < top_prize_count:
-                    continue
-                for pair_core_score in PAIR_CORE_SCORE_LIST:
-                    for single_hit_score in SINGLE_HIT_SCORE_LIST:
-                        for date_score_list in DATE_RECENT_SCORE_PROFILE_LIST:
-                            results.append(
-                                evaluate_param_set(
-                                    draws,
-                                    backtest_count,
-                                    window_count,
-                                    top_prize_count,
-                                    pair_core_score,
-                                    single_hit_score,
-                                    date_score_list,
-                                )
+    backtest_count = BEST_PARAM_SCORE_BACKTEST_COUNT
+    for window_count in WINDOW_DRAW_COUNT_LIST:
+        for top_prize_count in TOP_PRIZE_DRAW_COUNT_LIST:
+            if window_count < top_prize_count:
+                continue
+            for pair_core_score in PAIR_CORE_SCORE_LIST:
+                for single_hit_score in SINGLE_HIT_SCORE_LIST:
+                    for date_score_list in DATE_RECENT_SCORE_PROFILE_LIST:
+                        results.append(
+                            evaluate_param_set(
+                                draws,
+                                backtest_count,
+                                window_count,
+                                top_prize_count,
+                                pair_core_score,
+                                single_hit_score,
+                                date_score_list,
                             )
+                        )
     return sorted(
         results,
         key=lambda item: (

@@ -169,9 +169,15 @@ def init_c1_state() -> None:
 
 
 def main() -> None:
+    # 或更明確地：
+    from typing import Any
+    c1: Any = load_c1_module()
+    
     st.title("C1_v1 Fortune Key")
-    c1 = load_c1_module()
+    # c1 = load_c1_module() # type: ignore[assignment]
 
+    
+    
     st.markdown("### 參數選項")
     init_c1_state()
     backtest_counts = parse_int_list(
@@ -201,10 +207,12 @@ def main() -> None:
         st.info("請設定參數後，按「顯示回測」更新結果。")
         return
 
-    c1.BACKTEST_DRAW_COUNT_LIST = backtest_counts
-    c1.WINDOW_DRAW_COUNT_LIST = window_counts
-    c1.TOP_PRIZE_DRAW_COUNT_LIST = top_prize_counts
-
+    # c1.BACKTEST_DRAW_COUNT_LIST = backtest_counts
+    # c1.WINDOW_DRAW_COUNT_LIST = window_counts
+    # c1.TOP_PRIZE_DRAW_COUNT_LIST = top_prize_counts
+    c1.BACKTEST_DRAW_COUNT_LIST = backtest_counts  # type: ignore[attr-defined]
+    c1.WINDOW_DRAW_COUNT_LIST = window_counts  # type: ignore[attr-defined]
+    c1.TOP_PRIZE_DRAW_COUNT_LIST = top_prize_counts  # type: ignore[attr-defined]
     draws = c1.read_draws()
     if not draws:
         st.error(f"未能讀取 M6：{c1.M6_CSV}")
