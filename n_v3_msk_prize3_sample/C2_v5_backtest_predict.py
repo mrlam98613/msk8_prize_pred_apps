@@ -2,12 +2,18 @@ from pathlib import Path
 import csv
 import itertools
 import json
+import sys
 from collections import Counter
 from typing import TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from n_v2_msk_prize_31_num_backtest_pred.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
+
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M3_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M3_lotto_prize_results.csv"
 JSON_DIR = CURRENT_DIR / "json_data"
@@ -18,8 +24,8 @@ WIN_RESULTS_CSV = BET_DATA_DIR / "win_results.csv"
 NEXTDRAW_CSV = BET_DATA_DIR / "nextdraw_pred.csv"
 
 # C2_v5 只需要修改以下 2 個參數。
-RUN_MODE = "predict"  # 可選："backtest" 或 "predict"
-BACKTEST_DETAIL_COUNT = 30
+RUN_MODE = "backtest"  # 可選："backtest" 或 "predict"
+BACKTEST_DETAIL_COUNT = 20
 
 # 以下是 C2_v4 演算法固定設定，C2_v5 由 JSON 讀入最佳窗口期 / topN / 權重，不在此處手動調參。
 PRIZE_OPTION = 3
@@ -202,6 +208,15 @@ def is_matched(count: int) -> bool:
 
 def format_nums(nums: list[int]) -> str:
     return "[" + ",".join(str(num) for num in nums) + "]"
+
+
+def format_rbg_lines(nums: list[int]) -> list[str]:
+    rbg_dict = res_List_To_rbg_Dict_func(sorted(nums))
+    return [
+        f"R：{format_nums(sorted(rbg_dict.get(0, [])))} /> {len(rbg_dict.get(0, []))} 球",
+        f"B：{format_nums(sorted(rbg_dict.get(1, [])))} /> {len(rbg_dict.get(1, []))} 球",
+        f"G：{format_nums(sorted(rbg_dict.get(2, [])))} /> {len(rbg_dict.get(2, []))} 球",
+    ]
 
 
 def format_draw_nums(row: DrawRow) -> str:
@@ -869,6 +884,8 @@ def predict_nextdraw_with_best(draws: list[DrawRow], best: dict[str, object]) ->
     print(f"下一期開獎日期：{next_date}，未開獎，不能核對")
     print(f"預測：{format_group_prediction_text(group_predictions)}")
     print(f"候選池：{','.join(str(num) for num in candidate_pool)} /> {len(candidate_pool)} 球")
+    for line in format_rbg_lines(candidate_pool):
+        print(line)
     print(f"CSV 已寫入：{NEXTDRAW_CSV}")
     print()
 
@@ -1055,8 +1072,8 @@ def run_backtest_mode(draws: list[DrawRow], best: dict[str, object]) -> None:
     write_backtest_csv(rows)
     print_backtest_details(rows)
     print_hit_summary(rows)
-    print(f"已寫入：{BET_RECORDS_CSV}")
-    print(f"已寫入：{WIN_RESULTS_CSV}")
+    # print(f"已寫入：{BET_RECORDS_CSV}")
+    # print(f"已寫入：{WIN_RESULTS_CSV}")
     print()
 
 
@@ -1078,7 +1095,9 @@ def run_predict_mode(draws: list[DrawRow], best: dict[str, object]) -> None:
     print(f"下一期開獎日期：{next_date}，未開獎，不能核對")
     print(f"預測：{format_group_prediction_text(group_predictions)}")
     print(f"候選池：{','.join(str(num) for num in candidate_pool)} /> {len(candidate_pool)} 球")
-    print(f"已寫入：{NEXTDRAW_CSV}")
+    for line in format_rbg_lines(candidate_pool):
+        print(line)
+    # print(f"已寫入：{NEXTDRAW_CSV}")
     print()
 
 

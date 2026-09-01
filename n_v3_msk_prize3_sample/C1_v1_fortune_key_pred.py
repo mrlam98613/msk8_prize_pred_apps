@@ -2,11 +2,17 @@ from pathlib import Path
 import csv
 import itertools
 import json
+import sys
 from typing import TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from n_v2_msk_prize_31_num_backtest_pred.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
+
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 JSON_PATH = CURRENT_DIR / "json_data" / "C1_v1_simple_best_params.json"
@@ -16,8 +22,8 @@ BACKTEST_CHECK_CSV = BET_DATA_DIR / "C1_v1_backtest_check_rows.csv"
 
 # 簡化版只保留核心列表；回測會自動選最佳組合，再給預測模式讀入。
 BACKTEST_DRAW_COUNT_LIST = [30]
-WINDOW_DRAW_COUNT_LIST = [21,28]
-TOP_PRIZE_DRAW_COUNT_LIST = [5,7]
+WINDOW_DRAW_COUNT_LIST = [27]
+TOP_PRIZE_DRAW_COUNT_LIST = [7]
 PRIZE_OPTION = 3
 MATCH_COUNT = 2
 MATCH_MODE = ">="
@@ -182,6 +188,15 @@ def format_nums(nums: list[int]) -> str:
     return "[" + ",".join(str(num) for num in nums) + "]"
 
 
+def format_rbg_lines(nums: list[int]) -> list[str]:
+    rbg_dict = res_List_To_rbg_Dict_func(sorted(nums))
+    return [
+        f"R：{format_nums(sorted(rbg_dict.get(0, [])))} /> {len(rbg_dict.get(0, []))} 球",
+        f"B：{format_nums(sorted(rbg_dict.get(1, [])))} /> {len(rbg_dict.get(1, []))} 球",
+        f"G：{format_nums(sorted(rbg_dict.get(2, [])))} /> {len(rbg_dict.get(2, []))} 球",
+    ]
+
+
 def get_hit_score(normal_hit_count: int, has_special_hit: bool) -> float:
     if normal_hit_count >= 6:
         return 6.0
@@ -294,9 +309,9 @@ def sort_summaries(summaries: list[dict[str, object]]) -> list[dict[str, object]
     return sorted(
         summaries,
         key=lambda item: (
-            -to_int(item.get("hit_3_or_above")),
             -to_int(item.get("hit_5_or_above")),
             -to_int(item.get("hit_4_or_above")),
+            -to_int(item.get("hit_3_or_above")),
             -to_float(item.get("score")),
             to_int(item.get("zero_count")),
             to_int(item.get("backtest_draw_count")),
@@ -483,6 +498,8 @@ def print_prediction(bet_date: str, predictions: dict[str, list[int]], best: dic
         nums = predictions.get(name, [])
         print(f"{name}: {format_nums(nums)} /> {len(nums)} 球")
     print(f"9球候選池：{','.join(str(num) for num in candidate_pool)}")
+    for line in format_rbg_lines(candidate_pool):
+        print(line)
     print(
         f"下期開獎日期：{bet_date}，預測 "
         f"{format_nums(predictions.get('1-9', []))},"

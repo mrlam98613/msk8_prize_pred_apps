@@ -274,6 +274,8 @@ def render_styles() -> None:
         .a1-ball-row img{width:34px;height:34px;object-fit:contain;}
         .a1-plus{font-size:20px;font-weight:900;margin:0 5px;color:#111827;}
         .a1-muted{font-size:12px;line-height:1.55;color:#6b7280;margin-bottom:6px;}
+        .a1-cold-pick-note{font-size:15px;line-height:1.65;color:#111827;font-weight:700;margin:6px 0 8px 0;}
+        .a1-watch-pick-line{font-size:15px;line-height:1.75;color:#111827;white-space:nowrap;overflow-x:auto;}
         .a1-save-status{font-size:13px;line-height:1.6;color:#6b7280;margin:4px 0 6px 0;}
         .a1-tag{display:inline-block;min-width:42px;font-weight:800;color:#0f766e;}
         .a1-hot{color:#b91c1c;font-weight:800;}
@@ -412,34 +414,41 @@ def build_special_cold_numbers_for_groups(
 
 
 def render_watch_numbers_hint(watch_map: dict[str, list[int]], extra_watch_nums: list[int] | None = None) -> None:
-    """在數字鍵盤上方顯示注視號集合。"""
+    """在數字鍵盤上方顯示分組注視號。"""
 
     if not watch_map:
         return
 
     extra_watch_nums = extra_watch_nums or []
-    group_parts = [
-        f"{group_name}:{format_nums(nums)}"
-        for group_name, nums in watch_map.items()
-        if nums
-    ]
-    all_watch_nums = sorted({num for nums in watch_map.values() for num in nums} | set(extra_watch_nums))
-    if not group_parts or not all_watch_nums:
-        return
+    lines: list[str] = []
+    for group_name in ["1-9", "10-20", "21-31"]:
+        nums = list(watch_map.get(group_name, []))
+        for num in extra_watch_nums:
+            if num not in nums and group_name == get_group_name_for_num(num):
+                nums.append(num)
+        if nums:
+            text = "，".join(f"{num}[特]" if num in extra_watch_nums else str(num) for num in nums)
+            lines.append(f'<div class="a1-watch-pick-line">[{group_name}]：{text}</div>')
 
-    st.markdown(
-        f'<div class="a1-line">1-31 預測注視號：{format_nums(all_watch_nums)} '
-        f'/> {len(all_watch_nums)} 球</div>'
-        f'<div class="a1-muted">分組注視球：</div>'
-        f'<div class="a1-muted">{" ｜ ".join(group_parts)}</div>',
-        unsafe_allow_html=True,
-    )
+    if lines:
+        st.markdown("".join(lines), unsafe_allow_html=True)
+
+
+def get_group_name_for_num(num: int) -> str:
+    for group_name, start_num, end_num in BIRTHDAY_GROUPS.values():
+        if start_num <= num <= end_num:
+            return group_name
+    return ""
 
 
 def render_dim_numbers_hint(dim_numbers: list[int]) -> None:
     if not dim_numbers:
         return
-    st.caption(f"灰色號碼 = 目前分析冷門球號：{', '.join(str(num) for num in dim_numbers)}，仍可選取。")
+    st.markdown(
+        f'<div class="a1-cold-pick-note">灰色下期投注冷門球號碼：</div>'
+        f'<div class="a1-cold-pick-note">{", ".join(str(num) for num in dim_numbers)}，仍可選取。</div>',
+        unsafe_allow_html=True,
+    )
 
 
 def load_next_draw_date() -> str:
@@ -447,6 +456,12 @@ def load_next_draw_date() -> str:
     if not rows:
         return ""
     return rows[-1].get("next_draw_date", "").strip()
+
+
+def has_admin_bet_records() -> bool:
+    if not ADMIN_BET_CSV.exists():
+        return False
+    return any(read_csv_rows(ADMIN_BET_CSV))
 
 
 def init_admin_bet_state() -> None:
@@ -458,6 +473,7 @@ def init_admin_bet_state() -> None:
     st.session_state.setdefault("admin_leg_reset_token", 0)
     st.session_state.setdefault("admin_pick_mode", "膽")
     st.session_state.setdefault("admin_saved_notice", "")
+    st.session_state.setdefault("admin_show_saved_records", has_admin_bet_records())
 
 
 def reset_admin_bet_state() -> None:
@@ -468,6 +484,21 @@ def reset_admin_bet_state() -> None:
     st.session_state["admin_banker_reset_token"] += 1
     st.session_state["admin_leg_reset_token"] += 1
     st.session_state["admin_saved_notice"] = ""
+
+
+def reset_admin_bet_picker_state() -> None:
+    st.session_state["admin_standard_nums"] = []
+    st.session_state["admin_banker_nums"] = []
+    st.session_state["admin_leg_nums"] = []
+    st.session_state["admin_standard_reset_token"] += 1
+    st.session_state["admin_banker_reset_token"] += 1
+    st.session_state["admin_leg_reset_token"] += 1
+
+
+def reset_admin_bet_type_state() -> None:
+    reset_admin_bet_state()
+    bet_type = st.session_state.get("admin_bet_type", "單式")
+    st.session_state["admin_bet_unit"] = 10 if bet_type == "單式" else 5
 
 
 def write_admin_bet_record(record: dict[str, str]) -> None:
@@ -670,10 +701,15 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
         ["單式", "複式", "膽拖"],
         horizontal=True,
         key="admin_bet_type",
-        on_change=reset_admin_bet_state,
+        on_change=reset_admin_bet_type_state,
     )
 
-    bet_unit = int(st.selectbox("每注金額", [5, 10], index=0, format_func=lambda value: f"${value}", key="admin_bet_unit"))
+    st.session_state.setdefault("admin_bet_unit", 10 if bet_type == "單式" else 5)
+    if bet_type == "單式" and st.session_state["admin_bet_unit"] == 5:
+        st.session_state["admin_bet_unit"] = 10
+    elif bet_type in {"複式", "膽拖"} and st.session_state["admin_bet_unit"] == 10:
+        st.session_state["admin_bet_unit"] = 5
+    bet_unit = int(st.selectbox("每注金額", [5, 10], format_func=lambda value: f"${value}", key="admin_bet_unit"))
     saved_notice = st.session_state.get("admin_saved_notice", "")
     can_save = False
     record: dict[str, str] | None = None
@@ -681,10 +717,9 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
     if bet_type in {"單式", "複式"}:
         max_select = 6 if bet_type == "單式" else int(st.selectbox("複式球數", list(range(7, 16)), key="admin_multiple_size"))
         nums = sorted(int(num) for num in st.session_state["admin_standard_nums"])[:max_select]
-        render_ball_box("球圖框", nums)
+        ball_box = st.empty()
         render_dim_numbers_hint(dim_numbers)
         render_watch_numbers_hint(watch_map, st.session_state.get("admin_extra_watch_nums", []))
-        st.caption("輸入按鈕 1-31")
         selected = number_picker(
             selected=nums,
             max_select=max_select,
@@ -697,7 +732,8 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
         if nums != st.session_state["admin_standard_nums"]:
             st.session_state["admin_standard_nums"] = nums
             st.session_state["admin_saved_notice"] = ""
-            st.rerun()
+        with ball_box.container():
+            render_ball_box("球圖框", nums)
         can_save = bool(bet_date) and len(nums) == max_select
         record = build_admin_record(bet_date, bet_type, bet_unit, nums)
     else:
@@ -706,10 +742,9 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
         leg_count = int(st.selectbox("配腳數", list(range(min_leg_count, 50 - banker_count)), key="admin_leg_count", on_change=reset_admin_bet_state))
         bankers = sorted(int(num) for num in st.session_state["admin_banker_nums"])[:banker_count]
         legs = sorted(int(num) for num in st.session_state["admin_leg_nums"] if int(num) not in bankers)[:leg_count]
-        render_ball_box("球圖框", [], bankers=bankers, legs=legs)
+        ball_box = st.empty()
         render_dim_numbers_hint(dim_numbers)
         render_watch_numbers_hint(watch_map, st.session_state.get("admin_extra_watch_nums", []))
-        st.caption("輸入按鈕 1-31")
         pick_mode = st.radio("選號模式", ["膽", "配腳"], horizontal=True, key="admin_pick_mode")
 
         if pick_mode == "膽":
@@ -726,7 +761,8 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
                 st.session_state["admin_banker_nums"] = new_bankers
                 st.session_state["admin_leg_nums"] = [num for num in legs if num not in new_bankers]
                 st.session_state["admin_saved_notice"] = ""
-                st.rerun()
+                bankers = new_bankers
+                legs = [num for num in legs if num not in new_bankers]
         else:
             selected = number_picker(
                 selected=legs,
@@ -741,7 +777,10 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
             if new_legs != legs:
                 st.session_state["admin_leg_nums"] = new_legs
                 st.session_state["admin_saved_notice"] = ""
-                st.rerun()
+                legs = new_legs
+
+        with ball_box.container():
+            render_ball_box("球圖框", [], bankers=bankers, legs=legs)
 
         can_save = bool(bet_date) and len(bankers) == banker_count and len(legs) == leg_count
         record = build_admin_record(bet_date, bet_type, bet_unit, sorted(bankers + legs), bankers, legs)
@@ -758,13 +797,16 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
     if cols[1].button("存檔", type="primary", width="stretch", disabled=not can_save):
         assert record is not None
         write_admin_bet_record(record)
+        reset_admin_bet_picker_state()
         st.session_state["admin_saved_notice"] = f"已存檔：{render_admin_record_line(record)}"
+        st.session_state["admin_show_saved_records"] = True
         st.rerun()
 
     if saved_notice:
         st.success(saved_notice)
-    render_admin_bet_records()
-    render_admin_bet_manager()
+    if st.checkbox("顯示已存投注紀錄 / 刪除管理", key="admin_show_saved_records"):
+        render_admin_bet_records()
+        render_admin_bet_manager()
 
 
 def render_recent_combo(rows: list[dict[str, str]]) -> None:

@@ -16,7 +16,7 @@ BEST_PARAMS_JSON = JSON_DIR / "C2_v4_best_params.json"
 NEXTDRAW_CSV = BET_DATA_DIR / "C2_v4_nextdraw_pred.csv"
 
 # 第一步：只驗證回測窗口期及 prize3 取樣資料。
-BACKTEST_DRAW_COUNT_LIST = [6]
+BACKTEST_DRAW_COUNT_LIST = [30]
 # 窗口期 必須大於 TOP_PRIZE_DRAW_COUNT_LIST ＝7 X 3 倍= 21期 
 WINDOW_DRAW_COUNT_LIST = [21,28]
 TOP_PRIZE_DRAW_COUNT_LIST = [5,7] # 窗口期，3獎中獎注數最多前N期
@@ -49,22 +49,22 @@ DATE_RECENT_SCORE_PROFILE_LIST = [
     [10, 8, 6, 3, 2, 1, 1],
 ]
 HIT_SCORE_WEIGHT = {
-    6.0: 80,
-    5.5: 60,
-    5.0: 45,
-    4.5: 25,
-    4.0: 20,
-    3.5: 10,
-    3.0: 8,
-    2.5: 3,
-    2.0: 2,
-    1.5: 1,
+    6.0: 500,   # 一獎級：6 正號
+    5.5: 320,   # 二獎級：5 正號 + 特號，必須明顯高於 5.0
+    5.0: 220,   # 三獎級：5 正號
+    4.5: 120,   # 四獎級：4 正號 + 特號
+    4.0: 90,    # 五獎級：4 正號
+    3.5: 10,    # 六獎級：多數投注組合只作輔助參考
+    3.0: 5,     # 七獎級：投注 9 球時通常不足以代表盈利
+    2.5: 0,
+    2.0: 0,
+    1.5: 0,
     1.0: 0,
     0.5: 0,
-    0.0: -3,
+    0.0: -50,
 }
 SHOW_TOP_RANK_COUNT = 10  # JSON 只保留前 N 名，避免檔案太大
-PRINT_ALL_RANK_ROWS = False  # True 顯示全部回測參數組合；False 只顯示前 SHOW_TOP_RANK_COUNT 名
+PRINT_ALL_RANK_ROWS = True  # True 顯示全部回測參數組合；False 只顯示前 SHOW_TOP_RANK_COUNT 名
 # end 第四步參數驗證
 
 # 以下是程式內部使用中的參數，由多參數回測或 JSON 最佳組合自動套入。
@@ -642,9 +642,9 @@ def run_param_backtests(draws: list[DrawRow]) -> list[dict[str, object]]:
     return sorted(
         results,
         key=lambda item: (
-            -to_float(item["score"]),
             -to_int(item["hit_5_plus"]),
             -to_int(item["hit_4_plus"]),
+            -to_float(item["score"]),
             -to_int(item["hit_3_plus"]),
             to_int(item["zero_hit"]),
             to_int(item["window_count"]),
