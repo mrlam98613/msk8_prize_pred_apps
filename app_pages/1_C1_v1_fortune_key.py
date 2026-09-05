@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 import html
 import importlib.util
 import sys
@@ -93,11 +94,11 @@ def build_setting_rows(
     c1,
 ) -> list[dict[str, object]]:
     return [
-        {"項目": "回測期數", "設定": ", ".join(str(num) for num in backtest_counts)},
-        {"項目": "窗口期數", "設定": ", ".join(str(num) for num in window_counts)},
-        {"項目": "3獎注數前N期", "設定": ", ".join(str(num) for num in top_prize_counts)},
+        {"項目": "回測期數（預設 12、24）", "設定": ", ".join(str(num) for num in backtest_counts)},
+        {"項目": "採樣窗口期（預設 21、36）", "設定": ", ".join(str(num) for num in window_counts)},
+        {"項目": "3獎注數最多前期數（預設 7）", "設定": ", ".join(str(num) for num in top_prize_counts)},
         {"項目": "分組", "設定": "1-9 / 10-20 / 21-31"},
-        {"項目": "取樣條件", "設定": f"每組生日號 {c1.MATCH_MODE}{c1.MATCH_COUNT} 球，按 prize{c1.PRIZE_OPTION} 中獎注數排序"},
+        {"項目": "取樣條件", "設定": f"每組生日號 {c1.MATCH_MODE}{c1.MATCH_COUNT} 球，按三獎中獎注數排序"},
         {"項目": "配額列表", "設定": ", ".join(c1.format_quota(quota) for quota in c1.GROUP_QUOTA_LIST)},
     ]
 
@@ -110,25 +111,35 @@ def build_ranking_rows(ranking: list[dict[str, object]]) -> list[dict[str, objec
                 "排名": rank,
                 "回測期": to_int(item.get("backtest_draw_count")),
                 "窗口期": to_int(item.get("window_draw_count")),
-                "prize前N": to_int(item.get("top_prize_draw_count")),
+                "三獎前N期": to_int(item.get("top_prize_draw_count")),
                 "配額": str(item.get("group_quota_text", "")),
                 "5球+": to_int(item.get("hit_5_or_above")),
                 "4球+": to_int(item.get("hit_4_or_above")),
                 "3球+": to_int(item.get("hit_3_or_above")),
                 "0球": to_int(item.get("zero_count")),
-                "分數": to_float(item.get("score")),
+                "0球率": f"{to_float(item.get('zero_rate')) * 100:.1f}%",
+                "累積分數": to_float(item.get("score")),
             }
         )
     return rows
 
 
+def format_bet_date(date_text: str) -> str:
+    weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+    try:
+        date_value = datetime.strptime(date_text, "%Y-%m-%d")
+    except ValueError:
+        return date_text
+    return f"{date_text}（{weekdays[date_value.weekday()]}）"
+
+
 def render_prediction(c1, bet_date: str, predictions: dict[str, list[int]], best: dict[str, object]) -> None:
     candidate_pool = sorted({num for nums in predictions.values() for num in nums})
-    st.markdown("### C1_v1 下期預測")
+    st.markdown("### 下期預測")
     st.markdown(
         f"已讀入最佳參數：回測期 `{to_int(best.get('backtest_draw_count'))}`，"
         f"窗口期 `{to_int(best.get('window_draw_count'))}`，"
-        f"prize前 `{to_int(best.get('top_prize_draw_count'))}` 期，"
+        f"三獎前 `{to_int(best.get('top_prize_draw_count'))}` 期，"
         f"配額 `{best.get('group_quota_text', '')}`，"
         f"分數 `{to_float(best.get('score')):g}`"
     )
@@ -139,7 +150,12 @@ def render_prediction(c1, bet_date: str, predictions: dict[str, list[int]], best
         pred_rows.append({"分組": name, "預測球": format_nums(nums), "球數": len(nums)})
     render_html_table(pred_rows)
 
-    st.markdown(f"下期開獎日期：`{bet_date}`")
+    display_bet_date = html.escape(format_bet_date(bet_date))
+    st.markdown(
+        f"<div style=\"font-size:1.35rem;font-weight:800;margin:1rem 0 0.75rem;\">"
+        f"下期開獎日期：{display_bet_date}</div>",
+        unsafe_allow_html=True,
+    )
     st.markdown(
         f"預測：{format_nums(predictions.get('1-9', []))},"
         f"{format_nums(predictions.get('10-20', []))},"
@@ -151,8 +167,8 @@ def render_prediction(c1, bet_date: str, predictions: dict[str, list[int]], best
 
 
 def reset_c1_inputs() -> None:
-    st.session_state["c1_v1_backtest_draw_count_list"] = "30"
-    st.session_state["c1_v1_window_draw_count_list"] = "27,28"
+    st.session_state["c1_v1_backtest_draw_count_list"] = "12,24"
+    st.session_state["c1_v1_window_draw_count_list"] = "21,36"
     st.session_state["c1_v1_top_prize_draw_count_list"] = "7"
     st.session_state["c1_v1_show_result"] = False
 
@@ -162,8 +178,8 @@ def show_c1_backtest() -> None:
 
 
 def init_c1_state() -> None:
-    st.session_state.setdefault("c1_v1_backtest_draw_count_list", "30")
-    st.session_state.setdefault("c1_v1_window_draw_count_list", "27,28")
+    st.session_state.setdefault("c1_v1_backtest_draw_count_list", "12,24")
+    st.session_state.setdefault("c1_v1_window_draw_count_list", "21,36")
     st.session_state.setdefault("c1_v1_top_prize_draw_count_list", "7")
     st.session_state.setdefault("c1_v1_show_result", False)
 
@@ -173,30 +189,64 @@ def main() -> None:
     from typing import Any
     c1: Any = load_c1_module()
     
-    st.title("C1_v1 Fortune Key")
+    st.title("財庫鎖匙查詢")
+    st.markdown(
+        """
+        <style>
+        [data-testid="stTextInput"] input {
+            background-color: #eaf3ff !important;
+            border: 2px solid #3b82f6 !important;
+            color: #111827 !important;
+            font-weight: 700 !important;
+        }
+        [data-testid="stTextInput"] > div {
+            background-color: #eaf3ff !important;
+            border-radius: 8px !important;
+        }
+        [data-testid="stTextInput"] input:focus {
+            background-color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+        }
+        [data-testid="stTextInput"] label {
+            color: #1d4ed8 !important;
+            font-weight: 800 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     # c1 = load_c1_module() # type: ignore[assignment]
 
-    
-    
-    st.markdown("### 參數選項")
     init_c1_state()
     backtest_counts = parse_int_list(
-        st.text_input("BACKTEST_DRAW_COUNT_LIST", key="c1_v1_backtest_draw_count_list"),
-        [30],
+        st.text_input("回測期數", key="c1_v1_backtest_draw_count_list"),
+        [12, 24],
     )
     window_counts = parse_int_list(
-        st.text_input("WINDOW_DRAW_COUNT_LIST", key="c1_v1_window_draw_count_list"),
-        [27, 28],
+        st.text_input(
+            "採樣窗口期（最少 21 期起）",
+            key="c1_v1_window_draw_count_list",
+            help="採樣窗口期最少 21 期起，可輸入多個期數，例如：21,36",
+        ),
+        [21, 36],
     )
+    invalid_window_counts = [count for count in window_counts if count < 21]
+    if invalid_window_counts:
+        st.error(
+            f"採樣窗口期最少 21 期起，目前輸入：{', '.join(str(count) for count in invalid_window_counts)}。"
+        )
+        return
+
     top_prize_counts = parse_int_list(
-        st.text_input("TOP_PRIZE_DRAW_COUNT_LIST", key="c1_v1_top_prize_draw_count_list"),
+        st.text_input("三獎注數最多前期數", key="c1_v1_top_prize_draw_count_list"),
         [7],
     )
 
     button_cols = st.columns(2)
     button_cols[0].button("顯示回測", type="primary", width="stretch", on_click=show_c1_backtest)
     button_cols[1].button(
-        "Reset",
+        "重設",
         type="secondary",
         width="stretch",
         on_click=reset_c1_inputs,
@@ -219,21 +269,22 @@ def main() -> None:
         return
 
     best, ranking, best_rows = c1.run_auto_backtest(draws)
-    c1.save_json(best, ranking)
+    c1.save_json(best, ranking, best_rows)
     c1.save_backtest_check_csv(best_rows)
-    predictions = c1.predict_next(draws, best)
+    best_params = c1.load_best_params()
+    predictions = c1.predict_next(draws, best_params)
     bet_date = c1.read_next_draw_date()
     c1.save_nextdraw_pred_csv(bet_date, predictions)
 
-    st.markdown("### C1_v1 簡化回測設定")
+    st.markdown("### 簡化回測設定")
     render_html_table(build_setting_rows(backtest_counts, window_counts, top_prize_counts, c1))
 
-    st.markdown("### C1_v1 多期回測參數比較")
+    st.markdown("### 多期回測參數比較")
     render_html_table(build_ranking_rows(ranking))
     st.success(
         f"最佳組合：回測期 {to_int(best.get('backtest_draw_count'))}，"
         f"窗口期 {to_int(best.get('window_draw_count'))}，"
-        f"prize前 {to_int(best.get('top_prize_draw_count'))} 期，"
+        f"三獎前 {to_int(best.get('top_prize_draw_count'))} 期，"
         f"配額 {best.get('group_quota_text', '')}，"
         f"5球以上 {to_int(best.get('hit_5_or_above'))} 期，"
         f"4球以上 {to_int(best.get('hit_4_or_above'))} 期，"

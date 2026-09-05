@@ -32,21 +32,21 @@ PAGES = [
     #     "icon": "🎯",
     #     "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
     # },
+    # {
+    #     "label": "B1V1_生日號-回測窗口期最佳化",
+    #     "icon": "🎯",
+    #     "path": CONTENT_DIR / "1_B1_v1.py",
+    # },
     {
-        "label": "B1V1_生日號-回測窗口期最佳化",
-        "icon": "🎯",
-        "path": CONTENT_DIR / "1_B1_v1.py",
-    },
-    {
-        "label": "C1V1 財庫密碼-回測窗口期最佳化",
+        "label": "C1_v1財庫鎖匙查詢",
         "icon": "🔑",
         "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
     },
-    {
-        "label": "B0V4_生日號-回測中獎分析",
-        "icon": "📊",
-        "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",
-    },
+    # {
+    #     "label": "B0V4_生日號-回測中獎分析",
+    #     "icon": "📊",
+    #     "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",
+    # },
     {
         "label": "生日號中獎號碼-組合特色分析",
         "icon": "💰",

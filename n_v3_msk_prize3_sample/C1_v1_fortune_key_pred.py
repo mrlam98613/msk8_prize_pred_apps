@@ -21,17 +21,17 @@ NEXTDRAW_PRED_CSV = BET_DATA_DIR / "C1_v1_nextdraw_pred.csv"
 BACKTEST_CHECK_CSV = BET_DATA_DIR / "C1_v1_backtest_check_rows.csv"
 
 # 簡化版只保留核心列表；回測會自動選最佳組合，再給預測模式讀入。
-BACKTEST_DRAW_COUNT_LIST = [30]
-WINDOW_DRAW_COUNT_LIST = [21,27, 28]
+BACKTEST_DRAW_COUNT_LIST = [6,12,21]
+WINDOW_DRAW_COUNT_LIST = [21, 36, 50]
 TOP_PRIZE_DRAW_COUNT_LIST = [7]
 PRIZE_OPTION = 3
 MATCH_COUNT = 2
 MATCH_MODE = ">="
 GROUP_QUOTA_LIST = [
     (3, 3, 3),
-    (2, 2, 3),
-    (2, 3, 2),
-    (3, 2, 2),
+    # (2, 2, 3),
+    # (2, 3, 2),
+    # (3, 2, 2),
 ]
 GROUPS = {
     1: ("1-9", 1, 9),
@@ -246,24 +246,24 @@ def run_backtest_once(
 ) -> list[BacktestRow]:
     if len(draws) <= window_count + 1:
         return []
-    last_target_index = len(draws) - 2
-    first_target_index = max(window_count, last_target_index - backtest_count + 1)
-    target_indices = list(range(first_target_index, last_target_index + 1))
-    total_targets = len(target_indices)
+    last_check_index = len(draws) - 1
+    first_check_index = max(window_count, last_check_index - backtest_count + 1)
+    check_indices = list(range(first_check_index, last_check_index + 1))
+    total_targets = len(check_indices)
     result_rows: list[BacktestRow] = []
     quotas = quota_to_map(quota_tuple)
 
-    for display_index, target_index in enumerate(target_indices, start=1):
+    for display_index, check_index in enumerate(check_indices, start=1):
         predictions: dict[str, list[int]] = {}
         for group_id in GROUPS:
-            samples = build_window_samples(draws, target_index, group_id, window_count)
+            samples = build_window_samples(draws, check_index, group_id, window_count)
             predictions[group_name(group_id)] = build_group_prediction(
                 samples,
                 group_id,
                 top_prize_count,
                 quotas[group_id],
             )
-        check_row = draws[target_index + 1]
+        check_row = draws[check_index]
         result_rows.append(check_prediction(check_row, predictions, total_targets - display_index + 1))
     return result_rows
 
@@ -289,19 +289,31 @@ def summarize_result(
     backtest_rows: list[BacktestRow],
 ) -> dict[str, object]:
     counts = exact_counts(backtest_rows)
+    total_count = len(backtest_rows)
+    hit_5_or_above = sum(count for level, count in counts.items() if level >= 5)
+    hit_4_or_above = sum(count for level, count in counts.items() if level >= 4)
+    hit_3_or_above = sum(count for level, count in counts.items() if level >= 3)
+    zero_count = counts.get(0, 0)
+    score = model_score(counts)
     return {
         "backtest_draw_count": backtest_count,
         "window_draw_count": window_count,
         "top_prize_draw_count": top_prize_count,
         "group_quota": list(quota_tuple),
         "group_quota_text": format_quota(quota_tuple),
-        "total_count": len(backtest_rows),
-        "hit_5_or_above": sum(count for level, count in counts.items() if level >= 5),
-        "hit_4_or_above": sum(count for level, count in counts.items() if level >= 4),
-        "hit_3_or_above": sum(count for level, count in counts.items() if level >= 3),
-        "zero_count": counts.get(0, 0),
-        "score": model_score(counts),
+        "total_count": total_count,
+        "hit_5_or_above": hit_5_or_above,
+        "hit_4_or_above": hit_4_or_above,
+        "hit_3_or_above": hit_3_or_above,
+        "zero_count": zero_count,
+        "hit_5_rate": hit_5_or_above / total_count if total_count else 0.0,
+        "hit_4_rate": hit_4_or_above / total_count if total_count else 0.0,
+        "hit_3_rate": hit_3_or_above / total_count if total_count else 0.0,
+        "zero_rate": zero_count / total_count if total_count else 0.0,
+        "average_score": score / total_count if total_count else 0.0,
+        "score": score,
         "exact_counts": {f"{level:g}": count for level, count in counts.items()},
+        "check_dates": [row["check_date"] for row in backtest_rows],
     }
 
 
@@ -309,17 +321,91 @@ def sort_summaries(summaries: list[dict[str, object]]) -> list[dict[str, object]
     return sorted(
         summaries,
         key=lambda item: (
-            -to_int(item.get("hit_5_or_above")),
-            -to_int(item.get("hit_4_or_above")),
-            -to_int(item.get("hit_3_or_above")),
-            -to_float(item.get("score")),
-            to_int(item.get("zero_count")),
+            -to_float(item.get("hit_5_rate")),
+            -to_float(item.get("hit_4_rate")),
+            -to_float(item.get("hit_3_rate")),
+            -to_float(item.get("average_score")),
+            to_float(item.get("zero_rate")),
+            -to_int(item.get("total_count")),
             to_int(item.get("backtest_draw_count")),
             to_int(item.get("window_draw_count")),
             to_int(item.get("top_prize_draw_count")),
             str(item.get("group_quota_text", "")),
         ),
     )
+
+
+def load_historical_rankings(current_latest_date: str) -> list[list[dict[str, object]]]:
+    if not JSON_PATH.exists():
+        return []
+    try:
+        data = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []
+    history = data.get("run_history", []) if isinstance(data, dict) else []
+    if not isinstance(history, list):
+        return []
+    rankings: list[list[dict[str, object]]] = []
+    for run in history:
+        if not isinstance(run, dict):
+            continue
+        check_dates = run.get("check_dates", [])
+        if current_latest_date and isinstance(check_dates, list) and current_latest_date in check_dates:
+            continue
+        ranking = run.get("ranking")
+        if isinstance(ranking, list):
+            rankings.append([item for item in ranking if isinstance(item, dict)])
+    return rankings
+
+
+def aggregate_summary_history(
+    current_ranking: list[dict[str, object]],
+    historical_rankings: list[list[dict[str, object]]],
+) -> list[dict[str, object]]:
+    grouped: dict[tuple[int, int, int, str], dict[str, object]] = {}
+    for ranking in [*historical_rankings, current_ranking]:
+        for item in ranking:
+            key = (
+                to_int(item.get("backtest_draw_count")),
+                to_int(item.get("window_draw_count")),
+                to_int(item.get("top_prize_draw_count")),
+                str(item.get("group_quota_text", "")),
+            )
+            if key not in grouped:
+                grouped[key] = {
+                    "backtest_draw_count": key[0],
+                    "window_draw_count": key[1],
+                    "top_prize_draw_count": key[2],
+                    "group_quota": item.get("group_quota", []),
+                    "group_quota_text": key[3],
+                    "total_count": 0,
+                    "hit_5_or_above": 0,
+                    "hit_4_or_above": 0,
+                    "hit_3_or_above": 0,
+                    "zero_count": 0,
+                    "score": 0.0,
+                    "exact_counts": {},
+                }
+            total = to_int(item.get("total_count"))
+            aggregate = grouped[key]
+            aggregate["total_count"] = to_int(aggregate.get("total_count")) + total
+            for field in ["hit_5_or_above", "hit_4_or_above", "hit_3_or_above", "zero_count"]:
+                aggregate[field] = to_int(aggregate.get(field)) + to_int(item.get(field))
+            aggregate["score"] = to_float(aggregate.get("score")) + to_float(item.get("score"))
+            exact_counts = aggregate["exact_counts"]
+            source_counts = item.get("exact_counts", {})
+            if isinstance(exact_counts, dict) and isinstance(source_counts, dict):
+                for level, count in source_counts.items():
+                    exact_counts[str(level)] = to_int(exact_counts.get(str(level))) + to_int(count)
+
+    for aggregate in grouped.values():
+        total = to_int(aggregate.get("total_count"))
+        aggregate["hit_5_rate"] = to_int(aggregate.get("hit_5_or_above")) / total if total else 0.0
+        aggregate["hit_4_rate"] = to_int(aggregate.get("hit_4_or_above")) / total if total else 0.0
+        aggregate["hit_3_rate"] = to_int(aggregate.get("hit_3_or_above")) / total if total else 0.0
+        aggregate["zero_rate"] = to_int(aggregate.get("zero_count")) / total if total else 0.0
+        aggregate["average_score"] = to_float(aggregate.get("score")) / total if total else 0.0
+    return list(grouped.values())
 
 
 def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dict[str, object]], list[BacktestRow]]:
@@ -337,7 +423,9 @@ def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dic
                         summarize_result(backtest_count, window_count, top_prize_count, quota_tuple, rows)
                     )
 
-    ranked = sort_summaries(summaries)
+    latest_date = draws[-1]["date"] if draws else ""
+    historical_rankings = load_historical_rankings(latest_date)
+    ranked = sort_summaries(aggregate_summary_history(summaries, historical_rankings))
     best = ranked[0]
     best_key = (
         to_int(best.get("backtest_draw_count")),
@@ -348,12 +436,34 @@ def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dic
     return best, ranked, backtest_by_key[best_key]
 
 
-def save_json(best: dict[str, object], ranking: list[dict[str, object]]) -> None:
+def save_json(
+    best: dict[str, object],
+    ranking: list[dict[str, object]],
+    backtest_rows: list[BacktestRow],
+) -> None:
     JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
+    previous: dict[str, object] = {}
+    if JSON_PATH.exists():
+        try:
+            loaded = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                previous = loaded
+        except json.JSONDecodeError:
+            previous = {}
+    run_history = previous.get("run_history", [])
+    if not isinstance(run_history, list):
+        run_history = []
+    run_history.append({
+        "check_dates": [row["check_date"] for row in backtest_rows],
+        "ranking": ranking,
+        "best": best,
+        "best_backtest_rows": backtest_rows,
+    })
     data = {
         "model": "C1_v1_simple",
         "best": best,
         "ranking": ranking,
+        "run_history": run_history[-30:],
         "fixed_params": {
             "groups": GROUPS,
             "prize_option": PRIZE_OPTION,
@@ -515,7 +625,7 @@ def main() -> None:
 
     print_backtest_setting()
     best, ranking, best_rows = run_auto_backtest(draws)
-    save_json(best, ranking)
+    save_json(best, ranking, best_rows)
     save_backtest_check_csv(best_rows)
     print_ranking(ranking)
     print(

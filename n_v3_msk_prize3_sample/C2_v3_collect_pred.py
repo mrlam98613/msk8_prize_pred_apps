@@ -535,18 +535,17 @@ def main() -> None:
         raise FileNotFoundError(f"找不到或未能讀取 M6：{M6_CSV}")
 
     print_step_1_setting()
-    last_target_index = len(draws) - 2
+    last_check_index = len(draws) - 1
     for backtest_count in BACKTEST_DRAW_COUNT_LIST:
-        first_target_index = max(0, last_target_index - backtest_count + 1)
-        target_indices = list(range(first_target_index, last_target_index + 1))
-        for target_index in target_indices:
-            target_row = draws[target_index]
-            check_row = draws[target_index + 1]
+        first_check_index = max(0, last_check_index - backtest_count + 1)
+        check_indices = list(range(first_check_index, last_check_index + 1))
+        for check_index in check_indices:
+            check_row = draws[check_index]
             print("====== 回測目標期 ======")
-            print(f"預測參考期：{target_row['date']}，核對期：{check_row['date']}")
+            print(f"核對期：{check_row['date']}")
             print()
             for window_count in WINDOW_DRAW_COUNT_LIST:
-                window_rows = build_window_rows(draws, target_index, window_count)
+                window_rows = build_window_rows(draws, check_index, window_count)
                 print_window_rows(window_rows)
                 for top_prize_count in TOP_PRIZE_DRAW_COUNT_LIST:
                     if not validate_window_top_prize_count(window_count, top_prize_count):

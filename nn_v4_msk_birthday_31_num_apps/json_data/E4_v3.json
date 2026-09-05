@@ -1,0 +1,231 @@
+{
+  "version": "E4_v3",
+  "params": {
+    "backtest_draw_count": 1,
+    "window_draw_count_list": [
+      24
+    ],
+    "pair_select_mode": "bridge",
+    "memory_window_count": 24,
+    "cold_warn_gap": 12,
+    "deep_cold_warn_gap": 18,
+    "include_special_in_cold": true
+  },
+  "best_window": {
+    "window_count": 24,
+    "full_pair_hit_count": 0,
+    "hit_2_count": 0,
+    "hit_1_5_count": 0,
+    "hit_1_count": 0,
+    "hit_0_count": 1,
+    "none_hit_count": 0,
+    "score": -5.0
+  },
+  "window_scores": [
+    {
+      "window_count": 24,
+      "full_pair_hit_count": 0,
+      "hit_2_count": 0,
+      "hit_1_5_count": 0,
+      "hit_1_count": 0,
+      "hit_0_count": 1,
+      "none_hit_count": 0,
+      "score": -5.0
+    }
+  ],
+  "next_prediction": {
+    "best_window": 24,
+    "latest_draw_date": "2026-08-29",
+    "skip_1_9": false,
+    "prediction_pairs": [
+      [
+        7,
+        9
+      ],
+      [
+        5,
+        7
+      ]
+    ],
+    "prediction_nums": [
+      5,
+      7,
+      9
+    ],
+    "deep_cold_nums": [],
+    "top_pair_scores": [
+      {
+        "index": 35,
+        "pair": [
+          7,
+          9
+        ],
+        "hit_count": 3,
+        "wait_count": 4,
+        "single_support": 0,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 113.0
+      },
+      {
+        "index": 28,
+        "pair": [
+          5,
+          7
+        ],
+        "hit_count": 2,
+        "wait_count": 16,
+        "single_support": 1,
+        "cold_nums": [
+          5
+        ],
+        "cold_support": 6,
+        "score": 97.0
+      },
+      {
+        "index": 6,
+        "pair": [
+          1,
+          7
+        ],
+        "hit_count": 4,
+        "wait_count": 3,
+        "single_support": 0,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 51.47
+      },
+      {
+        "index": 11,
+        "pair": [
+          2,
+          5
+        ],
+        "hit_count": 1,
+        "wait_count": 21,
+        "single_support": 1,
+        "cold_nums": [
+          2,
+          5
+        ],
+        "cold_support": 12,
+        "score": 46.5
+      },
+      {
+        "index": 24,
+        "pair": [
+          4,
+          7
+        ],
+        "hit_count": 3,
+        "wait_count": 1,
+        "single_support": 2,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 41.5
+      },
+      {
+        "index": 5,
+        "pair": [
+          1,
+          6
+        ],
+        "hit_count": 1,
+        "wait_count": 18,
+        "single_support": 0,
+        "cold_nums": [
+          6
+        ],
+        "cold_support": 6,
+        "score": 36.0
+      },
+      {
+        "index": 32,
+        "pair": [
+          6,
+          8
+        ],
+        "hit_count": 1,
+        "wait_count": 18,
+        "single_support": 0,
+        "cold_nums": [
+          6
+        ],
+        "cold_support": 6,
+        "score": 36.0
+      },
+      {
+        "index": 13,
+        "pair": [
+          2,
+          7
+        ],
+        "hit_count": 1,
+        "wait_count": 21,
+        "single_support": 0,
+        "cold_nums": [
+          2
+        ],
+        "cold_support": 6,
+        "score": 35.5
+      },
+      {
+        "index": 1,
+        "pair": [
+          1,
+          2
+        ],
+        "hit_count": 1,
+        "wait_count": 14,
+        "single_support": 0,
+        "cold_nums": [
+          2
+        ],
+        "cold_support": 6,
+        "score": 27.67
+      },
+      {
+        "index": 19,
+        "pair": [
+          3,
+          7
+        ],
+        "hit_count": 1,
+        "wait_count": 10,
+        "single_support": 2,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 27.33
+      }
+    ]
+  },
+  "backtest_results": [
+    {
+      "window_count": 24,
+      "check_no": 1,
+      "check_date": "2026-08-29",
+      "check_nums": "[4,7,8]",
+      "skip_1_9": true,
+      "prediction_pairs": [],
+      "prediction_nums": [],
+      "deep_cold_nums": [],
+      "normal_hits": [],
+      "special_hits": [],
+      "hit_score": 0.0,
+      "check_group_score": 3.0,
+      "check_group_nums_count": 3,
+      "random_prediction_nums": [
+        2,
+        6,
+        7,
+        8
+      ],
+      "random_normal_hits": [
+        7,
+        8
+      ],
+      "random_special_hits": [],
+      "random_hit_score": 2.0
+    }
+  ]
+}

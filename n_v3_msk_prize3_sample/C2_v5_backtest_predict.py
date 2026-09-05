@@ -621,9 +621,9 @@ def evaluate_param_set(
     date_score_list: list[int],
 ) -> dict[str, object]:
     set_predict_params(pair_core_score, single_hit_score, date_score_list)
-    last_target_index = len(draws) - 2
-    first_target_index = max(0, last_target_index - backtest_count + 1)
-    target_indices = list(range(first_target_index, last_target_index + 1))
+    last_check_index = len(draws) - 1
+    first_check_index = max(0, last_check_index - backtest_count + 1)
+    check_indices = list(range(first_check_index, last_check_index + 1))
     check_rows: list[dict[str, object]] = []
     score = 0.0
     hit_5_plus = 0
@@ -631,9 +631,9 @@ def evaluate_param_set(
     hit_3_plus = 0
     zero_hit = 0
 
-    for target_index in target_indices:
-        window_rows = build_window_rows(draws, target_index, window_count)
-        check_row = draws[target_index + 1]
+    for check_index in check_indices:
+        window_rows = build_window_rows(draws, check_index, window_count)
+        check_row = draws[check_index]
         if len(window_rows) < window_count or not is_group_sample_enough(window_rows, top_prize_count):
             continue
         group_predictions = build_predictions_for_window(window_rows, top_prize_count)
@@ -835,11 +835,11 @@ def format_group_prediction_text(group_predictions: dict[str, list[int]]) -> str
 
 
 def print_backtest_last_check(draws: list[DrawRow], window_count: int, top_prize_count: int) -> None:
-    if len(draws) < window_count + 2:
+    if len(draws) < window_count + 1:
         return
-    target_index = len(draws) - 2
+    check_index = len(draws) - 1
     check_row = draws[-1]
-    window_rows = build_window_rows(draws, target_index, window_count)
+    window_rows = build_window_rows(draws, check_index, window_count)
     group_predictions = build_predictions_for_window(window_rows, top_prize_count)
     candidate_pool = flatten_predictions(group_predictions)
     hit_score = calc_hit_score(candidate_pool, check_row)
@@ -971,14 +971,14 @@ def build_backtest_detail_rows(
     window_count: int,
     top_prize_count: int,
 ) -> list[dict[str, object]]:
-    last_target_index = len(draws) - 2
-    first_target_index = max(0, last_target_index - backtest_count + 1)
+    last_check_index = len(draws) - 1
+    first_check_index = max(0, last_check_index - backtest_count + 1)
     rows: list[dict[str, object]] = []
-    for target_index in range(first_target_index, last_target_index + 1):
-        window_rows = build_window_rows(draws, target_index, window_count)
+    for check_index in range(first_check_index, last_check_index + 1):
+        window_rows = build_window_rows(draws, check_index, window_count)
         if len(window_rows) < window_count or not is_group_sample_enough(window_rows, top_prize_count):
             continue
-        check_row = draws[target_index + 1]
+        check_row = draws[check_index]
         group_predictions = build_predictions_for_window(window_rows, top_prize_count)
         candidate_pool = flatten_predictions(group_predictions)
         normal_hits, special_hits, hit_score = split_hit_nums(candidate_pool, check_row)
