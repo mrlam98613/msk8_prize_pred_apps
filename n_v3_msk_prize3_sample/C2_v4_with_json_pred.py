@@ -16,11 +16,11 @@ BEST_PARAMS_JSON = JSON_DIR / "C2_v4_best_params.json"
 NEXTDRAW_CSV = BET_DATA_DIR / "C2_v4_nextdraw_pred.csv"
 
 # 第一步：只驗證回測窗口期及 prize3 取樣資料。
-BACKTEST_DRAW_COUNT_LIST = [20]
-BEST_PARAM_SCORE_BACKTEST_COUNT = 30  # 固定用多少期核對結果選最佳參數；避免顯示回測期改變最後一期預測
+BACKTEST_DRAW_COUNT_LIST = [10]
+BEST_PARAM_SCORE_BACKTEST_COUNT = 21  # 固定用多少期核對結果選最佳參數；避免顯示回測期改變最後一期預測
 # 窗口期 必須大於 TOP_PRIZE_DRAW_COUNT_LIST ＝7 X 3 倍= 21期 
-WINDOW_DRAW_COUNT_LIST = [21,28, 36]  # 可選：21,28,36
-TOP_PRIZE_DRAW_COUNT_LIST = [5,7] # 窗口期，3獎中獎注數最多前N期
+WINDOW_DRAW_COUNT_LIST = [18,21,30, 50]  # 可選：21,28,36
+TOP_PRIZE_DRAW_COUNT_LIST = [7] # 窗口期，3獎中獎注數最多前N期
 PRIZE_OPTION = 3 # 目標以每期 3獎中獎注數 取樣驗證
 MATCH_COUNT = 2 # 取樣條件：每開獎期如有生日號 >= 2 球
 MATCH_MODE = ">="

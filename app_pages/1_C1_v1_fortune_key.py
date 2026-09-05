@@ -9,6 +9,7 @@ import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 C1_SCRIPT = PROJECT_ROOT / "n_v3_msk_prize3_sample" / "C1_v1_fortune_key_pred.py"
+WEB_JSON_PATH = PROJECT_ROOT / "n_v3_msk_prize3_sample" / "json_data" / "C1_v1_web_best_params.json"
 
 
 def load_c1_module():
@@ -18,6 +19,7 @@ def load_c1_module():
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
+    setattr(module, "JSON_PATH", WEB_JSON_PATH)
     return module
 
 
@@ -109,16 +111,14 @@ def build_ranking_rows(ranking: list[dict[str, object]]) -> list[dict[str, objec
         rows.append(
             {
                 "排名": rank,
-                "回測期": to_int(item.get("backtest_draw_count")),
+                "參數回測期": to_int(item.get("backtest_draw_count")),
                 "窗口期": to_int(item.get("window_draw_count")),
                 "三獎前N期": to_int(item.get("top_prize_draw_count")),
                 "配額": str(item.get("group_quota_text", "")),
-                "5球+": to_int(item.get("hit_5_or_above")),
-                "4球+": to_int(item.get("hit_4_or_above")),
-                "3球+": to_int(item.get("hit_3_or_above")),
-                "0球": to_int(item.get("zero_count")),
-                "0球率": f"{to_float(item.get('zero_rate')) * 100:.1f}%",
-                "累積分數": to_float(item.get("score")),
+                "5+": to_int(item.get("hit_5_plus_count")),
+                "4+": to_int(item.get("hit_4_plus_count")),
+                "3+": to_int(item.get("hit_3_plus_count")),
+                "分數": to_float(item.get("score")),
             }
         )
     return rows
@@ -225,16 +225,16 @@ def main() -> None:
     )
     window_counts = parse_int_list(
         st.text_input(
-            "採樣窗口期（最少 21 期起）",
+            "採樣窗口期（最少 14 期起）",
             key="c1_v1_window_draw_count_list",
-            help="採樣窗口期最少 21 期起，可輸入多個期數，例如：21,36",
+            help="採樣窗口期最少 14 期起，可輸入多個期數，例如：14,28",
         ),
-        [21, 36],
+        [18, 28],
     )
-    invalid_window_counts = [count for count in window_counts if count < 21]
+    invalid_window_counts = [count for count in window_counts if count < 14]
     if invalid_window_counts:
         st.error(
-            f"採樣窗口期最少 21 期起，目前輸入：{', '.join(str(count) for count in invalid_window_counts)}。"
+            f"採樣窗口期最少 14 期起，目前輸入：{', '.join(str(count) for count in invalid_window_counts)}。"
         )
         return
 

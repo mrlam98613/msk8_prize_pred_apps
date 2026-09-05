@@ -4,6 +4,12 @@ import itertools
 import json
 import sys
 from typing import TypedDict
+'''
+5+ = 5、5.5、6 球
+4+ = 4、4.5 球
+3+ = 3、3.5 球
+
+'''
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -21,9 +27,9 @@ NEXTDRAW_PRED_CSV = BET_DATA_DIR / "C1_v1_nextdraw_pred.csv"
 BACKTEST_CHECK_CSV = BET_DATA_DIR / "C1_v1_backtest_check_rows.csv"
 
 # 簡化版只保留核心列表；回測會自動選最佳組合，再給預測模式讀入。
-BACKTEST_DRAW_COUNT_LIST = [6,12,21]
-WINDOW_DRAW_COUNT_LIST = [21, 36, 50]
-TOP_PRIZE_DRAW_COUNT_LIST = [7]
+BACKTEST_DRAW_COUNT_LIST = [30]
+WINDOW_DRAW_COUNT_LIST = [12,18,21]
+TOP_PRIZE_DRAW_COUNT_LIST = [5,7]
 PRIZE_OPTION = 3
 MATCH_COUNT = 2
 MATCH_MODE = ">="
@@ -295,6 +301,19 @@ def summarize_result(
     hit_3_or_above = sum(count for level, count in counts.items() if level >= 3)
     zero_count = counts.get(0, 0)
     score = model_score(counts)
+    prize_counts = {
+        f"prize_{prize}_count": sum(1 for row in backtest_rows if row["prize_level"] == f"{prize}獎")
+        for prize in range(1, 8)
+    }
+    prize_counts["no_prize_count"] = sum(1 for row in backtest_rows if row["prize_level"] == "未中獎")
+    prize_counts["target_prize_count"] = sum(
+        prize_counts[f"prize_{prize}_count"] for prize in range(3, 8)
+    )
+    grouped_counts = {
+        "hit_5_plus_count": sum(counts.get(level, 0) for level in (5.0, 5.5, 6.0)),
+        "hit_4_plus_count": sum(counts.get(level, 0) for level in (4.0, 4.5)),
+        "hit_3_plus_count": sum(counts.get(level, 0) for level in (3.0, 3.5)),
+    }
     return {
         "backtest_draw_count": backtest_count,
         "window_draw_count": window_count,
@@ -312,6 +331,8 @@ def summarize_result(
         "zero_rate": zero_count / total_count if total_count else 0.0,
         "average_score": score / total_count if total_count else 0.0,
         "score": score,
+        **prize_counts,
+        **grouped_counts,
         "exact_counts": {f"{level:g}": count for level, count in counts.items()},
         "check_dates": [row["check_date"] for row in backtest_rows],
     }
@@ -321,11 +342,12 @@ def sort_summaries(summaries: list[dict[str, object]]) -> list[dict[str, object]
     return sorted(
         summaries,
         key=lambda item: (
-            -to_float(item.get("hit_5_rate")),
-            -to_float(item.get("hit_4_rate")),
-            -to_float(item.get("hit_3_rate")),
-            -to_float(item.get("average_score")),
-            to_float(item.get("zero_rate")),
+            -to_int(item.get("hit_5_plus_count")),
+            -to_int(item.get("hit_4_plus_count")),
+            -to_int(item.get("hit_3_plus_count")),
+            -to_int(item.get("target_prize_count")),
+            to_int(item.get("no_prize_count")),
+            -to_float(item.get("score")),
             -to_int(item.get("total_count")),
             to_int(item.get("backtest_draw_count")),
             to_int(item.get("window_draw_count")),
@@ -362,6 +384,25 @@ def aggregate_summary_history(
     current_ranking: list[dict[str, object]],
     historical_rankings: list[list[dict[str, object]]],
 ) -> list[dict[str, object]]:
+    active_keys = {
+        (
+            to_int(item.get("backtest_draw_count")),
+            to_int(item.get("window_draw_count")),
+            to_int(item.get("top_prize_draw_count")),
+            str(item.get("group_quota_text", "")),
+        )
+        for item in current_ranking
+    }
+    current_by_key: dict[tuple[int, int, int, str], dict[str, object]] = {}
+    for item in current_ranking:
+        current_key = (
+            to_int(item.get("backtest_draw_count")),
+            to_int(item.get("window_draw_count")),
+            to_int(item.get("top_prize_draw_count")),
+            str(item.get("group_quota_text", "")),
+        )
+        current_by_key[current_key] = item
+
     grouped: dict[tuple[int, int, int, str], dict[str, object]] = {}
     for ranking in [*historical_rankings, current_ranking]:
         for item in ranking:
@@ -371,6 +412,8 @@ def aggregate_summary_history(
                 to_int(item.get("top_prize_draw_count")),
                 str(item.get("group_quota_text", "")),
             )
+            if key not in active_keys:
+                continue
             if key not in grouped:
                 grouped[key] = {
                     "backtest_draw_count": key[0],
@@ -405,6 +448,18 @@ def aggregate_summary_history(
         aggregate["hit_3_rate"] = to_int(aggregate.get("hit_3_or_above")) / total if total else 0.0
         aggregate["zero_rate"] = to_int(aggregate.get("zero_count")) / total if total else 0.0
         aggregate["average_score"] = to_float(aggregate.get("score")) / total if total else 0.0
+        current = current_by_key.get((
+            to_int(aggregate.get("backtest_draw_count")),
+            to_int(aggregate.get("window_draw_count")),
+            to_int(aggregate.get("top_prize_draw_count")),
+            str(aggregate.get("group_quota_text", "")),
+        ), {})
+        aggregate["current_total_count"] = to_int(current.get("total_count"))
+        aggregate["current_hit_5_or_above"] = to_int(current.get("hit_5_or_above"))
+        aggregate["current_hit_4_or_above"] = to_int(current.get("hit_4_or_above"))
+        aggregate["current_hit_3_or_above"] = to_int(current.get("hit_3_or_above"))
+        aggregate["current_zero_count"] = to_int(current.get("zero_count"))
+        aggregate["current_score"] = to_float(current.get("score"))
     return list(grouped.values())
 
 
@@ -423,9 +478,7 @@ def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dic
                         summarize_result(backtest_count, window_count, top_prize_count, quota_tuple, rows)
                     )
 
-    latest_date = draws[-1]["date"] if draws else ""
-    historical_rankings = load_historical_rankings(latest_date)
-    ranked = sort_summaries(aggregate_summary_history(summaries, historical_rankings))
+    ranked = sort_summaries(summaries)
     best = ranked[0]
     best_key = (
         to_int(best.get("backtest_draw_count")),
@@ -433,7 +486,25 @@ def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dic
         to_int(best.get("top_prize_draw_count")),
         str(best.get("group_quota_text", "")),
     )
-    return best, ranked, backtest_by_key[best_key]
+    best_rows = backtest_by_key.get(best_key)
+    if best_rows is None:
+        best_quota_raw = best.get("group_quota", GROUP_QUOTA_LIST[0])
+        if isinstance(best_quota_raw, list) and len(best_quota_raw) == len(GROUPS):
+            best_quota: tuple[int, int, int] = (
+                to_int(best_quota_raw[0], 3),
+                to_int(best_quota_raw[1], 3),
+                to_int(best_quota_raw[2], 3),
+            )
+        else:
+            best_quota = GROUP_QUOTA_LIST[0]
+        best_rows = run_backtest_once(
+            draws,
+            to_int(best.get("backtest_draw_count")),
+            to_int(best.get("window_draw_count")),
+            to_int(best.get("top_prize_draw_count")),
+            best_quota,
+        )
+    return best, ranked, best_rows
 
 
 def save_json(
@@ -559,7 +630,7 @@ def print_backtest_setting() -> None:
 
 def print_ranking(ranking: list[dict[str, object]]) -> None:
     print("====== C1_v1 多期回測參數比較 ======")
-    print("排名 | 回測期 | 窗口期 | prize前N | 配額 | 5球+ | 4球+ | 3球+ | 0球 | 分數")
+    print("排名 | 回測期 | 窗口期 | prize前N | 配額 | 5+ | 4+ | 3+ | 分數")
     for rank, item in enumerate(ranking, start=1):
         print(
             f"{rank:>2} | "
@@ -567,10 +638,9 @@ def print_ranking(ranking: list[dict[str, object]]) -> None:
             f"{to_int(item.get('window_draw_count')):>4} | "
             f"{to_int(item.get('top_prize_draw_count')):>7} | "
             f"{str(item.get('group_quota_text', '')):>5} | "
-            f"{to_int(item.get('hit_5_or_above')):>3} | "
-            f"{to_int(item.get('hit_4_or_above')):>3} | "
-            f"{to_int(item.get('hit_3_or_above')):>3} | "
-            f"{to_int(item.get('zero_count')):>2} | "
+            f"{to_int(item.get('hit_5_plus_count')):>2} | "
+            f"{to_int(item.get('hit_4_plus_count')):>2} | "
+            f"{to_int(item.get('hit_3_plus_count')):>2} | "
             f"{to_float(item.get('score')):>5g}"
         )
     print()
