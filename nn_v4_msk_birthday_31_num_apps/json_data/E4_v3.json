@@ -16,10 +16,10 @@
     "full_pair_hit_count": 0,
     "hit_2_count": 0,
     "hit_1_5_count": 0,
-    "hit_1_count": 0,
-    "hit_0_count": 1,
+    "hit_1_count": 1,
+    "hit_0_count": 0,
     "none_hit_count": 0,
-    "score": -5.0
+    "score": 2.0
   },
   "window_scores": [
     {
@@ -27,15 +27,15 @@
       "full_pair_hit_count": 0,
       "hit_2_count": 0,
       "hit_1_5_count": 0,
-      "hit_1_count": 0,
-      "hit_0_count": 1,
+      "hit_1_count": 1,
+      "hit_0_count": 0,
       "none_hit_count": 0,
-      "score": -5.0
+      "score": 2.0
     }
   ],
   "next_prediction": {
     "best_window": 24,
-    "latest_draw_date": "2026-08-29",
+    "latest_draw_date": "2026-09-05",
     "skip_1_9": false,
     "prediction_pairs": [
       [
@@ -52,7 +52,9 @@
       7,
       9
     ],
-    "deep_cold_nums": [],
+    "deep_cold_nums": [
+      6
+    ],
     "top_pair_scores": [
       {
         "index": 35,
@@ -61,11 +63,11 @@
           9
         ],
         "hit_count": 3,
-        "wait_count": 4,
-        "single_support": 0,
+        "wait_count": 5,
+        "single_support": 1,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 113.0
+        "score": 135.0
       },
       {
         "index": 28,
@@ -74,13 +76,13 @@
           7
         ],
         "hit_count": 2,
-        "wait_count": 16,
+        "wait_count": 17,
         "single_support": 1,
         "cold_nums": [
           5
         ],
         "cold_support": 6,
-        "score": 97.0
+        "score": 101.0
       },
       {
         "index": 6,
@@ -89,11 +91,11 @@
           7
         ],
         "hit_count": 4,
-        "wait_count": 3,
+        "wait_count": 4,
         "single_support": 0,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 51.47
+        "score": 54.63
       },
       {
         "index": 11,
@@ -102,14 +104,14 @@
           5
         ],
         "hit_count": 1,
-        "wait_count": 21,
+        "wait_count": 22,
         "single_support": 1,
         "cold_nums": [
           2,
           5
         ],
         "cold_support": 12,
-        "score": 46.5
+        "score": 47.33
       },
       {
         "index": 24,
@@ -118,11 +120,11 @@
           7
         ],
         "hit_count": 3,
-        "wait_count": 1,
+        "wait_count": 2,
         "single_support": 2,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 41.5
+        "score": 44.0
       },
       {
         "index": 5,
@@ -131,13 +133,13 @@
           6
         ],
         "hit_count": 1,
-        "wait_count": 18,
+        "wait_count": 19,
         "single_support": 0,
         "cold_nums": [
           6
         ],
-        "cold_support": 6,
-        "score": 36.0
+        "cold_support": 10,
+        "score": 40.83
       },
       {
         "index": 32,
@@ -146,13 +148,13 @@
           8
         ],
         "hit_count": 1,
-        "wait_count": 18,
+        "wait_count": 19,
         "single_support": 0,
         "cold_nums": [
           6
         ],
-        "cold_support": 6,
-        "score": 36.0
+        "cold_support": 10,
+        "score": 40.83
       },
       {
         "index": 13,
@@ -161,13 +163,13 @@
           7
         ],
         "hit_count": 1,
-        "wait_count": 21,
+        "wait_count": 22,
         "single_support": 0,
         "cold_nums": [
           2
         ],
         "cold_support": 6,
-        "score": 35.5
+        "score": 36.33
       },
       {
         "index": 1,
@@ -176,26 +178,26 @@
           2
         ],
         "hit_count": 1,
-        "wait_count": 14,
+        "wait_count": 15,
         "single_support": 0,
         "cold_nums": [
           2
         ],
         "cold_support": 6,
-        "score": 27.67
+        "score": 28.5
       },
       {
-        "index": 19,
+        "index": 34,
         "pair": [
-          3,
-          7
+          7,
+          8
         ],
-        "hit_count": 1,
-        "wait_count": 10,
-        "single_support": 2,
+        "hit_count": 2,
+        "wait_count": 2,
+        "single_support": 0,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 27.33
+        "score": 28.0
       }
     ]
   },
@@ -203,29 +205,41 @@
     {
       "window_count": 24,
       "check_no": 1,
-      "check_date": "2026-08-29",
-      "check_nums": "[4,7,8]",
-      "skip_1_9": true,
-      "prediction_pairs": [],
-      "prediction_nums": [],
+      "check_date": "2026-09-05",
+      "check_nums": "[9]",
+      "skip_1_9": false,
+      "prediction_pairs": [
+        [
+          7,
+          9
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "prediction_nums": [
+        5,
+        7,
+        9
+      ],
       "deep_cold_nums": [],
-      "normal_hits": [],
+      "normal_hits": [
+        9
+      ],
       "special_hits": [],
-      "hit_score": 0.0,
-      "check_group_score": 3.0,
-      "check_group_nums_count": 3,
+      "hit_score": 1.0,
+      "check_group_score": 1.0,
+      "check_group_nums_count": 1,
       "random_prediction_nums": [
+        1,
         2,
-        6,
-        7,
+        3,
         8
       ],
-      "random_normal_hits": [
-        7,
-        8
-      ],
+      "random_normal_hits": [],
       "random_special_hits": [],
-      "random_hit_score": 2.0
+      "random_hit_score": 0.0
     }
   ]
 }

@@ -1,0 +1,877 @@
+{
+  "model": "F5_v2",
+  "best": {
+    "backtest_draw_count": 30,
+    "window_draw_count": 12,
+    "total_count": 30,
+    "hit_4_count": 0,
+    "hit_3_count": 0,
+    "hit_2_count": 6,
+    "hit_1_count": 12,
+    "hit_0_count": 12,
+    "correct_no_prediction_count": 1,
+    "missed_no_prediction_count": 2,
+    "incorrect_prediction_count": 6,
+    "score": 15
+  },
+  "ranking": [
+    {
+      "backtest_draw_count": 30,
+      "window_draw_count": 12,
+      "total_count": 30,
+      "hit_4_count": 0,
+      "hit_3_count": 0,
+      "hit_2_count": 6,
+      "hit_1_count": 12,
+      "hit_0_count": 12,
+      "correct_no_prediction_count": 1,
+      "missed_no_prediction_count": 2,
+      "incorrect_prediction_count": 6,
+      "score": 15
+    },
+    {
+      "backtest_draw_count": 30,
+      "window_draw_count": 18,
+      "total_count": 30,
+      "hit_4_count": 0,
+      "hit_3_count": 0,
+      "hit_2_count": 5,
+      "hit_1_count": 14,
+      "hit_0_count": 11,
+      "correct_no_prediction_count": 0,
+      "missed_no_prediction_count": 2,
+      "incorrect_prediction_count": 7,
+      "score": 9
+    }
+  ],
+  "weights": {
+    "pair_hit_weight": 10.0,
+    "recency_pair_weight": 3.0,
+    "cold_num_weight": 1.5,
+    "max_previous_draw_overlap": 1,
+    "predict_pair_count": 2,
+    "recent_draw_count": 5,
+    "cold_warn_gap": 12,
+    "deep_cold_warn_gap": 18
+  },
+  "backtest_rows": [
+    {
+      "check_date": "2026-06-23",
+      "predictions": [
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          9
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        6,
+        9
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        2
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-06-25",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-06-28",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        5,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        5,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-06-30",
+      "predictions": [
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          9
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        6,
+        9
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-07-02",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        5
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        5
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-05",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        3
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        3
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-07",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        5
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        5
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-09",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        1,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-11",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        5,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 3,
+      "actual_1_9_nums": [
+        2,
+        5,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-14",
+      "predictions": [
+        [
+          1,
+          7
+        ],
+        [
+          4,
+          8
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        7,
+        8
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-07-16",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "candidate_nums": [
+        2,
+        5,
+        7
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-07-21",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "candidate_nums": [
+        2,
+        5,
+        7
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 3,
+      "actual_1_9_nums": [
+        1,
+        6,
+        8
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-23",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "candidate_nums": [
+        2,
+        5,
+        7
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        4,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-25",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        5,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        5,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-28",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        6,
+        7
+      ],
+      "hit_nums": [
+        4,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        4,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-07-30",
+      "predictions": [
+        [
+          5,
+          7
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        5,
+        6,
+        7
+      ],
+      "hit_nums": [
+        1
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        1,
+        2
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-01",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        4,
+        5,
+        7
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        1,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-04",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        4,
+        5,
+        7
+      ],
+      "hit_nums": [
+        4
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        4
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-06",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        7
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        3
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-08",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        7
+      ],
+      "hit_nums": [
+        1,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 3,
+      "actual_1_9_nums": [
+        1,
+        3,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-11",
+      "predictions": [
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        4,
+        5,
+        7
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-08-13",
+      "predictions": [],
+      "candidate_nums": [],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "不發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-15",
+      "predictions": [],
+      "candidate_nums": [],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "不發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        4
+      ],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-08-18",
+      "predictions": [
+        [
+          1,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        7
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 3,
+      "actual_1_9_nums": [
+        7,
+        8,
+        9
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-20",
+      "predictions": [
+        [
+          1,
+          7
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        4,
+        7
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        7,
+        9
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-22",
+      "predictions": [
+        [
+          1,
+          7
+        ],
+        [
+          7,
+          8
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        7,
+        8
+      ],
+      "hit_nums": [
+        7
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        7,
+        9
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-25",
+      "predictions": [
+        [
+          1,
+          7
+        ],
+        [
+          7,
+          8
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        7,
+        8
+      ],
+      "hit_nums": [
+        1,
+        7
+      ],
+      "hit_count": 2,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        1,
+        7
+      ],
+      "allocation_correct": true
+    },
+    {
+      "check_date": "2026-08-27",
+      "predictions": [
+        [
+          7,
+          9
+        ],
+        [
+          7,
+          8
+        ]
+      ],
+      "candidate_nums": [
+        7,
+        8,
+        9
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-08-29",
+      "predictions": [],
+      "candidate_nums": [],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "不發球",
+      "actual_1_9_count": 3,
+      "actual_1_9_nums": [
+        4,
+        7,
+        8
+      ],
+      "allocation_correct": false
+    },
+    {
+      "check_date": "2026-09-05",
+      "predictions": [
+        [
+          7,
+          9
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "candidate_nums": [
+        1,
+        7,
+        9
+      ],
+      "hit_nums": [
+        9
+      ],
+      "hit_count": 1,
+      "prediction_mode": "發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        9
+      ],
+      "allocation_correct": true
+    }
+  ],
+  "next_prediction": {
+    "bet_date": "2026-09-08",
+    "pairs": [
+      [
+        7,
+        9
+      ],
+      [
+        7,
+        8
+      ]
+    ],
+    "candidate_nums": [
+      7,
+      8,
+      9
+    ]
+  }
+}

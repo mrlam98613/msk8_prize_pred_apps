@@ -1,0 +1,846 @@
+{
+  "model": "R1_v1_group_quota_backtest_predict",
+  "groups": {
+    "F": [
+      "1-9",
+      1,
+      9
+    ],
+    "G": [
+      "10-20",
+      10,
+      20
+    ],
+    "H": [
+      "21-31",
+      21,
+      31
+    ]
+  },
+  "base_group_quota": 3,
+  "group_popularity_weight": {
+    "F": 1.2,
+    "G": 1.15,
+    "H": 0.85
+  },
+  "best": {
+    "backtest_draw_count": 30,
+    "window_draw_count": 12,
+    "total": 30,
+    "hit_2_plus_count": 9,
+    "hit_1_count": 8,
+    "hit_0_count": 13,
+    "hit_2_plus_rate": 0.3,
+    "score": 49
+  },
+  "ranking": [
+    {
+      "backtest_draw_count": 30,
+      "window_draw_count": 12,
+      "total": 30,
+      "hit_2_plus_count": 9,
+      "hit_1_count": 8,
+      "hit_0_count": 13,
+      "hit_2_plus_rate": 0.3,
+      "score": 49
+    },
+    {
+      "backtest_draw_count": 30,
+      "window_draw_count": 18,
+      "total": 30,
+      "hit_2_plus_count": 9,
+      "hit_1_count": 8,
+      "hit_0_count": 13,
+      "hit_2_plus_rate": 0.3,
+      "score": 49
+    },
+    {
+      "backtest_draw_count": 30,
+      "window_draw_count": 24,
+      "total": 30,
+      "hit_2_plus_count": 9,
+      "hit_1_count": 8,
+      "hit_0_count": 13,
+      "hit_2_plus_rate": 0.3,
+      "score": 49
+    }
+  ],
+  "backtest_rows": [
+    {
+      "check_date": "2026-06-23",
+      "predicted_quota": {
+        "F": 4,
+        "G": 5,
+        "H": 0
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "G"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 1,
+        "G": 2,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:21.3, F:20.8, H:8.3",
+      "reason": "最近5期：F:5, G:5, H:4；窗口分：G:21.3, F:20.8, H:8.3；上一期未出：H，該組減球；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-06-25",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [
+        "G",
+        "H"
+      ],
+      "hit_route": [
+        "G",
+        "H"
+      ],
+      "hit_count": 2,
+      "check_counts": {
+        "F": 0,
+        "G": 4,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "G:21.3, F:20.9, H:9.6",
+      "reason": "最近5期：F:5, G:5, H:4；窗口分：G:21.3, F:20.9, H:9.6；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-06-28",
+      "predicted_quota": {
+        "F": 0,
+        "G": 5,
+        "H": 4
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 2,
+        "G": 0,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:21.3, F:19.8, H:10.8",
+      "reason": "最近5期：G:5, F:4, H:4；窗口分：G:21.3, F:19.8, H:10.8；上一期未出：F，該組減球；上一期主力：G,H，主力組加權"
+    },
+    {
+      "check_date": "2026-06-30",
+      "predicted_quota": {
+        "F": 4,
+        "G": 1,
+        "H": 4
+      },
+      "predicted_strong": [
+        "F",
+        "H"
+      ],
+      "actual_strong": [
+        "G"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 0,
+        "G": 5,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "F:19.9, G:19.0, H:11.0",
+      "reason": "最近5期：F:4, G:4, H:4；窗口分：F:19.9, G:19.0, H:11.0；上一期未出：G，該組減球"
+    },
+    {
+      "check_date": "2026-07-02",
+      "predicted_quota": {
+        "F": 1,
+        "G": 5,
+        "H": 3
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "G"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 1,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "G:19.1, F:17.6, H:11.3",
+      "reason": "最近5期：G:4, H:4, F:3；窗口分：G:19.1, F:17.6, H:11.3；上一期未出：F，該組減球；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-07-05",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [
+        "G"
+      ],
+      "hit_route": [
+        "G"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 1,
+        "G": 3,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:19.2, F:17.8, H:12.5",
+      "reason": "最近5期：H:5, G:4, F:3；窗口分：G:19.2, F:17.8, H:12.5；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-07-07",
+      "predicted_quota": {
+        "F": 3,
+        "G": 4,
+        "H": 2
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 1,
+        "G": 0,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:19.3, F:18.0, H:13.5",
+      "reason": "最近5期：H:5, G:4, F:3；窗口分：G:19.3, F:18.0, H:13.5；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-07-09",
+      "predicted_quota": {
+        "F": 4,
+        "G": 1,
+        "H": 4
+      },
+      "predicted_strong": [
+        "F",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "H"
+      ],
+      "hit_count": 2,
+      "check_counts": {
+        "F": 2,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.2, G:17.1, H:14.5",
+      "reason": "最近5期：H:5, F:4, G:3；窗口分：F:18.2, G:17.1, H:14.5；上一期未出：G，該組減球"
+    },
+    {
+      "check_date": "2026-07-11",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [
+        "F"
+      ],
+      "hit_route": [
+        "F"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 3,
+        "G": 1,
+        "H": 0
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.4, G:17.2, H:14.6",
+      "reason": "最近5期：H:5, F:4, G:4；窗口分：F:18.4, G:17.2, H:14.6；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-07-14",
+      "predicted_quota": {
+        "F": 5,
+        "G": 4,
+        "H": 0
+      },
+      "predicted_strong": [
+        "F"
+      ],
+      "actual_strong": [
+        "G"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 0,
+        "G": 4,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.6, G:17.4, H:13.0",
+      "reason": "最近5期：F:5, G:4, H:4；窗口分：F:18.6, G:17.4, H:13.0；上一期未出：H，該組減球；上一期主力：F，主力組加權"
+    },
+    {
+      "check_date": "2026-07-16",
+      "predicted_quota": {
+        "F": 1,
+        "G": 5,
+        "H": 3
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 0,
+        "G": 1,
+        "H": 4
+      },
+      "window_count": 12,
+      "route_score_text": "G:17.6, F:16.4, H:13.1",
+      "reason": "最近5期：F:4, G:4, H:4；窗口分：G:17.6, F:16.4, H:13.1；上一期未出：F，該組減球；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-07-21",
+      "predicted_quota": {
+        "F": 0,
+        "G": 4,
+        "H": 5
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "F"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 3,
+        "G": 0,
+        "H": 0
+      },
+      "window_count": 12,
+      "route_score_text": "G:17.8, F:14.3, H:13.2",
+      "reason": "最近5期：G:4, H:4, F:3；窗口分：G:17.8, F:14.3, H:13.2；上一期未出：F，該組減球；上一期主力：H，主力組加權"
+    },
+    {
+      "check_date": "2026-07-23",
+      "predicted_quota": {
+        "F": 5,
+        "G": 2,
+        "H": 1
+      },
+      "predicted_strong": [
+        "F"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 2,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "G:15.7, F:14.7, H:12.5",
+      "reason": "最近5期：G:4, F:3, H:3；窗口分：G:15.7, F:14.7, H:12.5；上一期未出：G,H，該組減球；上一期主力：F，主力組加權"
+    },
+    {
+      "check_date": "2026-07-25",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 2,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "G:16.0, F:15.1, H:12.7",
+      "reason": "最近5期：G:4, F:3, H:3；窗口分：G:16.0, F:15.1, H:12.7；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-07-28",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 2,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:16.7, G:16.3, H:12.8",
+      "reason": "最近5期：G:4, H:4, F:3；窗口分：F:16.7, G:16.3, H:12.8；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-07-30",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 2,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:17.7, F:17.0, H:13.0",
+      "reason": "最近5期：F:4, G:4, H:4；窗口分：G:17.7, F:17.0, H:13.0；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-01",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.5, G:17.9, H:13.1",
+      "reason": "最近5期：F:5, G:4, H:4；窗口分：F:18.5, G:17.9, H:13.1；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-04",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [
+        "G"
+      ],
+      "hit_route": [
+        "G"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 1,
+        "G": 3,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.7, G:18.1, H:13.2",
+      "reason": "最近5期：F:5, G:5, H:5；窗口分：F:18.7, G:18.1, H:13.2；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-06",
+      "predicted_quota": {
+        "F": 3,
+        "G": 4,
+        "H": 2
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 1,
+        "G": 1,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.9, G:18.3, H:13.4",
+      "reason": "最近5期：F:5, G:5, H:5；窗口分：F:18.9, G:18.3, H:13.4；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-08-08",
+      "predicted_quota": {
+        "F": 2,
+        "G": 3,
+        "H": 4
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "F"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 3,
+        "G": 0,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "G:19.6, F:19.1, H:13.5",
+      "reason": "最近5期：F:5, G:5, H:5；窗口分：G:19.6, F:19.1, H:13.5；上一期主力：H，主力組加權"
+    },
+    {
+      "check_date": "2026-08-11",
+      "predicted_quota": {
+        "F": 5,
+        "G": 1,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F"
+      ],
+      "actual_strong": [
+        "G"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 0,
+        "G": 3,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "F:19.3, G:17.4, H:13.7",
+      "reason": "最近5期：F:5, H:5, G:4；窗口分：F:19.3, G:17.4, H:13.7；上一期未出：G，該組減球；上一期主力：F，主力組加權"
+    },
+    {
+      "check_date": "2026-08-13",
+      "predicted_quota": {
+        "F": 1,
+        "G": 5,
+        "H": 3
+      },
+      "predicted_strong": [
+        "G"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 0,
+        "G": 0,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "G:17.6, F:17.1, H:14.7",
+      "reason": "最近5期：H:5, F:4, G:4；窗口分：G:17.6, F:17.1, H:14.7；上一期未出：F，該組減球；上一期主力：G，主力組加權"
+    },
+    {
+      "check_date": "2026-08-15",
+      "predicted_quota": {
+        "F": 2,
+        "G": 1,
+        "H": 5
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [
+        "H"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 1,
+        "G": 2,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "F:16.2, G:15.5, H:14.7",
+      "reason": "最近5期：H:5, F:3, G:3；窗口分：F:16.2, G:15.5, H:14.7；上一期未出：F,G，該組減球；上一期主力：H，主力組加權"
+    },
+    {
+      "check_date": "2026-08-18",
+      "predicted_quota": {
+        "F": 3,
+        "G": 2,
+        "H": 4
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "F"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 3,
+        "G": 1,
+        "H": 0
+      },
+      "window_count": 12,
+      "route_score_text": "F:17.7, G:15.8, H:14.8",
+      "reason": "最近5期：H:5, F:3, G:3；窗口分：F:17.7, G:15.8, H:14.8；上一期主力：H，主力組加權"
+    },
+    {
+      "check_date": "2026-08-20",
+      "predicted_quota": {
+        "F": 5,
+        "G": 4,
+        "H": 0
+      },
+      "predicted_strong": [
+        "F"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F"
+      ],
+      "hit_count": 1,
+      "check_counts": {
+        "F": 2,
+        "G": 2,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "F:17.9, G:17.2, H:14.0",
+      "reason": "最近5期：H:4, F:3, G:3；窗口分：F:17.9, G:17.2, H:14.0；上一期未出：H，該組減球；上一期主力：F，主力組加權"
+    },
+    {
+      "check_date": "2026-08-22",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.1, G:17.4, H:14.1",
+      "reason": "最近5期：G:4, H:4, F:3；窗口分：F:18.1, G:17.4, H:14.1；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-25",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "F",
+        "G",
+        "H"
+      ],
+      "hit_count": 3,
+      "check_counts": {
+        "F": 2,
+        "G": 2,
+        "H": 1
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.3, G:17.6, H:14.2",
+      "reason": "最近5期：F:4, G:4, H:4；窗口分：F:18.3, G:17.6, H:14.2；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-27",
+      "predicted_quota": {
+        "F": 3,
+        "G": 3,
+        "H": 3
+      },
+      "predicted_strong": [
+        "F",
+        "G",
+        "H"
+      ],
+      "actual_strong": [],
+      "hit_route": [
+        "G",
+        "H"
+      ],
+      "hit_count": 2,
+      "check_counts": {
+        "F": 0,
+        "G": 2,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "F:18.5, G:17.8, H:14.2",
+      "reason": "最近5期：F:5, G:5, H:4；窗口分：F:18.5, G:17.8, H:14.2；三組沒有明顯消失或主力，接近平均配額"
+    },
+    {
+      "check_date": "2026-08-29",
+      "predicted_quota": {
+        "F": 1,
+        "G": 4,
+        "H": 4
+      },
+      "predicted_strong": [
+        "G",
+        "H"
+      ],
+      "actual_strong": [
+        "F"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 3,
+        "G": 1,
+        "H": 2
+      },
+      "window_count": 12,
+      "route_score_text": "G:18.0, F:16.3, H:14.3",
+      "reason": "最近5期：G:5, F:4, H:4；窗口分：G:18.0, F:16.3, H:14.3；上一期未出：F，該組減球"
+    },
+    {
+      "check_date": "2026-09-05",
+      "predicted_quota": {
+        "F": 4,
+        "G": 3,
+        "H": 2
+      },
+      "predicted_strong": [
+        "F"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [],
+      "hit_count": 0,
+      "check_counts": {
+        "F": 1,
+        "G": 1,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "G:18.2, F:16.6, H:14.4",
+      "reason": "最近5期：G:5, H:5, F:4；窗口分：G:18.2, F:16.6, H:14.4；上一期主力：F，主力組加權"
+    }
+  ],
+  "next_prediction": {
+    "bet_date": "2026-09-08",
+    "quota": {
+      "F": 2,
+      "G": 3,
+      "H": 4
+    },
+    "quota_text": "F2 + G3 + H4"
+  }
+}
