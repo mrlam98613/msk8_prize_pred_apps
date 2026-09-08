@@ -23,6 +23,7 @@ BASE_GROUP_QUOTA = 3  # 基準配額：F3 + G3 + H3。
 MIN_GROUP_QUOTA = 0
 MAX_GROUP_QUOTA = 5
 STRONG_GROUP_COUNT = 3  # N1..N7 中同組 >=3 球，視為該組主力。
+MIN_TOTAL_CANDIDATE_COUNT = 6  # 最終候選池最少球數；F/G/H 來源不足時會自動補球。
 
 # 投注人氣權重：F/G 較貼近主觀記憶與投注人氣，H 保留但稍降權。
 GROUP_POPULARITY_WEIGHT = {
@@ -420,6 +421,59 @@ def build_fgh_predictions(quota: dict[str, int]) -> list[GroupPrediction]:
     return [read_group_prediction(group_key, quota.get(group_key, 0)) for group_key in GROUPS]
 
 
+def recent_group_candidates(window_rows: list[DrawRow], group_key: str, used_nums: set[int]) -> list[int]:
+    """用預測窗口期內的近期出現次數，為來源不足的分組補球。"""
+
+    _label, start, end = GROUPS[group_key]
+    score_map = {num: 0.0 for num in range(start, end + 1)}
+    total = len(window_rows)
+    for row_index, row in enumerate(window_rows):
+        recent_bonus = (row_index + 1) / total if total else 0.0
+        for num in all_draw_nums(row):
+            if start <= num <= end:
+                score_map[num] += 1.0 + recent_bonus
+    return [
+        num
+        for num, score in sorted(score_map.items(), key=lambda item: (-item[1], item[0]))
+        if score > 0 and num not in used_nums
+    ]
+
+
+def fill_group_prediction_shortage(
+    group_predictions: list[GroupPrediction],
+    window_rows: list[DrawRow],
+) -> None:
+    """當 F5/G1/H1 來源球不足，先補足該組配額，再確保整體最少 6 球。"""
+
+    used_nums = {num for item in group_predictions for num in item["final_candidates"]}
+
+    # 第一輪：有配額但來源不足的分組，先在自己的號碼範圍內補足。
+    for item in group_predictions:
+        quota = item["quota"]
+        if quota <= 0 or len(item["final_candidates"]) >= quota:
+            continue
+        for num in recent_group_candidates(window_rows, item["group_key"], used_nums):
+            if len(item["final_candidates"]) >= quota:
+                break
+            item["final_candidates"].append(num)
+            used_nums.add(num)
+
+    # 第二輪：整合候選池仍少於 6 球，按 R1 配額高低補位。
+    ranked_items = sorted(group_predictions, key=lambda item: (-item["quota"], item["group_key"]))
+    for item in ranked_items:
+        if len(used_nums) >= MIN_TOTAL_CANDIDATE_COUNT:
+            break
+        for num in recent_group_candidates(window_rows, item["group_key"], used_nums):
+            if len(used_nums) >= MIN_TOTAL_CANDIDATE_COUNT:
+                break
+            item["final_candidates"].append(num)
+            used_nums.add(num)
+
+    for item in group_predictions:
+        item["final_candidates"] = sorted(item["final_candidates"])
+        item["shortage_count"] = max(0, item["quota"] - len(item["final_candidates"]))
+
+
 def format_nums(nums: list[int]) -> str:
     return "[" + ",".join(str(num) for num in nums) + "]"
 
@@ -476,6 +530,7 @@ def print_next_prediction(draws: list[DrawRow], best: dict[str, object]) -> tupl
     window_rows = draws[-window_count:]
     quota, predicted_strong, reason, score_text = predict_quota(window_rows)
     group_predictions = build_fgh_predictions(quota)
+    fill_group_prediction_shortage(group_predictions, window_rows)
     final_candidates = [num for item in group_predictions for num in item["final_candidates"]]
     latest_info = route_info(draws[-1])
     print("====== R1_v2 下期分組配額預測 ======")
