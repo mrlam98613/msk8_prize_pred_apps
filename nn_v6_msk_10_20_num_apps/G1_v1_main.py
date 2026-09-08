@@ -12,6 +12,7 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 JSON_PATH = CURRENT_DIR / "json_data" / "G1_v1_best_params.json"
+COLD_REBOUND_JSON_PATH = CURRENT_DIR / "json_data" / "G1_v1_cold_rebound_best.json"
 
 # G1_v1 獨立測試 10-20 分組，不依賴 F5 系列設定。
 GROUP_LABEL = "10-20"
@@ -19,14 +20,14 @@ BIRTHDAY_NUM_MIN = 10
 BIRTHDAY_NUM_MAX = 20
 
 # G1_v1 自動比較的簡化參數。
-BACKTEST_DRAW_COUNT_LIST = [30] # 回測期 
+BACKTEST_DRAW_COUNT_LIST = [6] # 回測期 
 WINDOW_DRAW_COUNT_LIST = [12,18,24] # 窗口期：每期核對前即時計算 12 / 18 / 24 期
 AFTER_NONE_HIT_RATE_THRESHOLD_LIST = [0.50, 0.60, 0.65]
 PREDICT_PAIR_COUNT = 2 # 最多選 2 組雙球，合併後通常是 3-4 球
 RECENT_DRAW_COUNT = 5
 COLD_WARN_GAP = 12 #預設初步 冷號未開期 。
 DEEP_COLD_WARN_GAP = 18 # 預設 深度冷號期。
-DETAIL_DISPLAY_MODE = "simple"  # "detail" 顯示完整分析；"simple" 顯示簡單核對。
+DETAIL_DISPLAY_MODE = "detail"  # "detail" 顯示完整分析；"simple" 顯示簡單核對。
 LOW_SIGNAL_PREDICT_COUNT = 2 # 弱訊號時只發 2 球，減少 10-20 配額消耗
 NORMAL_SIGNAL_PREDICT_COUNT = 3 # 正常訊號時發 3 球
 STRONG_SIGNAL_PREDICT_COUNT = 4 # 強訊號時最多發 4 球
@@ -127,6 +128,24 @@ def read_draws() -> list[DrawRow]:
     return draws
 
 
+def load_cold_rebound_best() -> dict[str, object]:
+    """讀取 G1_v1_cold_rebound.py 產生的最佳冷號門檻。"""
+
+    if not COLD_REBOUND_JSON_PATH.exists():
+        return {}
+    try:
+        data = json.loads(COLD_REBOUND_JSON_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    group = data.get("analysis_group", {})
+    if not isinstance(group, dict) or group.get("key") != "10_20":
+        return {}
+    best = data.get("best", {})
+    return best if isinstance(best, dict) else {}
+
+
 # 只用於預測顯示下一期日期，不參與回測命中計算。
 def read_next_draw_date() -> str:
     rows = read_csv_rows(M4_CSV)
@@ -187,9 +206,10 @@ def cold_numbers(rows: list[DrawRow], gap: int) -> set[int]:
     return set(range(BIRTHDAY_NUM_MIN, BIRTHDAY_NUM_MAX + 1)) - appeared
 
 
-# G1 暫時使用固定冷號門檻；之後可改為讀取 JSON 最佳冷號參數。
 def best_cold_gap() -> int:
-    return COLD_WARN_GAP
+    best = load_cold_rebound_best()
+    gap = to_int(best.get("cold_gap"), COLD_WARN_GAP)
+    return gap if gap > 0 else COLD_WARN_GAP
 
 
 # 雙球組合評分：

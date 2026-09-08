@@ -1503,7 +1503,7 @@
         "group_key": "F",
         "label": "1-9",
         "json_path": "/Users/mrlammac/msk_prize_lotto_pred_apps/nn_v5_msk_1_9_num_apps/json_data/F5_v6_best_params.json",
-        "bet_date": "2026-09-08",
+        "bet_date": "2026-09-10",
         "source_candidates": [
           7,
           9
@@ -1521,10 +1521,10 @@
         "group_key": "G",
         "label": "10-20",
         "json_path": "/Users/mrlammac/msk_prize_lotto_pred_apps/nn_v6_msk_10_20_num_apps/json_data/G1_v1_best_params.json",
-        "bet_date": "2026-09-08",
+        "bet_date": "2026-09-10",
         "source_candidates": [
-          11,
-          13
+          12,
+          17
         ],
         "quota": 0,
         "final_candidates": [],
@@ -1534,11 +1534,11 @@
         "group_key": "H",
         "label": "21-31",
         "json_path": "/Users/mrlammac/msk_prize_lotto_pred_apps/nn_v7_msk_21_31_num_apps/json_data/H1_v1_best_params.json",
-        "bet_date": "2026-09-08",
+        "bet_date": "2026-09-10",
         "source_candidates": [
-          25,
-          29,
-          31
+          26,
+          28,
+          30
         ],
         "quota": 5,
         "final_candidates": [
@@ -1546,7 +1546,7 @@
           26,
           28,
           29,
-          31
+          30
         ],
         "shortage_count": 0
       }
@@ -1560,7 +1560,7 @@
       26,
       28,
       29,
-      31
+      30
     ]
   }
 }

@@ -75,34 +75,6 @@
   ],
   "backtest_rows": [
     {
-      "check_date": "2026-05-05",
-      "predicted_quota": {
-        "F": 5,
-        "G": 1,
-        "H": 3
-      },
-      "predicted_strong": [
-        "F"
-      ],
-      "actual_strong": [
-        "F"
-      ],
-      "hit_route": [
-        "F",
-        "G"
-      ],
-      "hit_count": 2,
-      "hit_ball_count": 5,
-      "check_counts": {
-        "F": 4,
-        "G": 2,
-        "H": 0
-      },
-      "window_count": 12,
-      "route_score_text": "G:17.5, F:17.2, H:15.7",
-      "reason": "最近5期：H:5, F:4, G:4；窗口分：G:17.5, F:17.2, H:15.7；上一期未出：G，該組減球；上一期主力：F，主力組加權"
-    },
-    {
       "check_date": "2026-05-07",
       "predicted_quota": {
         "F": 5,
@@ -1488,15 +1460,43 @@
       "window_count": 12,
       "route_score_text": "G:18.2, F:16.6, H:14.4",
       "reason": "最近5期：G:5, H:5, F:4；窗口分：G:18.2, F:16.6, H:14.4；上一期主力：F，主力組加權"
+    },
+    {
+      "check_date": "2026-09-08",
+      "predicted_quota": {
+        "F": 2,
+        "G": 3,
+        "H": 4
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [
+        "F",
+        "H"
+      ],
+      "hit_count": 2,
+      "hit_ball_count": 4,
+      "check_counts": {
+        "F": 1,
+        "G": 0,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "G:18.4, F:16.9, H:14.4",
+      "reason": "最近5期：G:5, H:5, F:4；窗口分：G:18.4, F:16.9, H:14.4；上一期主力：H，主力組加權"
     }
   ],
   "next_prediction": {
-    "bet_date": "2026-09-08",
+    "bet_date": "2026-09-10",
     "quota": {
-      "F": 2,
-      "G": 3,
-      "H": 4
+      "F": 4,
+      "G": 0,
+      "H": 5
     },
-    "quota_text": "F2 + G3 + H4"
+    "quota_text": "F4 + G0 + H5"
   }
 }
