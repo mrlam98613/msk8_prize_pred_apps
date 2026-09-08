@@ -1,11 +1,17 @@
 from pathlib import Path
 import csv
 import json
+import sys
 from typing import TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from n_v2_msk_prize_31_num_backtest_pred.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
+
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 JSON_PATH = CURRENT_DIR / "json_data" / "R1_v2_route_with_fgh_pred.json"
@@ -478,6 +484,18 @@ def format_nums(nums: list[int]) -> str:
     return "[" + ",".join(str(num) for num in nums) + "]"
 
 
+def print_rbg_candidates(nums: list[int]) -> None:
+    rbg_dict = res_List_To_rbg_Dict_func(nums)
+    color_rows = [
+        ("R", sorted(rbg_dict.get(0, []))),
+        ("B", sorted(rbg_dict.get(1, []))),
+        ("G", sorted(rbg_dict.get(2, []))),
+    ]
+    print("----------------------------------------")
+    for label, color_nums in color_rows:
+        print(f"{label}: {format_nums(color_nums)} /> {len(color_nums)} 球")
+
+
 def group_prediction_map(group_predictions: list[GroupPrediction]) -> dict[str, list[int]]:
     return {item["group_key"]: item["final_candidates"] for item in group_predictions}
 
@@ -521,6 +539,7 @@ def print_fgh_prediction(group_predictions: list[GroupPrediction]) -> list[int]:
             f"採用 {format_nums(item['final_candidates'])}{shortage_text}"
         )
     print(f"整合候選池：{','.join(str(num) for num in all_candidates)} /> {len(all_candidates)} 球")
+    print_rbg_candidates(all_candidates)
     print()
     return all_candidates
 

@@ -37,11 +37,11 @@ PAGES = [
     #     "icon": "🎯",
     #     "path": CONTENT_DIR / "1_B1_v1.py",
     # },
-    {
-        "label": "C1_v1財庫鎖匙查詢",
-        "icon": "🔑",
-        "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
-    },
+    # {
+    #     "label": "C1_v1財庫鎖匙查詢",
+    #     "icon": "🔑",
+    #     "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
+    # },
     {
         "label": "R1V2_分組配額FortuneCode預測",
         "icon": "🧭",
