@@ -42,6 +42,11 @@ PAGES = [
         "icon": "🔑",
         "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
     },
+    {
+        "label": "R1V2_分組配額FortuneCode預測",
+        "icon": "🧭",
+        "path": CONTENT_DIR / "1_R1_v2_Fortune_code_pred.py",
+    },
     # {
     #     "label": "B0V4_生日號-回測中獎分析",
     #     "icon": "📊",

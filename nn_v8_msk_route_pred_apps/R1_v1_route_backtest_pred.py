@@ -12,7 +12,7 @@ JSON_PATH = CURRENT_DIR / "json_data" / "R1_v1_route_best_params.json"
 
 # R1_v1 只分析分組配額路線，不產生具體球號。
 # F = 1-9，G = 10-20，H = 21-31。
-BACKTEST_DRAW_COUNT_LIST = [30]
+BACKTEST_DRAW_COUNT_LIST = [50]
 WINDOW_DRAW_COUNT_LIST = [12, 18, 24]
 RECENT_DRAW_COUNT = 5
 BASE_GROUP_QUOTA = 3  # 基準配額：F3 + G3 + H3。
@@ -53,6 +53,7 @@ class BacktestRow(TypedDict):
     actual_strong: list[str]
     hit_route: list[str]
     hit_count: int
+    hit_ball_count: int
     check_counts: dict[str, int]
     window_count: int
     route_score_text: str
@@ -129,12 +130,24 @@ def route_text(route: list[str]) -> str:
     return "+".join(route) if route else "(00)"
 
 
+def strong_text(route: list[str]) -> str:
+    return "+".join(route) if route else "未達3球"
+
+
 def quota_text(quota: dict[str, int]) -> str:
     return " + ".join(f"{key}{quota.get(key, 0)}" for key in GROUPS)
 
 
 def counts_text(counts: dict[str, int]) -> str:
     return "，".join(f"{key}={counts[key]}" for key in GROUPS)
+
+
+def actual_counts_text(counts: dict[str, int]) -> str:
+    parts: list[str] = []
+    for key in GROUPS:
+        count = counts.get(key, 0)
+        parts.append(f"{key}={count}" if count > 0 else "___")
+    return "，".join(parts)
 
 
 def route_scores(window_rows: list[DrawRow]) -> dict[str, float]:
@@ -223,8 +236,12 @@ def run_backtest_once(draws: list[DrawRow], backtest_count: int, window_count: i
         predicted_quota, predicted_strong, reason, score_text = predict_quota(window_rows)
         actual_info = route_info(check_row)
         actual_strong = strong_groups(actual_info["counts"])
-        actual_target = actual_strong if actual_strong else actual_info["active"]
-        hit_route = [key for key in predicted_strong if key in actual_target]
+        predicted_active = [key for key in GROUPS if predicted_quota.get(key, 0) > 0]
+        hit_route = [key for key in predicted_active if actual_info["counts"].get(key, 0) > 0]
+        hit_ball_count = sum(
+            min(predicted_quota.get(key, 0), actual_info["counts"].get(key, 0))
+            for key in hit_route
+        )
         rows.append({
             "check_date": check_row["date"],
             "predicted_quota": predicted_quota,
@@ -232,6 +249,7 @@ def run_backtest_once(draws: list[DrawRow], backtest_count: int, window_count: i
             "actual_strong": actual_strong,
             "hit_route": hit_route,
             "hit_count": len(hit_route),
+            "hit_ball_count": hit_ball_count,
             "check_counts": actual_info["counts"],
             "window_count": window_count,
             "route_score_text": score_text,
@@ -242,18 +260,21 @@ def run_backtest_once(draws: list[DrawRow], backtest_count: int, window_count: i
 
 def summarize(backtest_count: int, window_count: int, rows: list[BacktestRow]) -> dict[str, object]:
     total = len(rows)
-    hit_2 = sum(row["hit_count"] >= 2 for row in rows)
+    hit_3 = sum(row["hit_count"] == 3 for row in rows)
+    hit_2 = sum(row["hit_count"] == 2 for row in rows)
     hit_1 = sum(row["hit_count"] == 1 for row in rows)
     hit_0 = sum(row["hit_count"] == 0 for row in rows)
-    score = hit_2 * 8 + hit_1 * 2 - hit_0 * 3
+    score = hit_3 * 12 + hit_2 * 8 + hit_1 * 2 - hit_0 * 3
     return {
         "backtest_draw_count": backtest_count,
         "window_draw_count": window_count,
         "total": total,
-        "hit_2_plus_count": hit_2,
+        "hit_3_count": hit_3,
+        "hit_2_count": hit_2,
+        "hit_2_plus_count": hit_3 + hit_2,
         "hit_1_count": hit_1,
         "hit_0_count": hit_0,
-        "hit_2_plus_rate": hit_2 / total if total else 0.0,
+        "hit_2_plus_rate": (hit_3 + hit_2) / total if total else 0.0,
         "score": score,
     }
 
@@ -307,26 +328,32 @@ def print_backtest_rows(rows: list[BacktestRow], best: dict[str, object]) -> Non
         near_index = total - index + 1
         print(
             f"{near_index}，核對期：{row['check_date']}，"
-            f"基準 F3+G3+H3，調整 {quota_text(row['predicted_quota'])}，"
-            f"主力傾向 {route_text(row['predicted_strong'])}，"
-            f"實際 {counts_text(row['check_counts'])}，"
-            f"實際主力 {route_text(row['actual_strong'])}，"
-            f"命中 {route_text(row['hit_route'])} / {row['hit_count']} 組"
+            f"調整 {quota_text(row['predicted_quota'])}，"
+            f"實際 {actual_counts_text(row['check_counts'])}，"
+            f"命中 {route_text(row['hit_route'])} / {row['hit_count']} 組，"
+            f"命中共 /> {row['hit_ball_count']} 球"
         )
-        print(f"  提示：{row['reason']}")
     print()
 
 
 def print_summary(rows: list[BacktestRow]) -> None:
     total = len(rows)
-    hit_2 = sum(row["hit_count"] >= 2 for row in rows)
-    hit_1 = sum(row["hit_count"] == 1 for row in rows)
-    hit_0 = sum(row["hit_count"] == 0 for row in rows)
+    group_hit_counts = {count: sum(row["hit_count"] == count for row in rows) for count in range(3, -1, -1)}
+    ball_hit_counts = {count: sum(row["hit_ball_count"] == count for row in rows) for count in range(7, -1, -1)}
+
+    def line(label: str, count: int) -> str:
+        return f"{label} = {count} 期，{count / total:.2%}" if total else f"{label} = 0 期"
+
     print("====== R1_v1 路線命中率 ======")
     print(f"總回測期數：{total}")
-    print(f"命中 2 組以上：{hit_2} 期，{hit_2 / total:.2%}" if total else "命中 2 組以上：0 期")
-    print(f"命中 1 組：{hit_1} 期，{hit_1 / total:.2%}" if total else "命中 1 組：0 期")
-    print(f"命中 0 組：{hit_0} 期，{hit_0 / total:.2%}" if total else "命中 0 組：0 期")
+    print()
+    print("命中組別統計：")
+    for count in range(3, -1, -1):
+        print(line(f"命中 {count} 組", group_hit_counts[count]))
+    print()
+    print("命中總球數統計：")
+    for count in range(7, -1, -1):
+        print(line(f"{count} 球", ball_hit_counts[count]))
     print()
 
 

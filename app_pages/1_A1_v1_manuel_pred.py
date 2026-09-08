@@ -229,6 +229,47 @@ def build_watch_nums(
     return watch_nums
 
 
+def format_strength_num(num: int, scores: dict[int, int], special_scores: dict[int, int]) -> str:
+    suffix = "[特]" if special_scores.get(num, 0) > 0 else ""
+    return f"{num}({scores[num]}){suffix}"
+
+
+def build_strength_groups(
+    start_num: int,
+    end_num: int,
+    scores: dict[int, int],
+    special_scores: dict[int, int],
+    cold_gaps: dict[int, int],
+) -> dict[str, list[int]]:
+    ranked = sorted(range(start_num, end_num + 1), key=lambda num: (-scores[num], num))
+    cold_nums = [num for num in ranked if scores[num] <= 0]
+    active_nums = [num for num in ranked if scores[num] > 0]
+    return {
+        "strong": active_nums[:3],
+        "middle": active_nums[3:5],
+        "weak": active_nums[5:],
+        "cold": sorted(cold_nums, key=lambda num: (-cold_gaps[num], num)),
+    }
+
+
+def render_strength_groups(
+    start_num: int,
+    end_num: int,
+    scores: dict[int, int],
+    special_scores: dict[int, int],
+    cold_gaps: dict[int, int],
+) -> None:
+    groups = build_strength_groups(start_num, end_num, scores, special_scores, cold_gaps)
+    strong_text = "，".join(format_strength_num(num, scores, special_scores) for num in groups["strong"]) or "-"
+    middle_text = "，".join(format_strength_num(num, scores, special_scores) for num in groups["middle"]) or "-"
+    weak_text = "，".join(format_strength_num(num, scores, special_scores) for num in groups["weak"]) or "-"
+    cold_text = "，".join(f"{num}({cold_gaps[num]}期未出)" for num in groups["cold"]) or "-"
+    st.markdown(f'<div class="a1-line">強：{strong_text}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="a1-line">中：{middle_text}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="a1-line">弱：{weak_text}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="a1-line">冷：{cold_text}</div>', unsafe_allow_html=True)
+
+
 def trend_label(stats_by_period: dict[int, PeriodStats], period_counts: list[int]) -> str:
     def avg_hits(stats: PeriodStats) -> float:
         buckets = stats["buckets"]
@@ -275,12 +316,18 @@ def render_styles() -> None:
         .a1-plus{font-size:20px;font-weight:900;margin:0 5px;color:#111827;}
         .a1-muted{font-size:12px;line-height:1.55;color:#6b7280;margin-bottom:6px;}
         .a1-cold-pick-note{font-size:15px;line-height:1.65;color:#111827;font-weight:700;margin:6px 0 8px 0;}
-        .a1-watch-pick-line{font-size:15px;line-height:1.75;color:#111827;white-space:nowrap;overflow-x:auto;}
+        .a1-watch-pick-line{font-size:15px;line-height:1.75;color:#b91c1c;font-weight:800;white-space:nowrap;overflow-x:auto;}
         .a1-save-status{font-size:13px;line-height:1.6;color:#6b7280;margin:4px 0 6px 0;}
         .a1-tag{display:inline-block;min-width:42px;font-weight:800;color:#0f766e;}
         .a1-hot{color:#b91c1c;font-weight:800;}
         .a1-cold{color:#1d4ed8;font-weight:800;}
         .a1-special{color:#7c3aed;font-weight:800;}
+        .a1-watch-text,
+        .a1-watch-text *{
+            color:#b91c1c !important;
+            -webkit-text-fill-color:#b91c1c !important;
+            font-weight:800 !important;
+        }
         .a1-bar-active{color:#2563eb;font-weight:900;}
         .a1-bar-muted{color:#cbd5e1;font-weight:900;}
         [data-testid="stTextInput"] [data-baseweb="input"] > div {
@@ -331,9 +378,6 @@ def render_group_card(
     scores = build_attention_scores(rows, start_num, end_num, period_counts)
     special_scores = build_special_attention(rows, start_num, end_num, period_counts)
     cold_gaps = build_cold_gaps(rows, start_num, end_num)
-    hot_nums = sorted(scores, key=lambda num: (-scores[num], num))[:3]
-    special_nums = [num for num in sorted(special_scores, key=lambda num: (-special_scores[num], num)) if special_scores[num] > 0][:3]
-    cold_nums = build_cold_nums(rows, start_num, end_num, period_counts)
     watch_nums = build_watch_nums(rows, start_num, end_num, period_counts)
 
     st.markdown('<div class="a1-card">', unsafe_allow_html=True)
@@ -349,21 +393,14 @@ def render_group_card(
             unsafe_allow_html=True,
         )
 
-    hot_text = "，".join(f"{num}({scores[num]})" for num in hot_nums)
-    special_text = "，".join(f"{num}(特{special_scores[num]})" for num in special_nums) if special_nums else "-"
-    cold_text_parts = []
-    for num in cold_nums:
-        special_count = special_scores[num]
-        if special_count > 0:
-            cold_text_parts.append(f"{num}({cold_gaps[num]}期未出｜特號{special_count}次)")
-        else:
-            cold_text_parts.append(f"{num}({cold_gaps[num]}期未出)")
-    cold_text = "，".join(cold_text_parts)
     watch_text = "，".join(f"{num}[特]" if special_scores[num] > 0 else str(num) for num in watch_nums)
-    st.markdown(f'<div class="a1-line">熱號：<span class="a1-hot">{hot_text}</span></div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="a1-line">特號注意：<span class="a1-special">{special_text}</span></div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="a1-line">正號冷號：<span class="a1-cold">{cold_text}</span></div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="a1-line">注視號：{watch_text}</div>', unsafe_allow_html=True)
+    render_strength_groups(start_num, end_num, scores, special_scores, cold_gaps)
+    st.markdown(
+        f'<div class="a1-line a1-watch-text" '
+        f'style="color:#b91c1c !important;-webkit-text-fill-color:#b91c1c !important;font-weight:800 !important;">'
+        f'注視號：{watch_text}</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -375,8 +412,13 @@ def build_dim_numbers_for_groups(
     dim_numbers: set[int] = set()
     for group_option in group_options:
         _group_name, start_num, end_num = BIRTHDAY_GROUPS[int(group_option)]
+        scores = build_attention_scores(rows, start_num, end_num, period_counts)
+        special_scores = build_special_attention(rows, start_num, end_num, period_counts)
+        cold_gaps = build_cold_gaps(rows, start_num, end_num)
+        strength_groups = build_strength_groups(start_num, end_num, scores, special_scores, cold_gaps)
         cold_nums = build_cold_nums(rows, start_num, end_num, period_counts)
         dim_numbers.update(cold_nums)
+        dim_numbers.update(strength_groups["weak"])
     return sorted(dim_numbers)
 
 
@@ -428,7 +470,7 @@ def render_watch_numbers_hint(watch_map: dict[str, list[int]], extra_watch_nums:
                 nums.append(num)
         if nums:
             text = "，".join(f"{num}[特]" if num in extra_watch_nums else str(num) for num in nums)
-            lines.append(f'<div class="a1-watch-pick-line">[{group_name}]：{text}</div>')
+            lines.append(f'<div class="a1-watch-pick-line">[{group_name}]：{text} /> {len(nums)} 球</div>')
 
     if lines:
         st.markdown("".join(lines), unsafe_allow_html=True)
@@ -445,8 +487,9 @@ def render_dim_numbers_hint(dim_numbers: list[int]) -> None:
     if not dim_numbers:
         return
     st.markdown(
-        f'<div class="a1-cold-pick-note">灰色下期投注冷門球號碼：</div>'
-        f'<div class="a1-cold-pick-note">{", ".join(str(num) for num in dim_numbers)}，仍可選取。</div>',
+        f'<div class="a1-cold-pick-note">灰色下期投注冷弱球號碼：</div>'
+        f'<div class="a1-cold-pick-note">{", ".join(str(num) for num in dim_numbers)} '
+        f'/> 共 {len(dim_numbers)} 球，仍可選取投注。</div>',
         unsafe_allow_html=True,
     )
 

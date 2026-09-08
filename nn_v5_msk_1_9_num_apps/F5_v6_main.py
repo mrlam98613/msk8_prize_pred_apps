@@ -20,7 +20,7 @@ JSON_PATH = CURRENT_DIR / "json_data" / "F5_v6_best_params.json"
 COLD_REBOUND_JSON_PATH = CURRENT_DIR / "json_data" / COLD_REBOUND_JSON_NAME
 
 # F5_v6 自動比較的簡化參數。
-BACKTEST_DRAW_COUNT_LIST = [30] # 回測期 
+BACKTEST_DRAW_COUNT_LIST = [24] # 回測期 
 WINDOW_DRAW_COUNT_LIST = [12,18,24] # 窗口期：每期核對前即時計算 12 / 18 / 24 期
 AFTER_NONE_HIT_RATE_THRESHOLD_LIST = [0.50, 0.60, 0.65]
 PREDICT_PAIR_COUNT = 2 # 最多選 2 組雙球，合併後通常是 3-4 球
@@ -587,40 +587,26 @@ def print_simple_view(rows: list[BacktestRow], best: dict[str, object]) -> None:
     print(
         f"最佳參數：回測期 {to_int(best.get('backtest_draw_count'))}，"
         f"窗口期 {to_int(best.get('window_draw_count'))}，"
-        f"(00) 門檻 {to_float(best.get('after_none_threshold')):.0%}"
+        f"(00) 連續率 {to_float(best.get('after_none_threshold')):.0%}"
     )
     total_rows = len(rows)
     for display_index, row in enumerate(rows, start=1):
         near_index = total_rows - display_index + 1
+        actual_text = format_nums(row["actual_1_9_nums"]) if row["actual_1_9_count"] else "(00)"
+        none_hit_flag = "Y" if row["prediction_mode"] == "不發球" and row["actual_1_9_count"] == 0 else "N"
         if row["prediction_mode"] == "不發球":
-            result = "正確避開" if row["allocation_correct"] else "錯失發球"
-            score_text = "+ 3 球" if row["allocation_correct"] else "- 3 球"
+            hit_text = "" if row["actual_1_9_count"] == 0 else f" = {row['actual_1_9_count']} 球"
             print(
-                f"/> {near_index}，核對期：{row['check_date']}，預測：None（不發球），"
-                f"1-9 開獎 {format_nums(row['actual_1_9_nums'])} "
-                f"{row['actual_1_9_count']} 球，{result}，{score_text}，原因：{row['allocation_reason']}"
-            )
-            print(
-                f"   獨立分析：窗口00={row['window_categories']['none']}，"
-                f"1球={row['window_categories']['single']}，2球+={row['window_categories']['multi']}，"
-                f"(00)連續率 {row['after_none_rate']:.0%}/門檻{row['after_none_threshold']:.0%}，"
-                f"{row['cold_gap_used']}期冷號 {format_nums(row['window_cold_nums'])}，pair分 {row['pair_score_text']}"
+                f"/> {near_index}，核對期：{row['check_date']}，(00) 不發球，"
+                f"開獎 {actual_text}，命中 [{none_hit_flag}]{hit_text}"
             )
             continue
         print(
             f"/> {near_index}，核對期：{row['check_date']}，{row['prediction_mode']} "
             f"{row['predict_num_count']} 球，預測：{format_pairs(row['predictions'])} "
             f"-> {format_nums(row['candidate_nums'])}，"
-            f"開獎 {format_nums(row['actual_1_9_nums']) if row['actual_1_9_count'] else '(00)'}，"
+            f"開獎 {actual_text}，"
             f"命中 {format_nums(row['hit_nums'])} / {row['hit_count']} 球"
-        )
-        print(
-            f"   獨立分析：窗口00={row['window_categories']['none']}，"
-            f"1球={row['window_categories']['single']}，2球+={row['window_categories']['multi']}，"
-            f"(00)連續率 {row['after_none_rate']:.0%}/門檻{row['after_none_threshold']:.0%}，"
-            f"{row['cold_gap_used']}期冷號 {format_nums(row['window_cold_nums'])}，"
-            f"冷號命中 {format_nums(row['cold_hit_nums'])}，pair分 {row['pair_score_text']}，"
-            f"原因：{row['allocation_reason']}"
         )
     print()
 
