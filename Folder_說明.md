@@ -2,11 +2,17 @@ uv add tree 安裝 tree, 輸入 tree -d，可以打印目錄
 
 不打印某目錄 
 tree -d -I "__pycache__|A_msk_balls_png"
+打印目錄 ＋ 檔案 
+tree -I "__pycache__|A_msk_balls_png"
+
 
 # 存檔整個系統 csv 開獎號 
 ├── A_msk_lottery_data_folder # 
 # streamlit 網頁版 目錄 
 ├── app_pages
+    └── old apps
+    網頁 page_app
+
 # 網頁版 components 
 ├── custom_components
 │   └── number_picker_frontend
