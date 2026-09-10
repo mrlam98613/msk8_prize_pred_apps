@@ -130,29 +130,28 @@ def reset_custom_bet_outputs() -> None:
     reset_banker_leg_numbers()
 
 
-def render_seed_picker(seeds: list[int], nums: list[int]) -> None:
-    """顯示 1-49 球號，最多可選 3 個種子球。"""
+def render_seed_picker(seeds: list[int], nums: list[int], max_select: int) -> None:
+    """顯示 1-49 球號；用戶可先自選部分號碼，再由系統補足。"""
 
     render_selected_and_generated_numbers(seeds, nums)
-    render_seed_only_picker(seeds)
+    render_seed_only_picker(seeds, max_select)
 
 
-def render_seed_only_picker(seeds: list[int]) -> None:
-    """只顯示種子選號盤。"""
+def render_seed_only_picker(seeds: list[int], max_select: int) -> None:
+    """只顯示自選號碼盤。"""
 
     picker_seeds = st.session_state.get("custom_picker_seed_numbers", seeds)
     selected = number_picker(
         selected=picker_seeds,
-        max_select=3,
+        max_select=max_select,
         reset_token=st.session_state["custom_seed_reset_token"],
-        key=f"custom_seed_number_picker_{st.session_state['custom_seed_reset_token']}",
+        key=f"custom_seed_number_picker_{max_select}_{st.session_state['custom_seed_reset_token']}",
     )
     selected = sorted(int(num) for num in selected)
     if selected != picker_seeds:
         st.session_state["custom_picker_seed_numbers"] = selected
         st.session_state["custom_seed_numbers"] = selected
         reset_generated_numbers()
-        st.rerun()
 
 
 def render_banker_leg_picker(
@@ -161,14 +160,9 @@ def render_banker_leg_picker(
     banker_count: int,
     leg_count: int,
 ) -> None:
-    """用單一 1-49 鍵盤選膽或配腳。"""
+    """用單一 1-49 鍵盤選膽或配腳；膽拖全由用戶自選，不做補發球。"""
 
-    banker_seed_count, leg_seed_count = seed_allocation_for_banker_leg(banker_count)
-
-    if len(bankers) >= banker_seed_count and leg_seed_count > 0 and len(legs) < leg_seed_count:
-        st.session_state["custom_banker_leg_pick_mode"] = "配腳"
-
-    pick_options = ["膽", "配腳"] if leg_seed_count > 0 else ["膽"]
+    pick_options = ["膽", "配腳"]
     if st.session_state.get("custom_banker_leg_pick_mode") not in pick_options:
         st.session_state["custom_banker_leg_pick_mode"] = "膽"
 
@@ -182,9 +176,9 @@ def render_banker_leg_picker(
     if pick_mode == "膽":
         selected = number_picker(
             selected=bankers,
-            max_select=banker_seed_count,
+            max_select=banker_count,
             reset_token=st.session_state["custom_banker_reset_token"],
-            key=f"custom_banker_leg_picker_banker_{st.session_state['custom_banker_reset_token']}_{banker_seed_count}",
+            key=f"custom_banker_leg_picker_banker_{st.session_state['custom_banker_reset_token']}_{banker_count}",
         )
         selected_bankers = sorted(int(num) for num in selected)
         if selected_bankers != bankers:
@@ -192,20 +186,19 @@ def render_banker_leg_picker(
             st.session_state["custom_leg_numbers"] = [num for num in legs if num not in selected_bankers]
             st.session_state["custom_saved_notice"] = ""
             st.session_state["custom_save_locked"] = False
-            st.rerun()
     else:
         selected = number_picker(
             selected=legs,
-            max_select=leg_seed_count,
+            max_select=leg_count,
+            disabled_numbers=bankers,
             reset_token=st.session_state["custom_leg_reset_token"],
-            key=f"custom_banker_leg_picker_leg_{st.session_state['custom_leg_reset_token']}_{leg_seed_count}",
+            key=f"custom_banker_leg_picker_leg_{st.session_state['custom_leg_reset_token']}_{leg_count}_{len(bankers)}",
         )
         selected_legs = sorted(int(num) for num in selected if int(num) not in bankers)
         if selected_legs != legs:
             st.session_state["custom_leg_numbers"] = selected_legs
             st.session_state["custom_saved_notice"] = ""
             st.session_state["custom_save_locked"] = False
-            st.rerun()
 
 
 def get_bet_config():
@@ -272,6 +265,8 @@ def generate_numbers(seed_numbers: list[int], bet_size: int) -> list[int]:
     """用 random 暫時補足投注號碼。"""
 
     need_count = bet_size - len(seed_numbers)
+    if need_count <= 0:
+        return sorted(seed_numbers[:bet_size])
     pool = [num for num in ALL_NUMBERS if num not in seed_numbers]
     generated = sorted(seed_numbers + random.sample(pool, need_count))
     return generated
@@ -396,7 +391,7 @@ def render_selected_and_generated_numbers(seeds: list[int], nums: list[int]) -> 
     """把用戶種子球和系統補足號碼集中顯示。"""
 
     with st.container(border=True):
-        render_generated_numbers_inline("選種子號 最多 1-3 球：", seeds, empty_text="未選")
+        render_generated_numbers_inline("自選號碼：", seeds, empty_text="未選")
         render_generated_numbers_inline("投注：", nums)
 
 
@@ -412,7 +407,6 @@ def render_banker_leg_summary(seeds: list[int], bankers: list[int], legs: list[i
         )
 
     with st.container(border=True):
-        render_generated_numbers_inline("選種子號 最多 1-3 球：", seeds, empty_text="未選")
         render_generated_numbers_inline("選膽：", bankers, empty_text="未選")
         render_generated_numbers_inline("配腳：", legs, empty_text="未選")
         if combined_body:
@@ -594,6 +588,10 @@ def clear_banker_leg_custom_bet() -> None:
     st.session_state["custom_seed_numbers"] = []
     st.session_state["custom_picker_seed_numbers"] = []
     st.session_state["custom_seed_reset_token"] += 1
+    st.session_state["custom_banker_count"] = 1
+    st.session_state["custom_leg_count_1"] = 6
+    st.session_state["custom_last_banker_count"] = 1
+    st.session_state["custom_banker_leg_pick_mode"] = "膽"
     reset_banker_leg_numbers()
 
 
@@ -669,14 +667,13 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
         )
     )
 
-    banker_seed_count, leg_seed_count = seed_allocation_for_banker_leg(banker_count)
     bankers = sorted(int(num) for num in st.session_state.get("custom_banker_numbers", []))[:banker_count]
     legs = sorted(
         int(num)
         for num in st.session_state.get("custom_leg_numbers", [])
         if int(num) not in bankers
     )[:leg_count]
-    seeds = sorted((bankers + legs)[:3])
+    seeds = sorted(bankers + legs)
     st.session_state["custom_seed_numbers"] = seeds
     if bankers != st.session_state.get("custom_banker_numbers", []):
         st.session_state["custom_banker_numbers"] = bankers
@@ -685,7 +682,6 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
 
     seed_count = len(bankers) + len(legs)
     has_seed = seed_count > 0
-    seed_limit_reached = seed_count >= 3
     selections_complete = len(bankers) == banker_count and len(legs) == leg_count
     total_bets = math.comb(leg_count, 6 - banker_count)
     total_cost = total_bets * bet_unit
@@ -698,37 +694,31 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
             膽拖投注：{banker_count} 膽 + {leg_count} 腳｜每注 ${bet_unit}<br>
             注數：{total_bets:,}注｜投注金額：${total_cost:,}
             <div style="border-top:1px solid #d1d5db;margin:7px 0 6px 0;"></div>
-            1， 用戶選種子號 最多 1-3 球<br>
-            2， 種子球會分配成：膽選 = {banker_seed_count} 球，配腳 = {leg_seed_count} 球
+            請分別選滿膽號及配腳號，膽拖投注不使用系統補發球。
         </h7>
         """,
         unsafe_allow_html=True,
     )
-    if seed_limit_reached and not selections_complete:
-        st.info("已選滿 3 球種子，請按「發球補足」或「清除種子球號」重設。")
-    elif not seed_limit_reached:
-        render_banker_leg_picker(bankers, legs, banker_count, leg_count)
+    render_banker_leg_picker(bankers, legs, banker_count, leg_count)
     render_saved_notice()
 
     st.markdown('<span class="custom-action-marker"></span>', unsafe_allow_html=True)
     clear_col, fill_col, save_col = st.columns(3)
     clear_col.markdown('<span class="custom-action-a"></span>', unsafe_allow_html=True)
     clear_col.button(
-        "重設種子選號",
+        "重設選號",
         key="clear_banker_leg_seed_numbers",
-        disabled=not has_seed,
+        disabled=False,
         width="stretch",
         on_click=clear_banker_leg_custom_bet,
     )
 
     fill_col.markdown('<span class="custom-action-b"></span>', unsafe_allow_html=True)
     fill_col.button(
-        "系統補發種子號",
+        "膽拖不補發",
         key="custom_generate_banker_leg_numbers",
-        disabled=not has_seed,
+        disabled=True,
         width="stretch",
-        on_click=fill_banker_leg_custom_bet,
-        args=(bankers, legs, banker_count, leg_count),
     )
 
     can_save = (
@@ -758,7 +748,11 @@ def render_custom_bet_page(email: str) -> None:
 
     bet_date = load_next_draw_date()
     if bet_date:
-        st.caption(f"投注日期：{format_date_with_weekday(bet_date)}")
+        st.markdown(
+            f'<div style="font-size:1rem;font-weight:800;color:#2563eb;margin:2px 0 8px 0;">'
+            f'投注日期：{format_date_with_weekday(bet_date)}</div>',
+            unsafe_allow_html=True,
+        )
     else:
         st.warning("找不到下期投注日期，暫時不能儲存投注。")
 
@@ -772,7 +766,11 @@ def render_custom_bet_page(email: str) -> None:
 
     seeds = st.session_state["custom_seed_numbers"]
     nums = st.session_state.get("custom_generated_numbers", [])
-    render_seed_picker(seeds, nums)
+    if len(seeds) == bet_size:
+        nums = sorted(seeds[:bet_size])
+        st.session_state["custom_generated_numbers"] = nums
+        st.session_state["custom_generated_signature"] = (bet_type, bet_size, bet_unit, tuple(nums), "manual_full")
+    render_seed_picker(seeds, nums, bet_size)
 
     if bet_type == "複式 [7-15]":
         st.markdown(
@@ -797,13 +795,13 @@ def render_custom_bet_page(email: str) -> None:
     signature = (bet_type, bet_size, bet_unit, tuple(sorted(seeds)), datetime.now().date().isoformat())
 
     if not seeds:
-        st.info("請先選擇 1 至 3 個種子球。")
+        st.info("請先選擇號碼；可選部分號碼後按補發，也可自行選滿。")
     render_saved_notice()
     st.markdown('<span class="custom-action-marker"></span>', unsafe_allow_html=True)
     col1, col2, col3 = st.columns(3)
     col1.markdown('<span class="custom-action-a"></span>', unsafe_allow_html=True)
     col1.button(
-        "重設種子選號",
+        "重設選號",
         key="clear_custom_seed_numbers",
         disabled=not bool(seeds),
         width="stretch",
@@ -812,7 +810,7 @@ def render_custom_bet_page(email: str) -> None:
 
     col2.markdown('<span class="custom-action-b"></span>', unsafe_allow_html=True)
     col2.button(
-        "系統補發種子號",
+        "補發未完成選球",
         key="custom_generate_numbers",
         disabled=not bool(seeds),
         width="stretch",

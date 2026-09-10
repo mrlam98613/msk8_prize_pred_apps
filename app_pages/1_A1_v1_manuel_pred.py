@@ -409,17 +409,38 @@ def build_dim_numbers_for_groups(
     group_options: list[int],
     period_counts: list[int],
 ) -> list[int]:
+    """鍵盤灰色號碼只代表冷號。弱號會另外用淡黃色顯示。"""
+
     dim_numbers: set[int] = set()
+    for group_option in group_options:
+        _group_name, start_num, end_num = BIRTHDAY_GROUPS[int(group_option)]
+        cold_nums = build_cold_nums(rows, start_num, end_num, period_counts)
+        dim_numbers.update(cold_nums)
+    return sorted(dim_numbers)
+
+
+def build_dim_number_groups_for_groups(
+    rows: list[dict[str, str]],
+    group_options: list[int],
+    period_counts: list[int],
+) -> dict[str, list[int]]:
+    """分開保存冷號及弱號，顯示時更清楚；鍵盤仍使用兩者合併作灰色提示。"""
+
+    cold_numbers: set[int] = set()
+    weak_numbers: set[int] = set()
     for group_option in group_options:
         _group_name, start_num, end_num = BIRTHDAY_GROUPS[int(group_option)]
         scores = build_attention_scores(rows, start_num, end_num, period_counts)
         special_scores = build_special_attention(rows, start_num, end_num, period_counts)
         cold_gaps = build_cold_gaps(rows, start_num, end_num)
         strength_groups = build_strength_groups(start_num, end_num, scores, special_scores, cold_gaps)
-        cold_nums = build_cold_nums(rows, start_num, end_num, period_counts)
-        dim_numbers.update(cold_nums)
-        dim_numbers.update(strength_groups["weak"])
-    return sorted(dim_numbers)
+        cold_numbers.update(build_cold_nums(rows, start_num, end_num, period_counts))
+        weak_numbers.update(strength_groups["weak"])
+
+    return {
+        "cold": sorted(cold_numbers),
+        "weak": sorted(weak_numbers),
+    }
 
 
 def build_watch_numbers_for_groups(
@@ -483,13 +504,18 @@ def get_group_name_for_num(num: int) -> str:
     return ""
 
 
-def render_dim_numbers_hint(dim_numbers: list[int]) -> None:
-    if not dim_numbers:
+def render_dim_numbers_hint(dim_number_groups: dict[str, list[int]]) -> None:
+    cold_numbers = dim_number_groups.get("cold", [])
+    weak_numbers = dim_number_groups.get("weak", [])
+    if not cold_numbers and not weak_numbers:
         return
+
+    cold_text = ", ".join(str(num) for num in cold_numbers) or "-"
+    weak_text = ", ".join(str(num) for num in weak_numbers) or "-"
     st.markdown(
-        f'<div class="a1-cold-pick-note">灰色下期投注冷弱球號碼：</div>'
-        f'<div class="a1-cold-pick-note">{", ".join(str(num) for num in dim_numbers)} '
-        f'/> 共 {len(dim_numbers)} 球，仍可選取投注。</div>',
+        f'<div class="a1-cold-pick-note">下期投注參考，冷球號 = 灰色，弱球 = 淺黃色，都可選入投注。</div>'
+        f'<div class="a1-cold-pick-note">冷號：{cold_text} /> {len(cold_numbers)} 球</div>'
+        f'<div class="a1-cold-pick-note">弱號：{weak_text} /> {len(weak_numbers)} 球，仍可選取投注。</div>',
         unsafe_allow_html=True,
     )
 
@@ -598,8 +624,9 @@ def render_ball_box(label: str, nums: list[int], bankers: list[int] | None = Non
         )
     else:
         body = build_ball_image_html(nums)
+    title_html = f'<div class="a1-bet-line">{label}</div>' if label else ""
     st.markdown(
-        f'<div class="a1-bet-line">{label}</div><div class="a1-ball-row">{body}</div>',
+        f'{title_html}<div class="a1-ball-row">{body}</div>',
         unsafe_allow_html=True,
     )
 
@@ -735,7 +762,11 @@ def render_admin_bet_manager() -> None:
         st.rerun()
 
 
-def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[int]]) -> None:
+def render_admin_manual_bet(
+    dim_numbers: list[int],
+    dim_number_groups: dict[str, list[int]],
+    watch_map: dict[str, list[int]],
+) -> None:
     init_admin_bet_state()
     st.markdown("### 手動輸入下期預測投注")
     bet_date = st.text_input("投注日期", value=load_next_draw_date() or "", key="admin_bet_date")
@@ -756,18 +787,21 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
     saved_notice = st.session_state.get("admin_saved_notice", "")
     can_save = False
     record: dict[str, str] | None = None
+    weak_numbers = [num for num in dim_number_groups.get("weak", []) if num not in set(dim_numbers)]
 
     if bet_type in {"單式", "複式"}:
         max_select = 6 if bet_type == "單式" else int(st.selectbox("複式球數", list(range(7, 16)), key="admin_multiple_size"))
         nums = sorted(int(num) for num in st.session_state["admin_standard_nums"])[:max_select]
         ball_box = st.empty()
-        render_dim_numbers_hint(dim_numbers)
+        render_dim_numbers_hint(dim_number_groups)
         render_watch_numbers_hint(watch_map, st.session_state.get("admin_extra_watch_nums", []))
+        st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
         selected = number_picker(
             selected=nums,
             max_select=max_select,
             max_number=31,
             dim_numbers=dim_numbers,
+            weak_numbers=weak_numbers,
             reset_token=st.session_state["admin_standard_reset_token"],
             key=f"admin_standard_picker_{bet_type}_{max_select}_{st.session_state['admin_standard_reset_token']}",
         )
@@ -776,7 +810,7 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
             st.session_state["admin_standard_nums"] = nums
             st.session_state["admin_saved_notice"] = ""
         with ball_box.container():
-            render_ball_box("球圖框", nums)
+            render_ball_box("", nums)
         can_save = bool(bet_date) and len(nums) == max_select
         record = build_admin_record(bet_date, bet_type, bet_unit, nums)
     else:
@@ -786,8 +820,9 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
         bankers = sorted(int(num) for num in st.session_state["admin_banker_nums"])[:banker_count]
         legs = sorted(int(num) for num in st.session_state["admin_leg_nums"] if int(num) not in bankers)[:leg_count]
         ball_box = st.empty()
-        render_dim_numbers_hint(dim_numbers)
+        render_dim_numbers_hint(dim_number_groups)
         render_watch_numbers_hint(watch_map, st.session_state.get("admin_extra_watch_nums", []))
+        st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
         pick_mode = st.radio("選號模式", ["膽", "配腳"], horizontal=True, key="admin_pick_mode")
 
         if pick_mode == "膽":
@@ -796,6 +831,7 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
                 max_select=banker_count,
                 max_number=31,
                 dim_numbers=dim_numbers,
+                weak_numbers=weak_numbers,
                 reset_token=st.session_state["admin_banker_reset_token"],
                 key=f"admin_banker_picker_{banker_count}_{st.session_state['admin_banker_reset_token']}",
             )
@@ -812,6 +848,7 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
                 max_select=leg_count,
                 max_number=31,
                 dim_numbers=dim_numbers,
+                weak_numbers=weak_numbers,
                 disabled_numbers=bankers,
                 reset_token=st.session_state["admin_leg_reset_token"],
                 key=f"admin_leg_picker_{leg_count}_{st.session_state['admin_leg_reset_token']}",
@@ -823,7 +860,7 @@ def render_admin_manual_bet(dim_numbers: list[int], watch_map: dict[str, list[in
                 legs = new_legs
 
         with ball_box.container():
-            render_ball_box("球圖框", [], bankers=bankers, legs=legs)
+            render_ball_box("", [], bankers=bankers, legs=legs)
 
         can_save = bool(bet_date) and len(bankers) == banker_count and len(legs) == leg_count
         record = build_admin_record(bet_date, bet_type, bet_unit, sorted(bankers + legs), bankers, legs)
@@ -913,6 +950,11 @@ def main() -> None:
         [int(group_option) for group_option in group_options],
         period_counts,
     )
+    dim_number_groups = build_dim_number_groups_for_groups(
+        rows,
+        [int(group_option) for group_option in group_options],
+        period_counts,
+    )
     watch_map = build_watch_numbers_for_groups(
         rows,
         [int(group_option) for group_option in group_options],
@@ -923,7 +965,7 @@ def main() -> None:
         [int(group_option) for group_option in group_options],
         period_counts,
     )
-    render_admin_manual_bet(dim_numbers, watch_map)
+    render_admin_manual_bet(dim_numbers, dim_number_groups, watch_map)
 
     if SHOW_RECENT_COMBO:
         render_recent_combo(rows)

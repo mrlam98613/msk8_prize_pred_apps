@@ -1,0 +1,1212 @@
+{
+  "model": "G1_v1_cold_rebound_backtest",
+  "include_special_num": true,
+  "analysis_group": {
+    "key": "10_20",
+    "label": "10-20",
+    "min": 10,
+    "max": 20
+  },
+  "best": {
+    "cold_gap": 19,
+    "case_count": 216,
+    "average_rebound_after_draws": 6.805555555555555,
+    "special_only_rebound_count": 35,
+    "current_cold_nums": [],
+    "recent_cases": [
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2016-12-15",
+        "rebound_after_draws": 4,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2017-09-30",
+        "rebound_after_draws": 1,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2018-06-17",
+        "rebound_after_draws": 1,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2019-02-14",
+        "rebound_after_draws": 2,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2019-04-16",
+        "rebound_after_draws": 7,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2021-12-19",
+        "rebound_after_draws": 10,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2022-06-21",
+        "rebound_after_draws": 1,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2024-07-11",
+        "rebound_after_draws": 18,
+        "rebound_in_special": false
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2025-06-29",
+        "rebound_after_draws": 3,
+        "rebound_in_special": true
+      },
+      {
+        "num": 20,
+        "cold_gap": 19,
+        "rebound_date": "2025-10-14",
+        "rebound_after_draws": 2,
+        "rebound_in_special": true
+      }
+    ],
+    "rebound_within_1_count": 36,
+    "rebound_within_1_rate": 0.16666666666666666,
+    "rebound_within_3_count": 82,
+    "rebound_within_3_rate": 0.37962962962962965,
+    "rebound_within_6_count": 132,
+    "rebound_within_6_rate": 0.6111111111111112
+  },
+  "ranking": [
+    {
+      "cold_gap": 19,
+      "case_count": 216,
+      "average_rebound_after_draws": 6.805555555555555,
+      "special_only_rebound_count": 35,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2017-09-30",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2018-06-17",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2019-02-14",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 7,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 10,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 18,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 3,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 19,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 2,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 36,
+      "rebound_within_1_rate": 0.16666666666666666,
+      "rebound_within_3_count": 82,
+      "rebound_within_3_rate": 0.37962962962962965,
+      "rebound_within_6_count": 132,
+      "rebound_within_6_rate": 0.6111111111111112
+    },
+    {
+      "cold_gap": 22,
+      "case_count": 134,
+      "average_rebound_after_draws": 6.873134328358209,
+      "special_only_rebound_count": 23,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 19,
+          "cold_gap": 22,
+          "rebound_date": "2024-08-17",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2011-10-22",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2012-04-03",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2013-04-11",
+          "rebound_after_draws": 8,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2014-09-18",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2016-04-30",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 7,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 22,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 15,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 22,
+      "rebound_within_1_rate": 0.16417910447761194,
+      "rebound_within_3_count": 50,
+      "rebound_within_3_rate": 0.373134328358209,
+      "rebound_within_6_count": 81,
+      "rebound_within_6_rate": 0.6044776119402985
+    },
+    {
+      "cold_gap": 17,
+      "case_count": 298,
+      "average_rebound_after_draws": 6.775167785234899,
+      "special_only_rebound_count": 50,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 6,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2017-09-30",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2018-06-17",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2019-02-14",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 9,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 12,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 20,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 5,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 17,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 4,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 47,
+      "rebound_within_1_rate": 0.15771812080536912,
+      "rebound_within_3_count": 118,
+      "rebound_within_3_rate": 0.3959731543624161,
+      "rebound_within_6_count": 186,
+      "rebound_within_6_rate": 0.6241610738255033
+    },
+    {
+      "cold_gap": 14,
+      "case_count": 467,
+      "average_rebound_after_draws": 6.895074946466809,
+      "special_only_rebound_count": 73,
+      "current_cold_nums": [
+        20
+      ],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 15,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 6,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2022-10-20",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2024-03-21",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 23,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2024-12-21",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2025-02-11",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 8,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 7,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 14,
+          "rebound_date": "2026-01-03",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 72,
+      "rebound_within_1_rate": 0.15417558886509636,
+      "rebound_within_3_count": 169,
+      "rebound_within_3_rate": 0.3618843683083512,
+      "rebound_within_6_count": 287,
+      "rebound_within_6_rate": 0.6145610278372591
+    },
+    {
+      "cold_gap": 20,
+      "case_count": 180,
+      "average_rebound_after_draws": 6.966666666666667,
+      "special_only_rebound_count": 29,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2013-04-11",
+          "rebound_after_draws": 10,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2014-09-18",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2016-04-30",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2019-02-14",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 6,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 9,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 17,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 2,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 20,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 1,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 27,
+      "rebound_within_1_rate": 0.15,
+      "rebound_within_3_count": 68,
+      "rebound_within_3_rate": 0.37777777777777777,
+      "rebound_within_6_count": 111,
+      "rebound_within_6_rate": 0.6166666666666667
+    },
+    {
+      "cold_gap": 12,
+      "case_count": 634,
+      "average_rebound_after_draws": 6.935331230283912,
+      "special_only_rebound_count": 96,
+      "current_cold_nums": [
+        20
+      ],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2022-10-20",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2022-12-10",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2024-01-30",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2024-03-21",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 25,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2024-12-21",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2025-02-11",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 10,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 9,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 12,
+          "rebound_date": "2026-01-03",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 91,
+      "rebound_within_1_rate": 0.14353312302839116,
+      "rebound_within_3_count": 239,
+      "rebound_within_3_rate": 0.37697160883280756,
+      "rebound_within_6_count": 383,
+      "rebound_within_6_rate": 0.6041009463722398
+    },
+    {
+      "cold_gap": 24,
+      "case_count": 98,
+      "average_rebound_after_draws": 6.887755102040816,
+      "special_only_rebound_count": 12,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 19,
+          "cold_gap": 24,
+          "rebound_date": "2017-06-15",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 24,
+          "rebound_date": "2020-10-22",
+          "rebound_after_draws": 12,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 24,
+          "rebound_date": "2023-09-09",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 24,
+          "rebound_date": "2024-08-17",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2013-04-11",
+          "rebound_after_draws": 6,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2014-09-18",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2016-04-30",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 24,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 13,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 14,
+      "rebound_within_1_rate": 0.14285714285714285,
+      "rebound_within_3_count": 38,
+      "rebound_within_3_rate": 0.3877551020408163,
+      "rebound_within_6_count": 64,
+      "rebound_within_6_rate": 0.6530612244897959
+    },
+    {
+      "cold_gap": 15,
+      "case_count": 395,
+      "average_rebound_after_draws": 6.969620253164557,
+      "special_only_rebound_count": 64,
+      "current_cold_nums": [
+        20
+      ],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 11,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 14,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2022-10-20",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2024-03-21",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 22,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2024-12-21",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2025-02-11",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 7,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 15,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 6,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 56,
+      "rebound_within_1_rate": 0.14177215189873418,
+      "rebound_within_3_count": 144,
+      "rebound_within_3_rate": 0.36455696202531646,
+      "rebound_within_6_count": 242,
+      "rebound_within_6_rate": 0.6126582278481013
+    },
+    {
+      "cold_gap": 13,
+      "case_count": 543,
+      "average_rebound_after_draws": 6.930018416206262,
+      "special_only_rebound_count": 82,
+      "current_cold_nums": [
+        20
+      ],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2022-10-20",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2022-12-10",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2024-01-30",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2024-03-21",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 24,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2024-12-21",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2025-02-11",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 9,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 8,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 13,
+          "rebound_date": "2026-01-03",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 76,
+      "rebound_within_1_rate": 0.13996316758747698,
+      "rebound_within_3_count": 204,
+      "rebound_within_3_rate": 0.3756906077348066,
+      "rebound_within_6_count": 327,
+      "rebound_within_6_rate": 0.6022099447513812
+    },
+    {
+      "cold_gap": 18,
+      "case_count": 251,
+      "average_rebound_after_draws": 6.856573705179283,
+      "special_only_rebound_count": 43,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2017-09-30",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2018-06-17",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2019-02-14",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 8,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 11,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 19,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 4,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 18,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 3,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 35,
+      "rebound_within_1_rate": 0.1394422310756972,
+      "rebound_within_3_count": 98,
+      "rebound_within_3_rate": 0.3904382470119522,
+      "rebound_within_6_count": 153,
+      "rebound_within_6_rate": 0.6095617529880478
+    },
+    {
+      "cold_gap": 23,
+      "case_count": 112,
+      "average_rebound_after_draws": 7.026785714285714,
+      "special_only_rebound_count": 17,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 19,
+          "cold_gap": 23,
+          "rebound_date": "2020-10-22",
+          "rebound_after_draws": 13,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 23,
+          "rebound_date": "2022-11-03",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 23,
+          "rebound_date": "2023-09-09",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 19,
+          "cold_gap": 23,
+          "rebound_date": "2024-08-17",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2013-04-11",
+          "rebound_after_draws": 7,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2014-09-18",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2016-04-30",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 3,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 6,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 23,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 14,
+          "rebound_in_special": false
+        }
+      ],
+      "rebound_within_1_count": 14,
+      "rebound_within_1_rate": 0.125,
+      "rebound_within_3_count": 43,
+      "rebound_within_3_rate": 0.38392857142857145,
+      "rebound_within_6_count": 65,
+      "rebound_within_6_rate": 0.5803571428571429
+    },
+    {
+      "cold_gap": 21,
+      "case_count": 153,
+      "average_rebound_after_draws": 7.019607843137255,
+      "special_only_rebound_count": 27,
+      "current_cold_nums": [],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2011-10-22",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2012-04-03",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2013-04-11",
+          "rebound_after_draws": 9,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2014-09-18",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2016-04-30",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2016-12-15",
+          "rebound_after_draws": 2,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 8,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 16,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 21,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 1,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 19,
+      "rebound_within_1_rate": 0.12418300653594772,
+      "rebound_within_3_count": 55,
+      "rebound_within_3_rate": 0.35947712418300654,
+      "rebound_within_6_count": 93,
+      "rebound_within_6_rate": 0.6078431372549019
+    },
+    {
+      "cold_gap": 16,
+      "case_count": 339,
+      "average_rebound_after_draws": 6.95575221238938,
+      "special_only_rebound_count": 57,
+      "current_cold_nums": [
+        20
+      ],
+      "recent_cases": [
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2017-09-30",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2018-06-17",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2019-02-14",
+          "rebound_after_draws": 5,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2019-04-16",
+          "rebound_after_draws": 10,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2021-12-19",
+          "rebound_after_draws": 13,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2022-06-21",
+          "rebound_after_draws": 4,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2024-07-11",
+          "rebound_after_draws": 21,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2025-02-11",
+          "rebound_after_draws": 1,
+          "rebound_in_special": false
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2025-06-29",
+          "rebound_after_draws": 6,
+          "rebound_in_special": true
+        },
+        {
+          "num": 20,
+          "cold_gap": 16,
+          "rebound_date": "2025-10-14",
+          "rebound_after_draws": 5,
+          "rebound_in_special": true
+        }
+      ],
+      "rebound_within_1_count": 41,
+      "rebound_within_1_rate": 0.12094395280235988,
+      "rebound_within_3_count": 123,
+      "rebound_within_3_rate": 0.36283185840707965,
+      "rebound_within_6_count": 205,
+      "rebound_within_6_rate": 0.6047197640117994
+    }
+  ]
+}

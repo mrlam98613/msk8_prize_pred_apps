@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""檢查 M2/M3 是否有新資料；有新資料才執行 A1 與生日號分組預測。"""
+"""檢查 M2/M3 最新開獎日期是否一致。"""
 
 from __future__ import annotations
 
 import csv
-import json
 import re
-import subprocess
-import sys
 import time
 from pathlib import Path
 
@@ -19,11 +16,6 @@ ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "A_msk_lottery_data_folder"
 M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"
-A1_SCRIPT = ROOT / "msk_new_seed_apps" / "A1_seedBet_main.py"
-BIRTHDAY_PRED_SCRIPT = ROOT / "n_v1_msk_prize_31_num_backtest_pred" / "A1_v2_brithday_group_quota_pred.py"
-STATE_DIR = ROOT / "msk_new_seed_apps" / "bet_data"
-STATE_FILE = STATE_DIR / "check_data_state.json"
-LOG_FILE = ROOT / "msk_new_seed_apps" / "bet_data" / "check_data_log.txt"
 
 DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ZH_DATE_PATTERN = re.compile(r"(\d{4})年(\d{2})月(\d{2})日")
@@ -34,8 +26,6 @@ def now_string() -> str:
 
 
 def write_log(message: str) -> None:
-    STATE_DIR.mkdir(parents=True, exist_ok=True)
-    LOG_FILE.write_text(message + "\n", encoding="utf-8")
     print(message)
 
 
@@ -79,84 +69,15 @@ def m3_dates() -> tuple[str, str]:
     return parse_zh_date(row_map["日期"][0]), parse_zh_date(row_map["開獎日期"][0])
 
 
-def read_last_processed_date() -> str | None:
-    if not STATE_FILE.exists():
-        return None
-    try:
-        data = json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return None
-    value = data.get("last_processed_m2_date")
-    return str(value) if value else None
-
-
-def write_last_processed_date(latest_date: str) -> None:
-    STATE_DIR.mkdir(parents=True, exist_ok=True)
-    STATE_FILE.write_text(
-        json.dumps(
-            {
-                "last_processed_m2_date": latest_date,
-                "updated_at": now_string(),
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-
-
-def run_script(script: Path, args: list[str] | None = None, cwd: Path | None = None) -> int:
-    if args is None:
-        args = []
-    result = subprocess.run(
-        [sys.executable, str(script), *args],
-        cwd=str(cwd or ROOT),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    output = "\n".join(part for part in [result.stdout.strip(), result.stderr.strip()] if part)
-    if output:
-        print(output)
-    return result.returncode
-
-
-# 執行 A1.py，傳入參數 []，
-# 並指定工作目錄為 A1.py 所在目錄 DIR\ msk_new_seed_apps\A1_seedBet_main.py
-def run_a1() -> int:
-    return run_script(A1_SCRIPT)
-
-# 執行生日號分組預測，產生 nextBetDraw_record.csv 並追加 bet_records.csv。
-def run_birthday_pred() -> int:
-    return run_script(BIRTHDAY_PRED_SCRIPT)
-
-
 def main() -> int:
     try:
         m2_latest = latest_m2_date()
         m3_latest, m3_next = m3_dates()
         if m2_latest != m3_latest:
-            write_log(f"{now_string()} M2/M3 最新期不一致，略過 A1_seedBet_main.py。M2={m2_latest}；M3={m3_latest}")
+            write_log(f"{now_string()} M2/M3 最新期不一致。M2={m2_latest}；M3={m3_latest}")
             return 1
 
-        last_processed = read_last_processed_date()
-        if last_processed == m2_latest:
-            write_log(f"{now_string()} 沒有新資料，略過 A1_seedBet_main.py/生日號分組預測。最新期={m2_latest}；下期={m3_next}")
-            return 0
-
-        a1_code = run_a1()
-        if a1_code != 0:
-            write_log(f"{now_string()} A1_seedBet_main.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={a1_code}")
-            return a1_code
-
-        birthday_pred_code = run_birthday_pred()
-        if birthday_pred_code != 0:
-            write_log(f"{now_string()} A1_v2_brithday_group_quota_pred.py 執行失敗，未更新狀態。最新期={m2_latest}；returncode={birthday_pred_code}")
-            return birthday_pred_code
-
-        write_last_processed_date(m2_latest)
-        write_log(f"{now_string()} 發現新資料並已執行 A1_seedBet_main.py/生日號分組預測。最新期={m2_latest}；下期={m3_next}")
+        write_log(f"{now_string()} M2/M3 最新期一致。最新期={m2_latest}；下期={m3_next}")
         return 0
     except Exception as exc:
         write_log(f"{now_string()} 檢查資料失敗：{exc}")

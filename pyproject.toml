@@ -9,5 +9,6 @@ dependencies = [
     "pandas>=3.0.5",
     "requests>=2.34.2",
     "streamlit==1.57",
+    "tree>=0.2.4",
     "urllib3>=2.7.0",
 ]

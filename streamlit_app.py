@@ -16,62 +16,58 @@ PAGES = [
         "label": "六合彩最新資訊",
         "icon": "📌",
         "path": CONTENT_DIR / "0_lotto_info.py",
+        # 來源 A_msk_lottery_data_folder \ M2_last_upgrade_lotto_data.csv & M3_lotto_prize_results.csv
     },
     {
         "label": "A1V1_生日號-手動趨勢投注",
         "icon": "📈",
         "path": CONTENT_DIR / "1_A1_v1_manuel_pred.py",
+        # 來源 n_v1_msk_prize_31_num_backtest_pred \ folder
     },
-    # {
-    #     "label": "種子投注法-下期投注預測",
-    #     "icon": "🏆",
-    #     "path": CONTENT_DIR / "0_predict_nextdraw.py",
-    # },
-    # {
-    #     "label": "A1_v2 12/6/3 分組預測",
-    #     "icon": "🎯",
-    #     "path": CONTENT_DIR / "1_A1_v2_12_6_3_pred.py",
-    # },
-    # {
-    #     "label": "B1V1_生日號-回測窗口期最佳化",
-    #     "icon": "🎯",
-    #     "path": CONTENT_DIR / "1_B1_v1.py",
-    # },
-    # {
-    #     "label": "C1_v1財庫鎖匙查詢",
-    #     "icon": "🔑",
-    #     "path": CONTENT_DIR / "1_C1_v1_fortune_key.py",
-    # },
+    
     {
-        "label": "R1V2_分組配額FortuneCode預測",
+        "label": "R1V2_生日號,組別主力-預測",
         "icon": "🧭",
         "path": CONTENT_DIR / "1_R1_v2_Fortune_code_pred.py",
+        # 來源 nn_v8_msk_route_pred_apps \ folder
     },
-    # {
-    #     "label": "B0V4_生日號-回測中獎分析",
-    #     "icon": "📊",
-    #     "path": CONTENT_DIR / "1_B0_v4_prize_keys.py",
-    # },
+    
     {
         "label": "生日號中獎號碼-組合特色分析",
         "icon": "💰",
         "path": CONTENT_DIR / "2_lotto_prize_results.py",
+        # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
     },
     {
         "label": "你的生日算出-旺財星日 + 開獎日",
         "icon": "🍀",
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
+        # 主要查詢 A_msk_lottery_data_folder \ M7_lotto_open_days.csv
     },
     {
-        "label": "1,2,3獎中獎注數生日號分析",
+        "label": "1,2,3 獎中獎注數生日號分析",
         "icon": "🔎",
         "path": CONTENT_DIR / "4_prize_comb_key.py",
+        # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
+    },
+    {
+        "label": "複式，投注-派彩查詢",
+        "icon": "🧮",
+        "path": CONTENT_DIR / "x1_multiple_bet.py",
+        # 複式投注注數及派彩查詢
+    },
+    {
+        "label": "膽拖，投注-派彩查詢",
+        "icon": "🎯",
+        "path": CONTENT_DIR / "x2_banker_leg_bet.py",
+        # 膽拖配腳投注注數及派彩查詢
     },
     {
             "label": "會員登入投注",
             "icon": "👤",
             "path": PROJECT_ROOT / "member" / "member_login.py",
             "bet_path": PROJECT_ROOT / "member" / "member_bet_center.py",
+            # member 模組相關文件
     },
 ]
 

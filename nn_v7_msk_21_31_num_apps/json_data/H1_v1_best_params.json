@@ -28,7 +28,7 @@
     "no_prediction_hit_rate": 0.0,
     "allocation_correct_rate": 0.9,
     "score": 7,
-    "cold_gap_used": 12,
+    "cold_gap_used": 20,
     "predict_pair_count": 2
   },
   "ranking": [
@@ -60,7 +60,7 @@
       "no_prediction_hit_rate": 0.0,
       "allocation_correct_rate": 0.9,
       "score": 7,
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "predict_pair_count": 2
     },
     {
@@ -91,7 +91,7 @@
       "no_prediction_hit_rate": 0.0,
       "allocation_correct_rate": 0.9,
       "score": 7,
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "predict_pair_count": 2
     },
     {
@@ -122,7 +122,7 @@
       "no_prediction_hit_rate": 0.0,
       "allocation_correct_rate": 0.9,
       "score": 7,
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "predict_pair_count": 2
     }
   ],
@@ -138,7 +138,7 @@
     "recent_draw_count": 5,
     "cold_warn_gap": 12,
     "deep_cold_warn_gap": 18,
-    "cold_gap_used": 12,
+    "cold_gap_used": 20,
     "after_none_hit_rate_threshold_list": [
       0.5,
       0.6,
@@ -226,7 +226,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(24,26)=12.57"
@@ -316,7 +316,7 @@
       "allocation_correct": true,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(24,26)=12.36，(24,31)=12.36"
@@ -401,7 +401,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(28,29)=24.50"
@@ -432,7 +432,6 @@
         31
       ],
       "window_cold_nums": [
-        21,
         23
       ],
       "deep_cold_nums": [
@@ -485,7 +484,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.4,
       "after_none_threshold": 0.5,
       "pair_score_text": "(28,29)=24.07"
@@ -520,7 +519,6 @@
         31
       ],
       "window_cold_nums": [
-        21,
         23
       ],
       "deep_cold_nums": [
@@ -576,7 +574,7 @@
       "allocation_correct": true,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(28,29)=23.64，(28,30)=12.36"
@@ -662,7 +660,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=24.29"
@@ -747,7 +745,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.5,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=23.86"
@@ -835,7 +833,7 @@
       "allocation_correct": false,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.3333333333333333,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=23.43，(28,29)=22.36"
@@ -920,7 +918,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=23.00"
@@ -1013,7 +1011,7 @@
       "allocation_correct": true,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=22.57，(28,29)=21.50"
@@ -1046,8 +1044,7 @@
       "actual_1_9_count": 0,
       "actual_1_9_nums": [],
       "window_cold_nums": [
-        23,
-        24
+        23
       ],
       "deep_cold_nums": [
         23
@@ -1102,7 +1099,7 @@
       "allocation_correct": false,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=22.14，(27,31)=12.79"
@@ -1133,8 +1130,7 @@
         29
       ],
       "window_cold_nums": [
-        23,
-        24
+        23
       ],
       "deep_cold_nums": [
         23
@@ -1187,7 +1183,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=21.71"
@@ -1225,8 +1221,7 @@
         31
       ],
       "window_cold_nums": [
-        24,
-        25
+        24
       ],
       "deep_cold_nums": [],
       "window_categories": {
@@ -1277,7 +1272,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,26)=12.57，(21,27)=12.57"
@@ -1316,8 +1311,7 @@
         30
       ],
       "window_cold_nums": [
-        24,
-        25
+        24
       ],
       "deep_cold_nums": [],
       "window_categories": {
@@ -1371,7 +1365,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 4 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(23,29)=12.79，(21,26)=12.36"
@@ -1464,7 +1458,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 4 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(26,31)=23.64，(23,29)=12.57"
@@ -1495,7 +1489,6 @@
         23
       ],
       "window_cold_nums": [
-        22,
         24,
         25
       ],
@@ -1548,7 +1541,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=24.71"
@@ -1643,7 +1636,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 4 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=24.29，(26,31)=22.79"
@@ -1733,7 +1726,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=23.86"
@@ -1825,7 +1818,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=23.43，(22,23)=12.57"
@@ -1855,8 +1848,7 @@
         28
       ],
       "window_cold_nums": [
-        25,
-        28
+        25
       ],
       "deep_cold_nums": [
         25
@@ -1911,7 +1903,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=23.00"
@@ -2000,7 +1992,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=22.57"
@@ -2094,7 +2086,7 @@
       "allocation_correct": true,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,30)=22.14，(24,29)=12.36"
@@ -2181,7 +2173,7 @@
       "allocation_correct": false,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,27)=23.21，(21,30)=21.71"
@@ -2261,7 +2253,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(21,27)=22.79"
@@ -2344,7 +2336,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,27)=12.57"
@@ -2380,9 +2372,7 @@
       "actual_1_9_nums": [
         25
       ],
-      "window_cold_nums": [
-        26
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
         "none": 1,
@@ -2434,7 +2424,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,27)=12.36，(25,28)=12.36"
@@ -2466,9 +2456,7 @@
         25,
         31
       ],
-      "window_cold_nums": [
-        26
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
         "none": 1,
@@ -2518,7 +2506,7 @@
       "allocation_correct": true,
       "predict_num_count": 2,
       "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,29)=12.79"
@@ -2604,7 +2592,7 @@
       "allocation_correct": true,
       "predict_num_count": 3,
       "allocation_reason": "近期有 21-31，按正常配額發球",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,29)=12.57，(25,27)=11.93"
@@ -2640,9 +2628,7 @@
         28,
         30
       ],
-      "window_cold_nums": [
-        22
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
         "none": 1,
@@ -2694,7 +2680,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 3 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,31)=12.79，(25,29)=12.36"
@@ -2732,9 +2718,7 @@
         28,
         29
       ],
-      "window_cold_nums": [
-        22
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
         "none": 1,
@@ -2788,7 +2772,7 @@
       "allocation_correct": true,
       "predict_num_count": 4,
       "allocation_reason": "最近 5 期有 4 期 2球+",
-      "cold_gap_used": 12,
+      "cold_gap_used": 20,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
       "pair_score_text": "(25,31)=12.57，(25,29)=12.14"
@@ -2876,7 +2860,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(24,26)=12.57"
@@ -2966,7 +2950,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(24,26)=12.36，(24,31)=12.36"
@@ -3051,7 +3035,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(28,29)=24.50"
@@ -3082,7 +3066,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -3135,7 +3118,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.4,
         "after_none_threshold": 0.5,
         "pair_score_text": "(28,29)=24.07"
@@ -3170,7 +3153,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -3226,7 +3208,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(28,29)=23.64，(28,30)=12.36"
@@ -3312,7 +3294,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=24.29"
@@ -3397,7 +3379,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=23.86"
@@ -3485,7 +3467,7 @@
         "allocation_correct": false,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.3333333333333333,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=23.43，(28,29)=22.36"
@@ -3570,7 +3552,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=23.00"
@@ -3663,7 +3645,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=22.57，(28,29)=21.50"
@@ -3696,8 +3678,7 @@
         "actual_1_9_count": 0,
         "actual_1_9_nums": [],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -3752,7 +3733,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=22.14，(27,31)=12.79"
@@ -3783,8 +3764,7 @@
           29
         ],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -3837,7 +3817,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=21.71"
@@ -3875,8 +3855,7 @@
           31
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -3927,7 +3906,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,26)=12.57，(21,27)=12.57"
@@ -3966,8 +3945,7 @@
           30
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -4021,7 +3999,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(23,29)=12.79，(21,26)=12.36"
@@ -4114,7 +4092,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(26,31)=23.64，(23,29)=12.57"
@@ -4145,7 +4123,6 @@
           23
         ],
         "window_cold_nums": [
-          22,
           24,
           25
         ],
@@ -4198,7 +4175,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=24.71"
@@ -4293,7 +4270,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=24.29，(26,31)=22.79"
@@ -4383,7 +4360,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=23.86"
@@ -4475,7 +4452,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=23.43，(22,23)=12.57"
@@ -4505,8 +4482,7 @@
           28
         ],
         "window_cold_nums": [
-          25,
-          28
+          25
         ],
         "deep_cold_nums": [
           25
@@ -4561,7 +4537,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=23.00"
@@ -4650,7 +4626,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=22.57"
@@ -4744,7 +4720,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,30)=22.14，(24,29)=12.36"
@@ -4831,7 +4807,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,27)=23.21，(21,30)=21.71"
@@ -4911,7 +4887,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(21,27)=22.79"
@@ -4994,7 +4970,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,27)=12.57"
@@ -5030,9 +5006,7 @@
         "actual_1_9_nums": [
           25
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -5084,7 +5058,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,27)=12.36，(25,28)=12.36"
@@ -5116,9 +5090,7 @@
           25,
           31
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -5168,7 +5140,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,29)=12.79"
@@ -5254,7 +5226,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,29)=12.57，(25,27)=11.93"
@@ -5290,9 +5262,7 @@
           28,
           30
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -5344,7 +5314,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,31)=12.79，(25,29)=12.36"
@@ -5382,9 +5352,7 @@
           28,
           29
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -5438,7 +5406,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(25,31)=12.57，(25,29)=12.14"
@@ -5525,7 +5493,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(24,26)=12.57"
@@ -5615,7 +5583,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(24,26)=12.36，(24,31)=12.36"
@@ -5700,7 +5668,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(28,29)=24.50"
@@ -5731,7 +5699,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -5784,7 +5751,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.4,
         "after_none_threshold": 0.6,
         "pair_score_text": "(28,29)=24.07"
@@ -5819,7 +5786,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -5875,7 +5841,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(28,29)=23.64，(28,30)=12.36"
@@ -5961,7 +5927,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=24.29"
@@ -6046,7 +6012,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=23.86"
@@ -6134,7 +6100,7 @@
         "allocation_correct": false,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.3333333333333333,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=23.43，(28,29)=22.36"
@@ -6219,7 +6185,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=23.00"
@@ -6312,7 +6278,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=22.57，(28,29)=21.50"
@@ -6345,8 +6311,7 @@
         "actual_1_9_count": 0,
         "actual_1_9_nums": [],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -6401,7 +6366,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=22.14，(27,31)=12.79"
@@ -6432,8 +6397,7 @@
           29
         ],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -6486,7 +6450,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=21.71"
@@ -6524,8 +6488,7 @@
           31
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -6576,7 +6539,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,26)=12.57，(21,27)=12.57"
@@ -6615,8 +6578,7 @@
           30
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -6670,7 +6632,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(23,29)=12.79，(21,26)=12.36"
@@ -6763,7 +6725,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(26,31)=23.64，(23,29)=12.57"
@@ -6794,7 +6756,6 @@
           23
         ],
         "window_cold_nums": [
-          22,
           24,
           25
         ],
@@ -6847,7 +6808,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=24.71"
@@ -6942,7 +6903,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=24.29，(26,31)=22.79"
@@ -7032,7 +6993,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=23.86"
@@ -7124,7 +7085,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=23.43，(22,23)=12.57"
@@ -7154,8 +7115,7 @@
           28
         ],
         "window_cold_nums": [
-          25,
-          28
+          25
         ],
         "deep_cold_nums": [
           25
@@ -7210,7 +7170,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=23.00"
@@ -7299,7 +7259,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=22.57"
@@ -7393,7 +7353,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,30)=22.14，(24,29)=12.36"
@@ -7480,7 +7440,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,27)=23.21，(21,30)=21.71"
@@ -7560,7 +7520,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(21,27)=22.79"
@@ -7643,7 +7603,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,27)=12.57"
@@ -7679,9 +7639,7 @@
         "actual_1_9_nums": [
           25
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -7733,7 +7691,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,27)=12.36，(25,28)=12.36"
@@ -7765,9 +7723,7 @@
           25,
           31
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -7817,7 +7773,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,29)=12.79"
@@ -7903,7 +7859,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,29)=12.57，(25,27)=11.93"
@@ -7939,9 +7895,7 @@
           28,
           30
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -7993,7 +7947,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,31)=12.79，(25,29)=12.36"
@@ -8031,9 +7985,7 @@
           28,
           29
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -8087,7 +8039,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(25,31)=12.57，(25,29)=12.14"
@@ -8174,7 +8126,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(24,26)=12.57"
@@ -8264,7 +8216,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(24,26)=12.36，(24,31)=12.36"
@@ -8349,7 +8301,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(28,29)=24.50"
@@ -8380,7 +8332,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -8433,7 +8384,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.4,
         "after_none_threshold": 0.65,
         "pair_score_text": "(28,29)=24.07"
@@ -8468,7 +8419,6 @@
           31
         ],
         "window_cold_nums": [
-          21,
           23
         ],
         "deep_cold_nums": [
@@ -8524,7 +8474,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(28,29)=23.64，(28,30)=12.36"
@@ -8610,7 +8560,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=24.29"
@@ -8695,7 +8645,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.5,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=23.86"
@@ -8783,7 +8733,7 @@
         "allocation_correct": false,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.3333333333333333,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=23.43，(28,29)=22.36"
@@ -8868,7 +8818,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=23.00"
@@ -8961,7 +8911,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=22.57，(28,29)=21.50"
@@ -8994,8 +8944,7 @@
         "actual_1_9_count": 0,
         "actual_1_9_nums": [],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -9050,7 +8999,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=22.14，(27,31)=12.79"
@@ -9081,8 +9030,7 @@
           29
         ],
         "window_cold_nums": [
-          23,
-          24
+          23
         ],
         "deep_cold_nums": [
           23
@@ -9135,7 +9083,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=21.71"
@@ -9173,8 +9121,7 @@
           31
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -9225,7 +9172,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,26)=12.57，(21,27)=12.57"
@@ -9264,8 +9211,7 @@
           30
         ],
         "window_cold_nums": [
-          24,
-          25
+          24
         ],
         "deep_cold_nums": [],
         "window_categories": {
@@ -9319,7 +9265,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(23,29)=12.79，(21,26)=12.36"
@@ -9412,7 +9358,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(26,31)=23.64，(23,29)=12.57"
@@ -9443,7 +9389,6 @@
           23
         ],
         "window_cold_nums": [
-          22,
           24,
           25
         ],
@@ -9496,7 +9441,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=24.71"
@@ -9591,7 +9536,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=24.29，(26,31)=22.79"
@@ -9681,7 +9626,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=23.86"
@@ -9773,7 +9718,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=23.43，(22,23)=12.57"
@@ -9803,8 +9748,7 @@
           28
         ],
         "window_cold_nums": [
-          25,
-          28
+          25
         ],
         "deep_cold_nums": [
           25
@@ -9859,7 +9803,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=23.00"
@@ -9948,7 +9892,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=22.57"
@@ -10042,7 +9986,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,30)=22.14，(24,29)=12.36"
@@ -10129,7 +10073,7 @@
         "allocation_correct": false,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,27)=23.21，(21,30)=21.71"
@@ -10209,7 +10153,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(21,27)=22.79"
@@ -10292,7 +10236,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,27)=12.57"
@@ -10328,9 +10272,7 @@
         "actual_1_9_nums": [
           25
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -10382,7 +10324,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,27)=12.36，(25,28)=12.36"
@@ -10414,9 +10356,7 @@
           25,
           31
         ],
-        "window_cold_nums": [
-          26
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -10466,7 +10406,7 @@
         "allocation_correct": true,
         "predict_num_count": 2,
         "allocation_reason": "上一期只開 1 球，先減少 21-31 發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,29)=12.79"
@@ -10552,7 +10492,7 @@
         "allocation_correct": true,
         "predict_num_count": 3,
         "allocation_reason": "近期有 21-31，按正常配額發球",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,29)=12.57，(25,27)=11.93"
@@ -10588,9 +10528,7 @@
           28,
           30
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -10642,7 +10580,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 3 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,31)=12.79，(25,29)=12.36"
@@ -10680,9 +10618,7 @@
           28,
           29
         ],
-        "window_cold_nums": [
-          22
-        ],
+        "window_cold_nums": [],
         "deep_cold_nums": [],
         "window_categories": {
           "none": 1,
@@ -10736,7 +10672,7 @@
         "allocation_correct": true,
         "predict_num_count": 4,
         "allocation_reason": "最近 5 期有 4 期 2球+",
-        "cold_gap_used": 12,
+        "cold_gap_used": 20,
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(25,31)=12.57，(25,29)=12.14"
