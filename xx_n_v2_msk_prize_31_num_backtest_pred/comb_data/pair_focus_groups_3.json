@@ -2,6 +2,77 @@
   {
     "rank": 1,
     "pair": [
+      4,
+      7
+    ],
+    "group_count": 5,
+    "total_hit_count": 5,
+    "combo_units": [
+      {
+        "index": 490,
+        "nums": [
+          4,
+          7,
+          8
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 493,
+        "nums": [
+          4,
+          7,
+          11
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 496,
+        "nums": [
+          4,
+          7,
+          14
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-28"
+        ]
+      },
+      {
+        "index": 497,
+        "nums": [
+          4,
+          7,
+          15
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-23"
+        ]
+      },
+      {
+        "index": 502,
+        "nums": [
+          4,
+          7,
+          20
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-07-28"
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 2,
+    "pair": [
       7,
       9
     ],
@@ -71,7 +142,125 @@
     ]
   },
   {
-    "rank": 2,
+    "rank": 3,
+    "pair": [
+      4,
+      11
+    ],
+    "group_count": 4,
+    "total_hit_count": 4,
+    "combo_units": [
+      {
+        "index": 493,
+        "nums": [
+          4,
+          7,
+          11
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 505,
+        "nums": [
+          4,
+          8,
+          11
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 537,
+        "nums": [
+          4,
+          11,
+          13
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-04"
+        ]
+      },
+      {
+        "index": 540,
+        "nums": [
+          4,
+          11,
+          16
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-04"
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 4,
+    "pair": [
+      7,
+      8
+    ],
+    "group_count": 4,
+    "total_hit_count": 4,
+    "combo_units": [
+      {
+        "index": 490,
+        "nums": [
+          4,
+          7,
+          8
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 777,
+        "nums": [
+          7,
+          8,
+          9
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-18"
+        ]
+      },
+      {
+        "index": 779,
+        "nums": [
+          7,
+          8,
+          11
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-29"
+        ]
+      },
+      {
+        "index": 782,
+        "nums": [
+          7,
+          8,
+          14
+        ],
+        "hit_count": 1,
+        "hit_dates": [
+          "2026-08-18"
+        ]
+      }
+    ]
+  },
+  {
+    "rank": 5,
     "pair": [
       7,
       14
@@ -130,101 +319,7 @@
     ]
   },
   {
-    "rank": 3,
-    "pair": [
-      4,
-      7
-    ],
-    "group_count": 3,
-    "total_hit_count": 3,
-    "combo_units": [
-      {
-        "index": 496,
-        "nums": [
-          4,
-          7,
-          14
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-28"
-        ]
-      },
-      {
-        "index": 497,
-        "nums": [
-          4,
-          7,
-          15
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-23"
-        ]
-      },
-      {
-        "index": 502,
-        "nums": [
-          4,
-          7,
-          20
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-28"
-        ]
-      }
-    ]
-  },
-  {
-    "rank": 4,
-    "pair": [
-      5,
-      7
-    ],
-    "group_count": 3,
-    "total_hit_count": 3,
-    "combo_units": [
-      {
-        "index": 206,
-        "nums": [
-          2,
-          5,
-          7
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-11"
-        ]
-      },
-      {
-        "index": 598,
-        "nums": [
-          5,
-          7,
-          11
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-11"
-        ]
-      },
-      {
-        "index": 599,
-        "nums": [
-          5,
-          7,
-          12
-        ],
-        "hit_count": 1,
-        "hit_dates": [
-          "2026-07-25"
-        ]
-      }
-    ]
-  },
-  {
-    "rank": 5,
+    "rank": 6,
     "pair": [
       7,
       15

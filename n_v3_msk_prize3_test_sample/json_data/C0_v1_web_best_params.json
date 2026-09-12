@@ -1,5 +1,5 @@
 {
-  "model": "C1_v1_simple",
+  "model": "C0_v1_simple",
   "best": {
     "backtest_draw_count": 24,
     "window_draw_count": 21,

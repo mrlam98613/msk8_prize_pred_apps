@@ -28,12 +28,12 @@
     "window_draw_count": 12,
     "total": 50,
     "hit_3_count": 23,
-    "hit_2_count": 21,
-    "hit_2_plus_count": 44,
-    "hit_1_count": 5,
+    "hit_2_count": 20,
+    "hit_2_plus_count": 43,
+    "hit_1_count": 6,
     "hit_0_count": 1,
-    "hit_2_plus_rate": 0.88,
-    "score": 451
+    "hit_2_plus_rate": 0.86,
+    "score": 445
   },
   "ranking": [
     {
@@ -41,65 +41,39 @@
       "window_draw_count": 12,
       "total": 50,
       "hit_3_count": 23,
-      "hit_2_count": 21,
-      "hit_2_plus_count": 44,
-      "hit_1_count": 5,
+      "hit_2_count": 20,
+      "hit_2_plus_count": 43,
+      "hit_1_count": 6,
       "hit_0_count": 1,
-      "hit_2_plus_rate": 0.88,
-      "score": 451
+      "hit_2_plus_rate": 0.86,
+      "score": 445
     },
     {
       "backtest_draw_count": 50,
       "window_draw_count": 18,
       "total": 50,
       "hit_3_count": 23,
-      "hit_2_count": 21,
-      "hit_2_plus_count": 44,
-      "hit_1_count": 5,
+      "hit_2_count": 20,
+      "hit_2_plus_count": 43,
+      "hit_1_count": 6,
       "hit_0_count": 1,
-      "hit_2_plus_rate": 0.88,
-      "score": 451
+      "hit_2_plus_rate": 0.86,
+      "score": 445
     },
     {
       "backtest_draw_count": 50,
       "window_draw_count": 24,
       "total": 50,
       "hit_3_count": 23,
-      "hit_2_count": 21,
-      "hit_2_plus_count": 44,
-      "hit_1_count": 5,
+      "hit_2_count": 20,
+      "hit_2_plus_count": 43,
+      "hit_1_count": 6,
       "hit_0_count": 1,
-      "hit_2_plus_rate": 0.88,
-      "score": 451
+      "hit_2_plus_rate": 0.86,
+      "score": 445
     }
   ],
   "backtest_rows": [
-    {
-      "check_date": "2026-05-07",
-      "predicted_quota": {
-        "F": 5,
-        "G": 4,
-        "H": 0
-      },
-      "predicted_strong": [
-        "F"
-      ],
-      "actual_strong": [],
-      "hit_route": [
-        "F",
-        "G"
-      ],
-      "hit_count": 2,
-      "hit_ball_count": 3,
-      "check_counts": {
-        "F": 1,
-        "G": 2,
-        "H": 2
-      },
-      "window_count": 12,
-      "route_score_text": "G:17.7, F:17.5, H:14.0",
-      "reason": "最近5期：F:5, G:4, H:4；窗口分：G:17.7, F:17.5, H:14.0；上一期未出：H，該組減球；上一期主力：F，主力組加權"
-    },
     {
       "check_date": "2026-05-10",
       "predicted_quota": {
@@ -1488,15 +1462,42 @@
       "window_count": 12,
       "route_score_text": "G:18.4, F:16.9, H:14.4",
       "reason": "最近5期：G:5, H:5, F:4；窗口分：G:18.4, F:16.9, H:14.4；上一期主力：H，主力組加權"
+    },
+    {
+      "check_date": "2026-09-10",
+      "predicted_quota": {
+        "F": 4,
+        "G": 0,
+        "H": 5
+      },
+      "predicted_strong": [
+        "H"
+      ],
+      "actual_strong": [
+        "H"
+      ],
+      "hit_route": [
+        "H"
+      ],
+      "hit_count": 1,
+      "hit_ball_count": 3,
+      "check_counts": {
+        "F": 0,
+        "G": 0,
+        "H": 3
+      },
+      "window_count": 12,
+      "route_score_text": "F:17.2, G:16.3, H:14.5",
+      "reason": "最近5期：H:5, F:4, G:4；窗口分：F:17.2, G:16.3, H:14.5；上一期未出：G，該組減球；上一期主力：H，主力組加權"
     }
   ],
   "next_prediction": {
-    "bet_date": "2026-09-10",
+    "bet_date": "2026-09-12",
     "quota": {
-      "F": 4,
-      "G": 0,
+      "F": 1,
+      "G": 2,
       "H": 5
     },
-    "quota_text": "F4 + G0 + H5"
+    "quota_text": "F1 + G2 + H5"
   }
 }

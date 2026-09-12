@@ -3,7 +3,7 @@
   "params": {
     "backtest_draw_count": 1,
     "window_draw_count_list": [
-      24
+      18
     ],
     "pair_select_mode": "bridge",
     "memory_window_count": 24,
@@ -12,47 +12,35 @@
     "include_special_in_cold": true
   },
   "best_window": {
-    "window_count": 24,
+    "window_count": 18,
     "full_pair_hit_count": 0,
     "hit_2_count": 0,
     "hit_1_5_count": 0,
-    "hit_1_count": 1,
-    "hit_0_count": 0,
+    "hit_1_count": 0,
+    "hit_0_count": 1,
     "none_hit_count": 0,
-    "score": 2.0
+    "score": -5.0
   },
   "window_scores": [
     {
-      "window_count": 24,
+      "window_count": 18,
       "full_pair_hit_count": 0,
       "hit_2_count": 0,
       "hit_1_5_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 0,
+      "hit_1_count": 0,
+      "hit_0_count": 1,
       "none_hit_count": 0,
-      "score": 2.0
+      "score": -5.0
     }
   ],
   "next_prediction": {
-    "best_window": 24,
-    "latest_draw_date": "2026-09-05",
-    "skip_1_9": false,
-    "prediction_pairs": [
-      [
-        7,
-        9
-      ],
-      [
-        5,
-        7
-      ]
-    ],
-    "prediction_nums": [
-      5,
-      7,
-      9
-    ],
+    "best_window": 18,
+    "latest_draw_date": "2026-09-10",
+    "skip_1_9": true,
+    "prediction_pairs": [],
+    "prediction_nums": [],
     "deep_cold_nums": [
+      5,
       6
     ],
     "top_pair_scores": [
@@ -63,26 +51,11 @@
           9
         ],
         "hit_count": 3,
-        "wait_count": 5,
-        "single_support": 1,
+        "wait_count": 7,
+        "single_support": 2,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 135.0
-      },
-      {
-        "index": 28,
-        "pair": [
-          5,
-          7
-        ],
-        "hit_count": 2,
-        "wait_count": 17,
-        "single_support": 1,
-        "cold_nums": [
-          5
-        ],
-        "cold_support": 6,
-        "score": 101.0
+        "score": 177.0
       },
       {
         "index": 6,
@@ -90,101 +63,27 @@
           1,
           7
         ],
-        "hit_count": 4,
-        "wait_count": 4,
+        "hit_count": 3,
+        "wait_count": 6,
         "single_support": 0,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 54.63
+        "score": 56.0
       },
       {
-        "index": 11,
+        "index": 19,
         "pair": [
-          2,
-          5
+          3,
+          7
         ],
         "hit_count": 1,
-        "wait_count": 22,
+        "wait_count": 13,
         "single_support": 1,
         "cold_nums": [
-          2,
-          5
-        ],
-        "cold_support": 12,
-        "score": 47.33
-      },
-      {
-        "index": 24,
-        "pair": [
-          4,
-          7
-        ],
-        "hit_count": 3,
-        "wait_count": 2,
-        "single_support": 2,
-        "cold_nums": [],
-        "cold_support": 0,
-        "score": 44.0
-      },
-      {
-        "index": 5,
-        "pair": [
-          1,
-          6
-        ],
-        "hit_count": 1,
-        "wait_count": 19,
-        "single_support": 0,
-        "cold_nums": [
-          6
-        ],
-        "cold_support": 10,
-        "score": 40.83
-      },
-      {
-        "index": 32,
-        "pair": [
-          6,
-          8
-        ],
-        "hit_count": 1,
-        "wait_count": 19,
-        "single_support": 0,
-        "cold_nums": [
-          6
-        ],
-        "cold_support": 10,
-        "score": 40.83
-      },
-      {
-        "index": 13,
-        "pair": [
-          2,
-          7
-        ],
-        "hit_count": 1,
-        "wait_count": 22,
-        "single_support": 0,
-        "cold_nums": [
-          2
+          3
         ],
         "cold_support": 6,
-        "score": 36.33
-      },
-      {
-        "index": 1,
-        "pair": [
-          1,
-          2
-        ],
-        "hit_count": 1,
-        "wait_count": 15,
-        "single_support": 0,
-        "cold_nums": [
-          2
-        ],
-        "cold_support": 6,
-        "score": 28.5
+        "score": 37.44
       },
       {
         "index": 34,
@@ -193,20 +92,89 @@
           8
         ],
         "hit_count": 2,
-        "wait_count": 2,
+        "wait_count": 4,
         "single_support": 0,
         "cold_nums": [],
         "cold_support": 0,
-        "score": 28.0
+        "score": 36.0
+      },
+      {
+        "index": 2,
+        "pair": [
+          1,
+          3
+        ],
+        "hit_count": 1,
+        "wait_count": 13,
+        "single_support": 1,
+        "cold_nums": [
+          3
+        ],
+        "cold_support": 6,
+        "score": 35.44
+      },
+      {
+        "index": 1,
+        "pair": [
+          1,
+          2
+        ],
+        "hit_count": 1,
+        "wait_count": 17,
+        "single_support": 0,
+        "cold_nums": [
+          2
+        ],
+        "cold_support": 6,
+        "score": 34.89
+      },
+      {
+        "index": 24,
+        "pair": [
+          4,
+          7
+        ],
+        "hit_count": 2,
+        "wait_count": 4,
+        "single_support": 2,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 34.71
+      },
+      {
+        "index": 36,
+        "pair": [
+          8,
+          9
+        ],
+        "hit_count": 1,
+        "wait_count": 9,
+        "single_support": 2,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 27.0
+      },
+      {
+        "index": 25,
+        "pair": [
+          4,
+          8
+        ],
+        "hit_count": 1,
+        "wait_count": 4,
+        "single_support": 2,
+        "cold_nums": [],
+        "cold_support": 0,
+        "score": 23.44
       }
     ]
   },
   "backtest_results": [
     {
-      "window_count": 24,
+      "window_count": 18,
       "check_no": 1,
-      "check_date": "2026-09-05",
-      "check_nums": "[9]",
+      "check_date": "2026-09-10",
+      "check_nums": "[]",
       "skip_1_9": false,
       "prediction_pairs": [
         [
@@ -214,28 +182,28 @@
           9
         ],
         [
-          5,
+          1,
           7
         ]
       ],
       "prediction_nums": [
-        5,
+        1,
         7,
         9
       ],
-      "deep_cold_nums": [],
-      "normal_hits": [
-        9
+      "deep_cold_nums": [
+        6
       ],
+      "normal_hits": [],
       "special_hits": [],
-      "hit_score": 1.0,
-      "check_group_score": 1.0,
-      "check_group_nums_count": 1,
+      "hit_score": 0.0,
+      "check_group_score": 0.0,
+      "check_group_nums_count": 0,
       "random_prediction_nums": [
-        1,
-        2,
         3,
-        8
+        6,
+        7,
+        9
       ],
       "random_normal_hits": [],
       "random_special_hits": [],

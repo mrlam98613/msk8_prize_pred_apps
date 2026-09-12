@@ -13,7 +13,7 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 BACKTEST_DRAW_COUNT_LIST = [6]
 # 窗口期 必須大於 TOP_PRIZE_DRAW_COUNT_LIST ＝7 X 3 倍= 21期 
 WINDOW_DRAW_COUNT_LIST = [28]
-TOP_PRIZE_DRAW_COUNT_LIST = [5] # 窗口期，3獎中獎注數最多前7期
+TOP_PRIZE_DRAW_COUNT_LIST = [7] # 窗口期，3獎中獎注數最多前7期
 PRIZE_OPTION = 3 # 目標以每期 3獎中獎注數 取樣驗證
 MATCH_COUNT = 2 # 取樣條件：每開獎期如有生日號 >= 2 球
 MATCH_MODE = ">="

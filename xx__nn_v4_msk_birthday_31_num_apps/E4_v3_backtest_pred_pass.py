@@ -20,7 +20,7 @@ E4_JSON = JSON_DIR / "E4_v3.json"
 # 2. 真實預測：用最佳窗口期，並包含最新開獎期作分析窗口。
 # 3. 追蹤對象：36 組雙球 + 9 個單球 + (00) 無 1-9。
 BACKTEST_DRAW_COUNT = 1 # 回測核對期數。
-WINDOW_DRAW_COUNT_LIST = [24]  # 多窗口期回測比較。
+WINDOW_DRAW_COUNT_LIST = [18]  # 多窗口期回測比較。
 COMBINATION_TAKE_COUNT = 2  # 每期 N1-N6 需符合多少個 1-9。
 BIRTHDAY_NUM_MIN = 1
 BIRTHDAY_NUM_MAX = 9

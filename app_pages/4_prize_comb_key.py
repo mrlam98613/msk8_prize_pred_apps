@@ -16,7 +16,7 @@ from css import white_black_style
 
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-DEFAULT_RECENT_DRAW_COUNT = 20
+DEFAULT_RECENT_DRAW_COUNT = 24
 DEFAULT_MIN_SELECTED_COUNT = 3
 DEFAULT_MATCH_MODE = ">="
 DEFAULT_NUM_MIN = 1
@@ -29,7 +29,7 @@ class MatchedDraw(TypedDict):
     index: int
     date: str
     selected_nums: str
-    selected_count: int
+    selected_count: float
     prize_count: str
     display_text: str
 
@@ -102,6 +102,23 @@ def should_include_special(match_mode: str, target_count: int, main_count: int) 
     return match_mode == ">=" and target_count >= 3 and main_count >= target_count
 
 
+def build_display_text(
+    index: int,
+    date: str,
+    selected_nums: str,
+    selected_count: float,
+    prize_count: str,
+    show_prize_count: bool,
+) -> str:
+    display_text = (
+        f"{index:>3} {date} : "
+        f"{selected_nums} /> {selected_count:g} 球"
+    )
+    if show_prize_count:
+        display_text += f" /> {prize_count}"
+    return display_text
+
+
 def build_matched_rows(
     rows: list[dict[str, str]],
     recent_draw_count: int,
@@ -124,24 +141,17 @@ def build_matched_rows(
             continue
 
         display_nums = [str(num) for num in selected_nums]
-        selected_count = len(selected_nums)
+        selected_count = float(len(selected_nums))
         if (
             special is not None
             and num_min <= special <= num_max
             and should_include_special(match_mode, min_selected_count, len(selected_nums))
         ):
             display_nums.append(f"*{special}")
-            selected_count += 1
+            selected_count += 0.5
 
         selected_nums_text = ",".join(display_nums)
         prize_count = format_prize_count(row.get(prize_key, ""))
-        display_text = (
-            f"{len(matched_rows) + 1:>3} {row.get('nDdate', '')} : "
-            f"{selected_nums_text} /> {selected_count} 球"
-        )
-        if show_prize_count:
-            display_text += f" /> {prize_count}"
-
         matched_rows.append(
             {
                 "index": len(matched_rows) + 1,
@@ -149,7 +159,14 @@ def build_matched_rows(
                 "selected_nums": selected_nums_text,
                 "selected_count": selected_count,
                 "prize_count": prize_count,
-                "display_text": display_text,
+                "display_text": build_display_text(
+                    len(matched_rows) + 1,
+                    row.get("nDdate", ""),
+                    selected_nums_text,
+                    selected_count,
+                    prize_count,
+                    show_prize_count,
+                ),
             }
         )
 
@@ -318,7 +335,11 @@ def main() -> None:
         )
         prize_option = st.selectbox("顯示獎項注數", [1, 2, 3], index=2)
 
-        show_prize_count = st.checkbox("顯示中獎注數", value=DEFAULT_SHOW_PRIZE_COUNT)
+        col_show, col_sort = st.columns(2)
+        with col_show:
+            show_prize_count = st.checkbox("顯示中獎注數", value=DEFAULT_SHOW_PRIZE_COUNT)
+        with col_sort:
+            sort_by_prize_count = st.checkbox("依中獎注數排序（大到小）", value=False)
 
         submitted = st.form_submit_button("查詢", type="primary")
         reset_clicked = st.form_submit_button("Reset", type="secondary")
@@ -337,6 +358,7 @@ def main() -> None:
             "num_max": int(num_max),
             "prize_option": int(prize_option),
             "show_prize_count": bool(show_prize_count),
+            "sort_by_prize_count": bool(sort_by_prize_count),
         }
 
     if not st.session_state["prize_comb_key_has_query"]:
@@ -350,6 +372,7 @@ def main() -> None:
     num_max = params["num_max"]
     prize_option = params["prize_option"]
     show_prize_count = params["show_prize_count"]
+    sort_by_prize_count = params["sort_by_prize_count"]
 
     error = validate_params(int(num_min), int(num_max), int(min_selected_count))
     if error:
@@ -371,6 +394,18 @@ def main() -> None:
         prize_option=int(prize_option),
         show_prize_count=show_prize_count,
     )
+    if sort_by_prize_count:
+        matched_rows.sort(key=lambda row: float(row["prize_count"]), reverse=True)
+        for index, row in enumerate(matched_rows, start=1):
+            row["index"] = index
+            row["display_text"] = build_display_text(
+                index,
+                row["date"],
+                row["selected_nums"],
+                row["selected_count"],
+                row["prize_count"],
+                show_prize_count,
+            )
 
     include_special_text = (
         "N1-N7"
@@ -378,10 +413,11 @@ def main() -> None:
         else "N1-N6"
     )
     prize_text = f"顯示 {prize_option} 中獎注數" if show_prize_count else "不顯示中獎注數"
+    sort_text = "，依中獎注數由大到小排序" if sort_by_prize_count else ""
     st.markdown(
         f"<div class='result-title'>最近 {int(recent_draw_count)} 期，"
         f"{include_special_text} 包含 {int(num_min)}-{int(num_max)} 號數量 "
-        f"{match_mode} {int(min_selected_count)}，{prize_text}</div>",
+        f"{match_mode} {int(min_selected_count)}，{prize_text}{sort_text}</div>",
         unsafe_allow_html=True,
     )
 

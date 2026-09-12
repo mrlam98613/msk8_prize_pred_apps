@@ -4,11 +4,24 @@ import itertools
 import json
 import sys
 from typing import TypedDict
+
 '''
+C0_v1 生日號 fortune key 簡化回測 + 預測版
+
+核心概念：
+1. 讀入 M6_lotto_history_prize.csv 作歷史開獎及 1/2/3 獎注數分析。
+2. 每一期回測時，窗口期只取「核對期之前」資料，不包括核對期。
+3. 真正預測下一期時，窗口期會包括最新已開獎期。
+4. 1-31 生日號分成三組：1-9、10-20、21-31。
+5. 每組先找出符合 MATCH_COUNT 的期數，再按 prize3 中獎注數排序取樣。
+6. 用單號出現、雙號組合關連、prize 注數、排名權重，計算每個球號分數。
+7. 自動比較多組回測期 / 窗口期 / prize前N / 分組配額，選出最佳參數。
+
+命中統計：
 5+ = 5、5.5、6 球
 4+ = 4、4.5 球
 3+ = 3、3.5 球
-
+特號命中 = 0.5 球
 '''
 
 
@@ -19,25 +32,36 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from msk_marksix_function_app.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
 
+# ===== 資料來源及輸出位置 =====
+# M6：歷史開獎資料，包含 N1..N7 及 prize1/prize2/prize3 注數。
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
+# M4：讀取真正下一期開獎日期。
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
-JSON_PATH = CURRENT_DIR / "json_data" / "C1_v1_simple_best_params.json"
+# JSON：保存本次回測最佳參數，讓預測模式可直接讀入。
+JSON_PATH = CURRENT_DIR / "json_data" / "C0_v1_simple_best_params.json"
+# CSV：保存下期預測及最佳參數回測核對資料。
 BET_DATA_DIR = CURRENT_DIR / "data"
-NEXTDRAW_PRED_CSV = BET_DATA_DIR / "C1_v1_nextdraw_pred.csv"
-BACKTEST_CHECK_CSV = BET_DATA_DIR / "C1_v1_backtest_check_rows.csv"
+NEXTDRAW_PRED_CSV = BET_DATA_DIR / "C0_v1_nextdraw_pred.csv"
+BACKTEST_CHECK_CSV = BET_DATA_DIR / "C0_v1_backtest_check_rows.csv"
 
+# ===== 回測主要參數 =====
 # 簡化版只保留核心列表；回測會自動選最佳組合，再給預測模式讀入。
 BACKTEST_DRAW_COUNT_LIST = [30]
-WINDOW_DRAW_COUNT_LIST = [12,18,21]
-TOP_PRIZE_DRAW_COUNT_LIST = [5,7]
+# 窗口期：每一期核對前，用多少期歷史資料做取樣分析。
+WINDOW_DRAW_COUNT_LIST = [18,21,36]
+# prize前N：在窗口期內，取 prize3 注數最高的前 N 期做核心樣本。
+TOP_PRIZE_DRAW_COUNT_LIST = [7]
+# PRIZE_OPTION=3 即以三獎注數作人氣排序基準。
 PRIZE_OPTION = 3
+# MATCH_COUNT / MATCH_MODE：每組要出現幾球才納入樣本，例如 >=2。
 MATCH_COUNT = 2
 MATCH_MODE = ">="
+# GROUP_QUOTA_LIST：三個分組各發幾球，例如 3+3+3 或 2+2+3。
 GROUP_QUOTA_LIST = [
     (3, 3, 3),
-    # (2, 2, 3),
-    # (2, 3, 2),
-    # (3, 2, 2),
+    (2, 2, 3),
+    (2, 3, 2),
+    (3, 2, 2),
 ]
 GROUPS = {
     1: ("1-9", 1, 9),
@@ -45,10 +69,16 @@ GROUPS = {
     3: ("21-31", 21, 31),
 }
 
+# ===== 球號打分權重 =====
+# 雙球組合權重：同一期內兩個號碼一起出現，代表有關連性。
 PAIR_HIT_WEIGHT = 7
+# 單球出現權重：號碼在樣本內出現一次，加基本分。
 NUM_HIT_WEIGHT = 1
+# prize 注數權重：中獎注數越多人中，代表該期組合人氣越高。
 PRIZE_WEIGHT = 1.0
+# 排名權重：prize 排名越前的樣本，加分越高。
 RECENCY_WEIGHTS = [7, 6, 5, 4, 3, 2, 1]
+# 模型分數：回測命中越高球數，分數越重；0 球扣分。
 SCORE_WEIGHTS = {
     6.0: 80,
     5.5: 60,
@@ -65,7 +95,9 @@ SCORE_WEIGHTS = {
     0.0: -2,
 }
 
-# ======================== Start of C1_v1 core functions ========================
+# ======================== 資料結構 ========================
+# DrawRow：一期开奖结果的標準格式。
+# BacktestRow：一期开奖结果核對後的標準格式。
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
@@ -83,6 +115,8 @@ class BacktestRow(TypedDict):
     prize_level: str
 
 
+# ======================== CSV 讀取及數值轉換 ========================
+# 這一段只處理資料清洗，不做預測邏輯。
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
@@ -114,6 +148,8 @@ def to_float(value: object, default: float = 0.0) -> float:
         return default
 
 
+# ======================== 開獎資料解析 ========================
+# 將 M6 CSV 原始欄位轉成 DrawRow，方便後面統一處理。
 def parse_m6_row(row: dict[str, str]) -> DrawRow:
     nums = [to_int(row.get(f"N{idx}")) for idx in range(1, 7)]
     special = to_int(row.get("N7"))
@@ -135,6 +171,8 @@ def read_next_draw_date() -> str:
     return rows[-1].get("next_draw_date", "") if rows else ""
 
 
+# ======================== 生日號分組工具 ========================
+# GROUPS 定義三段生日號：1-9、10-20、21-31。
 def group_name(group_id: int) -> str:
     return GROUPS[group_id][0]
 
@@ -150,6 +188,9 @@ def is_matched(count: int) -> bool:
     return count >= MATCH_COUNT
 
 
+# ======================== 窗口期樣本取樣 ========================
+# 回測時：窗口期不包括核對期。
+# 預測時：窗口期包括最新已開獎期，因 target_index = len(draws)。
 def build_window_samples(draws: list[DrawRow], target_index: int, group_id: int, window_count: int) -> list[DrawRow]:
     window_rows = draws[max(0, target_index - window_count):target_index]
     matched: list[DrawRow] = []
@@ -159,6 +200,8 @@ def build_window_samples(draws: list[DrawRow], target_index: int, group_id: int,
     return sorted(matched, key=lambda item: (-item["prize_count"], item["date"]))
 
 
+# ======================== 分組發球預測 ========================
+# 依據 prize3 高注數樣本，計算單號分、雙號關連分、排名權重，選出每組預測號碼。
 def build_group_prediction(
     samples: list[DrawRow],
     group_id: int,
@@ -182,6 +225,8 @@ def build_group_prediction(
     return sorted(num for num, _score in ranked[:quota])
 
 
+# ======================== 顯示格式工具 ========================
+# 統一配額、號碼 list、R/B/G 顯示格式，避免打印結果混亂。
 def quota_to_map(quota_tuple: tuple[int, int, int]) -> dict[int, int]:
     return {group_id: quota for group_id, quota in zip(GROUPS, quota_tuple)}
 
@@ -203,6 +248,8 @@ def format_rbg_lines(nums: list[int]) -> list[str]:
     ]
 
 
+# ======================== 命中及獎級核對 ========================
+# 正號命中每球 = 1；特號命中 = 0.5。
 def get_hit_score(normal_hit_count: int, has_special_hit: bool) -> float:
     if normal_hit_count >= 6:
         return 6.0
@@ -243,6 +290,8 @@ def check_prediction(check_row: DrawRow, predictions: dict[str, list[int]], rank
     }
 
 
+# ======================== 單組參數回測 ========================
+# 對一組 backtest/window/top_prize/quota 參數逐期回測，產生核對列表。
 def run_backtest_once(
     draws: list[DrawRow],
     backtest_count: int,
@@ -274,6 +323,8 @@ def run_backtest_once(
     return result_rows
 
 
+# ======================== 回測統計及模型分數 ========================
+# 將逐期核對結果變成 5+ / 4+ / 3+ / 0球 / 模型分數。
 def exact_counts(backtest_rows: list[BacktestRow]) -> dict[float, int]:
     levels = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0]
     counts = {float(level): 0 for level in levels}
@@ -338,6 +389,8 @@ def summarize_result(
     }
 
 
+# ======================== 多組參數排序 ========================
+# 排序重點優先看 5+、4+、3+，再看中獎期、0球、模型分數。
 def sort_summaries(summaries: list[dict[str, object]]) -> list[dict[str, object]]:
     return sorted(
         summaries,
@@ -357,6 +410,8 @@ def sort_summaries(summaries: list[dict[str, object]]) -> list[dict[str, object]
     )
 
 
+# ======================== JSON 歷史記憶工具 ========================
+# 目前保留給日後擴展：比較不同執行日的長期穩定參數。
 def load_historical_rankings(current_latest_date: str) -> list[list[dict[str, object]]]:
     if not JSON_PATH.exists():
         return []
@@ -463,6 +518,8 @@ def aggregate_summary_history(
     return list(grouped.values())
 
 
+# ======================== 自動回測選最佳參數 ========================
+# 將所有參數列表組合起來逐一回測，排名第一即為本次最佳參數。
 def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dict[str, object]], list[BacktestRow]]:
     summaries: list[dict[str, object]] = []
     backtest_by_key: dict[tuple[int, int, int, str], list[BacktestRow]] = {}
@@ -507,6 +564,8 @@ def run_auto_backtest(draws: list[DrawRow]) -> tuple[dict[str, object], list[dic
     return best, ranked, best_rows
 
 
+# ======================== JSON 儲存最佳參數 ========================
+# best 供 predict_next 使用；ranking 供人工比較；run_history 供日後追蹤。
 def save_json(
     best: dict[str, object],
     ranking: list[dict[str, object]],
@@ -531,7 +590,7 @@ def save_json(
         "best_backtest_rows": backtest_rows,
     })
     data = {
-        "model": "C1_v1_simple",
+        "model": "C0_v1_simple",
         "best": best,
         "ranking": ranking,
         "run_history": run_history[-30:],
@@ -551,6 +610,8 @@ def save_json(
     JSON_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+# ======================== 讀入最佳參數 ========================
+# 預測模式只讀 JSON best，不再手動重填所有回測參數。
 def load_best_params() -> dict[str, object]:
     if not JSON_PATH.exists():
         return {}
@@ -562,6 +623,8 @@ def load_best_params() -> dict[str, object]:
     return best if isinstance(best, dict) else {}
 
 
+# ======================== 真正下一期預測 ========================
+# 用最新已開獎期之前/包含最新期的窗口資料，生成下一期 1-9 / 10-20 / 21-31 預測。
 def predict_next(draws: list[DrawRow], best: dict[str, object]) -> dict[str, list[int]]:
     window_count = to_int(best.get("window_draw_count"), WINDOW_DRAW_COUNT_LIST[0])
     top_prize_count = to_int(best.get("top_prize_draw_count"), TOP_PRIZE_DRAW_COUNT_LIST[0])
@@ -583,6 +646,9 @@ def predict_next(draws: list[DrawRow], best: dict[str, object]) -> dict[str, lis
     return predictions
 
 
+# ======================== CSV 輸出 ========================
+# nextdraw_pred：給網頁或其他程式讀取下期預測。
+# backtest_check：保存最佳參數逐期核對明細。
 def save_nextdraw_pred_csv(bet_date: str, predictions: dict[str, list[int]]) -> None:
     BET_DATA_DIR.mkdir(parents=True, exist_ok=True)
     with NEXTDRAW_PRED_CSV.open("w", encoding="utf-8-sig", newline="") as f:
@@ -617,8 +683,10 @@ def save_backtest_check_csv(backtest_rows: list[BacktestRow]) -> None:
             )
 
 
+# ======================== 終端打印輸出 ========================
+# 只負責將參數、排名、回測核對、下期預測打印出來，不改模型計算。
 def print_backtest_setting() -> None:
-    print("====== C1_v1 簡化回測設定 ======")
+    print("====== C0_v1 簡化回測設定 ======")
     print(f"回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
     print(f"窗口期列表：{WINDOW_DRAW_COUNT_LIST}")
     print(f"3獎注數前N期列表：{TOP_PRIZE_DRAW_COUNT_LIST}")
@@ -629,7 +697,7 @@ def print_backtest_setting() -> None:
 
 
 def print_ranking(ranking: list[dict[str, object]]) -> None:
-    print("====== C1_v1 多期回測參數比較 ======")
+    print("====== C0_v1 多期回測參數比較 ======")
     print("排名 | 回測期 | 窗口期 | prize前N | 配額 | 5+ | 4+ | 3+ | 分數")
     for rank, item in enumerate(ranking, start=1):
         print(
@@ -647,7 +715,7 @@ def print_ranking(ranking: list[dict[str, object]]) -> None:
 
 
 def print_backtest_summary(backtest_rows: list[BacktestRow]) -> None:
-    print("====== C1_v1 多期回測預測核對總結 ======")
+    print("====== C0_v1 多期回測預測核對總結 ======")
     for row in backtest_rows:
         prediction_text = "，".join(
             format_nums(row["predictions"].get(name, []))
@@ -666,7 +734,7 @@ def print_backtest_summary(backtest_rows: list[BacktestRow]) -> None:
 
 def print_prediction(bet_date: str, predictions: dict[str, list[int]], best: dict[str, object]) -> None:
     candidate_pool = sorted({num for nums in predictions.values() for num in nums})
-    print("====== C1_v1 下期預測 ======")
+    print("====== C0_v1 下期預測 ======")
     print(
         f"已讀入最佳參數：回測期 {to_int(best.get('backtest_draw_count'))}，"
         f"窗口期 {to_int(best.get('window_draw_count'))}，"
@@ -688,6 +756,13 @@ def print_prediction(bet_date: str, predictions: dict[str, list[int]], best: dic
     )
 
 
+# ======================== 主流程 ========================
+# 執行順序：
+# 1. 讀取 M6
+# 2. 自動回測所有參數組合
+# 3. 保存 JSON / CSV
+# 4. 打印回測結果
+# 5. 讀入最佳參數，預測真正下一期
 def main() -> None:
     draws = read_draws()
     if not draws:
