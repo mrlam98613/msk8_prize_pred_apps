@@ -14,8 +14,8 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [6]
-WINDOW_DRAW_COUNT_LIST = [7]
+BACKTEST_DRAW_COUNT_LIST = [3]
+WINDOW_DRAW_COUNT_LIST = [12]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,2,3) 自選前三組，(1,2,3,4) 全組別。
 '''
@@ -23,7 +23,7 @@ SELECT_GROUPS = (1, 2, 3)      # 自選 1-31
 SELECT_GROUPS = (1, 2, 3, 4)   # 全組別 1-40
 SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 '''
-SELECT_GROUPS = (1,2, 3,4)
+SELECT_GROUPS = (1, 2, 3,4)
 
 # 每一期在指定範圍內有多少球才算符合條件。
 COMBINATION_TAKE_COUNT = 2
@@ -35,7 +35,8 @@ PRIZE_PRINT_SHOW = False
 # -------------------------
 RANDOM_GROUP_TAKE_COUNT = 3
 RANDOM_SEED = 20260912
-HIGH_FREQ_LOOKBACK_LIST = [1, 2, 3, 4, 5]
+# 高頻號，搜尋只需在近 1-5 期內 重開，重現。
+HIGH_FREQ_LOOKBACK_LIST = [1, 2, 3, 4, 5] 
 COLD_EXTRA_DRAW_COUNT = 3
 HOT_MIN_COUNT = 2
 
@@ -248,6 +249,15 @@ def all_check_nums_text(row: DrawRow) -> str:
     return format_nums(sorted(row["nums"]), row["special"])
 
 
+def check_draw_nums_text(row: DrawRow) -> str:
+    ''' 格式化下期核對開獎號，特號用 + 號標示。 '''
+    parts = [str(num) if 1 <= num <= 40 else "_" for num in sorted(row["nums"])]
+    if row["special"] is not None:
+        special_text = str(row["special"]) if 1 <= row["special"] <= 40 else "_"
+        parts.append(f"+{special_text}")
+    return "[" + ",".join(parts) + "]"
+
+
 def selected_draw_nums(row: DrawRow, start_num: int, end_num: int) -> list[int]:
     ''' 取得某分組範圍內的 N1..N7 號碼，特號也作單球分析。 '''
     nums = selected_nums(row, start_num, end_num)
@@ -279,16 +289,22 @@ def find_hot_nums(counter: Counter[int]) -> list[int]:
     return [num for num, _count in sorted(hot_items, key=lambda item: (-item[1], item[0]))]
 
 
-def find_high_freq_nums(draws: list[DrawRow], check_index: int, start_num: int, end_num: int) -> list[int]:
-    ''' 高頻號：核對期有開出，且前 1 至 5 期內曾重複出現的號碼。 '''
-    check_nums = set(selected_draw_nums(draws[check_index], start_num, end_num))
+def find_high_freq_nums(window_rows: list[DrawRow], start_num: int, end_num: int) -> list[int]:
+    ''' 高頻號：只用窗口期內部資料，找出相隔 1 至 5 期有重複出現的號碼。 '''
+    num_positions: dict[int, list[int]] = {}
+    for position, row in enumerate(window_rows):
+        for num in selected_draw_nums(row, start_num, end_num):
+            num_positions.setdefault(num, []).append(position)
+
     high_freq: set[int] = set()
-    for lag in HIGH_FREQ_LOOKBACK_LIST:
-        source_index = check_index - lag
-        if source_index < 0:
-            continue
-        source_nums = set(selected_draw_nums(draws[source_index], start_num, end_num))
-        high_freq.update(check_nums & source_nums)
+    for num, positions in num_positions.items():
+        for left_index, left_position in enumerate(positions):
+            for right_position in positions[left_index + 1:]:
+                if right_position - left_position in HIGH_FREQ_LOOKBACK_LIST:
+                    high_freq.add(num)
+                    break
+            if num in high_freq:
+                break
     return sorted(high_freq)
 
 
@@ -339,7 +355,7 @@ def build_group_analysis_lines(
     for name, start_num, end_num in selected_groups():
         counter = build_group_window_counts(window_rows, start_num, end_num)
         hot_nums = find_hot_nums(counter)
-        high_freq_nums = find_high_freq_nums(draws, check_index, start_num, end_num)
+        high_freq_nums = find_high_freq_nums(window_rows, start_num, end_num)
         cold_nums = find_cold_nums(draws, cold_start_index, check_index, start_num, end_num)
         weak_nums = find_weak_nums(counter, hot_nums, high_freq_nums, cold_nums)
         no_group_hit_count = find_no_group_hit_count(window_rows, start_num, end_num)
@@ -356,7 +372,7 @@ def build_group_analysis_lines(
         "高頻頻在隔期出現 ：" + "，".join(high_freq_parts),
         "弱號窗口期 出現  1 次  ：" + "，".join(weak_parts),
         f"窗口期 + {COLD_EXTRA_DRAW_COUNT} 期 都不出現的球號 ：" + "，".join(cold_parts),
-        "開獎期內，全組沒有球號 ：" + "，".join(no_group_hit_parts),
+        "窗口期內開獎期的組別，全組沒有球號 ：" + "，".join(no_group_hit_parts),
     ]
 
 
@@ -445,18 +461,25 @@ def print_backtest_window(
     check_index: int,
     backtest_count: int,
     window_count: int,
+    backtest_index: int,
+    total_backtest_count: int,
 ) -> None:
     ''' 打印單一期 backtest 窗口資料與核對結果。 '''
     check_row = draws[check_index]
+    display_backtest_index = total_backtest_count - backtest_index + 1
     window_start_index = max(0, check_index - window_count)
     window_rows = [
         (row_index, row)
         for row_index, row in enumerate(draws[window_start_index:check_index], start=window_start_index)
     ]
-    print(f"====== {query_mode_text()}，回測期= {backtest_count}，N1..N7，窗口期 = {window_count} ======")
+    print(
+        f"======[回測 {display_backtest_index}] "
+        f"{query_mode_text()}，參數，回測期= {backtest_count}，N1..N7，窗口期 = {window_count} ======"
+    )
     print(f"backtest：窗口期不包括核對期，預留核對預測")
     print_draw_rows(draws, window_rows, check_index - 1)
     print_window_analysis(draws, [row for _row_index, row in window_rows], check_index, window_start_index)
+    print(f"下期核對開獎號，{check_row['date']}: {check_draw_nums_text(check_row)}")
     print()
 
 
@@ -496,8 +519,16 @@ def main() -> None:
             first_check_index = max(0, latest_index - backtest_count + 1)
             check_indices = range(first_check_index, latest_index + 1)
             for window_count in WINDOW_DRAW_COUNT_LIST:
-                for check_index in check_indices:
-                    print_backtest_window(draws, check_index, backtest_count, window_count)
+                total_backtest_count = len(check_indices)
+                for backtest_index, check_index in enumerate(check_indices, start=1):
+                    print_backtest_window(
+                        draws,
+                        check_index,
+                        backtest_count,
+                        window_count,
+                        backtest_index,
+                        total_backtest_count,
+                    )
     elif MODE == "predict":
         next_draw_date = read_next_draw_date()
         for window_count in WINDOW_DRAW_COUNT_LIST:

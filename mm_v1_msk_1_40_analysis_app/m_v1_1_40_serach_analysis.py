@@ -13,7 +13,7 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [1]
+BACKTEST_DRAW_COUNT_LIST = [20]
 WINDOW_DRAW_COUNT_LIST = [7]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,2,3) 自選前三組，(1,2,3,4) 全組別。
@@ -23,6 +23,13 @@ SELECT_GROUPS = (1, 2, 3, 4)   # 全組別 1-40
 SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 '''
 SELECT_GROUPS = (1,2,3,4) # 錯誤示例：單一組要寫 (2,)，但本程式最少要選 2 組。
+
+# LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。
+LOTTO_LIST = True
+
+# PRINT_BACKTEST_MODE 可選 "detail" 或 "simple"。
+# detail 會打印窗口期明細；simple 只打印每期核對、預測球與命中統計。
+PRINT_BACKTEST_MODE = "detail" #"detail" 或 "simple"。
 
 # 每一期在指定範圍內有多少球才算符合條件。
 COMBINATION_TAKE_COUNT = 2
@@ -34,6 +41,9 @@ PRIZE_PRINT_SHOW = False
 # -------------------------
 RANDOM_GROUP_TAKE_COUNT = 3
 RANDOM_SEED = 20260912
+
+# PRINT_RANDOM_RESULT=True 時顯示隨機發球、命中與統計；False 時保留功能但暫不打印。
+PRINT_RANDOM_RESULT = True
 
 GROUPS = {
     1: ("1-9", 1, 9),
@@ -140,7 +150,7 @@ def prize_print_text(row: DrawRow) -> str:
     ''' 依 PRIZE_PRINT_SHOW 決定是否顯示獎項注數。 '''
     if not PRIZE_PRINT_SHOW:
         return ""
-    return f"，{PRIZE_OPTION}獎中獎注數：{prize_text(row['prize_count'])}"
+    return f"，Pz{PRIZE_OPTION}: {prize_text(row['prize_count'])}"
 
 
 def selected_nums(row: DrawRow, start_num: int, end_num: int) -> list[int]:
@@ -181,6 +191,12 @@ def normalize_select_groups() -> tuple[int, ...]:
         if group_id not in GROUPS:
             raise ValueError(f"SELECT_GROUPS 只可選 1,2,3,4；錯誤值：{group_id}")
     return group_ids
+
+
+def validate_print_backtest_mode() -> None:
+    ''' 檢查 backtest 打印模式，只可使用 detail 或 simple。 '''
+    if PRINT_BACKTEST_MODE not in ("detail", "simple"):
+        raise ValueError('PRINT_BACKTEST_MODE 只可設定為 "detail" 或 "simple"。')
 
 
 def selected_groups() -> list[tuple[str, int, int]]:
@@ -230,8 +246,23 @@ def group_only_text(row: DrawRow, name: str, start_num: int, end_num: int) -> st
     return format_nums(nums, special)
 
 
+def lotto_list_text(row: DrawRow) -> str:
+    ''' 將所選組別內的正號合併成一個 []，特號不在所選組別時用 _ 佔位。 '''
+    nums: list[int] = []
+    special: int | None = None
+    for _name, start_num, end_num in selected_groups():
+        nums.extend(selected_nums(row, start_num, end_num))
+        group_special = selected_special(row, start_num, end_num)
+        if group_special is not None:
+            special = group_special
+    return format_nums(sorted(set(nums)), special)
+
+
 def row_result_text(row: DrawRow) -> str:
     ''' 產生一期的所有選中組別顯示文字與總球數。 '''
+    if LOTTO_LIST:
+        return f"{lotto_list_text(row)} /> {format_ball_count(row_ball_count(row))} 球"
+
     group_text = "，".join(
         group_only_text(row, name, start_num, end_num)
         for name, start_num, end_num in selected_groups()
@@ -240,8 +271,12 @@ def row_result_text(row: DrawRow) -> str:
 
 
 def all_check_nums_text(row: DrawRow) -> str:
-    ''' 格式化核對期完整 N1..N6 + N7 開獎號碼。 '''
-    return format_nums(sorted(row["nums"]), row["special"])
+    ''' 格式化核對期 N1..N7；只顯示 1-40，41-49 用底線代替。 '''
+    parts = [str(num) if 1 <= num <= 40 else "_" for num in sorted(row["nums"])]
+    if row["special"] is not None:
+        special_text = str(row["special"]) if 1 <= row["special"] <= 40 else "_"
+        parts.append(f"*{special_text}")
+    return "[" + ",".join(parts) + "]"
 
 
 def build_random_group_prediction(target_date: str, window_count: int) -> list[int]:
@@ -254,18 +289,33 @@ def build_random_group_prediction(target_date: str, window_count: int) -> list[i
     return sorted(predicted)
 
 
-def random_backtest_text(check_row: DrawRow, window_count: int) -> str:
-    ''' 產生 backtest 核對文字，包含預測球與命中球數。 '''
+def prediction_hit_score(normal_hit_count: int, special_hit: int | None) -> float:
+    ''' 計算預測命中球數；特號命中固定加 0.5。 '''
+    score = float(normal_hit_count)
+    if special_hit is not None:
+        score += 0.5
+    return score
+
+
+def random_backtest_result(check_row: DrawRow, window_count: int) -> tuple[str, float]:
+    ''' 產生 backtest 核對文字與命中球數。 '''
     predicted = build_random_group_prediction(check_row["date"], window_count)
     predicted_set = set(predicted)
     normal_hits = sorted(num for num in check_row["nums"] if num in predicted_set)
     special_hit = check_row["special"] if check_row["special"] in predicted_set else None
-    hit_score = display_ball_count(len(normal_hits), special_hit)
-    return (
+    hit_score = prediction_hit_score(len(normal_hits), special_hit)
+    text = (
         f"核對日期：{check_row['date']}: {all_check_nums_text(check_row)}，"
         f"預測球 {format_nums(predicted)}，"
         f"命中: {format_hit_nums(normal_hits, special_hit)} /> {format_ball_count(hit_score)} 球。"
     )
+    return text, hit_score
+
+
+def random_backtest_text(check_row: DrawRow, window_count: int) -> str:
+    ''' 產生 backtest 核對文字，包含預測球與命中球數。 '''
+    text, _hit_score = random_backtest_result(check_row, window_count)
+    return text
 
 
 def random_predict_text(next_draw_date: str, window_count: int) -> str:
@@ -282,12 +332,15 @@ def print_query_setting() -> None:
     print("====== m_v1 1-40 開獎紀錄基查 ======")
     print(f"運作模式：{MODE}")
     print(f"查詢模式：{mode_text} {group_ids}")
+    print(f"回測打印模式：{PRINT_BACKTEST_MODE}")
+    print(f"隨機發球顯示：{PRINT_RANDOM_RESULT}")
     print(f"回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
     print(f"窗口期列表：{WINDOW_DRAW_COUNT_LIST}")
     print(f"符合條件：範圍內號碼數量 {BIRTHDAY_NUM_MATCH_MODE}{COMBINATION_TAKE_COUNT} 球")
     print(f"查詢號碼：N1..N7，N7 特號以 * 顯示")
-    prize_show_text = f"，prize{PRIZE_OPTION} 中獎注數" if PRIZE_PRINT_SHOW else ""
-    print(f"顯示欄位：開獎日期，分組號碼，N球{prize_show_text}")
+    display_text = "合併號碼" if LOTTO_LIST else "分組號碼"
+    prize_show_text = f"，Pz{PRIZE_OPTION}" if PRIZE_PRINT_SHOW else ""
+    print(f"顯示欄位：開獎日期，{display_text}，N球{prize_show_text}")
     print()
 
 
@@ -318,19 +371,33 @@ def print_backtest_window(
     check_index: int,
     backtest_count: int,
     window_count: int,
-) -> None:
+    backtest_index: int,
+    total_backtest_count: int,
+) -> float:
     ''' 打印單一期 backtest 窗口資料與核對結果。 '''
     check_row = draws[check_index]
+    display_backtest_index = total_backtest_count - backtest_index + 1
     window_start_index = max(0, check_index - window_count)
     window_rows = [
         (row_index, row)
         for row_index, row in enumerate(draws[window_start_index:check_index], start=window_start_index)
     ]
-    print(f"====== {query_mode_text()}，回測期= {backtest_count}，N1..N7，窗口期 = {window_count} ======")
+    backtest_text, hit_score = random_backtest_result(check_row, window_count)
+    if PRINT_BACKTEST_MODE == "simple":
+        if PRINT_RANDOM_RESULT:
+            print(backtest_text)
+        return hit_score
+
+    print(
+        f"======[回測 {display_backtest_index}] "
+        f"{query_mode_text()}，參數，回測期= {backtest_count}，N1..N7，窗口期 = {window_count} ======"
+    )
     print(f"backtest：窗口期不包括核對期，預留核對預測")
     print_draw_rows(draws, window_rows, check_index - 1)
-    print(random_backtest_text(check_row, window_count))
+    if PRINT_RANDOM_RESULT:
+        print(backtest_text)
     print()
+    return hit_score
 
 
 def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date: str) -> None:
@@ -344,7 +411,28 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print(f"====== {query_mode_text()}，預測模式，N1..N7，窗口期 = {window_count} ======")
     print(f"predict：只顯示最後窗口期分析及預測，不核對")
     print_draw_rows(draws, window_rows, latest_index)
-    print(random_predict_text(next_draw_date, window_count))
+    if PRINT_RANDOM_RESULT:
+        print(random_predict_text(next_draw_date, window_count))
+    print()
+
+
+def print_hit_score_summary(backtest_count: int, window_count: int, hit_scores: list[float]) -> None:
+    ''' 按命中球數統計回測期數。 '''
+    if not hit_scores:
+        return
+
+    max_score = max(6.0, max(hit_scores))
+    score_steps = [score / 2 for score in range(int(max_score * 2), -1, -1)]
+    score_counts = {score: 0 for score in score_steps}
+    for score in hit_scores:
+        score_counts[score] = score_counts.get(score, 0) + 1
+
+    print()
+    print(f"=== 回測期 = {backtest_count} 期，窗口期 = {window_count}，預測球命中統計：===")
+    for score in score_steps:
+        if score == 2.5:
+            print("------")
+        print(f"{format_ball_count(score):>3} = {score_counts.get(score, 0)} 期")
     print()
 
 
@@ -352,6 +440,7 @@ def main() -> None:
     ''' 主流程：驗證參數、讀取資料，並按 MODE 執行。 '''
     try:
         normalize_select_groups()
+        validate_print_backtest_mode()
     except ValueError as exc:
         print(f"參數錯誤：{exc}", file=sys.stderr)
         raise SystemExit(1)
@@ -368,8 +457,19 @@ def main() -> None:
             first_check_index = max(0, latest_index - backtest_count + 1)
             check_indices = range(first_check_index, latest_index + 1)
             for window_count in WINDOW_DRAW_COUNT_LIST:
-                for check_index in check_indices:
-                    print_backtest_window(draws, check_index, backtest_count, window_count)
+                total_backtest_count = len(check_indices)
+                hit_scores: list[float] = []
+                for backtest_index, check_index in enumerate(check_indices, start=1):
+                    hit_scores.append(print_backtest_window(
+                        draws,
+                        check_index,
+                        backtest_count,
+                        window_count,
+                        backtest_index,
+                        total_backtest_count,
+                    ))
+                if PRINT_RANDOM_RESULT:
+                    print_hit_score_summary(backtest_count, window_count, hit_scores)
     elif MODE == "predict":
         next_draw_date = read_next_draw_date()
         for window_count in WINDOW_DRAW_COUNT_LIST:
