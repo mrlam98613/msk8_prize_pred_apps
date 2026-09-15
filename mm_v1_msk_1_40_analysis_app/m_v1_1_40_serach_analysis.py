@@ -13,8 +13,8 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [20]
-WINDOW_DRAW_COUNT_LIST = [7]
+BACKTEST_DRAW_COUNT_LIST = [1]
+WINDOW_DRAW_COUNT_LIST = [24]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,2,3) 自選前三組，(1,2,3,4) 全組別。
 '''
@@ -32,7 +32,7 @@ LOTTO_LIST = True
 PRINT_BACKTEST_MODE = "detail" #"detail" 或 "simple"。
 
 # 每一期在指定範圍內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 2
+COMBINATION_TAKE_COUNT = 4
 BIRTHDAY_NUM_MATCH_MODE = ">="
 # -------------------------
 # PRIZE_OPTION=3 即顯示三獎中獎注數 prize3。

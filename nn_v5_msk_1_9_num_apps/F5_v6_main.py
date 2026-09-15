@@ -20,7 +20,7 @@ JSON_PATH = CURRENT_DIR / "json_data" / "F5_v6_best_params.json"
 COLD_REBOUND_JSON_PATH = CURRENT_DIR / "json_data" / COLD_REBOUND_JSON_NAME
 
 # F5_v6 自動比較的簡化參數。
-BACKTEST_DRAW_COUNT_LIST = [24] # 回測期 
+BACKTEST_DRAW_COUNT_LIST = [10] # 回測期 
 WINDOW_DRAW_COUNT_LIST = [12,18,24] # 窗口期：每期核對前即時計算 12 / 18 / 24 期
 AFTER_NONE_HIT_RATE_THRESHOLD_LIST = [0.50, 0.60, 0.65]
 PREDICT_PAIR_COUNT = 2 # 最多選 2 組雙球，合併後通常是 3-4 球

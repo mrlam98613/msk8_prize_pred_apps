@@ -1,313 +1,313 @@
 {
   "model": "G1_v1_10_20_allocation_strategy",
   "best": {
-    "backtest_draw_count": 6,
-    "window_draw_count": 12,
+    "backtest_draw_count": 10,
+    "window_draw_count": 18,
     "after_none_threshold": 0.5,
-    "total_count": 6,
-    "actual_none_count": 1,
-    "actual_has_num_count": 5,
+    "total_count": 10,
+    "actual_none_count": 2,
+    "actual_has_num_count": 8,
     "hit_4_count": 0,
     "hit_3_count": 0,
     "hit_2_count": 0,
-    "hit_1_count": 1,
-    "hit_0_count": 5,
+    "hit_1_count": 3,
+    "hit_0_count": 7,
     "hit_4_rate": 0.0,
     "hit_3_rate": 0.0,
     "hit_2_rate": 0.0,
-    "hit_1_rate": 0.16666666666666666,
-    "hit_1_plus_count": 1,
+    "hit_1_rate": 0.3,
+    "hit_1_plus_count": 3,
     "hit_2_plus_count": 0,
     "hit_3_plus_count": 0,
-    "hit_1_plus_effective_rate": 0.2,
+    "hit_1_plus_effective_rate": 0.375,
     "hit_2_plus_effective_rate": 0.0,
     "hit_3_plus_effective_rate": 0.0,
     "correct_no_prediction_count": 0,
     "missed_no_prediction_count": 0,
-    "incorrect_prediction_count": 1,
+    "incorrect_prediction_count": 2,
     "no_prediction_hit_rate": 0.0,
-    "allocation_correct_rate": 0.8333333333333334,
+    "allocation_correct_rate": 0.8,
     "score": -1,
     "cold_gap_used": 19,
     "predict_pair_count": 2
   },
   "ranking": [
     {
-      "backtest_draw_count": 6,
-      "window_draw_count": 12,
-      "after_none_threshold": 0.5,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
-      "hit_4_count": 0,
-      "hit_3_count": 0,
-      "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
-      "hit_4_rate": 0.0,
-      "hit_3_rate": 0.0,
-      "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
-      "hit_2_plus_count": 0,
-      "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
-      "hit_2_plus_effective_rate": 0.0,
-      "hit_3_plus_effective_rate": 0.0,
-      "correct_no_prediction_count": 0,
-      "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
-      "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
-      "score": -1,
-      "cold_gap_used": 19,
-      "predict_pair_count": 2
-    },
-    {
-      "backtest_draw_count": 6,
-      "window_draw_count": 12,
-      "after_none_threshold": 0.6,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
-      "hit_4_count": 0,
-      "hit_3_count": 0,
-      "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
-      "hit_4_rate": 0.0,
-      "hit_3_rate": 0.0,
-      "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
-      "hit_2_plus_count": 0,
-      "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
-      "hit_2_plus_effective_rate": 0.0,
-      "hit_3_plus_effective_rate": 0.0,
-      "correct_no_prediction_count": 0,
-      "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
-      "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
-      "score": -1,
-      "cold_gap_used": 19,
-      "predict_pair_count": 2
-    },
-    {
-      "backtest_draw_count": 6,
-      "window_draw_count": 12,
-      "after_none_threshold": 0.65,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
-      "hit_4_count": 0,
-      "hit_3_count": 0,
-      "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
-      "hit_4_rate": 0.0,
-      "hit_3_rate": 0.0,
-      "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
-      "hit_2_plus_count": 0,
-      "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
-      "hit_2_plus_effective_rate": 0.0,
-      "hit_3_plus_effective_rate": 0.0,
-      "correct_no_prediction_count": 0,
-      "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
-      "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
-      "score": -1,
-      "cold_gap_used": 19,
-      "predict_pair_count": 2
-    },
-    {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 18,
       "after_none_threshold": 0.5,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     },
     {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 18,
       "after_none_threshold": 0.6,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     },
     {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 18,
       "after_none_threshold": 0.65,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     },
     {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 24,
       "after_none_threshold": 0.5,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     },
     {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 24,
       "after_none_threshold": 0.6,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     },
     {
-      "backtest_draw_count": 6,
+      "backtest_draw_count": 10,
       "window_draw_count": 24,
       "after_none_threshold": 0.65,
-      "total_count": 6,
-      "actual_none_count": 1,
-      "actual_has_num_count": 5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
       "hit_4_count": 0,
       "hit_3_count": 0,
       "hit_2_count": 0,
-      "hit_1_count": 1,
-      "hit_0_count": 5,
+      "hit_1_count": 3,
+      "hit_0_count": 7,
       "hit_4_rate": 0.0,
       "hit_3_rate": 0.0,
       "hit_2_rate": 0.0,
-      "hit_1_rate": 0.16666666666666666,
-      "hit_1_plus_count": 1,
+      "hit_1_rate": 0.3,
+      "hit_1_plus_count": 3,
       "hit_2_plus_count": 0,
       "hit_3_plus_count": 0,
-      "hit_1_plus_effective_rate": 0.2,
+      "hit_1_plus_effective_rate": 0.375,
       "hit_2_plus_effective_rate": 0.0,
       "hit_3_plus_effective_rate": 0.0,
       "correct_no_prediction_count": 0,
       "missed_no_prediction_count": 0,
-      "incorrect_prediction_count": 1,
+      "incorrect_prediction_count": 2,
       "no_prediction_hit_rate": 0.0,
-      "allocation_correct_rate": 0.8333333333333334,
+      "allocation_correct_rate": 0.8,
       "score": -1,
+      "cold_gap_used": 19,
+      "predict_pair_count": 2
+    },
+    {
+      "backtest_draw_count": 10,
+      "window_draw_count": 12,
+      "after_none_threshold": 0.5,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
+      "hit_4_count": 0,
+      "hit_3_count": 0,
+      "hit_2_count": 0,
+      "hit_1_count": 1,
+      "hit_0_count": 9,
+      "hit_4_rate": 0.0,
+      "hit_3_rate": 0.0,
+      "hit_2_rate": 0.0,
+      "hit_1_rate": 0.1,
+      "hit_1_plus_count": 1,
+      "hit_2_plus_count": 0,
+      "hit_3_plus_count": 0,
+      "hit_1_plus_effective_rate": 0.125,
+      "hit_2_plus_effective_rate": 0.0,
+      "hit_3_plus_effective_rate": 0.0,
+      "correct_no_prediction_count": 0,
+      "missed_no_prediction_count": 0,
+      "incorrect_prediction_count": 2,
+      "no_prediction_hit_rate": 0.0,
+      "allocation_correct_rate": 0.8,
+      "score": -3,
+      "cold_gap_used": 19,
+      "predict_pair_count": 2
+    },
+    {
+      "backtest_draw_count": 10,
+      "window_draw_count": 12,
+      "after_none_threshold": 0.6,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
+      "hit_4_count": 0,
+      "hit_3_count": 0,
+      "hit_2_count": 0,
+      "hit_1_count": 1,
+      "hit_0_count": 9,
+      "hit_4_rate": 0.0,
+      "hit_3_rate": 0.0,
+      "hit_2_rate": 0.0,
+      "hit_1_rate": 0.1,
+      "hit_1_plus_count": 1,
+      "hit_2_plus_count": 0,
+      "hit_3_plus_count": 0,
+      "hit_1_plus_effective_rate": 0.125,
+      "hit_2_plus_effective_rate": 0.0,
+      "hit_3_plus_effective_rate": 0.0,
+      "correct_no_prediction_count": 0,
+      "missed_no_prediction_count": 0,
+      "incorrect_prediction_count": 2,
+      "no_prediction_hit_rate": 0.0,
+      "allocation_correct_rate": 0.8,
+      "score": -3,
+      "cold_gap_used": 19,
+      "predict_pair_count": 2
+    },
+    {
+      "backtest_draw_count": 10,
+      "window_draw_count": 12,
+      "after_none_threshold": 0.65,
+      "total_count": 10,
+      "actual_none_count": 2,
+      "actual_has_num_count": 8,
+      "hit_4_count": 0,
+      "hit_3_count": 0,
+      "hit_2_count": 0,
+      "hit_1_count": 1,
+      "hit_0_count": 9,
+      "hit_4_rate": 0.0,
+      "hit_3_rate": 0.0,
+      "hit_2_rate": 0.0,
+      "hit_1_rate": 0.1,
+      "hit_1_plus_count": 1,
+      "hit_2_plus_count": 0,
+      "hit_3_plus_count": 0,
+      "hit_1_plus_effective_rate": 0.125,
+      "hit_2_plus_effective_rate": 0.0,
+      "hit_3_plus_effective_rate": 0.0,
+      "correct_no_prediction_count": 0,
+      "missed_no_prediction_count": 0,
+      "incorrect_prediction_count": 2,
+      "no_prediction_hit_rate": 0.0,
+      "allocation_correct_rate": 0.8,
+      "score": -3,
       "cold_gap_used": 19,
       "predict_pair_count": 2
     }
@@ -332,6 +332,169 @@
     ]
   },
   "backtest_rows": [
+    {
+      "backtest_date": "2026-08-15",
+      "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+      "backtest_1_31_count": 6,
+      "check_date": "2026-08-18",
+      "check_draw_display": "[7,8,9,14,_,_,_]",
+      "check_1_31_count": 4,
+      "predictions": [
+        [
+          11,
+          13
+        ],
+        [
+          14,
+          20
+        ]
+      ],
+      "candidate_nums": [
+        11,
+        13,
+        14,
+        20
+      ],
+      "hit_nums": [
+        14
+      ],
+      "hit_count": 1,
+      "prediction_mode": "正常發球",
+      "actual_1_9_count": 1,
+      "actual_1_9_nums": [
+        14
+      ],
+      "window_cold_nums": [],
+      "deep_cold_nums": [],
+      "window_categories": {
+        "none": 4,
+        "single": 6,
+        "multi": 8
+      },
+      "recent_rows": [
+        {
+          "date": "2026-08-06",
+          "nums": [
+            13
+          ],
+          "count": 1
+        },
+        {
+          "date": "2026-08-08",
+          "nums": [],
+          "count": 0
+        },
+        {
+          "date": "2026-08-11",
+          "nums": [
+            11,
+            13,
+            19
+          ],
+          "count": 3
+        },
+        {
+          "date": "2026-08-13",
+          "nums": [],
+          "count": 0
+        },
+        {
+          "date": "2026-08-15",
+          "nums": [
+            14,
+            16
+          ],
+          "count": 2
+        }
+      ],
+      "predicted_cold_nums": [],
+      "cold_hit_nums": [],
+      "allocation_correct": true,
+      "predict_num_count": 3,
+      "allocation_reason": "近期有 10-20，按正常配額發球",
+      "cold_gap_used": 19,
+      "after_none_rate": 0.0,
+      "after_none_threshold": 0.5,
+      "pair_score_text": "(11,13)=24.83，(14,20)=21.83"
+    },
+    {
+      "backtest_date": "2026-08-18",
+      "backtest_draw_display": "[7,8,9,14,_,_,_]",
+      "backtest_1_31_count": 4,
+      "check_date": "2026-08-20",
+      "check_draw_display": "[7,9,10,15,24,_,_]",
+      "check_1_31_count": 5,
+      "predictions": [
+        [
+          11,
+          13
+        ]
+      ],
+      "candidate_nums": [
+        11,
+        13
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "少發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        10,
+        15
+      ],
+      "window_cold_nums": [],
+      "deep_cold_nums": [],
+      "window_categories": {
+        "none": 4,
+        "single": 7,
+        "multi": 7
+      },
+      "recent_rows": [
+        {
+          "date": "2026-08-08",
+          "nums": [],
+          "count": 0
+        },
+        {
+          "date": "2026-08-11",
+          "nums": [
+            11,
+            13,
+            19
+          ],
+          "count": 3
+        },
+        {
+          "date": "2026-08-13",
+          "nums": [],
+          "count": 0
+        },
+        {
+          "date": "2026-08-15",
+          "nums": [
+            14,
+            16
+          ],
+          "count": 2
+        },
+        {
+          "date": "2026-08-18",
+          "nums": [
+            14
+          ],
+          "count": 1
+        }
+      ],
+      "predicted_cold_nums": [],
+      "cold_hit_nums": [],
+      "allocation_correct": true,
+      "predict_num_count": 2,
+      "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+      "cold_gap_used": 19,
+      "after_none_rate": 0.0,
+      "after_none_threshold": 0.5,
+      "pair_score_text": "(11,13)=24.50"
+    },
     {
       "backtest_date": "2026-08-20",
       "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -362,14 +525,12 @@
       "actual_1_9_nums": [
         12
       ],
-      "window_cold_nums": [
-        18
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
-        "none": 2,
-        "single": 3,
-        "multi": 7
+        "none": 3,
+        "single": 7,
+        "multi": 8
       },
       "recent_rows": [
         {
@@ -418,7 +579,7 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(11,13)=23.25，(14,16)=12.50"
+      "pair_score_text": "(11,13)=24.17，(14,16)=12.67"
     },
     {
       "backtest_date": "2026-08-22",
@@ -445,14 +606,12 @@
         18,
         19
       ],
-      "window_cold_nums": [
-        18
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
-        "none": 2,
-        "single": 4,
-        "multi": 6
+        "none": 3,
+        "single": 7,
+        "multi": 8
       },
       "recent_rows": [
         {
@@ -499,7 +658,7 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(11,13)=22.75"
+      "pair_score_text": "(11,13)=23.83"
     },
     {
       "backtest_date": "2026-08-25",
@@ -532,14 +691,12 @@
         12,
         17
       ],
-      "window_cold_nums": [
-        20
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
-        "none": 2,
-        "single": 4,
-        "multi": 6
+        "none": 3,
+        "single": 6,
+        "multi": 9
       },
       "recent_rows": [
         {
@@ -589,7 +746,7 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(11,13)=22.25，(10,15)=12.50"
+      "pair_score_text": "(11,13)=23.50，(10,15)=12.67"
     },
     {
       "backtest_date": "2026-08-27",
@@ -623,14 +780,12 @@
       "actual_1_9_nums": [
         11
       ],
-      "window_cold_nums": [
-        20
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
-        "none": 2,
-        "single": 4,
-        "multi": 6
+        "none": 3,
+        "single": 6,
+        "multi": 9
       },
       "recent_rows": [
         {
@@ -680,7 +835,7 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(11,13)=21.75，(18,19)=12.75"
+      "pair_score_text": "(11,13)=23.17，(18,19)=12.83"
     },
     {
       "backtest_date": "2026-08-29",
@@ -706,14 +861,12 @@
       "actual_1_9_nums": [
         18
       ],
-      "window_cold_nums": [
-        20
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
-        "none": 2,
-        "single": 4,
-        "multi": 6
+        "none": 3,
+        "single": 6,
+        "multi": 9
       },
       "recent_rows": [
         {
@@ -763,7 +916,7 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(11,13)=21.25"
+      "pair_score_text": "(11,13)=22.83"
     },
     {
       "backtest_date": "2026-09-05",
@@ -774,27 +927,25 @@
       "check_1_31_count": 4,
       "predictions": [
         [
-          12,
-          17
+          11,
+          13
         ]
       ],
       "candidate_nums": [
-        12,
-        17
+        11,
+        13
       ],
       "hit_nums": [],
       "hit_count": 0,
       "prediction_mode": "少發球",
       "actual_1_9_count": 0,
       "actual_1_9_nums": [],
-      "window_cold_nums": [
-        20
-      ],
+      "window_cold_nums": [],
       "deep_cold_nums": [],
       "window_categories": {
         "none": 2,
-        "single": 5,
-        "multi": 5
+        "single": 7,
+        "multi": 9
       },
       "recent_rows": [
         {
@@ -843,11 +994,331 @@
       "cold_gap_used": 19,
       "after_none_rate": 0.0,
       "after_none_threshold": 0.5,
-      "pair_score_text": "(12,17)=12.50"
+      "pair_score_text": "(11,13)=22.50"
+    },
+    {
+      "backtest_date": "2026-09-08",
+      "backtest_draw_display": "[9,23,28,29,_,_,_]",
+      "backtest_1_31_count": 4,
+      "check_date": "2026-09-10",
+      "check_draw_display": "[22,23,31,_,_,_,_]",
+      "check_1_31_count": 3,
+      "predictions": [
+        [
+          11,
+          13
+        ]
+      ],
+      "candidate_nums": [
+        11,
+        13
+      ],
+      "hit_nums": [],
+      "hit_count": 0,
+      "prediction_mode": "少發球",
+      "actual_1_9_count": 0,
+      "actual_1_9_nums": [],
+      "window_cold_nums": [],
+      "deep_cold_nums": [],
+      "window_categories": {
+        "none": 3,
+        "single": 6,
+        "multi": 9
+      },
+      "recent_rows": [
+        {
+          "date": "2026-08-25",
+          "nums": [
+            18,
+            19
+          ],
+          "count": 2
+        },
+        {
+          "date": "2026-08-27",
+          "nums": [
+            12,
+            17
+          ],
+          "count": 2
+        },
+        {
+          "date": "2026-08-29",
+          "nums": [
+            11
+          ],
+          "count": 1
+        },
+        {
+          "date": "2026-09-05",
+          "nums": [
+            18
+          ],
+          "count": 1
+        },
+        {
+          "date": "2026-09-08",
+          "nums": [],
+          "count": 0
+        }
+      ],
+      "predicted_cold_nums": [],
+      "cold_hit_nums": [],
+      "allocation_correct": false,
+      "predict_num_count": 2,
+      "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
+      "cold_gap_used": 19,
+      "after_none_rate": 0.0,
+      "after_none_threshold": 0.5,
+      "pair_score_text": "(11,13)=22.17"
+    },
+    {
+      "backtest_date": "2026-09-10",
+      "backtest_draw_display": "[22,23,31,_,_,_,_]",
+      "backtest_1_31_count": 3,
+      "check_date": "2026-09-12",
+      "check_draw_display": "[9,18,24,_,_,_,*11]",
+      "check_1_31_count": 4,
+      "predictions": [
+        [
+          11,
+          13
+        ]
+      ],
+      "candidate_nums": [
+        11,
+        13
+      ],
+      "hit_nums": [
+        11
+      ],
+      "hit_count": 1,
+      "prediction_mode": "少發球",
+      "actual_1_9_count": 2,
+      "actual_1_9_nums": [
+        11,
+        18
+      ],
+      "window_cold_nums": [],
+      "deep_cold_nums": [],
+      "window_categories": {
+        "none": 4,
+        "single": 6,
+        "multi": 8
+      },
+      "recent_rows": [
+        {
+          "date": "2026-08-27",
+          "nums": [
+            12,
+            17
+          ],
+          "count": 2
+        },
+        {
+          "date": "2026-08-29",
+          "nums": [
+            11
+          ],
+          "count": 1
+        },
+        {
+          "date": "2026-09-05",
+          "nums": [
+            18
+          ],
+          "count": 1
+        },
+        {
+          "date": "2026-09-08",
+          "nums": [],
+          "count": 0
+        },
+        {
+          "date": "2026-09-10",
+          "nums": [],
+          "count": 0
+        }
+      ],
+      "predicted_cold_nums": [],
+      "cold_hit_nums": [],
+      "allocation_correct": true,
+      "predict_num_count": 2,
+      "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 50%",
+      "cold_gap_used": 19,
+      "after_none_rate": 0.3333333333333333,
+      "after_none_threshold": 0.5,
+      "pair_score_text": "(11,13)=21.83"
     }
   ],
   "parameter_backtest_details": {
-    "backtest_6_window_12_threshold_50%": [
+    "backtest_10_window_12_threshold_50%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            11,
+            19
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          19
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 3,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=24.25，(11,19)=12.50"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 2,
+          "single": 4,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=23.75"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -1360,9 +1831,331 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(12,17)=12.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(12,17)=12.25"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(12,17)=12.00"
       }
     ],
-    "backtest_6_window_12_threshold_60%": [
+    "backtest_10_window_12_threshold_60%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            11,
+            19
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          19
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 3,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=24.25，(11,19)=12.50"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 2,
+          "single": 4,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=23.75"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -1875,9 +2668,331 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(12,17)=12.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(12,17)=12.25"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(12,17)=12.00"
       }
     ],
-    "backtest_6_window_12_threshold_65%": [
+    "backtest_10_window_12_threshold_65%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            11,
+            19
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          19
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 3,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=24.25，(11,19)=12.50"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [
+          10,
+          18
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 2,
+          "single": 4,
+          "multi": 6
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=23.75"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -2390,9 +3505,328 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(12,17)=12.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(12,17)=12.25"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            12,
+            17
+          ]
+        ],
+        "candidate_nums": [
+          12,
+          17
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [
+          20
+        ],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 4,
+          "multi": 5
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(12,17)=12.00"
       }
     ],
-    "backtest_6_window_18_threshold_50%": [
+    "backtest_10_window_18_threshold_50%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=24.83，(14,20)=21.83"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 7,
+          "multi": 7
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=24.50"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -2893,9 +4327,326 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(11,13)=22.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 6,
+          "multi": 9
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=22.17"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=21.83"
       }
     ],
-    "backtest_6_window_18_threshold_60%": [
+    "backtest_10_window_18_threshold_60%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=24.83，(14,20)=21.83"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 7,
+          "multi": 7
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=24.50"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -3396,9 +5147,326 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(11,13)=22.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 6,
+          "multi": 9
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=22.17"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=21.83"
       }
     ],
-    "backtest_6_window_18_threshold_65%": [
+    "backtest_10_window_18_threshold_65%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=24.83，(14,20)=21.83"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 7,
+          "multi": 7
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=24.50"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -3899,9 +5967,326 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(11,13)=22.50"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 3,
+          "single": 6,
+          "multi": 9
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=22.17"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 6,
+          "multi": 8
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 33% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.3333333333333333,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=21.83"
       }
     ],
-    "backtest_6_window_24_threshold_50%": [
+    "backtest_10_window_24_threshold_50%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 7,
+          "multi": 12
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=25.12，(14,20)=22.88"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 8,
+          "multi": 11
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=24.88"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -4402,9 +6787,326 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.5,
         "pair_score_text": "(11,13)=23.38"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 10,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=23.12"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 9,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 25% < 門檻 50%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.25,
+        "after_none_threshold": 0.5,
+        "pair_score_text": "(11,13)=22.88"
       }
     ],
-    "backtest_6_window_24_threshold_60%": [
+    "backtest_10_window_24_threshold_60%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 7,
+          "multi": 12
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=25.12，(14,20)=22.88"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 8,
+          "multi": 11
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=24.88"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -4905,9 +7607,326 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.6,
         "pair_score_text": "(11,13)=23.38"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 10,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=23.12"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 9,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 25% < 門檻 60%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.25,
+        "after_none_threshold": 0.6,
+        "pair_score_text": "(11,13)=22.88"
       }
     ],
-    "backtest_6_window_24_threshold_65%": [
+    "backtest_10_window_24_threshold_65%": [
+      {
+        "backtest_date": "2026-08-15",
+        "backtest_draw_display": "[4,16,25,27,28,_,*14]",
+        "backtest_1_31_count": 6,
+        "check_date": "2026-08-18",
+        "check_draw_display": "[7,8,9,14,_,_,_]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ],
+          [
+            14,
+            20
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13,
+          14,
+          20
+        ],
+        "hit_nums": [
+          14
+        ],
+        "hit_count": 1,
+        "prediction_mode": "正常發球",
+        "actual_1_9_count": 1,
+        "actual_1_9_nums": [
+          14
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 7,
+          "multi": 12
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-06",
+            "nums": [
+              13
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 3,
+        "allocation_reason": "近期有 10-20，按正常配額發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=25.12，(14,20)=22.88"
+      },
+      {
+        "backtest_date": "2026-08-18",
+        "backtest_draw_display": "[7,8,9,14,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-08-20",
+        "check_draw_display": "[7,9,10,15,24,_,_]",
+        "check_1_31_count": 5,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          10,
+          15
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 8,
+          "multi": 11
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-11",
+            "nums": [
+              11,
+              13,
+              19
+            ],
+            "count": 3
+          },
+          {
+            "date": "2026-08-13",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-08-15",
+            "nums": [
+              14,
+              16
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-18",
+            "nums": [
+              14
+            ],
+            "count": 1
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期只開 1 球，先減少 10-20 發球",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=24.88"
+      },
       {
         "backtest_date": "2026-08-20",
         "backtest_draw_display": "[7,9,10,15,24,_,_]",
@@ -5408,19 +8427,179 @@
         "after_none_rate": 0.0,
         "after_none_threshold": 0.65,
         "pair_score_text": "(11,13)=23.38"
+      },
+      {
+        "backtest_date": "2026-09-08",
+        "backtest_draw_display": "[9,23,28,29,_,_,_]",
+        "backtest_1_31_count": 4,
+        "check_date": "2026-09-10",
+        "check_draw_display": "[22,23,31,_,_,_,_]",
+        "check_1_31_count": 3,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [],
+        "hit_count": 0,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 0,
+        "actual_1_9_nums": [],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 4,
+          "single": 10,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-25",
+            "nums": [
+              18,
+              19
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": false,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 0% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.0,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=23.12"
+      },
+      {
+        "backtest_date": "2026-09-10",
+        "backtest_draw_display": "[22,23,31,_,_,_,_]",
+        "backtest_1_31_count": 3,
+        "check_date": "2026-09-12",
+        "check_draw_display": "[9,18,24,_,_,_,*11]",
+        "check_1_31_count": 4,
+        "predictions": [
+          [
+            11,
+            13
+          ]
+        ],
+        "candidate_nums": [
+          11,
+          13
+        ],
+        "hit_nums": [
+          11
+        ],
+        "hit_count": 1,
+        "prediction_mode": "少發球",
+        "actual_1_9_count": 2,
+        "actual_1_9_nums": [
+          11,
+          18
+        ],
+        "window_cold_nums": [],
+        "deep_cold_nums": [],
+        "window_categories": {
+          "none": 5,
+          "single": 9,
+          "multi": 10
+        },
+        "recent_rows": [
+          {
+            "date": "2026-08-27",
+            "nums": [
+              12,
+              17
+            ],
+            "count": 2
+          },
+          {
+            "date": "2026-08-29",
+            "nums": [
+              11
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-05",
+            "nums": [
+              18
+            ],
+            "count": 1
+          },
+          {
+            "date": "2026-09-08",
+            "nums": [],
+            "count": 0
+          },
+          {
+            "date": "2026-09-10",
+            "nums": [],
+            "count": 0
+          }
+        ],
+        "predicted_cold_nums": [],
+        "cold_hit_nums": [],
+        "allocation_correct": true,
+        "predict_num_count": 2,
+        "allocation_reason": "上一期(00)，上下期(00)連續率 25% < 門檻 65%",
+        "cold_gap_used": 19,
+        "after_none_rate": 0.25,
+        "after_none_threshold": 0.65,
+        "pair_score_text": "(11,13)=22.88"
       }
     ]
   },
   "next_prediction": {
-    "bet_date": "2026-09-10",
+    "bet_date": "2026-09-15",
     "pairs": [
+      [
+        11,
+        13
+      ],
       [
         12,
         17
       ]
     ],
     "candidate_nums": [
+      11,
       12,
+      13,
       17
     ]
   }

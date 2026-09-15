@@ -93,6 +93,24 @@ def parse_special(row: dict[str, str]) -> int | None:
     return num if 1 <= num <= 49 else None
 
 
+def find_draw_row_by_date(rows: list[dict[str, str]], bet_date: str) -> dict[str, str] | None:
+    bet_date = bet_date.strip()
+    if not bet_date:
+        return None
+    for row in rows:
+        if row.get("nDdate", "").strip() == bet_date:
+            return row
+    return None
+
+
+def format_draw_summary(draw_row: dict[str, str]) -> str:
+    main_nums = format_nums(parse_nums(draw_row))
+    special_num = parse_special(draw_row)
+    if special_num is None:
+        return main_nums
+    return f"{main_nums} + {special_num}"
+
+
 def group_nums(nums: list[int], start_num: int, end_num: int) -> list[int]:
     return sorted(num for num in nums if start_num <= num <= end_num)
 
@@ -312,7 +330,12 @@ def render_styles() -> None:
         .a1-line{font-size:14px;line-height:1.7;color:#1f2937;white-space:nowrap;overflow-x:auto;}
         .a1-bet-line{font-size:16px;line-height:1.8;color:#111827;font-weight:800;white-space:nowrap;overflow-x:auto;}
         .a1-ball-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:4px 0 8px 0;}
-        .a1-ball-row img{width:34px;height:34px;object-fit:contain;}
+        .a1-ball-row-stack{flex-basis:100%;width:100%;display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:4px 0 4px 0;}
+        .a1-ball-frame{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:2px solid transparent;border-radius:999px;overflow:hidden;box-sizing:border-box;background:#ffffff;flex:0 0 auto;}
+        .a1-ball-frame img{width:100%;height:100%;object-fit:contain;}
+        .a1-ball-text{font-size:16px;font-weight:900;line-height:1;color:#111827;}
+        .a1-ball-hit{border-color:#ef4444;box-shadow:0 0 0 2px rgba(239,68,68,0.14);}
+        .a1-ball-special{border-color:#2563eb;border-radius:8px;box-shadow:0 0 0 2px rgba(37,99,235,0.14);}
         .a1-plus{font-size:20px;font-weight:900;margin:0 5px;color:#111827;}
         .a1-muted{font-size:12px;line-height:1.55;color:#6b7280;margin-bottom:6px;}
         .a1-cold-pick-note{font-size:15px;line-height:1.65;color:#111827;font-weight:700;margin:6px 0 8px 0;}
@@ -604,23 +627,34 @@ def parse_num_list(text: str) -> list[int]:
     return nums
 
 
-def build_ball_image_html(nums: list[int]) -> str:
+def build_ball_image_html(
+    nums: list[int],
+    hit_nums: set[int] | None = None,
+    special_num: int | None = None,
+) -> str:
+    hit_set = hit_nums or set()
     parts: list[str] = []
     for num in nums:
+        if special_num is not None and num == special_num:
+            state_class = "a1-ball-special"
+        elif num in hit_set:
+            state_class = "a1-ball-hit"
+        else:
+            state_class = ""
         b64 = load_ball_image_base64(num)
         if b64:
-            parts.append(f"<img src='data:image/png;base64,{b64}' alt='{num}'/>")
+            content = f"<img src='data:image/png;base64,{b64}' alt='{num}'/>"
         else:
-            parts.append(f"<span style='font-size:16px;font-weight:900;margin-right:4px;'>{num}</span>")
+            content = f"<span class='a1-ball-text'>{num}</span>"
+        parts.append(f"<span class='a1-ball-frame {state_class}'>{content}</span>")
     return "".join(parts)
 
 
 def render_ball_box(label: str, nums: list[int], bankers: list[int] | None = None, legs: list[int] | None = None) -> None:
     if bankers is not None or legs is not None:
         body = (
-            build_ball_image_html(bankers or [])
-            + '<span class="a1-plus">+</span>'
-            + build_ball_image_html(legs or [])
+            f'<div class="a1-ball-row a1-ball-row-stack">{build_ball_image_html(bankers or [])}</div>'
+            f'<div class="a1-ball-row a1-ball-row-stack"><span class="a1-plus">+</span>{build_ball_image_html(legs or [])}</div>'
         )
     else:
         body = build_ball_image_html(nums)
@@ -677,30 +711,33 @@ def format_record_money(value: str) -> str:
         return "$0"
 
 
-def render_admin_record_html(record: dict[str, str]) -> str:
+def render_admin_record_html(record: dict[str, str], draw_row: dict[str, str] | None = None) -> str:
     bet_date = record.get("bet_date", "")
     bet_type = record.get("bet_type", "")
     bet_unit = record.get("bet_unit", "5")
     total_bets = record.get("total_bets", "0")
     total_cost = record.get("total_cost", "0")
+    hit_nums = set(parse_nums(draw_row)) if draw_row else set()
+    special_num = parse_special(draw_row) if draw_row else None
+    draw_text = f"｜開獎 {format_draw_summary(draw_row)}" if draw_row else ""
+
     if bet_type == "膽拖":
         bankers = parse_num_list(record.get("bankers", ""))
         legs = parse_num_list(record.get("legs", ""))
         title = (
             f"{bet_date} {bet_type}，{len(bankers)}膽 + {len(legs)}腳，"
-            f"${bet_unit} X {total_bets} 注 = {format_record_money(total_cost)}"
+            f"${bet_unit} X {total_bets} 注 = {format_record_money(total_cost)}{draw_text}"
         )
         body = (
-            build_ball_image_html(bankers)
-            + '<span class="a1-plus">+</span>'
-            + build_ball_image_html(legs)
+            f'<div class="a1-ball-row a1-ball-row-stack">{build_ball_image_html(bankers, hit_nums=hit_nums, special_num=special_num)}</div>'
+            f'<div class="a1-ball-row a1-ball-row-stack"><span class="a1-plus">+</span>{build_ball_image_html(legs, hit_nums=hit_nums, special_num=special_num)}</div>'
         )
     elif bet_type == "複式":
-        title = f"{bet_date} {bet_type}，${bet_unit} X {total_bets} 注 = {format_record_money(total_cost)}"
-        body = build_ball_image_html(parse_num_list(record.get("numbers", "")))
+        title = f"{bet_date} {bet_type}，${bet_unit} X {total_bets} 注 = {format_record_money(total_cost)}{draw_text}"
+        body = build_ball_image_html(parse_num_list(record.get("numbers", "")), hit_nums=hit_nums, special_num=special_num)
     else:
-        title = f"{bet_date} {bet_type}，投注 ${bet_unit}"
-        body = build_ball_image_html(parse_num_list(record.get("numbers", "")))
+        title = f"{bet_date} {bet_type}，投注 ${bet_unit}{draw_text}"
+        body = build_ball_image_html(parse_num_list(record.get("numbers", "")), hit_nums=hit_nums, special_num=special_num)
     return (
         f'<div class="a1-bet-line">{title}</div>'
         f'<div class="a1-ball-row">{body}</div>'
@@ -713,9 +750,12 @@ def render_admin_bet_records() -> None:
         st.info("未有 admin_bet.csv 趨勢投注紀錄。")
         return
 
+    draw_rows = read_m6_rows()
     st.markdown("#### 已存管理員趨勢投注紀錄")
+    st.caption("若投注日期已開獎，會以圓圈標示命中的主號，以方框標示特號。")
     for record in records[-12:][::-1]:
-        st.markdown(render_admin_record_html(record), unsafe_allow_html=True)
+        draw_row = find_draw_row_by_date(draw_rows, record.get("bet_date", ""))
+        st.markdown(render_admin_record_html(record, draw_row), unsafe_allow_html=True)
 
 
 def render_admin_bet_manager() -> None:

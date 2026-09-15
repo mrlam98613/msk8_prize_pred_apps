@@ -32,13 +32,13 @@ WINDOW_DRAW_COUNT_LIST = [24]
 DOUBLE_MODE_GROUPS = ((1, 2, 3), (2, 3, 4))
 
 # DOUBLE_MODE_SORT 可選："date_asc", "date_desc", "prize_asc", "prize_desc" 大至小。
-DOUBLE_MODE_SORT = "date_asc"
+DOUBLE_MODE_SORT = "dete_desc"
 
 # 預測分析每類最多顯示多少個候選球。
 ANALYSIS_CANDIDATE_LIMIT = 9
 
 # ANALYSIS_WEIGHT_MODE 可選："prize", "recent", "mixed"。
-ANALYSIS_WEIGHT_MODE = "mixed"
+ANALYSIS_WEIGHT_MODE = "recent"
 
 # mixed 模式下，Pz3 注數與日期近期的混合比例。
 PRIZE_WEIGHT_RATIO = 0.6
@@ -63,7 +63,7 @@ COMBINATION_TAKE_COUNT = 5
 BIRTHDAY_NUM_MATCH_MODE = ">="
 
 # 每個 double mode 最少要有多少個合條件開獎期，才產生候選球分析。
-MIN_ANALYSIS_DRAW_COUNT = 7
+MIN_ANALYSIS_DRAW_COUNT = 5
 # -------------------------
 # PRIZE_OPTION=3 即顯示三獎中獎注數 prize3。
 PRIZE_OPTION = 3 # 設定要顯示的獎項，3 即顯示三獎中獎注數。

@@ -22,7 +22,7 @@ H1_JSON_PATH = PROJECT_ROOT / "nn_v7_msk_21_31_num_apps" / "json_data" / "H1_v1_
 
 # R1_v2 先用 R1 配額判斷 F/G/H 發球數，再讀入 F5/G1/H1 候選球協調成總候選池。
 # F = 1-9，G = 10-20，H = 21-31。
-BACKTEST_DRAW_COUNT_LIST = [50]
+BACKTEST_DRAW_COUNT_LIST = [10]
 WINDOW_DRAW_COUNT_LIST = [12, 18, 24]
 RECENT_DRAW_COUNT = 5
 BASE_GROUP_QUOTA = 3  # 基準配額：F3 + G3 + H3。

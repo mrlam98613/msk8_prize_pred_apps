@@ -29,7 +29,7 @@ SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 SELECT_GROUPS = (1,2, 3,4)
 
 # 每一期在指定範圍內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 2
+COMBINATION_TAKE_COUNT = 4
 BIRTHDAY_NUM_MATCH_MODE = ">="
 # -------------------------
 # PRIZE_OPTION=3 即顯示三獎中獎注數 prize3。
