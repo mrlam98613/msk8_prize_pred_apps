@@ -4,6 +4,14 @@ from collections import Counter
 from itertools import combinations
 from typing import TypedDict
 
+''' 
+A,B,C,D, (1-9) , (10-20) , (21-31) , (32-40), (分單雙分佈)
+1-9,   [1,3,5,7,9], [2,4,6,8] = 9 球
+10-20, [11,13,15,17,19], [10,12,14,16,18,20] = 11 球
+21-31, [21,23,25,27,29,31], [22,24,26,28,30] = 11 球
+32-40, [33,35,37,39], [32,34,36,38,40] = 9 球 
+
+'''
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
@@ -14,7 +22,7 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [100]
+WINDOW_DRAW_COUNT_LIST = [24]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
@@ -30,6 +38,10 @@ COMBINATION_TAKE_COUNT = 5
 BIRTHDAY_NUM_MATCH_MODE = ">="
 
 # LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。
+''' backtest,窗口期不包括核對期,預留核對預測
+False = 近 10期:2026-08-27,[12,17],[25,31],[*35] /> 4.5 球
+Treu = 近 10期:2026-08-27,[12,17,25,31,*35] /> 4.5 球
+'''
 LOTTO_LIST = True
 
 # PRINT_BACKTEST_MODE 可選 "detail" 或 "simple"。
@@ -41,12 +53,21 @@ PRINT_BACKTEST_MODE = "detail" #"detail" 或 "simple"。
 PRIZE_OPTION = 3 # 設定要顯示的獎項，3 即顯示三獎中獎注數。
 PRIZE_PRINT_SHOW = False
 
+# 是否顯示 A-D 分組內的 R/B/G 顏色分組累計。
+PRINT_RBG_GROUP_ANALYSIS = True
+
 GROUPS = {
     1: ("1-9", 1, 9), # 9 球
     2: ("10-20", 10, 20), # 11 球
     3: ("21-31", 21, 31), # 11 球 
     4: ("32-40", 32, 40), # 9 球
     # Total 40 球 
+}
+GROUP_CODES = {
+    1: "A",
+    2: "B",
+    3: "C",
+    4: "D",
 }
 
 # 
@@ -340,10 +361,81 @@ def matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> int:
 
 def print_matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> None:
     ''' 打印窗口期合條件期數統計。 '''
+    matched_count = matched_window_count(window_rows)
+    window_total = len(window_rows)
+    matched_percent = (matched_count / window_total * 100) if window_total else 0
     print(
-        f"合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
-        f"統計 = {matched_window_count(window_rows)}期"
+        f"結果合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
+        f"查詢 {matched_count} / {window_total} 期統計 = {matched_count}期 "
+        f"({matched_percent:.0f} %)"
     )
+
+
+def sorted_hot_cold_nums(counter: Counter[int], nums: list[int]) -> list[tuple[int, int]]:
+    """依窗口期出現次數由熱到冷排序；同次數用號碼細至大排序。"""
+    return sorted(((num, counter.get(num, 0)) for num in nums), key=lambda item: (-item[1], item[0]))
+
+
+def format_hot_cold_pairs(pairs: list[tuple[int, int]]) -> str:
+    """格式化號碼出現次數，例如 [9(10),5(8)]。"""
+    return "[" + ",".join(f"{num}({count})" for num, count in pairs) + "]"
+
+
+def print_group_odd_even_hot_cold(window_rows: list[tuple[int, DrawRow]]) -> None:
+    """按 A/B/C/D 分組，統計窗口期正號 N1..N6 的單雙冷熱門排列。"""
+    num_counter: Counter[int] = Counter()
+    for _row_index, row in window_rows:
+        for num in row["nums"]:
+            if 1 <= num <= 40:
+                num_counter[num] += 1
+
+    print("----- A-D 分組單雙冷熱門累計 -----")
+    for group_id in normalize_select_groups():
+        name, start_num, end_num = GROUPS[group_id]
+        group_code = GROUP_CODES[group_id]
+        odd_nums = [num for num in range(start_num, end_num + 1) if num % 2 == 1]
+        even_nums = [num for num in range(start_num, end_num + 1) if num % 2 == 0]
+        odd_text = format_hot_cold_pairs(sorted_hot_cold_nums(num_counter, odd_nums))
+        even_text = format_hot_cold_pairs(sorted_hot_cold_nums(num_counter, even_nums))
+        print(f"{group_code}組 {name}：{odd_text}，{even_text}")
+
+
+def rbg_color_id(num: int) -> int:
+    """依六合彩 R/B/G 公式回傳 1=R、2=B、3=G。"""
+    adjusted_num = num - 1
+    return (((adjusted_num // 10) + adjusted_num) % 6 // 2) + 1
+
+
+def print_group_rbg_hot_cold(window_rows: list[tuple[int, DrawRow]]) -> None:
+    """按 A/B/C/D 分組，統計窗口期正號 N1..N6 的 R/B/G 顏色冷熱門排列。"""
+    if not PRINT_RBG_GROUP_ANALYSIS:
+        return
+
+    num_counter: Counter[int] = Counter()
+    for _row_index, row in window_rows:
+        for num in row["nums"]:
+            if 1 <= num <= 40:
+                num_counter[num] += 1
+
+    color_labels = {
+        1: "R",
+        2: "B",
+        3: "G",
+    }
+    print("----- A-D 分組 R/B/G 顏色冷熱門累計 -----")
+    for group_id in normalize_select_groups():
+        name, start_num, end_num = GROUPS[group_id]
+        group_code = GROUP_CODES[group_id]
+        color_parts: list[str] = []
+        for color_id in (1, 2, 3):
+            color_nums = [
+                num
+                for num in range(start_num, end_num + 1)
+                if rbg_color_id(num) == color_id
+            ]
+            color_text = format_hot_cold_pairs(sorted_hot_cold_nums(num_counter, color_nums))
+            color_parts.append(f"{color_labels[color_id]}{color_text}")
+        print(f"{group_code}組-RBG {name}：" + "，".join(color_parts))
 
 
 def fortune_candidate_pool(window_rows: list[tuple[int, DrawRow]]) -> tuple[list[int], list[tuple[int, int, int]]]:
@@ -453,8 +545,8 @@ def print_backtest_window(
     print("backtest：窗口期不包括核對期，預留核對預測")
     print_draw_rows(draws, window_rows, check_index - 1)
     print_matched_window_count(window_rows)
-    candidate_combs = print_fortune_keys_analysis(window_rows)
-    print(f"核對日期 ： {check_row['date']}: {all_check_nums_text(check_row)}，{fortune_check_text(candidate_combs, check_row)}")
+    print_group_odd_even_hot_cold(window_rows)
+    print_group_rbg_hot_cold(window_rows)
     print()
 
 
@@ -470,7 +562,8 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print("predict：只顯示最後窗口期分析，不輸出預測球")
     print_draw_rows(draws, window_rows, latest_index)
     print_matched_window_count(window_rows)
-    print_fortune_keys_analysis(window_rows)
+    print_group_odd_even_hot_cold(window_rows)
+    print_group_rbg_hot_cold(window_rows)
     print(f"下期開獎日期：{next_draw_date or '未知'}")
     print()
 
