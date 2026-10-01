@@ -1,5 +1,7 @@
 from pathlib import Path
 import csv
+from collections import Counter
+from itertools import combinations
 from typing import TypedDict
 
 
@@ -10,17 +12,22 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 
 # MODE 可選："backtest" 或 "predict"。
-MODE = "backtest"
+MODE = "predict"
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [10]
+WINDOW_DRAW_COUNT_LIST = [100]
 
-# SELECT_GROUPS 可選 1,2,3,4；例如 (1,2,3) 自選前三組，(1,2,3,4) 全組別。
+# SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
+SELECT_GROUPS = (1,)           # 只選 1-9
 SELECT_GROUPS = (1, 2, 3)      # 自選 1-31
 SELECT_GROUPS = (1, 2, 3, 4)   # 全組別 1-40
 SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 '''
-SELECT_GROUPS = (1,2,3,4) # 錯誤示例：單一組要寫 (2,)，但本程式最少要選 2 組。
+SELECT_GROUPS = (1,2,3) # select group index =1
+
+# 每一期在指定範圍內有多少球才算符合條件。
+COMBINATION_TAKE_COUNT = 5
+BIRTHDAY_NUM_MATCH_MODE = ">="
 
 # LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。
 LOTTO_LIST = True
@@ -29,28 +36,20 @@ LOTTO_LIST = True
 # detail 會打印窗口期明細；simple 只打印每期核對、預測球與命中統計。
 PRINT_BACKTEST_MODE = "detail" #"detail" 或 "simple"。
 
-# 每一期在指定範圍內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 4
-BIRTHDAY_NUM_MATCH_MODE = ">="
 # -------------------------
 # PRIZE_OPTION=3 即顯示三獎中獎注數 prize3。
 PRIZE_OPTION = 3 # 設定要顯示的獎項，3 即顯示三獎中獎注數。
 PRIZE_PRINT_SHOW = False
-# -------------------------
-RANDOM_GROUP_TAKE_COUNT = 3
-RANDOM_SEED = 20260912
-
-# PRINT_RANDOM_RESULT=True 時顯示隨機發球、命中與統計；False 時保留功能但暫不打印。
-PRINT_RANDOM_RESULT = True
 
 GROUPS = {
-    1: ("1-9", 1, 9),
-    2: ("10-20", 10, 20),
-    3: ("21-31", 21, 31),
-    4: ("32-40", 32, 40),
+    1: ("1-9", 1, 9), # 9 球
+    2: ("10-20", 10, 20), # 11 球
+    3: ("21-31", 21, 31), # 11 球 
+    4: ("32-40", 32, 40), # 9 球
+    # Total 40 球 
 }
 
-
+# 
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
@@ -172,19 +171,18 @@ def display_ball_count(normal_count: int, special: int | None) -> float:
 
 
 def normalize_select_groups() -> tuple[int, ...]:
-    ''' 檢查 SELECT_GROUPS 型別、組別範圍與最少組數。 '''
+    ''' 檢查 SELECT_GROUPS 型別與組別範圍；可單選一組。 '''
     if isinstance(SELECT_GROUPS, int):
         raise ValueError(
-            "SELECT_GROUPS 需要 tuple/list，例如 (1, 2) 或 (1, 2, 3, 4)。"
-            "你現在寫成 (2)，Python 會當作整數；若只寫單一 tuple 要用 (2,)，"
-            "但本程式最少需要選 2 個組別。"
+            "SELECT_GROUPS 需要 tuple/list，例如 (1,) 或 (1, 2, 3, 4)。"
+            "你現在寫成 (1)，Python 會當作整數；若只寫單一組要用 (1,)。"
         )
     if not isinstance(SELECT_GROUPS, (tuple, list)):
-        raise ValueError("SELECT_GROUPS 需要 tuple/list，例如 (1, 2) 或 (1, 2, 3, 4)。")
+        raise ValueError("SELECT_GROUPS 需要 tuple/list，例如 (1,) 或 (1, 2, 3, 4)。")
 
     group_ids = tuple(SELECT_GROUPS)
-    if len(group_ids) < 2:
-        raise ValueError("SELECT_GROUPS 最少需要選 2 個組別，例如 (1, 2)、(1, 2, 3) 或 (1, 2, 3, 4)。")
+    if not group_ids:
+        raise ValueError("SELECT_GROUPS 最少需要選 1 個組別，例如 (1,) 或 (1, 2, 3, 4)。")
     for group_id in group_ids:
         if group_id not in GROUPS:
             raise ValueError(f"SELECT_GROUPS 只可選 1,2,3,4；錯誤值：{group_id}")
@@ -216,6 +214,22 @@ def row_ball_count(row: DrawRow) -> float:
         for _name, start_num, end_num in selected_groups()
     )
     return display_ball_count(normal_count, row["special"] if has_special else None)
+
+
+def row_selected_normal_count(row: DrawRow) -> int:
+    ''' 計算某期开奖在所選組別中的正號 N1..N6 數量。 '''
+    return sum(
+        len(selected_nums(row, start_num, end_num))
+        for _name, start_num, end_num in selected_groups()
+    )
+
+
+def row_selected_normal_nums(row: DrawRow) -> list[int]:
+    ''' 取得某期开奖在所選組別中的正號 N1..N6。 '''
+    nums: list[int] = []
+    for _name, start_num, end_num in selected_groups():
+        nums.extend(selected_nums(row, start_num, end_num))
+    return sorted(set(nums))
 
 
 def is_matched(count: int) -> bool:
@@ -310,11 +324,105 @@ def print_draw_rows(
 ) -> None:
     """打印窗口期內每一期的組別分布。"""
     for row_index, row in window_rows:
+        if not is_matched(row_selected_normal_count(row)):
+            continue
         rank = target_index - row_index + 1
         print(
             f"近 {rank}期：{row['date']}，{row_result_text(row)}"
             f"{prize_print_text(row)}"
         )
+
+
+def matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> int:
+    ''' 統計窗口期內符合查詢條件的期數。 '''
+    return sum(1 for _row_index, row in window_rows if is_matched(row_selected_normal_count(row)))
+
+
+def print_matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> None:
+    ''' 打印窗口期合條件期數統計。 '''
+    print(
+        f"合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
+        f"統計 = {matched_window_count(window_rows)}期"
+    )
+
+
+def fortune_candidate_pool(window_rows: list[tuple[int, DrawRow]]) -> tuple[list[int], list[tuple[int, int, int]]]:
+    ''' 分析 fortune_keys，先用單號高頻取 6 球，再產生 C(6,3) 組合。 '''
+    matched_nums_list = [
+        row_selected_normal_nums(row)
+        for _row_index, row in window_rows
+        if is_matched(row_selected_normal_count(row))
+    ]
+
+    num_counter: Counter[int] = Counter()
+    for nums in matched_nums_list:
+        num_counter.update(nums)
+
+    if not num_counter:
+        return [], []
+
+    candidate_nums = [
+        num
+        for num, _count in sorted(num_counter.items(), key=lambda item: (-item[1], item[0]))
+    ][:6]
+
+    selected_all_nums = sorted(
+        {
+            num
+            for _name, start_num, end_num in selected_groups()
+            for num in range(start_num, end_num + 1)
+        }
+    )
+    for num in selected_all_nums:
+        if len(candidate_nums) == 6:
+            break
+        if num not in candidate_nums:
+            candidate_nums.append(num)
+
+    candidate_nums = sorted(candidate_nums[:6])
+    candidate_combs = list(combinations(candidate_nums, 3))
+    return candidate_nums, candidate_combs
+
+
+def fortune_comb_hits(candidate_combs: list[tuple[int, int, int]], check_row: DrawRow) -> list[tuple[int, int, int]]:
+    ''' 用核對期正號 N1..N6 檢查 C(6,3) 組合是否全中。 '''
+    check_nums = set(row_selected_normal_nums(check_row))
+    return [comb for comb in candidate_combs if set(comb).issubset(check_nums)]
+
+
+def fortune_check_text(candidate_combs: list[tuple[int, int, int]], check_row: DrawRow) -> str:
+    ''' 產生 fortune_keys C(6,3) 核對文字。 '''
+    hit_combs = fortune_comb_hits(candidate_combs, check_row)
+    hit_text = "，".join(format_nums(list(comb)) for comb in hit_combs) if hit_combs else "[]"
+    return f"c(6,3) 核對：命中：{hit_text} /> {len(hit_combs)} 組"
+
+
+def print_fortune_keys_analysis(window_rows: list[tuple[int, DrawRow]]) -> list[tuple[int, int, int]]:
+    ''' 打印 fortune_keys 單號高頻與 C(6,3) 預測組合，並回傳 20 組候選。 '''
+    matched_count = sum(1 for _row_index, row in window_rows if is_matched(row_selected_normal_count(row)))
+    candidate_nums, candidate_combs = fortune_candidate_pool(window_rows)
+
+    print("----- fortune_keys 分析 -----")
+    print(f"fortune_keys 合條件期數：{matched_count}")
+    if not candidate_nums:
+        print("單號高頻球：[]")
+        print("候選 6 球：[]")
+        print("C(6,3) 預測組合：[]")
+        return []
+
+    single_counter: Counter[int] = Counter()
+    for _row_index, row in window_rows:
+        if is_matched(row_selected_normal_count(row)):
+            single_counter.update(row_selected_normal_nums(row))
+    single_text = "，".join(
+        f"{num}({count})"
+        for num, count in sorted(single_counter.items(), key=lambda item: (-item[1], item[0]))
+    )
+    comb_text = "，".join(format_nums(list(comb)) for comb in candidate_combs)
+    print(f"單號高頻球：{single_text}")
+    print(f"候選 6 球：{format_nums(candidate_nums)}")
+    print(f"C(6,3) 預測組合：{comb_text}")
+    return candidate_combs
 
 
 def print_backtest_window(
@@ -344,7 +452,9 @@ def print_backtest_window(
     )
     print("backtest：窗口期不包括核對期，預留核對預測")
     print_draw_rows(draws, window_rows, check_index - 1)
-    print(f"核對日期 ： {check_row['date']}: {all_check_nums_text(check_row)}")
+    print_matched_window_count(window_rows)
+    candidate_combs = print_fortune_keys_analysis(window_rows)
+    print(f"核對日期 ： {check_row['date']}: {all_check_nums_text(check_row)}，{fortune_check_text(candidate_combs, check_row)}")
     print()
 
 
@@ -359,6 +469,8 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print(f"====== {query_mode_text()}，預測模式，N1..N7，窗口期 = {window_count} ======")
     print("predict：只顯示最後窗口期分析，不輸出預測球")
     print_draw_rows(draws, window_rows, latest_index)
+    print_matched_window_count(window_rows)
+    print_fortune_keys_analysis(window_rows)
     print(f"下期開獎日期：{next_draw_date or '未知'}")
     print()
 

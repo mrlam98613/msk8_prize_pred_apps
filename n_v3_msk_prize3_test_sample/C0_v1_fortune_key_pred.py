@@ -30,7 +30,7 @@ PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from msk_marksix_function_app.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
+from A_msk_marksix_function_app.res_func_num_convert_RBG_Dict import res_List_To_rbg_Dict_func
 
 # ===== 資料來源及輸出位置 =====
 # M6：歷史開獎資料，包含 N1..N7 及 prize1/prize2/prize3 注數。

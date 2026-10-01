@@ -8,7 +8,7 @@ dependencies = [
     "bs4>=0.0.2",
     "pandas>=3.0.5",
     "requests>=2.34.2",
-    "streamlit==1.57",
+    "streamlit==1.64.0",
     "tree>=0.2.4",
     "urllib3>=2.7.0",
 ]

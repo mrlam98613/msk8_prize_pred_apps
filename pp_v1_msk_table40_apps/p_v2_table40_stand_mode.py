@@ -10,7 +10,7 @@ PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
-from msk_marksix_function_app.res_func_num_convert_RBG_Dict import res_call_RBG_123_func
+from A_msk_marksix_function_app.res_func_num_convert_RBG_Dict import res_call_RBG_123_func
 
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
@@ -18,26 +18,45 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [2]
-WINDOW_DRAW_COUNT_LIST = [24]
+BACKTEST_DRAW_COUNT_LIST = [1]
+WINDOW_DRAW_COUNT_LIST = [30]
+# 每一期在指定 table idx_units 內有多少球才算符合條件。
+COMBINATION_TAKE_COUNT = 4
+BIRTHDAY_NUM_MATCH_MODE = ">="
 
-# SELECT_IDX_UNITS 用 table40 idx_units 搜尋；0 代表 40,10,20,30。
-SELECT_IDX_UNITS = (1,2,3,4,5,6,7,8,9,0) # 如果查詢 1 個 ＝(2,) 加入 分號。
- 
-# IDX_DISPLAY_MODE 可選："idx_tens_units", "idx_units", "idx_units_dot"。
-IDX_DISPLAY_MODE = "idx_units_dot"
+# SERACH_MODE 可選：
+# 1 = lotto_num / rbg / lotto_num_rbg
+# 2 = table40，並配合 IDX_DISPLAY_MODE 顯示 idx_tens_units / idx_units / idx_units_dot。
+SERACH_MODE = 1
 
-# 球數統計模式由 IDX_DISPLAY_MODE 自動配對：
-# idx_tens_units = 1 合條件球數；idx_units = 2 idx_units 不重復球數；idx_units_dot = 3 idx_units_dot 重復球數。
+# SERACH_MODE = 1 時使用；可選："lotto_num_rbg", "rbg", "lotto_num"。
+SERACH_MODE_1_DISPLAY_RESULT_MODE = "lotto_num"
 
-# 舊 range group 功能保留作 fallback；table40 版本主流程不用它。
-SELECT_GROUPS = (1,2,3,0)
+# SERACH_MODE = 2 時固定使用 table40。
+SERACH_MODE_2_DISPLAY_RESULT_MODE = "table40"
 
 # LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。
 LOTTO_LIST = True
 
-# DISPLAY_RESULT_MODE 可選："lotto_num_rbg", "rbg", "lotto_num", "table40"。
-DISPLAY_RESULT_MODE = "table40"
+'''
+ MODE 2 參數查詢 設定
+'''
+  
+# SELECT_IDX_UNITS 用 table40 idx_units 搜尋；0 代表 40,10,20,30。
+SELECT_IDX_UNITS = (1,4,7,2,5,8) # 如果查詢 1 個 ＝(2,) 加入 分號。
+
+# IDX_DISPLAY_MODE 可選：
+'''
+idx_tens_units ＝ 1.3= 13, 0.0=40"
+idx_units = 0-9
+idx_units_dot = 23= .3, 40= .0
+# 球數統計模式由 IDX_DISPLAY_MODE 自動配對：
+# idx_tens_units = 1 合條件球數；idx_units = 2 idx_units 不重復球數；idx_units_dot = 3 idx_units_dot 重復球數。
+'''
+IDX_DISPLAY_MODE = "idx_units_dot"
+
+# 舊 range group 功能保留作 fallback；table40 版本主流程不用它。
+SELECT_GROUPS = (1,2,3,0)
 
 # DISPLAY_PAD_EMPTY=True 時，查詢結果固定補齊 N1..N6 + N7 共 7 格，未命中位置用 _。
 DISPLAY_PAD_EMPTY = True
@@ -46,19 +65,16 @@ DISPLAY_PAD_EMPTY = True
 # detail 會打印窗口期明細；simple 只打印每期核對、預測球與命中統計。
 PRINT_BACKTEST_MODE = "detail" #"detail" 或 "simple"。
 
-# 每一期在指定 table idx_units 內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 5
-BIRTHDAY_NUM_MATCH_MODE = ">="
 # -------------------------
 # PRIZE_OPTION=3 即顯示三獎中獎注數 prize3。
 PRIZE_OPTION = 3 # 設定要顯示的獎項，3 即顯示三獎中獎注數。
 PRIZE_PRINT_SHOW = False
 # -------------------------
-RANDOM_GROUP_TAKE_COUNT = 3
-RANDOM_SEED = 20260912
+# RANDOM_GROUP_TAKE_COUNT = 3
+# RANDOM_SEED = 20260912
 
-# PRINT_RANDOM_RESULT=True 時顯示隨機發球、命中與統計；False 時保留功能但暫不打印。
-PRINT_RANDOM_RESULT = True
+# # PRINT_RANDOM_RESULT=True 時顯示隨機發球、命中與統計；False 時保留功能但暫不打印。
+# PRINT_RANDOM_RESULT = True
 
 GROUPS = {
     1: ("1-9", 1, 9),
@@ -222,18 +238,19 @@ def rbg_analysis_text(nums: list[int], special: int | None = None) -> str:
 
 
 def display_result_text(nums: list[int], special: int | None = None) -> str:
-    ''' 依 DISPLAY_RESULT_MODE 顯示號碼、RBG 或兩者。 '''
+    ''' 依目前 SERACH_MODE 生效的顯示模式，顯示號碼、RBG 或 table40。 '''
     lotto_text = format_nums(nums, special)
     rbg_text = rbg_analysis_text(nums, special).strip()
     table40_nums = [table40_idx_tens_units_code(num) for num in nums]
     if special is not None:
         table40_nums.append(f"*{table40_idx_tens_units_code(special)}")
     table40_text = format_nums_text(table40_nums)
-    if DISPLAY_RESULT_MODE == "rbg":
+    display_mode = active_display_result_mode()
+    if display_mode == "rbg":
         return rbg_text
-    if DISPLAY_RESULT_MODE == "table40":
+    if display_mode == "table40":
         return table40_text
-    if DISPLAY_RESULT_MODE == "lotto_num":
+    if display_mode == "lotto_num":
         return lotto_text
     return f"{lotto_text} {rbg_text}"
 
@@ -289,7 +306,7 @@ def padded_display_slots(row: DrawRow) -> tuple[list[str], list[str], list[str],
 
 
 def display_result_slots_text(lotto_slots: list[str], rbg_slots: list[str], table40_slots: list[str]) -> str:
-    ''' 依 DISPLAY_RESULT_MODE 顯示已補位的號碼與 RBG。 '''
+    ''' 依目前 SERACH_MODE 生效的顯示模式，顯示已補位的號碼、RBG 或 table40。 '''
     lotto_text = format_nums_text(lotto_slots)
     rbg_text = format_nums_text(rbg_slots)
     table40_text = format_nums_text(table40_slots)
@@ -297,11 +314,12 @@ def display_result_slots_text(lotto_slots: list[str], rbg_slots: list[str], tabl
     blue_count = rbg_slots.count("B")
     green_count = rbg_slots.count("G")
     rbg_summary = f"{rbg_text} , R{red_count},B{blue_count}, G{green_count},"
-    if DISPLAY_RESULT_MODE == "rbg":
+    display_mode = active_display_result_mode()
+    if display_mode == "rbg":
         return rbg_summary
-    if DISPLAY_RESULT_MODE == "table40":
+    if display_mode == "table40":
         return table40_text
-    if DISPLAY_RESULT_MODE == "lotto_num":
+    if display_mode == "lotto_num":
         return lotto_text
     return f"{lotto_text} {rbg_summary}"
 
@@ -364,10 +382,23 @@ def validate_print_backtest_mode() -> None:
         raise ValueError('PRINT_BACKTEST_MODE 只可設定為 "detail" 或 "simple"。')
 
 
-def validate_display_result_mode() -> None:
-    ''' 檢查查詢結果顯示模式。 '''
-    if DISPLAY_RESULT_MODE not in ("lotto_num_rbg", "rbg", "lotto_num", "table40"):
-        raise ValueError('DISPLAY_RESULT_MODE 只可設定為 "lotto_num_rbg", "rbg", "lotto_num", "table40"。')
+def active_display_result_mode() -> str:
+    ''' 按 SERACH_MODE 取得真正生效的查詢結果顯示模式。 '''
+    if SERACH_MODE == 1:
+        return SERACH_MODE_1_DISPLAY_RESULT_MODE
+    if SERACH_MODE == 2:
+        return SERACH_MODE_2_DISPLAY_RESULT_MODE
+    raise ValueError("SERACH_MODE 只可設定為 1 或 2。")
+
+
+def validate_serach_mode() -> None:
+    ''' 檢查 SERACH_MODE 與對應顯示模式設定。 '''
+    if SERACH_MODE not in (1, 2):
+        raise ValueError("SERACH_MODE 只可設定為 1 或 2。")
+    if SERACH_MODE_1_DISPLAY_RESULT_MODE not in ("lotto_num_rbg", "rbg", "lotto_num"):
+        raise ValueError('SERACH_MODE_1_DISPLAY_RESULT_MODE 只可設定為 "lotto_num_rbg", "rbg", "lotto_num"。')
+    if SERACH_MODE_2_DISPLAY_RESULT_MODE != "table40":
+        raise ValueError('SERACH_MODE_2_DISPLAY_RESULT_MODE 固定為 "table40"。')
 
 
 def validate_table_settings() -> None:
@@ -389,7 +420,9 @@ def selected_idx_units() -> tuple[int, ...]:
 
 
 def ball_count_mode() -> int:
-    ''' 依 IDX_DISPLAY_MODE 自動取得球數統計模式。 '''
+    ''' 依 SERACH_MODE / IDX_DISPLAY_MODE 自動取得球數統計模式。 '''
+    if active_display_result_mode() != "table40":
+        return 1
     if IDX_DISPLAY_MODE == "idx_units":
         return 2
     if IDX_DISPLAY_MODE == "idx_units_dot":
@@ -552,22 +585,43 @@ def all_check_nums_text(row: DrawRow) -> str:
 
 def query_mode_text() -> str:
     """產生標題用的查詢模式文字。"""
-    return "Table idx_units"
+    display_mode = active_display_result_mode()
+    if display_mode == "table40":
+        return f"Table idx_units，顯示={display_mode}/{IDX_DISPLAY_MODE}"
+    return f"Table idx_units，顯示={display_mode}"
 
 
 def print_query_setting() -> None:
     """打印本次執行的模式與主要查詢參數。"""
     print("====== p_v2 table40 stand mode 查詢分析 ======")
+    print()
+    print("基本查詢 參數")
+    print('運作模式可選："backtest" / "predict"')
     print(f"運作模式：{MODE}")
-    print(f"查詢模式：Table idx_units {selected_idx_units()}")
-    print(f"Table 顯示模式：{IDX_DISPLAY_MODE}")
-    print(f"球數統計模式：{ball_count_mode()} 自動配對")
+    print(f"SERACH_MODE = {SERACH_MODE}")
+    print(f"BACKTEST_DRAW_COUNT_LIST = {BACKTEST_DRAW_COUNT_LIST}")
+    print(f"WINDOW_DRAW_COUNT_LIST = {WINDOW_DRAW_COUNT_LIST}")
+    print(f"COMBINATION_TAKE_COUNT = {COMBINATION_TAKE_COUNT}")
+    print(f'BIRTHDAY_NUM_MATCH_MODE = "{BIRTHDAY_NUM_MATCH_MODE}"')
     print(f"回測打印模式：{PRINT_BACKTEST_MODE}")
-    print(f"查詢結果顯示模式：{DISPLAY_RESULT_MODE}")
-    print(f"查詢結果補位：{DISPLAY_PAD_EMPTY}")
-    print(f"回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
-    print(f"窗口期列表：{WINDOW_DRAW_COUNT_LIST}")
-    print(f"符合條件：所選 Table idx_units 正號數量 {BIRTHDAY_NUM_MATCH_MODE}{COMBINATION_TAKE_COUNT} 球")
+    print()
+    if SERACH_MODE == 1:
+        print("------------------- SERACH_MODE 1")
+        print('查詢結果顯示模式可選："lotto_num_rbg", "rbg", "lotto_num"')
+        print(f"查詢模式 1 = {SERACH_MODE_1_DISPLAY_RESULT_MODE}")
+        print(f"查詢結果補位：{DISPLAY_PAD_EMPTY}")
+    elif SERACH_MODE == 2:
+        print("------------------- SERACH_MODE 2")
+        print(f"查詢模式條件：Table 40 {selected_idx_units()}")
+        print(f"查詢模式 2 = {SERACH_MODE_2_DISPLAY_RESULT_MODE}")
+        print('Table 顯示模式可選："idx_tens_units", "idx_units", "idx_units_dot"')
+        print(f"Table 顯示模式：{IDX_DISPLAY_MODE}")
+        print(f"符合條件：所選 Table idx_units 正號數量 {BIRTHDAY_NUM_MATCH_MODE}{COMBINATION_TAKE_COUNT} 球")
+        print(f"查詢結果補位：{DISPLAY_PAD_EMPTY}")
+    print()
+    print("------------- 基本條件顯示")
+    print(f"實際生效顯示：{active_display_result_mode()}")
+    print(f"球數統計模式：{ball_count_mode()} 自動配對")
     print("查詢號碼：N1..N7，N7 特號以 * 顯示")
     display_text = "合併號碼" if LOTTO_LIST else "分組號碼"
     prize_show_text = f"，Pz{PRIZE_OPTION}" if PRIZE_PRINT_SHOW else ""
@@ -643,7 +697,7 @@ def main() -> None:
     try:
         validate_table_settings()
         validate_print_backtest_mode()
-        validate_display_result_mode()
+        validate_serach_mode()
     except ValueError as exc:
         raise SystemExit(f"參數錯誤：{exc}") from exc
 
