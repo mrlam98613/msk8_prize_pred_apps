@@ -66,6 +66,9 @@ def apply_new_page_style() -> None:
             color: var(--msk-text) !important;
             font-weight: 650 !important;
         }
+        div[data-testid="stDataFrame"] {
+            width: 100% !important;
+        }
         </style>
         """
     )

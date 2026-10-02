@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import re
 from collections import Counter
 from pathlib import Path
 from typing import TypedDict
@@ -29,12 +30,8 @@ class DrawRow(TypedDict):
 
 
 def parse_int_list(raw_text: str) -> list[int]:
-    """Parse text like [1,2] or 1,2 into int list."""
-    cleaned = raw_text.strip().strip("[]()")
-    if not cleaned:
-        return []
-    parts = [part.strip() for part in cleaned.replace("，", ",").split(",")]
-    return [int(part) for part in parts if part]
+    """Parse all integer values from text like [1,2], (1,2), or 1，2."""
+    return [int(value) for value in re.findall(r"\d+", raw_text)]
 
 
 def to_int(value: object, default: int = 0) -> int:
@@ -177,7 +174,7 @@ def window_detail_df(
                 "N球": format_ball_count(ball_count(row, group_ids)),
             }
         )
-    return pd.DataFrame(records)
+    return pd.DataFrame(records, columns=["近 N期", "日期", "號碼", "N球"])
 
 
 def group_hot_cold_df(window_rows: list[tuple[int, DrawRow]], group_ids: list[int]) -> pd.DataFrame:
@@ -251,20 +248,32 @@ def main() -> None:
         st.error(f"參數或資料錯誤：{exc}")
         return
 
+    mode = mode.strip()
+    match_mode = match_mode.strip()
     if mode not in ("backtest", "predict"):
         st.error('MODE 只可輸入 "backtest" 或 "predict"。')
+        return
+    if match_mode not in (">=", "==", "<="):
+        st.error('MATCH_MODE 只可輸入 ">="、"==" 或 "<="。')
+        return
+    if not group_ids or any(group_id not in GROUPS for group_id in group_ids):
+        st.error("SELECT_GROUPS 只可輸入 1,2,3,4，例如 (1,2,3,4)。")
         return
 
     window_rows, check_index = build_window_rows(draws, mode, backtest_count, window_count)
     target_index = check_index - 1 if check_index is not None else len(draws) - 1
     detail_df = window_detail_df(draws, window_rows, target_index, group_ids, take_count_int, match_mode)
+    window_total = len(window_rows)
+    matched_count = len(detail_df)
+    matched_percent = (matched_count / window_total * 100) if window_total else 0
 
     section_title("查詢摘要")
-    cols = st.columns(4)
+    cols = st.columns(5)
     cols[0].metric("模式", mode)
     cols[1].metric("窗口期", window_count)
-    cols[2].metric("合條件期數", len(detail_df))
-    cols[3].metric("條件", f"{match_mode}{take_count_int} 球")
+    cols[2].metric("查詢", f"{matched_count}/{window_total}")
+    cols[3].metric("百分比", f"{matched_percent:.0f}%")
+    cols[4].metric("條件", f"{match_mode}{take_count_int} 球")
 
     if check_index is not None:
         st.caption(f"backtest 核對日期：{draws[check_index]['date']}，窗口期不包含核對期。")
@@ -272,10 +281,44 @@ def main() -> None:
         st.caption("predict 窗口期包含最新一期開獎期。")
 
     section_title("合條件開獎期")
-    st.dataframe(detail_df, hide_index=True, width="stretch")
+    st.caption(
+        f"結果合條件 {match_mode} {take_count_int} 球，"
+        f"查詢 {matched_count} / {window_total} 期統計 = {matched_count}期 "
+        f"({matched_percent:.0f} %)"
+    )
+    st.dataframe(
+        detail_df,
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "近 N期": st.column_config.NumberColumn("近 N期", width="small", format="%d"),
+            "日期": st.column_config.TextColumn("日期", width="medium"),
+            "號碼": st.column_config.TextColumn("號碼", width="large"),
+            "N球": st.column_config.TextColumn("N球", width="small"),
+        },
+    )
 
     section_title("A-D 分組單雙冷熱門累計")
-    st.dataframe(group_hot_cold_df(window_rows, group_ids), hide_index=True, width="stretch")
+    st.dataframe(
+        group_hot_cold_df(window_rows, group_ids),
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "組別": st.column_config.TextColumn("組別", width="small"),
+            "單數": st.column_config.TextColumn("單數", width="large"),
+            "雙數": st.column_config.TextColumn("雙數", width="large"),
+        },
+    )
 
     section_title("A-D 分組 R/B/G 顏色冷熱門累計")
-    st.dataframe(group_rbg_df(window_rows, group_ids), hide_index=True, width="stretch")
+    st.dataframe(
+        group_rbg_df(window_rows, group_ids),
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "組別": st.column_config.TextColumn("組別", width="medium"),
+            "R": st.column_config.TextColumn("R", width="large"),
+            "B": st.column_config.TextColumn("B", width="large"),
+            "G": st.column_config.TextColumn("G", width="large"),
+        },
+    )
