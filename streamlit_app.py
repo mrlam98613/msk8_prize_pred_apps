@@ -12,18 +12,12 @@ CONTENT_DIR = PROJECT_ROOT / "app_pages"
 NEW_CONTENT_DIR = PROJECT_ROOT / "new_app_pages"
 
 PAGES = [
-    # {
-    #     "label": "新版 Streamlit 1.64 測試區",
-    #     "icon": "🧪",
-    #     "path": NEW_CONTENT_DIR / "0_new_streamlit_164_home.py",
-    #     # 新版頁面先放在 new_app_pages，舊 app_pages 暫時保留。
-    # },
-    # {
-    #     "label": "新版 1-40 多組條件分析",
-    #     "icon": "🧩",
-    #     "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
-    #     # 來源 prr_v1_wheelingSystem_apps / prr_v2_mulit_group_analyze.py
-    # },
+    {
+        "label": "新版 1-40 多組條件分析",
+        "icon": "🧩",
+        "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
+        # 來源 prr_v2_ABCD_analyze_apps / prr_v2_mulit_group_analyze.py
+    },
     
     {
             "label": "六合彩最新資訊",

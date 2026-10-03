@@ -22,7 +22,7 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 # MODE 可選："backtest" 或 "predict"。
 MODE = "backtest"
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [10]
+WINDOW_DRAW_COUNT_LIST = [18]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
