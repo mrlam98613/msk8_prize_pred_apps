@@ -18,19 +18,34 @@ PAGES = [
     #     "path": NEW_CONTENT_DIR / "0_new_streamlit_164_home.py",
     #     # 新版頁面先放在 new_app_pages，舊 app_pages 暫時保留。
     # },
+    # {
+    #     "label": "新版 1-40 多組條件分析",
+    #     "icon": "🧩",
+    #     "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
+    #     # 來源 prr_v1_wheelingSystem_apps / prr_v2_mulit_group_analyze.py
+    # },
+    
     {
-        "label": "新版 1-40 多組條件分析",
-        "icon": "🧩",
-        "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
-        # 來源 prr_v1_wheelingSystem_apps / prr_v2_mulit_group_analyze.py
+            "label": "六合彩最新資訊",
+            "icon": "📌",
+            "path": CONTENT_DIR / "0_lotto_info.py",
+            # 來源 A_msk_lottery_data_folder \ M2_last_upgrade_lotto_data.csv & M3_lotto_prize_results.csv
     },
     
     {
-        "label": "六合彩最新資訊",
-        "icon": "📌",
-        "path": CONTENT_DIR / "0_lotto_info.py",
-        # 來源 A_msk_lottery_data_folder \ M2_last_upgrade_lotto_data.csv & M3_lotto_prize_results.csv
+        "label": "PRR v4 回測",
+        "icon": "📊",
+        "path": NEW_CONTENT_DIR / "2_prr_v4_backtest.py",
+        # 來源 prr_v2_ABCD_analyze_apps / prr_v4_ABCD_predict.py
     },
+    {
+        "label": "PRR v4 下期預測",
+        "icon": "🎯",
+        "path": NEW_CONTENT_DIR / "3_prr_v4_predict.py",
+        # 來源 prr_v2_ABCD_analyze_apps / prr_v4_ABCD_predict.py
+    },
+    
+    
     {
         "label": "A1V1_生日號-手動趨勢投注",
         "icon": "📈",
@@ -38,12 +53,12 @@ PAGES = [
         # 來源 n_v1_msk_prize_31_num_backtest_pred \ folder
     },
     
-    {
-        "label": "R1V2_生日號,組別主力-預測",
-        "icon": "🧭",
-        "path": CONTENT_DIR / "1_R1_v2_Fortune_code_pred.py",
-        # 來源 nn_v8_msk_route_pred_apps \ folder
-    },
+    # {
+    #     "label": "R1V2_生日號,組別主力-預測",
+    #     "icon": "🧭",
+    #     "path": CONTENT_DIR / "1_R1_v2_Fortune_code_pred.py",
+    #     # 來源 nn_v8_msk_route_pred_apps \ folder
+    # },
     
     {
         "label": "生日號中獎號碼-組合特色分析",
