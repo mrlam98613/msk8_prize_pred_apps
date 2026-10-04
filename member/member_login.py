@@ -14,21 +14,47 @@ from db import (  # noqa: E402
     ensure_first_admin,
     get_all_members,
     get_member,
+    get_member_by_phone,
     hash_password,
     init_db,
     init_member_bet_db,
-    is_valid_email,
     is_valid_local_phone,
-    reset_password,
-    update_member,
+    update_member_simple,
 )
 from css import white_black_style  # noqa: E402
 
 
-ADMIN_EMAIL = "mrlam98613@gmail.com"
+ADMIN_EMAIL = "98687989"
 ADMIN_PHONE = "98687989"
-ADMIN_PASSWORD = "98687989"
-AUTH_TABS = ["會員登入", "會員註冊", "忘記密碼"]
+ADMIN_PASSWORD = "7989"
+AUTH_TABS = ["會員登入", "會員註冊", "忘記登入"]
+
+
+def normalize_phone(phone: str | None) -> str:
+    """統一整理電話號碼，登入和註冊都只接受 8 位本地號碼。"""
+
+    return str(phone or "").strip()
+
+
+def auto_password_from_phone(phone: str) -> str:
+    """會員預設密碼固定為電話號碼最後 4 位。"""
+
+    return normalize_phone(phone)[-4:]
+
+
+def find_member_by_phone(phone: str):
+    """以電話號碼尋找會員；兼容舊資料 email 欄位仍存電話的情況。"""
+
+    phone = normalize_phone(phone)
+    return get_member(phone) or get_member_by_phone(phone)
+
+
+def member_nickname(member) -> str:
+    """安全讀取暱稱欄位；舊資料沒有暱稱時回傳空字串。"""
+
+    if member and len(member) > 6:
+        return str(member[6] or "").strip()
+    return ""
 
 
 def init_login_state() -> None:
@@ -44,6 +70,8 @@ def set_logged_in(member) -> None:
 
     st.session_state["login_member_id"] = member[0]
     st.session_state["login_email_val"] = member[1]
+    st.session_state["login_member_phone"] = member[2]
+    st.session_state["login_member_nickname"] = member_nickname(member)
     st.session_state["login_state"] = "admin" if int(member[4]) == 1 else "user"
     init_member_bet_db(member[1])
 
@@ -80,11 +108,13 @@ def render_admin_member_manager() -> None:
 
     for member_id, email, phone, is_admin, created_at in members:
         cols = st.columns([2.6, 1.4, 1.2, 1, 1])
-        cols[0].write(email)
+        full_member = get_member(email)
+        nickname = member_nickname(full_member)
+        cols[0].write(nickname or "未填暱稱")
         cols[1].write(phone)
         cols[2].write("管理員" if is_admin else "普通會員")
 
-        if email == ADMIN_EMAIL:
+        if email == ADMIN_EMAIL or phone == ADMIN_PHONE:
             cols[3].caption("保留")
             cols[4].caption("-")
             continue
@@ -99,17 +129,22 @@ def render_admin_member_manager() -> None:
 
         if st.session_state.get(f"editing_member_{member_id}"):
             with st.container(border=True):
-                new_email = st.text_input("新信箱", value=email, key=f"email_{member_id}")
-                new_phone = st.text_input("新手機號碼", value=phone, key=f"phone_{member_id}")
+                new_phone = st.text_input(
+                    "新電話號碼（8 位數字，不用地區號）",
+                    value=phone,
+                    key=f"phone_{member_id}",
+                )
+                new_nickname = st.text_input(
+                    "會員暱稱（可不填）",
+                    value=nickname,
+                    key=f"nickname_{member_id}",
+                )
                 if st.button("確認修改", key=f"save_member_{member_id}"):
-                    new_email = str(new_email or "").strip().lower()
-                    new_phone = str(new_phone or "").strip()
-                    if not is_valid_email(new_email):
-                        st.error("Email 格式不正確。")
-                    elif not is_valid_local_phone(new_phone):
+                    new_phone = normalize_phone(new_phone)
+                    if not is_valid_local_phone(new_phone):
                         st.error("手機號碼請輸入 8 位數字，不需要地區號。")
                     else:
-                        update_member(member_id, new_email, new_phone)
+                        update_member_simple(member_id, new_phone, new_nickname)
                         st.success("會員資料已更新。")
                         st.session_state.pop(f"editing_member_{member_id}", None)
                         st.rerun()
@@ -120,7 +155,7 @@ def render_login_tab() -> None:
     st.markdown(
         """
         <style>
-        input[aria-label="登入密碼"] {
+        input[aria-label="登入密碼（電話號碼後 4 位）"] {
             autocomplete: current-password;
         }
         </style>
@@ -132,24 +167,25 @@ def render_login_tab() -> None:
     if notice:
         st.success(notice)
 
-    email = st.text_input("信箱", key="login_email")
-    password = st.text_input("登入密碼", type="password", key="member_login_password")
+    phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="login_phone")
+    password = st.text_input("登入密碼（電話號碼後 4 位）", type="password", key="member_login_password")
 
     if st.button("登入", key="login_btn", type="primary"):
-        email = str(email or "").strip().lower()
+        phone = normalize_phone(phone)
         password = str(password or "")
 
-        if not is_valid_email(email):
-            st.error("Email 格式不正確。")
+        if not is_valid_local_phone(phone):
+            st.error("電話號碼請輸入 8 位數字，不需要地區號。")
             return
 
-        member = get_member(email)
+        member = find_member_by_phone(phone)
         if member and member[3] == hash_password(password):
             set_logged_in(member)
-            st.success(f"登入成功，{email}")
+            display_name = member_nickname(member) or phone
+            st.success(f"登入成功，{display_name}")
             switch_to_bet_center()
         else:
-            st.error("帳號或密碼錯誤。")
+            st.error("電話號碼或密碼錯誤。")
 
     if st.session_state.get("login_state") == "admin":
         render_admin_member_manager()
@@ -158,57 +194,55 @@ def render_login_tab() -> None:
 def render_register_tab() -> None:
     st.header("會員註冊")
 
-    reg_email = st.text_input("註冊信箱", key="reg_email")
-    reg_phone = st.text_input("手機號碼（8 位數字，不用地區號）", key="reg_phone")
-    reg_password = st.text_input("密碼（6-12 字元）", type="password", key="reg_pwd")
+    reg_phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="reg_phone")
+    reg_nickname = st.text_input("會員暱稱（可不填）", key="reg_nickname")
 
     if st.button("註冊", key="reg_btn", type="primary"):
-        reg_email = str(reg_email or "").strip().lower()
-        reg_phone = str(reg_phone or "").strip()
-        reg_password = str(reg_password or "")
+        reg_phone = normalize_phone(reg_phone)
+        reg_password = auto_password_from_phone(reg_phone)
 
-        if not is_valid_email(reg_email):
-            st.warning("Email 格式不正確。")
-        elif not is_valid_local_phone(reg_phone):
+        if not is_valid_local_phone(reg_phone):
             st.warning("手機號碼請輸入 8 位數字，不需要地區號。")
-        elif len(reg_password) < 6 or len(reg_password) > 12:
-            st.warning("密碼長度需 6-12 字元。")
-        elif get_member(reg_email):
-            st.warning("此信箱已註冊。")
+        elif find_member_by_phone(reg_phone):
+            st.warning("此電話號碼已註冊。")
         else:
-            add_member(reg_email, reg_phone, hash_password(reg_password), 0)
-            init_member_bet_db(reg_email)
-            st.session_state["member_login_notice"] = "註冊成功，請使用新帳號登入。"
+            add_member(reg_phone, reg_phone, hash_password(reg_password), 0, reg_nickname)
+            init_member_bet_db(reg_phone)
+            st.session_state["member_login_notice"] = (
+                f"註冊成功，登入密碼是電話號碼後 4 位：{reg_password}"
+            )
             switch_auth_tab("會員登入")
             st.rerun()
 
 
 def render_forgot_password_tab() -> None:
-    st.header("忘記密碼")
+    st.header("忘記登入")
 
-    forgot_email = st.text_input("註冊信箱", key="forgot_email")
-    forgot_phone = st.text_input("手機號碼（8 位數字，不用地區號）", key="forgot_phone")
-    new_password = st.text_input("新密碼（6-12 字元）", type="password", key="forgot_pwd")
+    forgot_phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="forgot_phone")
+    forgot_password = st.text_input(
+        "登入密碼（電話號碼後 4 位）",
+        type="password",
+        key="forgot_pwd",
+    )
 
-    if st.button("重設密碼", key="forgot_btn", type="primary"):
-        forgot_email = str(forgot_email or "").strip().lower()
-        forgot_phone = str(forgot_phone or "").strip()
-        new_password = str(new_password or "")
+    if st.button("驗證並登入", key="forgot_btn", type="primary"):
+        forgot_phone = normalize_phone(forgot_phone)
+        forgot_password = str(forgot_password or "")
 
-        if not is_valid_email(forgot_email):
-            st.warning("Email 格式不正確。")
-        elif not is_valid_local_phone(forgot_phone):
+        if not is_valid_local_phone(forgot_phone):
             st.warning("手機號碼請輸入 8 位數字，不需要地區號。")
-        elif len(new_password) < 6 or len(new_password) > 12:
-            st.warning("密碼長度需 6-12 字元。")
-        elif not get_member(forgot_email):
-            st.warning("此信箱尚未註冊。")
-        elif reset_password(forgot_email, forgot_phone, hash_password(new_password)):
-            st.session_state["member_login_notice"] = "密碼重設成功，請重新登入。"
-            switch_auth_tab("會員登入")
-            st.rerun()
         else:
-            st.error("信箱或手機號碼錯誤，請確認輸入。")
+            member = find_member_by_phone(forgot_phone)
+            if member and member[3] == hash_password(forgot_password):
+                set_logged_in(member)
+                st.success("驗證成功，已登入會員網頁。")
+                switch_to_bet_center()
+            elif forgot_password != auto_password_from_phone(forgot_phone):
+                st.error("電話號碼或密碼錯誤。")
+            elif member:
+                st.error("會員密碼不是目前電話號碼後 4 位，請聯絡管理員。")
+            else:
+                st.warning("此電話號碼尚未註冊。")
 
 
 def main() -> None:

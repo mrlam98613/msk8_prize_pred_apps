@@ -60,17 +60,19 @@ def init_db():
             }
             if "created_at" not in columns:
                 conn.execute("ALTER TABLE members ADD COLUMN created_at TEXT")
+            if "nickname" not in columns:
+                conn.execute("ALTER TABLE members ADD COLUMN nickname TEXT DEFAULT ''")
 
 
-def add_member(email, phone, password, is_admin=0):
+def add_member(email, phone, password, is_admin=0, nickname: str = ""):
     with closing(_connect_member_db()) as conn:
         with conn:
             conn.execute(
                 """
-                INSERT INTO members (email, phone, password, is_admin)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO members (email, phone, password, is_admin, nickname)
+                VALUES (?, ?, ?, ?, ?)
                 """,
-                (email.strip().lower(), phone.strip(), password, int(is_admin)),
+                (email.strip().lower(), phone.strip(), password, int(is_admin), (nickname or "").strip()),
             )
 
 
@@ -78,6 +80,13 @@ def get_member(email):
     with closing(_connect_member_db()) as conn:
         cur = conn.cursor()
         cur.execute("SELECT * FROM members WHERE email = ?", ((email or "").strip().lower(),))
+        return cur.fetchone()
+
+
+def get_member_by_phone(phone: str):
+    with closing(_connect_member_db()) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM members WHERE phone = ?", ((phone or "").strip(),))
         return cur.fetchone()
 
 
@@ -110,6 +119,15 @@ def update_member(member_id, new_email, new_phone):
             )
 
 
+def update_member_simple(member_id, phone: str, nickname: str = ""):
+    with closing(_connect_member_db()) as conn:
+        with conn:
+            conn.execute(
+                "UPDATE members SET email = ?, phone = ?, nickname = ? WHERE id = ?",
+                (phone.strip(), phone.strip(), (nickname or "").strip(), member_id),
+            )
+
+
 def reset_password(email, phone, new_password):
     with closing(_connect_member_db()) as conn:
         with conn:
@@ -126,7 +144,7 @@ def ensure_first_admin(email: str, phone: str, password: str):
 
     init_db()
     if not get_member(email):
-        add_member(email, phone, hash_password(password), 1)
+        add_member(email, phone, hash_password(password), 1, "管理員")
 
 
 def _safe_email_db_name(email: str) -> str:

@@ -20,12 +20,12 @@ from db import (  # noqa: E402
     delete_member,
     delete_member_bet,
     get_all_members,
+    get_member,
     init_member_bet_db,
-    is_valid_email,
     is_valid_local_phone,
     list_member_bets,
     member_bet_exists,
-    update_member,
+    update_member_simple,
 )
 from css import white_black_style  # noqa: E402
 from member.member_custom_bet import render_custom_bet_page  # noqa: E402
@@ -700,7 +700,11 @@ def render_admin_member_data_tab() -> None:
     for member_id, email, phone, is_admin, created_at in members:
         with st.container(border=True):
             cols = st.columns([2.5, 1.3, 1.1, 0.8, 0.8])
-            cols[0].markdown(f"**{email}**")
+            full_member = get_member(email)
+            nickname = ""
+            if full_member and len(full_member) > 6:
+                nickname = str(full_member[6] or "").strip()
+            cols[0].markdown(f"**{nickname or '未填暱稱'}**")
             cols[1].write(phone)
             cols[2].write("管理員" if is_admin else "普通會員")
             cols[3].caption(created_at or "-")
@@ -716,18 +720,23 @@ def render_admin_member_data_tab() -> None:
                 st.session_state[f"admin_editing_member_{member_id}"] = True
 
             if st.session_state.get(f"admin_editing_member_{member_id}"):
-                new_email = st.text_input("新信箱", value=email, key=f"admin_email_{member_id}")
-                new_phone = st.text_input("新手機號碼", value=phone, key=f"admin_phone_{member_id}")
+                new_phone = st.text_input(
+                    "新電話號碼（8 位數字，不用地區號）",
+                    value=phone,
+                    key=f"admin_phone_{member_id}",
+                )
+                new_nickname = st.text_input(
+                    "會員暱稱（可不填）",
+                    value=nickname,
+                    key=f"admin_nickname_{member_id}",
+                )
                 save_cols = st.columns(2)
                 if save_cols[0].button("確認修改", key=f"admin_save_member_{member_id}"):
-                    new_email = str(new_email or "").strip().lower()
                     new_phone = str(new_phone or "").strip()
-                    if not is_valid_email(new_email):
-                        st.error("Email 格式不正確。")
-                    elif not is_valid_local_phone(new_phone):
+                    if not is_valid_local_phone(new_phone):
                         st.error("手機號碼請輸入 8 位數字，不需要地區號。")
                     else:
-                        update_member(member_id, new_email, new_phone)
+                        update_member_simple(member_id, new_phone, new_nickname)
                         st.success("會員資料已更新。")
                         st.session_state.pop(f"admin_editing_member_{member_id}", None)
                         st.rerun()

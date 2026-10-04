@@ -13,9 +13,12 @@ wheels/
 *.db
 *.sqlite
 *.sqlite3
+!member/members.db
 member/member_bet_dbs/
-n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/admin_bet.csv
+# n_v1_msk_prize_31_num_backtest_pred/bet_prize_data/admin_bet.csv
 # n_v2_msk_prize_31_num_backtest_pred/bet_data/backtest_window_check_rows.csv
 
 # Local lottery data snapshots
-Z4_lotto_prize_2026_crawler/log/
+Dockerfile
+Z4_lotto_prize_2026_crawler/log/*.*
+Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.*
