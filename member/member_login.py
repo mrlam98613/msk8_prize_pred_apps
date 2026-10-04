@@ -187,9 +187,6 @@ def render_login_tab() -> None:
         else:
             st.error("電話號碼或密碼錯誤。")
 
-    if st.session_state.get("login_state") == "admin":
-        render_admin_member_manager()
-
 
 def render_register_tab() -> None:
     st.header("會員註冊")

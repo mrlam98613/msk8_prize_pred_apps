@@ -7,6 +7,19 @@ import json
 import random
 from typing import Any, TypedDict
 
+try:
+    import streamlit as st
+except ModuleNotFoundError:  # Allows CLI use in environments without Streamlit.
+    class _StreamlitFallback:
+        @staticmethod
+        def cache_data(**_kwargs):
+            def decorator(func):
+                return func
+
+            return decorator
+
+    st = _StreamlitFallback()
+
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
@@ -109,8 +122,15 @@ class NumWeight(TypedDict):
     latest_rank: int | None
 
 
-def read_csv_rows(path: Path) -> list[dict[str, str]]:
+def file_mtime(path: Path) -> float:
+    """Return a lightweight file signature for Streamlit cache invalidation."""
+    return path.stat().st_mtime if path.exists() else 0.0
+
+
+@st.cache_data(show_spinner=False, max_entries=32)
+def read_csv_rows_cached(path_text: str, modified_at: float) -> list[dict[str, str]]:
     """讀取 CSV 並清理欄名、欄值前後空白與 BOM。"""
+    path = Path(path_text)
     if not path.exists():
         raise FileNotFoundError(f"找不到 CSV：{path}")
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
@@ -121,6 +141,11 @@ def read_csv_rows(path: Path) -> list[dict[str, str]]:
             {(key or "").strip().lstrip("\ufeff"): (value or "").strip() for key, value in row.items()}
             for row in reader
         ]
+
+
+def read_csv_rows(path: Path) -> list[dict[str, str]]:
+    """讀取 CSV；檔案修改時間改變時才重新載入。"""
+    return read_csv_rows_cached(str(path), file_mtime(path))
 
 
 def to_int(value: object, default: int = 0) -> int:
@@ -1197,7 +1222,12 @@ def build_group_result(
     }
 
 
-def compute_backtest(backtest_count: int, window_count: int) -> dict[str, object]:
+@st.cache_data(show_spinner=False, max_entries=24)
+def compute_backtest_cached(
+    backtest_count: int,
+    window_count: int,
+    draws_modified_at: float,
+) -> dict[str, object]:
     """Compute v4 backtest results without writing CSV or JSON."""
     draws = read_draws()
     latest_index = len(draws) - 1
@@ -1267,7 +1297,17 @@ def compute_backtest(backtest_count: int, window_count: int) -> dict[str, object
     }
 
 
-def compute_predict(window_count: int) -> dict[str, object]:
+def compute_backtest(backtest_count: int, window_count: int) -> dict[str, object]:
+    """Compute cached v4 backtest results, invalidated when draw CSV changes."""
+    return compute_backtest_cached(backtest_count, window_count, file_mtime(M6_CSV))
+
+
+@st.cache_data(show_spinner=False, max_entries=24)
+def compute_predict_cached(
+    window_count: int,
+    draws_modified_at: float,
+    summary_modified_at: float,
+) -> dict[str, object]:
     """Compute v4 next-draw prediction without writing CSV or JSON."""
     draws = read_draws()
     latest_index = len(draws) - 1
@@ -1316,3 +1356,8 @@ def compute_predict(window_count: int) -> dict[str, object]:
             {"name": "3. 隨機 9 球", "nums": random_nums},
         ],
     }
+
+
+def compute_predict(window_count: int) -> dict[str, object]:
+    """Compute cached v4 prediction, invalidated when source CSV files change."""
+    return compute_predict_cached(window_count, file_mtime(M6_CSV), file_mtime(M4_CSV))

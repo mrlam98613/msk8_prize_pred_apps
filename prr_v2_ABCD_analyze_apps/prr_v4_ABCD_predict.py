@@ -34,7 +34,7 @@ D，最後考慮最近 1 期開號，避免投注 重復上一期開號。
 
 # 1-6 重點參數。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [2]
+BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [18]
 GROUP_RUN_LIST = [(1,), (2,), (3,), (4,)]
 COMBINATION_TAKE_COUNT = 1

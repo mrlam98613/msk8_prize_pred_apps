@@ -130,17 +130,23 @@ def reset_custom_bet_outputs() -> None:
     reset_banker_leg_numbers()
 
 
-def render_seed_picker(seeds: list[int], nums: list[int], max_select: int) -> None:
+def render_seed_picker(seeds: list[int], nums: list[int], max_select: int) -> tuple[list[int], list[int]]:
     """顯示 1-49 球號；用戶可先自選部分號碼，再由系統補足。"""
 
+    seeds = render_seed_only_picker(seeds, max_select)
+    nums = st.session_state.get("custom_generated_numbers", nums)
+    if len(seeds) == max_select:
+        nums = sorted(seeds[:max_select])
+        st.session_state["custom_generated_numbers"] = nums
+        st.session_state["custom_generated_signature"] = ("manual_full", max_select, tuple(nums))
     render_selected_and_generated_numbers(seeds, nums)
-    render_seed_only_picker(seeds, max_select)
+    return seeds, nums
 
 
-def render_seed_only_picker(seeds: list[int], max_select: int) -> None:
+def render_seed_only_picker(seeds: list[int], max_select: int) -> list[int]:
     """只顯示自選號碼盤。"""
 
-    picker_seeds = st.session_state.get("custom_picker_seed_numbers", seeds)
+    picker_seeds = sorted(int(num) for num in st.session_state.get("custom_seed_numbers", seeds))
     selected = number_picker(
         selected=picker_seeds,
         max_select=max_select,
@@ -152,6 +158,7 @@ def render_seed_only_picker(seeds: list[int], max_select: int) -> None:
         st.session_state["custom_picker_seed_numbers"] = selected
         st.session_state["custom_seed_numbers"] = selected
         reset_generated_numbers()
+    return selected
 
 
 def render_banker_leg_picker(
@@ -766,11 +773,7 @@ def render_custom_bet_page(email: str) -> None:
 
     seeds = st.session_state["custom_seed_numbers"]
     nums = st.session_state.get("custom_generated_numbers", [])
-    if len(seeds) == bet_size:
-        nums = sorted(seeds[:bet_size])
-        st.session_state["custom_generated_numbers"] = nums
-        st.session_state["custom_generated_signature"] = (bet_type, bet_size, bet_unit, tuple(nums), "manual_full")
-    render_seed_picker(seeds, nums, bet_size)
+    seeds, nums = render_seed_picker(seeds, nums, bet_size)
 
     if bet_type == "複式 [7-15]":
         st.markdown(

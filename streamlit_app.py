@@ -12,12 +12,12 @@ CONTENT_DIR = PROJECT_ROOT / "app_pages"
 NEW_CONTENT_DIR = PROJECT_ROOT / "new_app_pages"
 
 PAGES = [
-    {
-        "label": "新版 1-40 多組條件分析",
-        "icon": "🧩",
-        "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
-        # 來源 prr_v2_ABCD_analyze_apps / prr_v2_mulit_group_analyze.py
-    },
+    # {
+    #     "label": "新版 1-40 多組條件分析",
+    #     "icon": "🧩",
+    #     "path": NEW_CONTENT_DIR / "1_mulit_group_analyze.py",
+    #     # 來源 prr_v2_ABCD_analyze_apps / prr_v2_mulit_group_analyze.py
+    # },
     
     {
             "label": "六合彩最新資訊",
@@ -92,6 +92,33 @@ PAGES = [
             # member 模組相關文件
     },
 ]
+
+PAGE_CATEGORY_ORDER = ["主要功能", "生日號分析", "投注工具", "會員功能"]
+PAGE_CATEGORY_BY_LABEL = {
+    "新版 1-40 多組條件分析": "主要功能",
+    "六合彩最新資訊": "主要功能",
+    "PRR v4 回測": "主要功能",
+    "PRR v4 下期預測": "主要功能",
+    "A1V1_生日號-手動趨勢投注": "生日號分析",
+    "生日號中獎號碼-組合特色分析": "生日號分析",
+    "你的生日算出-旺財星日 + 開獎日": "生日號分析",
+    "1,2,3 獎中獎注數生日號分析": "生日號分析",
+    "複式，投注-派彩查詢": "投注工具",
+    "膽拖，投注-派彩查詢": "投注工具",
+    "會員登入投注": "會員功能",
+}
+
+
+def page_label(page: dict) -> str:
+    """統一產生主目錄功能名稱。"""
+
+    return f"{page['icon']} {page['label']}"
+
+
+def page_category(page: dict) -> str:
+    """依功能名稱回傳手機友善的第一層分類。"""
+
+    return PAGE_CATEGORY_BY_LABEL.get(str(page["label"]), "主要功能")
 
 
 def init_member_state() -> None:
@@ -270,23 +297,36 @@ def main() -> None:
     st.caption("以下內容直接顯示在同一頁")
     render_member_status()
 
-    page_labels = [f"{page['icon']} {page['label']}" for page in PAGES]
+    member_page_label = "👤 會員登入投注"
     if (
         st.session_state.get("redirect_to_member_bet_center")
         and st.session_state.get("login_state") in ("user", "admin")
     ):
         st.session_state["redirect_to_member_bet_center"] = False
-        st.session_state["main_page_selector"] = "👤 會員登入投注"
+        st.session_state["main_page_category"] = "會員功能"
+        st.session_state["main_page_selector"] = member_page_label
+
+    selected_category = st.selectbox(
+        "請選擇功能分類",
+        PAGE_CATEGORY_ORDER,
+        index=0,
+        key="main_page_category",
+    )
+
+    category_pages = [page for page in PAGES if page_category(page) == selected_category]
+    page_labels = [page_label(page) for page in category_pages]
+    if st.session_state.get("main_page_selector") not in page_labels:
+        st.session_state["main_page_selector"] = page_labels[0]
 
     selected_label = st.selectbox(
         "請拉下選單-選擇網頁功能",
         page_labels,
-        index=0,
+        index=page_labels.index(st.session_state["main_page_selector"]),
         key="main_page_selector",
     )
 
     selected_page = next(
-        page for page in PAGES if f"{page['icon']} {page['label']}" == selected_label
+        page for page in category_pages if page_label(page) == selected_label
     )
     run_page_file(select_page_path(selected_page))
 

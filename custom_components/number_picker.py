@@ -38,4 +38,4 @@ def number_picker(
         default=selected,
         key=key,
     )
-    return value or selected
+    return selected if value is None else value

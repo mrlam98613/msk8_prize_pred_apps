@@ -37,6 +37,7 @@ BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
 NEXT_BET_DRAW_RECORD_PATH = (
     PROJECT_ROOT / "msk_new_seed_apps" / "bet_data" / "nextBetDraw_record.csv"
 )
+ADMIN_PHONE = "98687989"
 
 PRIZE_TABLE = {
     6.0: 10_000_000,
@@ -689,9 +690,12 @@ def render_bet_records_tab(email: str, key_prefix: str = "member") -> None:
 def render_admin_member_data_tab() -> None:
     """管理員修改或刪除會員資料。"""
 
-    st.subheader("D. 管理員會員資料")
-    members = get_all_members()
-    current_admin_email = st.session_state.get("login_email_val", "")
+    st.subheader("會員資訊")
+    members = [
+        member
+        for member in get_all_members()
+        if int(member[3]) != 1 and str(member[2]).strip() != ADMIN_PHONE
+    ]
 
     if not members:
         st.info("目前沒有會員資料。")
@@ -699,24 +703,21 @@ def render_admin_member_data_tab() -> None:
 
     for member_id, email, phone, is_admin, created_at in members:
         with st.container(border=True):
-            cols = st.columns([2.5, 1.3, 1.1, 0.8, 0.8])
+            cols = st.columns([1.3, 2.3, 0.8, 0.8])
             full_member = get_member(email)
             nickname = ""
             if full_member and len(full_member) > 6:
                 nickname = str(full_member[6] or "").strip()
-            cols[0].markdown(f"**{nickname or '未填暱稱'}**")
-            cols[1].write(phone)
-            cols[2].write("管理員" if is_admin else "普通會員")
-            cols[3].caption(created_at or "-")
+            cols[0].write(phone)
+            cols[1].markdown(f"**{nickname or '未填暱稱'}**")
+            cols[2].caption(created_at or "-")
 
-            if email == current_admin_email:
-                cols[4].caption("目前帳號")
-            elif cols[4].button("刪除", key=f"admin_delete_member_{member_id}"):
+            if cols[3].button("刪除", key=f"admin_delete_member_{member_id}"):
                 delete_member(member_id)
                 st.warning("已刪除會員資料。")
                 st.rerun()
 
-            if email != current_admin_email and st.button("修改", key=f"admin_edit_member_{member_id}"):
+            if st.button("修改", key=f"admin_edit_member_{member_id}"):
                 st.session_state[f"admin_editing_member_{member_id}"] = True
 
             if st.session_state.get(f"admin_editing_member_{member_id}"):
@@ -748,17 +749,30 @@ def render_admin_member_data_tab() -> None:
 def render_admin_member_bets_tab() -> None:
     """管理員查看及刪除指定會員投注紀錄。"""
 
-    st.subheader("E. 管理員會員投注紀錄")
-    members = get_all_members()
-    member_emails = [email for _, email, _, _, _ in members]
+    st.subheader("管理員會員投注紀錄")
+    members = [
+        member
+        for member in get_all_members()
+        if int(member[3]) != 1 and str(member[2]).strip() != ADMIN_PHONE
+    ]
+    member_accounts = [email for _, email, _, _, _ in members]
 
-    if not member_emails:
+    if not member_accounts:
         st.info("目前沒有會員資料。")
         return
 
+    member_labels = {}
+    for _, email, phone, _, _ in members:
+        full_member = get_member(email)
+        nickname = ""
+        if full_member and len(full_member) > 6:
+            nickname = str(full_member[6] or "").strip()
+        member_labels[email] = f"{phone}｜{nickname or '未填暱稱'}"
+
     selected_email = st.selectbox(
         "選擇會員",
-        member_emails,
+        member_accounts,
+        format_func=lambda account: member_labels.get(account, account),
         key="admin_selected_member_bet_email",
     )
     if not selected_email:
@@ -809,11 +823,21 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    tabs = st.tabs(["自選號碼投注", "投注紀錄"])
+    is_admin = st.session_state.get("login_state") == "admin"
+    tab_titles = ["自選號碼投注", "投注紀錄"]
+    if is_admin:
+        tab_titles.extend(["會員資訊", "會員投注紀錄"])
+
+    tabs = st.tabs(tab_titles)
     with tabs[0]:
         render_custom_bet_tab(email)
     with tabs[1]:
         render_bet_records_tab(email, key_prefix="member")
+    if is_admin:
+        with tabs[2]:
+            render_admin_member_data_tab()
+        with tabs[3]:
+            render_admin_member_bets_tab()
 
 
 if __name__ == "__main__":

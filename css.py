@@ -142,22 +142,179 @@ white_black_style = """
         opacity: 1 !important;
     }
     [data-baseweb="input"] svg,
-    [data-baseweb="select"] svg,
     [data-baseweb="radio"] svg,
     [data-testid="stNumberInput"] svg,
-    [data-testid="stSelectbox"] svg,
     [data-testid="stRadio"] svg,
-    [data-baseweb="input"] svg *,
-    [data-baseweb="select"] svg * {
+    [data-baseweb="input"] svg * {
         color: #000000 !important;
         fill: #000000 !important;
         stroke: #000000 !important;
         opacity: 1 !important;
     }
-    [data-testid="stNumberInput"] button svg *,
-    [data-testid="stSelectbox"] svg * {
+    [data-testid="stNumberInput"] button svg * {
         fill: #000000 !important;
         stroke: #000000 !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div > div:last-child,
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg,
+    [data-baseweb="select"] > div > div:last-child,
+    [data-baseweb="select"] svg {
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg rect,
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg mask,
+    [data-baseweb="select"] svg rect,
+    [data-baseweb="select"] svg mask {
+        fill: transparent !important;
+        stroke: transparent !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg path,
+    [data-baseweb="select"] svg path {
+        fill: #000000 !important;
+        stroke: #000000 !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div > div:last-child,
+    [data-baseweb="select"] > div > div:last-child {
+        position: relative !important;
+        width: 38px !important;
+        min-width: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div > div:last-child svg,
+    [data-baseweb="select"] > div > div:last-child svg {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div > div:last-child::after,
+    [data-baseweb="select"] > div > div:last-child::after {
+        content: "" !important;
+        width: 8px !important;
+        height: 8px !important;
+        border-right: 2px solid #000000 !important;
+        border-bottom: 2px solid #000000 !important;
+        transform: rotate(45deg) translateY(-2px) !important;
+        background: transparent !important;
+        display: block !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
+    [data-baseweb="select"] [data-baseweb="icon"] {
+        background: transparent !important;
+        color: #000000 !important;
+        fill: #000000 !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"] svg,
+    [data-baseweb="select"] [data-baseweb="icon"] svg {
+        background: transparent !important;
+        fill: #000000 !important;
+        stroke: none !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"],
+    [data-baseweb="select"] {
+        position: relative !important;
+        background-color: #ffffff !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg,
+    [data-testid="stSelectbox"] [data-baseweb="select"] svg *,
+    [data-baseweb="select"] svg,
+    [data-baseweb="select"] svg * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        fill: transparent !important;
+        stroke: transparent !important;
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"] *:has(> svg),
+    [data-baseweb="select"] *:has(> svg) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    [data-testid="stSelectbox"] [data-baseweb="select"]::after,
+    [data-baseweb="select"]::after {
+        content: "" !important;
+        position: absolute !important;
+        right: 16px !important;
+        top: 50% !important;
+        width: 8px !important;
+        height: 8px !important;
+        margin-top: -6px !important;
+        border-right: 2px solid #000000 !important;
+        border-bottom: 2px solid #000000 !important;
+        transform: rotate(45deg) !important;
+        pointer-events: none !important;
+        background: transparent !important;
+        z-index: 5 !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+        position: relative !important;
+        padding-right: 42px !important;
+        background-color: #ffffff !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > div:nth-child(n+2),
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > span:nth-child(n+2),
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > button,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > i {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [aria-hidden="true"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [class*="icon"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [class*="Icon"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [class*="material"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] [class*="Material"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div::after {
+        content: "" !important;
+        position: absolute !important;
+        right: 16px !important;
+        top: 50% !important;
+        width: 8px !important;
+        height: 8px !important;
+        margin-top: -6px !important;
+        border-right: 2px solid #111111 !important;
+        border-bottom: 2px solid #111111 !important;
+        transform: rotate(45deg) !important;
+        pointer-events: none !important;
+        background: transparent !important;
+        z-index: 10 !important;
     }
     [data-testid="stNumberInput"] > div,
     [data-testid="stSelectbox"] > div {
