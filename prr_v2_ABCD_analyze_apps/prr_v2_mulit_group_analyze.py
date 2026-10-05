@@ -31,11 +31,11 @@ SELECT_GROUPS = (1, 2, 3)      # 自選 1-31
 SELECT_GROUPS = (1, 2, 3, 4)   # 全組別 1-40
 SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 '''
-SELECT_GROUPS = (1,2,3,4) # select group index =1
+SELECT_GROUPS = (1,) # select group index =1
 
 # 每一期在指定範圍內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 5
-BIRTHDAY_NUM_MATCH_MODE = ">="
+COMBINATION_TAKE_COUNT = 2
+BIRTHDAY_NUM_MATCH_MODE = "=="
 
 # LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。
 ''' backtest,窗口期不包括核對期,預留核對預測

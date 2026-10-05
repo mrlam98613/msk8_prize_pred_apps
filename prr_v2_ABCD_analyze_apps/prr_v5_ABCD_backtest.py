@@ -13,10 +13,10 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 DATA_DIR = CURRENT_DIR / "data"
-BACKTEST_RECORD_CSV = DATA_DIR / "prr_v4_bet_pred_records.csv"
-NEXT_DRAW_RECORD_CSV = DATA_DIR / "prr_v4_next_draw_bet_records.csv"
+BACKTEST_RECORD_CSV = DATA_DIR / "prr_v5_bet_pred_records.csv"
+NEXT_DRAW_RECORD_CSV = DATA_DIR / "prr_v5_next_draw_bet_records.csv"
 JSON_DIR = CURRENT_DIR / "json_data"
-WEIGHT_JSON = JSON_DIR / "prr_v4_ABCD_weight_trace.json"
+WEIGHT_JSON = JSON_DIR / "prr_v5_ABCD_weight_trace.json"
 '''
 這支程式，核心分析總結。
 1， ABCD , 4 組查詢 窗口期開號，>= 1, 篩選出過往曾開出獎號。
@@ -35,7 +35,7 @@ D，最後考慮最近 1 期開號，避免投注 重復上一期開號。
 # 1-6 重點參數。
 MODE = "backtest"
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [18]
+WINDOW_DRAW_COUNT_LIST = [30]
 GROUP_RUN_LIST = [(1,), (2,), (3,), (4,)]
 COMBINATION_TAKE_COUNT = 1
 BIRTHDAY_NUM_MATCH_MODE = ">="
@@ -56,29 +56,20 @@ WEAK_NUM_RANDOM_SEED: int | None = 20261003
 
 # predict mode 最後投注分組顯示。
 PRINT_PREDICT_BET_GROUPS = True
-RANDOM_BET_GROUP_TAKE = 9 # 在下期預測顯示中，系統在總候選球中，隨機取出 9 球。
-RANDOM_BET_GROUP_SEED: int | None = 20261003
 
-# backtest mode 額外統計：從 ABCD 各組最終候選按比例隨機抽 9 球。
-PRINT_RANDOM_GROUP_BACKTEST = True
-RANDOM_GROUP_BACKTEST_TAKE_COUNTS = {
-    1: 2,  # A
-    2: 3,  # B
-    3: 2,  # C
-    4: 2,  # D
-}
-RANDOM_GROUP_BACKTEST_SEED: int | None = 20261003
+# backtest mode 額外統計：ABCD 全部高頻膽號合併成一組投注候選。
+PRINT_HIGH_FREQ_DAN_BACKTEST = True
 
 
-# A/B/C/D 每組基礎預測球數，預設 4 + 4 + 4 + 4 = 16 球。
+# A/B/C/D 每組基礎預測球數，預設 3 + 5 + 5 + 3 = 16 球。
 BASE_GROUP_TAKE_COUNTS = {
-    1: 4,  # A: 1-9 = 9 球 
+    1: 3,  # A: 1-9 = 9 球 
     2: 5,  # B: 10-20 ＝ 11 球 
-    3: 4,  # C: 21-31 ＝ 11 球
+    3: 5,  # C: 21-31 ＝ 11 球
     4: 3,  # D: 32-40 ＝ 9 球 
 }
 
-AUTO_DISTRIBUTE_GROUP_TAKE = True # 是否按窗口條件統計自動調配 ABCD 配額。
+AUTO_DISTRIBUTE_GROUP_TAKE = False # 是否按窗口條件統計自動調配 ABCD 配額。
 AUTO_DISTRIBUTE_MAX_TRANSFER = 2 # 每期最多由最弱組轉給最強組的球數。
 AUTO_DISTRIBUTE_MIN_GROUP_TAKE = 2 # 自動調配後單組最少保留球數。
 AUTO_DISTRIBUTE_MIN_GAP_PERCENT = 10 # 強弱組窗口命中率差距達此百分點才調配。
@@ -179,6 +170,31 @@ def format_group_quota(take_counts: dict[int, int] | None = None) -> str:
     counts = take_counts or BASE_GROUP_TAKE_COUNTS
     quota_parts = [f"{GROUPS[group_id][0]}={counts[group_id]}" for group_id in GROUPS]
     return "，".join(quota_parts) + f"，合共{sum(counts.values())}球"
+
+
+def format_auto_distribute_status() -> str:
+    """格式化自動配額開關與調配門檻。"""
+    if not AUTO_DISTRIBUTE_GROUP_TAKE:
+        return "自動配額：關閉，使用固定基礎配額"
+    return (
+        "自動配額：開啟，"
+        f"強弱差距 >= {AUTO_DISTRIBUTE_MIN_GAP_PERCENT}% 時，"
+        f"最多轉移 {AUTO_DISTRIBUTE_MAX_TRANSFER} 球，"
+        f"每組最少 {AUTO_DISTRIBUTE_MIN_GROUP_TAKE} 球"
+    )
+
+
+def format_quota_adjustment(take_counts: dict[int, int]) -> str:
+    """格式化本期實際配額相對固定基礎配額的變化。"""
+    changes: list[str] = []
+    for group_id in GROUPS:
+        code = GROUPS[group_id][0]
+        diff = take_counts[group_id] - BASE_GROUP_TAKE_COUNTS[group_id]
+        if diff > 0:
+            changes.append(f"{code}+{diff}")
+        elif diff < 0:
+            changes.append(f"{code}{diff}")
+    return "調配變化：" + ("，".join(changes) if changes else "沒有變化")
 
 
 def group_nums(row: DrawRow, group_id: int) -> list[int]:
@@ -703,36 +719,34 @@ def select_final_group_candidates(
     return sorted(candidates[:take_count])
 
 
-def select_random_group_backtest_nums(
-    group_pred_map: dict[int, list[int]],
-    display_index: int,
+def select_high_freq_dan_backtest_nums(
+    pair_data: dict[int, tuple[list[int], list[int]]],
 ) -> list[int]:
-    """從每組最終候選按比例隨機抽取合共 9 球。"""
-    selected_nums: list[int] = []
+    """合併 ABCD 各組全部高頻膽號，作為回測額外一注候選組。"""
+    selected_nums: set[int] = set()
     for group_id in GROUPS:
-        group_nums_pool = sorted(group_pred_map.get(group_id, []))
-        take_count = min(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.get(group_id, 0), len(group_nums_pool))
-        if take_count <= 0:
-            continue
-        if RANDOM_GROUP_BACKTEST_SEED is None:
-            selected_nums.extend(random.sample(group_nums_pool, take_count))
-        else:
-            rng = random.Random(RANDOM_GROUP_BACKTEST_SEED + display_index * 10 + group_id)
-            selected_nums.extend(rng.sample(group_nums_pool, take_count))
-    return sorted(set(selected_nums))
+        dan_nums, _partner_nums = pair_data.get(group_id, ([], []))
+        selected_nums.update(dan_nums)
+    return sorted(selected_nums)
 
 
-def format_random_group_quota() -> str:
-    """格式化分組比例隨機組合配額。"""
-    parts = [f"{GROUPS[group_id][0]}={RANDOM_GROUP_BACKTEST_TAKE_COUNTS[group_id]}" for group_id in GROUPS]
-    return "，".join(parts) + f"，合共{sum(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.values())}球"
+def format_high_freq_dan_group_quota(pair_data: dict[int, tuple[list[int], list[int]]]) -> str:
+    """格式化 ABCD 高頻膽號候選組各組球數。"""
+    parts: list[str] = []
+    total_count = 0
+    for group_id in GROUPS:
+        code = GROUPS[group_id][0]
+        dan_nums, _partner_nums = pair_data.get(group_id, ([], []))
+        parts.append(f"{code}={len(dan_nums)}")
+        total_count += len(dan_nums)
+    return "，".join(parts) + f"，合共{total_count}球"
 
 
 def print_hit_count_summary(
     backtest_count: int,
     window_count: int,
     hit_stats: Counter[float],
-    random_hit_stats: Counter[float] | None = None,
+    high_freq_dan_hit_stats: Counter[float] | None = None,
 ) -> None:
     """打印回測期內預測候選球命中球數統計。"""
     pred_count = total_candidate_count()
@@ -741,7 +755,8 @@ def print_hit_count_summary(
 
     print("----- 回測期命中統計 -----")
     print(f"回測期設定 = {backtest_count}，實際統計 = {total_periods} 期，窗口期 = {window_count}，預測候選球 = {pred_count} 球/期")
-    print(f"ABCD 配額：{format_group_quota()}")
+    print(f"固定基礎配額：{format_group_quota()}")
+    print(format_auto_distribute_status())
     print("-----------------------------------------")
     for value in summary_values:
         label = format_ball_count(value)
@@ -750,18 +765,17 @@ def print_hit_count_summary(
         print(f"{label:>3} = {hit_periods} 期 ({hit_percent:.1f}%)")
     print()
 
-    if random_hit_stats is None:
+    if high_freq_dan_hit_stats is None:
         return
 
-    random_total_periods = sum(random_hit_stats.values())
-    print("----- 分組比例隨機組合 9 球命中統計 -----")
-    print(f"回測期設定 = {backtest_count}，實際統計 = {random_total_periods} 期，窗口期 = {window_count}，隨機候選球 = {sum(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.values())} 球/期")
-    print(f"ABCD 隨機配額：{format_random_group_quota()}")
+    dan_total_periods = sum(high_freq_dan_hit_stats.values())
+    print("----- ABCD 全部高頻膽號合併一注命中統計 -----")
+    print(f"回測期設定 = {backtest_count}，實際統計 = {dan_total_periods} 期，窗口期 = {window_count}")
     print("-----------------------------------------")
     for value in summary_values:
         label = format_ball_count(value)
-        hit_periods = random_hit_stats.get(value, 0)
-        hit_percent = hit_periods / random_total_periods * 100 if random_total_periods else 0
+        hit_periods = high_freq_dan_hit_stats.get(value, 0)
+        hit_percent = hit_periods / dan_total_periods * 100 if dan_total_periods else 0
         print(f"{label:>3} = {hit_periods} 期 ({hit_percent:.1f}%)")
     print()
 
@@ -783,6 +797,10 @@ def reset_backtest_record_csv() -> None:
             "count",
             "hit_num",
             "hit_sp_num",
+            "high_freq_dan_list",
+            "high_freq_dan_count",
+            "high_freq_dan_hit_num",
+            "high_freq_dan_hit_sp_num",
         ])
 
 
@@ -792,8 +810,14 @@ def append_backtest_record_csv(
     pred_nums: list[int],
     hit_nums: list[int],
     hit_sp_nums: list[int],
+    high_freq_dan_nums: list[int] | None = None,
+    high_freq_dan_hit_nums: list[int] | None = None,
+    high_freq_dan_hit_sp_nums: list[int] | None = None,
 ) -> None:
     """追加一筆回測預測投注紀錄到 CSV。"""
+    dan_nums = high_freq_dan_nums or []
+    dan_hit_nums = high_freq_dan_hit_nums or []
+    dan_hit_sp_nums = high_freq_dan_hit_sp_nums or []
     with BACKTEST_RECORD_CSV.open("a", encoding="utf-8-sig", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow([
@@ -806,6 +830,10 @@ def append_backtest_record_csv(
             len(pred_nums),
             format_nums(hit_nums),
             format_nums(hit_sp_nums),
+            format_nums(dan_nums),
+            len(dan_nums),
+            format_nums(dan_hit_nums),
+            format_nums(dan_hit_sp_nums),
         ])
 
 
@@ -929,9 +957,10 @@ def run_backtest(draws: list[DrawRow]) -> None:
 
         for window_count in WINDOW_DRAW_COUNT_LIST:
             print(f"====== ABCD 權重預測回測：窗口期={window_count}，回測期={backtest_count} ======")
-            print(f"本輪回測基礎配額：{format_group_quota()}，每期預測候選球 = {total_candidate_count()} 球")
+            print(f"固定基礎配額：{format_group_quota()}，基礎候選球 = {total_candidate_count()} 球")
+            print(format_auto_distribute_status())
             hit_stats: Counter[float] = Counter()
-            random_hit_stats: Counter[float] = Counter()
+            high_freq_dan_hit_stats: Counter[float] = Counter()
             for display_index, check_index in enumerate(check_indices, start=1):
                 check_row = draws[check_index]
                 window_start_index = max(0, check_index - window_count)
@@ -971,7 +1000,9 @@ def run_backtest(draws: list[DrawRow]) -> None:
                 hit_text, hit_count = prediction_hit_text(pred_nums, check_row)
                 hit_nums, hit_sp_nums = prediction_hit_nums(pred_nums, check_row)
                 hit_stats[hit_count] += 1
-                print(f"ABCD 本期自動配額：{format_group_quota(take_counts)}")
+                print(f"固定基礎配額：{format_group_quota()}")
+                print(f"本期實際配額：{format_group_quota(take_counts)}")
+                print(format_quota_adjustment(take_counts))
                 for line in condition_stats_text(condition_stats):
                     print(line)
                 print(f"核對日期：{check_row['date']}: {row_all_check_text(check_row)}")
@@ -983,16 +1014,30 @@ def run_backtest(draws: list[DrawRow]) -> None:
                 pred_count = sum(take_counts.values())
                 print(f"ABCD 預測候選球 {format_nums(pred_nums)} /> [{pred_count}] 球 ==> {hit_text}")
 
-                if PRINT_RANDOM_GROUP_BACKTEST:
-                    random_group_nums = select_random_group_backtest_nums(group_pred_map, display_index)
-                    random_hit_text, random_hit_count = prediction_hit_text(random_group_nums, check_row)
-                    random_hit_stats[random_hit_count] += 1
+                high_freq_dan_nums: list[int] = []
+                dan_hit_nums: list[int] = []
+                dan_hit_sp_nums: list[int] = []
+                if PRINT_HIGH_FREQ_DAN_BACKTEST:
+                    high_freq_dan_nums = select_high_freq_dan_backtest_nums(pair_data)
+                    dan_hit_text, dan_hit_count = prediction_hit_text(high_freq_dan_nums, check_row)
+                    dan_hit_nums, dan_hit_sp_nums = prediction_hit_nums(high_freq_dan_nums, check_row)
+                    high_freq_dan_hit_stats[dan_hit_count] += 1
                     print(
-                        f"ABCD 分組比例隨機 9 球 {format_nums(random_group_nums)} "
-                        f"/> [{len(random_group_nums)}] 球 ==> {random_hit_text}"
+                        f"ABCD 全部高頻膽號合併一注 {format_nums(high_freq_dan_nums)} "
+                        f"/> [{len(high_freq_dan_nums)}] 球 ==> {dan_hit_text}"
                     )
+                    print(f"高頻膽號組配額：{format_high_freq_dan_group_quota(pair_data)}")
 
-                append_backtest_record_csv(check_row["date"], group_pred_map, pred_nums, hit_nums, hit_sp_nums)
+                append_backtest_record_csv(
+                    check_row["date"],
+                    group_pred_map,
+                    pred_nums,
+                    hit_nums,
+                    hit_sp_nums,
+                    high_freq_dan_nums,
+                    dan_hit_nums,
+                    dan_hit_sp_nums,
+                )
 
                 new_record = build_score_record(check_row, backtest_count, window_count, group_weights, pred_nums, hit_count, take_counts)
                 print_old_new_compare(old_record, new_record)
@@ -1004,7 +1049,7 @@ def run_backtest(draws: list[DrawRow]) -> None:
                 backtest_count,
                 window_count,
                 hit_stats,
-                random_hit_stats if PRINT_RANDOM_GROUP_BACKTEST else None,
+                high_freq_dan_hit_stats if PRINT_HIGH_FREQ_DAN_BACKTEST else None,
             )
 
 
@@ -1047,7 +1092,10 @@ def run_predict(draws: list[DrawRow]) -> None:
 
         pred_nums = sorted(pred_nums)
         pred_count = sum(take_counts.values())
-        print(f"ABCD 本期自動配額：{format_group_quota(take_counts)}")
+        print(f"固定基礎配額：{format_group_quota()}")
+        print(format_auto_distribute_status())
+        print(f"本期實際配額：{format_group_quota(take_counts)}")
+        print(format_quota_adjustment(take_counts))
         for line in condition_stats_text(condition_stats):
             print(line)
         print(f"最後開獎日期：{latest_row['date']}: {row_all_check_text(latest_row)}")
@@ -1058,35 +1106,29 @@ def run_predict(draws: list[DrawRow]) -> None:
         for line in weak_nums_text(window_rows, pair_data):
             print(line)
         print(f"ABCD 下期預測候選球 {format_nums(pred_nums)} /> [{pred_count}] 球")
-        print_predict_bet_groups(group_pred_map, pred_nums, next_draw_date, take_counts)
+        print_predict_bet_groups(group_pred_map, pair_data, next_draw_date, take_counts)
         print()
 
 
 def print_predict_bet_groups(
     group_pred_map: dict[int, list[int]],
-    pred_nums: list[int],
+    pair_data: dict[int, tuple[list[int], list[int]]],
     next_draw_date: str,
     take_counts: dict[int, int] | None = None,
 ) -> None:
-    """列印 predict mode 的投注分組組合與隨機候選組。"""
+    """列印 predict mode 的投注分組組合與高頻膽號候選組。"""
     if not PRINT_PREDICT_BET_GROUPS:
         return
 
     counts = take_counts or BASE_GROUP_TAKE_COUNTS
     abc_nums = sorted(group_pred_map.get(1, []) + group_pred_map.get(2, []) + group_pred_map.get(3, []))
     bcd_nums = sorted(group_pred_map.get(2, []) + group_pred_map.get(3, []) + group_pred_map.get(4, []))
-
-    random_pool = sorted(set(pred_nums))
-    if RANDOM_BET_GROUP_SEED is None:
-        random_nums = sorted(random.sample(random_pool, min(RANDOM_BET_GROUP_TAKE, len(random_pool))))
-    else:
-        rng = random.Random(RANDOM_BET_GROUP_SEED)
-        random_nums = sorted(rng.sample(random_pool, min(RANDOM_BET_GROUP_TAKE, len(random_pool))))
+    high_freq_dan_nums = select_high_freq_dan_backtest_nums(pair_data)
 
     reset_next_draw_record_csv()
     append_next_draw_record_csv(next_draw_date, abc_nums)
     append_next_draw_record_csv(next_draw_date, bcd_nums)
-    append_next_draw_record_csv(next_draw_date, random_nums)
+    append_next_draw_record_csv(next_draw_date, high_freq_dan_nums)
 
     print("----- 投注分組預測球組合 -----")
     print(
@@ -1097,7 +1139,11 @@ def print_predict_bet_groups(
         f"2，B{counts[2]} + C{counts[3]} + D{counts[4]} "
         f"= {format_nums(bcd_nums)} /> [{len(bcd_nums)}] 球"
     )
-    print(f"3，系統自動 A+B+C+D 隨機選取 {len(random_nums)} 球 = {format_nums(random_nums)}")
+    print(
+        f"3，ABCD 全部高頻膽號合併一注 "
+        f"= {format_nums(high_freq_dan_nums)} /> [{len(high_freq_dan_nums)}] 球"
+    )
+    print(f"高頻膽號組配額：{format_high_freq_dan_group_quota(pair_data)}")
 
 
 def main() -> None:
@@ -1110,7 +1156,8 @@ def main() -> None:
     print(f"運作模式：{MODE}")
     print(f"回測期列表：{BACKTEST_DRAW_COUNT_LIST}")
     print(f"窗口期列表：{WINDOW_DRAW_COUNT_LIST}")
-    print(f"ABCD 配額：{format_group_quota()}")
+    print(f"固定基礎配額：{format_group_quota()}")
+    print(format_auto_distribute_status())
     print(f"符合條件：範圍內號碼數量 {BIRTHDAY_NUM_MATCH_MODE}{COMBINATION_TAKE_COUNT} 球")
     print("權重公式：出現次數 + 遠近比例權重 + 短期重複加分")
     print()

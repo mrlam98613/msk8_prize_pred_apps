@@ -13,9 +13,10 @@ PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 DATA_DIR = CURRENT_DIR / "data"
-BACKTEST_RECORD_CSV = DATA_DIR / "prr_v3_bet_pred_records.csv"
+BACKTEST_RECORD_CSV = DATA_DIR / "prr_v4_bet_pred_records.csv"
+NEXT_DRAW_RECORD_CSV = DATA_DIR / "prr_v4_next_draw_bet_records.csv"
 JSON_DIR = CURRENT_DIR / "json_data"
-WEIGHT_JSON = JSON_DIR / "prr_v3_ABCD_weight_trace.json"
+WEIGHT_JSON = JSON_DIR / "prr_v4_ABCD_weight_trace.json"
 '''
 這支程式，核心分析總結。
 1， ABCD , 4 組查詢 窗口期開號，>= 1, 篩選出過往曾開出獎號。
@@ -30,10 +31,11 @@ D，最後考慮最近 1 期開號，避免投注 重復上一期開號。
 
 '''
 
+
 # 1-6 重點參數。
 MODE = "backtest"
-BACKTEST_DRAW_COUNT_LIST = [30]
-WINDOW_DRAW_COUNT_LIST = [18]
+BACKTEST_DRAW_COUNT_LIST = [1]
+WINDOW_DRAW_COUNT_LIST = [30]
 GROUP_RUN_LIST = [(1,), (2,), (3,), (4,)]
 COMBINATION_TAKE_COUNT = 1
 BIRTHDAY_NUM_MATCH_MODE = ">="
@@ -41,26 +43,48 @@ BIRTHDAY_NUM_MATCH_MODE = ">="
 # 是否顯示每期新舊權重比較。
 PRINT_WEIGHT_COMPARE = False
 
-# 高頻膽號：合條件窗口結果中，同組配對出現 >= 2 次才列入。
+# 高頻膽號：合條件窗口結果中，同組配對出現超過門檻次數才列入。
 PRINT_HIGH_FREQ_PAIR_ANALYSIS = True
-HIGH_FREQ_MIN_PAIR_COUNT = 2 # 高頻配對最少出現次數
-HIGH_FREQ_DAN_TAKE = 2 # 高頻膽號選取數量
-HIGH_FREQ_PARTNER_TAKE = 5 # 高頻配腳號選取數量
-HIGH_FREQ_PARTNER_RANDOM_SEED: int | None = None # 高頻配腳隨機種子；None 表示每次執行都不同。
+HIGH_FREQ_MIN_PAIR_COUNT = 2 # 高頻膽號必須出現超過此次數。
+HIGH_FREQ_DAN_TAKE = 5 # 高頻膽號顯示數量
+HIGH_FREQ_PARTNER_TAKE = 9 # 高頻配腳號顯示數量
+
+# 弱號：窗口期內只出現 1 次，可隨配額取得入選機會。
+PRINT_WEAK_NUM_ANALYSIS = True
+WEAK_NUM_TAKE = 1 # 每組最多抽取幾個弱號補入候選。
+WEAK_NUM_RANDOM_SEED: int | None = 20261003
 
 # predict mode 最後投注分組顯示。
 PRINT_PREDICT_BET_GROUPS = True
 RANDOM_BET_GROUP_TAKE = 9 # 在下期預測顯示中，系統在總候選球中，隨機取出 9 球。
 RANDOM_BET_GROUP_SEED: int | None = 20261003
 
-
-# A/B/C/D 每組預測球數，預設 4 + 5 + 5 + 4 = 18 球。
-GROUP_TAKE_COUNTS = {
-    1: 4,  # A: 1-9
-    2: 5,  # B: 10-20
-    3: 4,  # C: 21-31
-    4: 3,  # D: 32-40
+# backtest mode 額外統計：從 ABCD 各組最終候選按比例隨機抽 9 球。
+PRINT_RANDOM_GROUP_BACKTEST = True
+RANDOM_GROUP_BACKTEST_TAKE_COUNTS = {
+    1: 2,  # A
+    2: 3,  # B
+    3: 2,  # C
+    4: 2,  # D
 }
+RANDOM_GROUP_BACKTEST_SEED: int | None = 20261003
+
+
+# A/B/C/D 每組基礎預測球數，預設 4 + 4 + 4 + 4 = 16 球。
+BASE_GROUP_TAKE_COUNTS = {
+    1: 4,  # A: 1-9 = 9 球 
+    2: 5,  # B: 10-20 ＝ 11 球 
+    3: 4,  # C: 21-31 ＝ 11 球
+    4: 3,  # D: 32-40 ＝ 9 球 
+}
+
+AUTO_DISTRIBUTE_GROUP_TAKE = True # 是否按窗口條件統計自動調配 ABCD 配額。
+AUTO_DISTRIBUTE_MAX_TRANSFER = 2 # 每期最多由最弱組轉給最強組的球數。
+AUTO_DISTRIBUTE_MIN_GROUP_TAKE = 2 # 自動調配後單組最少保留球數。
+AUTO_DISTRIBUTE_MIN_GAP_PERCENT = 10 # 強弱組窗口命中率差距達此百分點才調配。
+
+RECENT_DRAW_SCORE_PENALTY = 1.0 # 最近一期出現號碼改為扣分，不再硬排除。
+HIGH_FREQ_PARTNER_POOL_TAKE = 9 # 高頻配腳先取前 N 個強配腳。
 
 GROUPS = {
     1: ("A", "1-9", 1, 9),
@@ -147,13 +171,14 @@ def format_ball_count(value: float) -> str:
 
 def total_candidate_count() -> int:
     """計算 ABCD 各組候選配額合計球數。"""
-    return sum(GROUP_TAKE_COUNTS.values())
+    return sum(BASE_GROUP_TAKE_COUNTS.values())
 
 
-def format_group_quota() -> str:
+def format_group_quota(take_counts: dict[int, int] | None = None) -> str:
     """格式化 ABCD 各組配額與總候選球數。"""
-    quota_parts = [f"{GROUPS[group_id][0]}={GROUP_TAKE_COUNTS[group_id]}" for group_id in GROUPS]
-    return "，".join(quota_parts) + f"，合共{total_candidate_count()}球"
+    counts = take_counts or BASE_GROUP_TAKE_COUNTS
+    quota_parts = [f"{GROUPS[group_id][0]}={counts[group_id]}" for group_id in GROUPS]
+    return "，".join(quota_parts) + f"，合共{sum(counts.values())}球"
 
 
 def group_nums(row: DrawRow, group_id: int) -> list[int]:
@@ -260,9 +285,13 @@ def analyze_group_weights(
     )
 
 
-def select_group_candidates(weights: list[NumWeight], group_id: int) -> list[int]:
+def select_group_candidates(
+    weights: list[NumWeight],
+    group_id: int,
+    take_counts: dict[int, int] | None = None,
+) -> list[int]:
     """依權重排序取出某組基礎熱號候選。"""
-    take_count = GROUP_TAKE_COUNTS[group_id]
+    take_count = (take_counts or BASE_GROUP_TAKE_COUNTS)[group_id]
     return sorted(item["num"] for item in weights[:take_count])
 
 
@@ -322,6 +351,64 @@ def print_group_weight_summary(weights: list[NumWeight], group_id: int) -> None:
         for item in weights
     ]
     # print(f"{code}組 {name} 遠近權重排序：" + "，".join(parts))
+
+
+def group_condition_stats(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tuple[int, int, float]]:
+    """統計各組窗口期符合條件期數、總期數與百分比。"""
+    total_count = len(window_rows)
+    stats: dict[int, tuple[int, int, float]] = {}
+    for group_id in GROUPS:
+        matched_count = sum(
+            1
+            for _row_index, row in window_rows
+            if is_matched(len(group_nums(row, group_id)))
+        )
+        matched_percent = matched_count / total_count * 100 if total_count else 0
+        stats[group_id] = (matched_count, total_count, matched_percent)
+    return stats
+
+
+def condition_stats_text(stats: dict[int, tuple[int, int, float]]) -> list[str]:
+    """格式化各組窗口條件統計文字。"""
+    lines: list[str] = []
+    for group_id in GROUPS:
+        code = GROUPS[group_id][0]
+        matched_count, total_count, matched_percent = stats[group_id]
+        lines.append(
+            f"{code},結果合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
+            f"查詢 {matched_count} / {total_count} 期統計 = {matched_count}期 "
+            f"({matched_percent:.0f} %)"
+        )
+    return lines
+
+
+def dynamic_group_take_counts(window_rows: list[tuple[int, DrawRow]]) -> dict[int, int]:
+    """按各組窗口條件強弱，從弱組轉移配額給強組。"""
+    take_counts = dict(BASE_GROUP_TAKE_COUNTS)
+    if not AUTO_DISTRIBUTE_GROUP_TAKE:
+        return take_counts
+
+    stats = group_condition_stats(window_rows)
+    ranked_groups = sorted(
+        GROUPS,
+        key=lambda group_id: (stats[group_id][2], stats[group_id][0], -group_id),
+    )
+    weakest_group = ranked_groups[0]
+    strongest_group = ranked_groups[-1]
+    percent_gap = stats[strongest_group][2] - stats[weakest_group][2]
+    if percent_gap < AUTO_DISTRIBUTE_MIN_GAP_PERCENT:
+        return take_counts
+
+    movable_count = min(
+        AUTO_DISTRIBUTE_MAX_TRANSFER,
+        take_counts[weakest_group] - AUTO_DISTRIBUTE_MIN_GROUP_TAKE,
+    )
+    if movable_count <= 0:
+        return take_counts
+
+    take_counts[weakest_group] -= movable_count
+    take_counts[strongest_group] += movable_count
+    return take_counts
 
 
 def load_trace() -> dict[str, object]:
@@ -392,33 +479,80 @@ def print_old_new_compare(old_record: dict[str, object] | None, new_record: dict
         print(f"{code}組：" + ("，".join(changes[:10]) if changes else "沒有明顯變化"))
 
 
+def group_window_num_counts(window_rows: list[tuple[int, DrawRow]]) -> dict[int, Counter[int]]:
+    """統計各組窗口期內正號與同組特號出現次數。"""
+    counters: dict[int, Counter[int]] = {group_id: Counter() for group_id in GROUPS}
+    for _row_index, row in window_rows:
+        for group_id in GROUPS:
+            for num in group_nums(row, group_id):
+                counters[group_id][num] += 1
+            special = group_special(row, group_id)
+            if special is not None:
+                counters[group_id][special] += 1
+    return counters
+
+
 def missing_nums_text(window_rows: list[tuple[int, DrawRow]]) -> str:
-    """顯示窗口期內 A/B/C/D 各組沒有出現過的正號。"""
-    seen_nums = {
-        num
-        for _row_index, row in window_rows
-        for num in row["nums"]
-        if 1 <= num <= 40
-    }
+    """顯示窗口期內 A/B/C/D 各組沒有出現過的號碼。"""
+    group_counts = group_window_num_counts(window_rows)
     parts: list[str] = []
     for group_id in GROUPS:
         code, _name, start_num, end_num = GROUPS[group_id]
-        missing = [num for num in range(start_num, end_num + 1) if num not in seen_nums]
+        missing = [num for num in range(start_num, end_num + 1) if group_counts[group_id][num] == 0]
         parts.append(f"{code}{format_nums(missing)}")
     return "ABCD 沒出現球號 = " + "，".join(parts)
 
 
+def weak_nums_data(
+    window_rows: list[tuple[int, DrawRow]],
+    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+) -> dict[int, list[int]]:
+    """回傳扣除沒出現、高頻膽、高頻配腳後的其餘弱號。"""
+    group_counts = group_window_num_counts(window_rows)
+    if pair_data is None:
+        pair_data = high_freq_pair_data(window_rows)
+    result: dict[int, list[int]] = {}
+    for group_id in GROUPS:
+        _code, _name, start_num, end_num = GROUPS[group_id]
+        dan_nums, partner_nums = pair_data.get(group_id, ([], []))
+        assigned_nums = set(dan_nums) | set(partner_nums)
+        weak_nums = [
+            num
+            for num in range(start_num, end_num + 1)
+            if group_counts[group_id][num] > 0 and num not in assigned_nums
+        ]
+        if weak_nums:
+            result[group_id] = weak_nums
+    return result
+
+
+def weak_nums_text(
+    window_rows: list[tuple[int, DrawRow]],
+    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+) -> list[str]:
+    """格式化 ABCD 弱號顯示文字。"""
+    if not PRINT_WEAK_NUM_ANALYSIS:
+        return []
+    weak_data = weak_nums_data(window_rows, pair_data)
+    parts: list[str] = []
+    for group_id in GROUPS:
+        code = GROUPS[group_id][0]
+        parts.append(f"{code}{format_nums(weak_data.get(group_id, []))}")
+    return ["ABCD 弱號 = " + "，".join(parts)]
+
+
 def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tuple[list[int], list[int]]]:
-    """回傳每組的高頻膽號與隨機抽取的高頻伴號。"""
+    """回傳每組的高頻膽號與同場非膽配腳號。"""
     result: dict[int, tuple[list[int], list[int]]] = {}
-    rng = random.Random(HIGH_FREQ_PARTNER_RANDOM_SEED)
 
     for group_id in GROUPS:
         pair_rows: list[list[int]] = []
         for _row_index, row in window_rows:
             nums = group_nums(row, group_id)
-            if is_matched(len(nums)) and len(nums) >= 2:
-                pair_rows.append(nums)
+            special = group_special(row, group_id)
+            pair_nums = sorted(set(nums + ([special] if special is not None else [])))
+            if is_matched(len(nums)) and len(pair_nums) >= 2:
+                pair_rows.append(pair_nums)
 
         dan_counter: Counter[int] = Counter()
         partner_counter_by_dan: dict[int, Counter[int]] = {}
@@ -432,24 +566,26 @@ def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tup
                         continue
                     partner_counter[partner_num] += 1
 
-        dan_nums = [
+        all_dan_nums = [
             num
             for num, count in sorted(dan_counter.items(), key=lambda item: (-item[1], item[0]))
-            if count >= HIGH_FREQ_MIN_PAIR_COUNT
-        ][:HIGH_FREQ_DAN_TAKE]
+            if count > HIGH_FREQ_MIN_PAIR_COUNT
+        ]
+        dan_nums = all_dan_nums[:HIGH_FREQ_DAN_TAKE]
         if not dan_nums:
             continue
 
+        partner_counter: Counter[int] = Counter()
+        for dan_num in dan_nums:
+            partner_counter.update(partner_counter_by_dan.get(dan_num, Counter()))
+        for dan_num in dan_nums:
+            partner_counter.pop(dan_num, None)
+
         partner_pool = sorted(
-            {
-                partner_num
-                for dan_num in dan_nums
-                for partner_num in partner_counter_by_dan.get(dan_num, Counter())
-                if partner_num not in dan_nums
-            }
-        )
-        partner_take = min(HIGH_FREQ_PARTNER_TAKE, len(partner_pool))
-        partners = sorted(rng.sample(partner_pool, partner_take)) if partner_take else []
+            partner_counter,
+            key=lambda partner_num: (-partner_counter[partner_num], partner_num),
+        )[:HIGH_FREQ_PARTNER_POOL_TAKE]
+        partners = sorted(partner_pool[:HIGH_FREQ_PARTNER_TAKE])
 
         result[group_id] = (dan_nums, partners)
 
@@ -497,38 +633,66 @@ def recent_draw_nums(row: DrawRow | None) -> set[int]:
 def append_unique_candidate(
     candidates: list[int],
     num: int,
-    avoid_nums: set[int],
     take_count: int,
 ) -> None:
-    """在未超出配額、未重複、未命中避開清單時加入候選球。"""
+    """在未超出配額且未重複時加入候選球。"""
     if len(candidates) >= take_count:
         return
-    if num in avoid_nums or num in candidates:
+    if num in candidates:
         return
     candidates.append(num)
+
+
+def recent_penalized_weights(weights: list[NumWeight], recent_nums: set[int]) -> list[NumWeight]:
+    """將最近一期出現號碼扣分後重新排序，不再直接排除。"""
+    return sorted(
+        weights,
+        key=lambda item: (
+            -(item["score"] - (RECENT_DRAW_SCORE_PENALTY if item["num"] in recent_nums else 0.0)),
+            item["num"] in recent_nums,
+            item["latest_rank"] if item["latest_rank"] is not None else 9999,
+            -item["count"],
+            item["num"],
+        ),
+    )
 
 
 def select_final_group_candidates(
     weights: list[NumWeight],
     group_id: int,
     pair_data: dict[int, tuple[list[int], list[int]]],
-    avoid_nums: set[int],
+    weak_data: dict[int, list[int]],
+    recent_nums: set[int],
+    take_counts: dict[int, int] | None = None,
 ) -> list[int]:
-    """高頻膽 1 + 高頻配腳 1 + 權重補滿；優先避開最近一期開號。"""
-    take_count = GROUP_TAKE_COUNTS[group_id]
+    """高頻膽 1 + 高頻配腳 1 + 弱號機會 + 扣分後權重補滿。"""
+    counts = take_counts or BASE_GROUP_TAKE_COUNTS
+    take_count = counts[group_id]
     candidates: list[int] = []
     dan_nums, partner_nums = pair_data.get(group_id, ([], []))
+    weak_nums = [num for num in weak_data.get(group_id, []) if num not in candidates]
+    ranked_weights = recent_penalized_weights(weights, recent_nums)
+    recent_penalty_rank = {item["num"]: index for index, item in enumerate(ranked_weights)}
 
-    for num in dan_nums[:1]:
-        append_unique_candidate(candidates, num, avoid_nums, take_count)
+    for num in sorted(dan_nums[:1], key=lambda value: (value in recent_nums, recent_penalty_rank.get(value, 9999), value)):
+        append_unique_candidate(candidates, num, take_count)
 
-    for num in partner_nums[:1]:
-        append_unique_candidate(candidates, num, avoid_nums, take_count)
+    for num in sorted(partner_nums[:1], key=lambda value: (value in recent_nums, recent_penalty_rank.get(value, 9999), value)):
+        append_unique_candidate(candidates, num, take_count)
 
-    for item in weights:
-        append_unique_candidate(candidates, item["num"], avoid_nums, take_count)
+    if weak_nums and WEAK_NUM_TAKE > 0:
+        if WEAK_NUM_RANDOM_SEED is None:
+            selected_weak_nums = random.sample(weak_nums, min(WEAK_NUM_TAKE, len(weak_nums)))
+        else:
+            rng = random.Random(WEAK_NUM_RANDOM_SEED + group_id)
+            selected_weak_nums = rng.sample(weak_nums, min(WEAK_NUM_TAKE, len(weak_nums)))
+        for num in sorted(selected_weak_nums):
+            append_unique_candidate(candidates, num, take_count)
 
-    # 極端情況下避開最近一期後不夠數，才放寬補滿。
+    for item in ranked_weights:
+        append_unique_candidate(candidates, item["num"], take_count)
+
+    # 極端情況下候選不足，按原始權重補滿。
     if len(candidates) < take_count:
         for item in weights:
             if len(candidates) >= take_count:
@@ -539,10 +703,36 @@ def select_final_group_candidates(
     return sorted(candidates[:take_count])
 
 
+def select_random_group_backtest_nums(
+    group_pred_map: dict[int, list[int]],
+    display_index: int,
+) -> list[int]:
+    """從每組最終候選按比例隨機抽取合共 9 球。"""
+    selected_nums: list[int] = []
+    for group_id in GROUPS:
+        group_nums_pool = sorted(group_pred_map.get(group_id, []))
+        take_count = min(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.get(group_id, 0), len(group_nums_pool))
+        if take_count <= 0:
+            continue
+        if RANDOM_GROUP_BACKTEST_SEED is None:
+            selected_nums.extend(random.sample(group_nums_pool, take_count))
+        else:
+            rng = random.Random(RANDOM_GROUP_BACKTEST_SEED + display_index * 10 + group_id)
+            selected_nums.extend(rng.sample(group_nums_pool, take_count))
+    return sorted(set(selected_nums))
+
+
+def format_random_group_quota() -> str:
+    """格式化分組比例隨機組合配額。"""
+    parts = [f"{GROUPS[group_id][0]}={RANDOM_GROUP_BACKTEST_TAKE_COUNTS[group_id]}" for group_id in GROUPS]
+    return "，".join(parts) + f"，合共{sum(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.values())}球"
+
+
 def print_hit_count_summary(
     backtest_count: int,
     window_count: int,
     hit_stats: Counter[float],
+    random_hit_stats: Counter[float] | None = None,
 ) -> None:
     """打印回測期內預測候選球命中球數統計。"""
     pred_count = total_candidate_count()
@@ -557,6 +747,21 @@ def print_hit_count_summary(
         label = format_ball_count(value)
         hit_periods = hit_stats.get(value, 0)
         hit_percent = hit_periods / total_periods * 100 if total_periods else 0
+        print(f"{label:>3} = {hit_periods} 期 ({hit_percent:.1f}%)")
+    print()
+
+    if random_hit_stats is None:
+        return
+
+    random_total_periods = sum(random_hit_stats.values())
+    print("----- 分組比例隨機組合 9 球命中統計 -----")
+    print(f"回測期設定 = {backtest_count}，實際統計 = {random_total_periods} 期，窗口期 = {window_count}，隨機候選球 = {sum(RANDOM_GROUP_BACKTEST_TAKE_COUNTS.values())} 球/期")
+    print(f"ABCD 隨機配額：{format_random_group_quota()}")
+    print("-----------------------------------------")
+    for value in summary_values:
+        label = format_ball_count(value)
+        hit_periods = random_hit_stats.get(value, 0)
+        hit_percent = hit_periods / random_total_periods * 100 if random_total_periods else 0
         print(f"{label:>3} = {hit_periods} 期 ({hit_percent:.1f}%)")
     print()
 
@@ -604,12 +809,86 @@ def append_backtest_record_csv(
         ])
 
 
+def nums_in_range(nums: list[int], start_num: int, end_num: int) -> list[int]:
+    """從候選球中取出指定範圍內的號碼。"""
+    return sorted(num for num in nums if start_num <= num <= end_num)
+
+
+def reset_next_draw_record_csv() -> None:
+    """建立新的下期投注紀錄 CSV。"""
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    if NEXT_DRAW_RECORD_CSV.exists():
+        NEXT_DRAW_RECORD_CSV.unlink()
+    with NEXT_DRAW_RECORD_CSV.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow([
+            "date",
+            "(1-9)",
+            "(10_20)",
+            "(21_31)",
+            "(32-40)",
+            "candidate_pool",
+        ])
+
+
+def append_next_draw_record_csv(next_draw_date: str, candidate_pool: list[int]) -> None:
+    """追加一注下期投注候選球到 CSV。"""
+    with NEXT_DRAW_RECORD_CSV.open("a", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow([
+            next_draw_date,
+            format_nums(nums_in_range(candidate_pool, 1, 9)),
+            format_nums(nums_in_range(candidate_pool, 10, 20)),
+            format_nums(nums_in_range(candidate_pool, 21, 31)),
+            format_nums(nums_in_range(candidate_pool, 32, 40)),
+            format_nums(sorted(candidate_pool)),
+        ])
+
+
+def hit_level_text(hit_count: float) -> str:
+    """依命中球數標記回測命中等級。"""
+    if hit_count >= 5:
+        return "prize3_like"
+    if hit_count >= 4:
+        return "high_hit"
+    if hit_count >= 3:
+        return "mid_hit"
+    return "low_hit"
+
+
+def config_snapshot(backtest_count: int | None, window_count: int, take_counts: dict[int, int] | None) -> dict[str, object]:
+    """保存本次回測/預測使用的核心參數，方便之後比較優化效果。"""
+    counts = take_counts or BASE_GROUP_TAKE_COUNTS
+    return {
+        "mode": MODE,
+        "backtest_count": backtest_count,
+        "window_count": window_count,
+        "combination_take_count": COMBINATION_TAKE_COUNT,
+        "birthday_num_match_mode": BIRTHDAY_NUM_MATCH_MODE,
+        "base_group_take_counts": {GROUPS[group_id][0]: BASE_GROUP_TAKE_COUNTS[group_id] for group_id in GROUPS},
+        "actual_group_take_counts": {GROUPS[group_id][0]: counts[group_id] for group_id in GROUPS},
+        "prediction_count": sum(counts.values()),
+        "auto_distribute_group_take": AUTO_DISTRIBUTE_GROUP_TAKE,
+        "auto_distribute_max_transfer": AUTO_DISTRIBUTE_MAX_TRANSFER,
+        "auto_distribute_min_group_take": AUTO_DISTRIBUTE_MIN_GROUP_TAKE,
+        "auto_distribute_min_gap_percent": AUTO_DISTRIBUTE_MIN_GAP_PERCENT,
+        "recent_draw_score_penalty": RECENT_DRAW_SCORE_PENALTY,
+        "high_freq_min_pair_count": HIGH_FREQ_MIN_PAIR_COUNT,
+        "high_freq_dan_take": HIGH_FREQ_DAN_TAKE,
+        "high_freq_partner_take": HIGH_FREQ_PARTNER_TAKE,
+        "weak_num_take": WEAK_NUM_TAKE,
+        "weak_num_random_seed": WEAK_NUM_RANDOM_SEED,
+    }
+
+
 def build_score_record(
     check_row: DrawRow,
+    backtest_count: int | None,
     window_count: int,
     group_weights: dict[int, list[NumWeight]],
     pred_nums: list[int],
     hit_count: float,
+    take_counts: dict[int, int] | None = None,
 ) -> dict[str, object]:
     """建立一筆可寫入 JSON 的回測/預測權重紀錄。"""
     group_scores: dict[str, dict[str, float]] = {}
@@ -617,16 +896,23 @@ def build_score_record(
     for group_id, weights in group_weights.items():
         code = GROUPS[group_id][0]
         group_scores[code] = {str(item["num"]): round(item["score"], 4) for item in weights}
-        group_candidates[code] = select_group_candidates(weights, group_id)
+        group_candidates[code] = select_group_candidates(weights, group_id, take_counts)
 
     return {
         "check_date": check_row["date"],
+        "config": config_snapshot(backtest_count, window_count, take_counts),
         "window_count": window_count,
+        "group_take_counts": {
+            GROUPS[group_id][0]: (take_counts or BASE_GROUP_TAKE_COUNTS)[group_id]
+            for group_id in GROUPS
+        },
         "group_scores": group_scores,
         "group_candidates": group_candidates,
         "prediction_nums": pred_nums,
         "prediction_count": len(pred_nums),
         "hit_count": hit_count,
+        "hit_level": hit_level_text(hit_count),
+        "is_prize3_like": hit_count >= 5,
     }
 
 
@@ -643,8 +929,9 @@ def run_backtest(draws: list[DrawRow]) -> None:
 
         for window_count in WINDOW_DRAW_COUNT_LIST:
             print(f"====== ABCD 權重預測回測：窗口期={window_count}，回測期={backtest_count} ======")
-            print(f"本輪回測參數：{format_group_quota()}，每期預測候選球 = {total_candidate_count()} 球")
+            print(f"本輪回測基礎配額：{format_group_quota()}，每期預測候選球 = {total_candidate_count()} 球")
             hit_stats: Counter[float] = Counter()
+            random_hit_stats: Counter[float] = Counter()
             for display_index, check_index in enumerate(check_indices, start=1):
                 check_row = draws[check_index]
                 window_start_index = max(0, check_index - window_count)
@@ -657,52 +944,68 @@ def run_backtest(draws: list[DrawRow]) -> None:
                 print("backtest：窗口期不包括核對期，預留核對預測")
 
                 group_weights: dict[int, list[NumWeight]] = {}
+                take_counts = dynamic_group_take_counts(window_rows)
+                condition_stats = group_condition_stats(window_rows)
                 pair_data = high_freq_pair_data(window_rows)
+                weak_data = weak_nums_data(window_rows, pair_data)
                 previous_row = draws[check_index - 1] if check_index > 0 else None
-                avoid_nums = recent_draw_nums(previous_row)
+                recent_nums = recent_draw_nums(previous_row)
                 pred_nums: list[int] = []
                 group_pred_map: dict[int, list[int]] = {}
                 for group_id in GROUPS:
                     code, name, _start_num, _end_num = GROUPS[group_id]
-                    matched_count = sum(1 for _row_index, row in window_rows if is_matched(len(group_nums(row, group_id))))
-                    matched_percent = matched_count / len(window_rows) * 100 if window_rows else 0
                     print(f"--- {code}組 {name} ---")
                     print_window_detail(window_rows, check_index - 1, group_id)
-                    print(
-                        f"結果合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
-                        f"查詢 {matched_count} / {len(window_rows)} 期統計 = {matched_count}期 "
-                        f"({matched_percent:.0f} %)"
-                    )
                     weights = analyze_group_weights(window_rows, check_index - 1, group_id)
                     group_weights[group_id] = weights
                     print_group_weight_summary(weights, group_id)
-                    group_pred = select_group_candidates(weights, group_id)
-                    print(f"{code}組權重熱號 {GROUP_TAKE_COUNTS[group_id]} 球：{format_nums(group_pred)}")
-                    final_group_pred = select_final_group_candidates(weights, group_id, pair_data, avoid_nums)
+                    group_pred = select_group_candidates(weights, group_id, take_counts)
+                    print(f"{code}組權重熱號 {take_counts[group_id]} 球：{format_nums(group_pred)}")
+                    final_group_pred = select_final_group_candidates(weights, group_id, pair_data, weak_data, recent_nums, take_counts)
                     group_pred_map[group_id] = final_group_pred
                     pred_nums.extend(final_group_pred)
-                    print(f"{code}組最終候選 {GROUP_TAKE_COUNTS[group_id]} 球：{format_nums(final_group_pred)}")
+                    print(f"{code}組最終候選 {take_counts[group_id]} 球：{format_nums(final_group_pred)}")
                     print()
 
                 pred_nums = sorted(pred_nums)
                 hit_text, hit_count = prediction_hit_text(pred_nums, check_row)
                 hit_nums, hit_sp_nums = prediction_hit_nums(pred_nums, check_row)
                 hit_stats[hit_count] += 1
+                print(f"ABCD 本期自動配額：{format_group_quota(take_counts)}")
+                for line in condition_stats_text(condition_stats):
+                    print(line)
                 print(f"核對日期：{check_row['date']}: {row_all_check_text(check_row)}")
                 print(missing_nums_text(window_rows))
                 for line in high_freq_pair_text(window_rows, pair_data):
                     print(line)
-                pred_count = total_candidate_count()
+                for line in weak_nums_text(window_rows, pair_data):
+                    print(line)
+                pred_count = sum(take_counts.values())
                 print(f"ABCD 預測候選球 {format_nums(pred_nums)} /> [{pred_count}] 球 ==> {hit_text}")
+
+                if PRINT_RANDOM_GROUP_BACKTEST:
+                    random_group_nums = select_random_group_backtest_nums(group_pred_map, display_index)
+                    random_hit_text, random_hit_count = prediction_hit_text(random_group_nums, check_row)
+                    random_hit_stats[random_hit_count] += 1
+                    print(
+                        f"ABCD 分組比例隨機 9 球 {format_nums(random_group_nums)} "
+                        f"/> [{len(random_group_nums)}] 球 ==> {random_hit_text}"
+                    )
+
                 append_backtest_record_csv(check_row["date"], group_pred_map, pred_nums, hit_nums, hit_sp_nums)
 
-                new_record = build_score_record(check_row, window_count, group_weights, pred_nums, hit_count)
+                new_record = build_score_record(check_row, backtest_count, window_count, group_weights, pred_nums, hit_count, take_counts)
                 print_old_new_compare(old_record, new_record)
                 save_trace_record(new_record)
                 old_record = new_record
                 print()
 
-            print_hit_count_summary(backtest_count, window_count, hit_stats)
+            print_hit_count_summary(
+                backtest_count,
+                window_count,
+                hit_stats,
+                random_hit_stats if PRINT_RANDOM_GROUP_BACKTEST else None,
+            )
 
 
 def run_predict(draws: list[DrawRow]) -> None:
@@ -723,46 +1026,53 @@ def run_predict(draws: list[DrawRow]) -> None:
 
         pred_nums: list[int] = []
         group_pred_map: dict[int, list[int]] = {}
+        take_counts = dynamic_group_take_counts(window_rows)
+        condition_stats = group_condition_stats(window_rows)
         pair_data = high_freq_pair_data(window_rows)
-        avoid_nums = recent_draw_nums(latest_row)
+        weak_data = weak_nums_data(window_rows, pair_data)
+        recent_nums = recent_draw_nums(latest_row)
         for group_id in GROUPS:
             code, name, _start_num, _end_num = GROUPS[group_id]
-            matched_count = sum(1 for _row_index, row in window_rows if is_matched(len(group_nums(row, group_id))))
-            matched_percent = matched_count / len(window_rows) * 100 if window_rows else 0
             print(f"--- {code}組 {name} ---")
             print_window_detail(window_rows, latest_index, group_id)
-            print(
-                f"結果合條件 {BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球，"
-                f"查詢 {matched_count} / {len(window_rows)} 期統計 = {matched_count}期 "
-                f"({matched_percent:.0f} %)"
-            )
             weights = analyze_group_weights(window_rows, latest_index, group_id)
             print_group_weight_summary(weights, group_id)
-            group_pred = select_group_candidates(weights, group_id)
-            print(f"{code}組權重熱號 {GROUP_TAKE_COUNTS[group_id]} 球：{format_nums(group_pred)}")
-            final_group_pred = select_final_group_candidates(weights, group_id, pair_data, avoid_nums)
+            group_pred = select_group_candidates(weights, group_id, take_counts)
+            print(f"{code}組權重熱號 {take_counts[group_id]} 球：{format_nums(group_pred)}")
+            final_group_pred = select_final_group_candidates(weights, group_id, pair_data, weak_data, recent_nums, take_counts)
             group_pred_map[group_id] = final_group_pred
             pred_nums.extend(final_group_pred)
-            print(f"{code}組最終候選 {GROUP_TAKE_COUNTS[group_id]} 球：{format_nums(final_group_pred)}")
+            print(f"{code}組最終候選 {take_counts[group_id]} 球：{format_nums(final_group_pred)}")
             print()
 
         pred_nums = sorted(pred_nums)
-        pred_count = total_candidate_count()
+        pred_count = sum(take_counts.values())
+        print(f"ABCD 本期自動配額：{format_group_quota(take_counts)}")
+        for line in condition_stats_text(condition_stats):
+            print(line)
         print(f"最後開獎日期：{latest_row['date']}: {row_all_check_text(latest_row)}")
         print(f"下期開獎日期：{next_draw_date or '未知'}")
         print(missing_nums_text(window_rows))
         for line in high_freq_pair_text(window_rows, pair_data):
             print(line)
+        for line in weak_nums_text(window_rows, pair_data):
+            print(line)
         print(f"ABCD 下期預測候選球 {format_nums(pred_nums)} /> [{pred_count}] 球")
-        print_predict_bet_groups(group_pred_map, pred_nums)
+        print_predict_bet_groups(group_pred_map, pred_nums, next_draw_date, take_counts)
         print()
 
 
-def print_predict_bet_groups(group_pred_map: dict[int, list[int]], pred_nums: list[int]) -> None:
+def print_predict_bet_groups(
+    group_pred_map: dict[int, list[int]],
+    pred_nums: list[int],
+    next_draw_date: str,
+    take_counts: dict[int, int] | None = None,
+) -> None:
     """列印 predict mode 的投注分組組合與隨機候選組。"""
     if not PRINT_PREDICT_BET_GROUPS:
         return
 
+    counts = take_counts or BASE_GROUP_TAKE_COUNTS
     abc_nums = sorted(group_pred_map.get(1, []) + group_pred_map.get(2, []) + group_pred_map.get(3, []))
     bcd_nums = sorted(group_pred_map.get(2, []) + group_pred_map.get(3, []) + group_pred_map.get(4, []))
 
@@ -773,13 +1083,18 @@ def print_predict_bet_groups(group_pred_map: dict[int, list[int]], pred_nums: li
         rng = random.Random(RANDOM_BET_GROUP_SEED)
         random_nums = sorted(rng.sample(random_pool, min(RANDOM_BET_GROUP_TAKE, len(random_pool))))
 
+    reset_next_draw_record_csv()
+    append_next_draw_record_csv(next_draw_date, abc_nums)
+    append_next_draw_record_csv(next_draw_date, bcd_nums)
+    append_next_draw_record_csv(next_draw_date, random_nums)
+
     print("----- 投注分組預測球組合 -----")
     print(
-        f"1，A{GROUP_TAKE_COUNTS[1]} + B{GROUP_TAKE_COUNTS[2]} + C{GROUP_TAKE_COUNTS[3]} "
+        f"1，A{counts[1]} + B{counts[2]} + C{counts[3]} "
         f"= {format_nums(abc_nums)} /> [{len(abc_nums)}] 球"
     )
     print(
-        f"2，B{GROUP_TAKE_COUNTS[2]} + C{GROUP_TAKE_COUNTS[3]} + D{GROUP_TAKE_COUNTS[4]} "
+        f"2，B{counts[2]} + C{counts[3]} + D{counts[4]} "
         f"= {format_nums(bcd_nums)} /> [{len(bcd_nums)}] 球"
     )
     print(f"3，系統自動 A+B+C+D 隨機選取 {len(random_nums)} 球 = {format_nums(random_nums)}")
