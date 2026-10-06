@@ -1,7 +1,7 @@
 import itertools
 import random
 import unicodedata
-from typing import TypedDict
+from typing import Optional, TypedDict, Union
 '''
 ===== 方案摘要 =====
 1. 6字單式，中5保5 = 726 組，$10 x 726 = $7,260，完全覆蓋
@@ -85,7 +85,7 @@ def input_candidate_numbers() -> list[int]:
             print("錯誤：請輸入整數號碼。\n")
 
 
-def input_max_tickets_limit() -> int | None:
+def input_max_tickets_limit() -> Optional[int]:
     """輸入注數上限。"""
     while True:
         raw_text = input("每個方案最多計算多少注？直接 Enter = 不限制：").strip()
@@ -148,7 +148,7 @@ def generate_abbreviated_wheel(
     chosen_numbers: list[int],
     match_if: int,
     guarantee: int,
-    max_limit: int | None,
+    max_limit: Optional[int],
     ticket_size: int,
 ) -> tuple[list[tuple[int, ...]], set[tuple[int, ...]]]:
     """用確定性貪婪法生成 wheeling 組合。"""
@@ -188,7 +188,7 @@ def validate_option(mode_key: str, match_if: int, guarantee: int) -> bool:
     return guarantee <= match_if <= ticket_size
 
 
-def calculate_option_results(chosen_numbers: list[int], max_limit: int | None) -> list[CalculatedOption]:
+def calculate_option_results(chosen_numbers: list[int], max_limit: Optional[int]) -> list[CalculatedOption]:
     """計算 6 字單式與 7 字複式的方案摘要。"""
     results: list[CalculatedOption] = []
     option_no = 1
@@ -286,7 +286,7 @@ def input_selected_option(option_results: list[CalculatedOption]) -> CalculatedO
 def calculate_selected_option(
     chosen_numbers: list[int],
     selected_option: OptionMenuItem,
-    max_limit: int | None,
+    max_limit: Optional[int],
 ) -> CalculatedOption:
     """只計算用戶選中的方案。"""
     tickets, uncovered_subsets = generate_abbreviated_wheel(
@@ -326,7 +326,7 @@ def print_ticket_details(result: CalculatedOption) -> None:
     print("-" * 52)
 
 
-def format_nums(nums: list[int] | tuple[int, ...]) -> str:
+def format_nums(nums: Union[list[int], tuple[int, ...]]) -> str:
     """格式化號碼列表。"""
     return "[" + ",".join(f"{num:02d}" for num in nums) + "]"
 

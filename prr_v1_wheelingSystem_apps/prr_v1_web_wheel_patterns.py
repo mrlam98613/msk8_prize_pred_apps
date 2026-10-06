@@ -1,7 +1,7 @@
 import itertools
 import random
 import unicodedata
-from typing import TypedDict
+from typing import TypedDict, Union
 
 """
 網上 wheeling / 聰明組合樣版庫。
@@ -92,7 +92,7 @@ def parse_number_list(raw_text: str) -> list[int]:
     return sorted(set(int(text) for text in cleaned_text.split() if text.strip()))
 
 
-def format_nums(nums: list[int] | tuple[int, ...]) -> str:
+def format_nums(nums: Union[list[int], tuple[int, ...]]) -> str:
     """格式化號碼列表。"""
     return "[" + ",".join(f"{num:02d}" for num in nums) + "]"
 

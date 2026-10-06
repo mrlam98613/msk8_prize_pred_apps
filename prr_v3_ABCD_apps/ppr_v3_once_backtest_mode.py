@@ -5,7 +5,7 @@ from pathlib import Path
 import csv
 import json
 import random
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -50,11 +50,11 @@ D，最後考慮最近 1 期開號，避免投注 重復上一期開號。
 MODE = "backtest"
 # backtest mode：數值代表「倒數第 N 期」作唯一核對期，不是最近 N 期逐期回測。
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [16, 18, 24, 30] 
+WINDOW_DRAW_COUNT_LIST = [13] 
 # CSV 窗口命中統計只使用 JSON 內最近 N 個有效核對日期重算，避免太舊回測長期累加。
 BACKTEST_WINDOW_HIT_DRAW = 50 # 50 /100 期
 GROUP_RUN_LIST = [(1,), (2,), (3,), (4,)]
-COMBINATION_TAKE_COUNT = 1
+COMBINATION_TAKE_COUNT = 5
 BIRTHDAY_NUM_MATCH_MODE = ">="
 
 # 是否顯示每期新舊權重比較。
@@ -69,7 +69,7 @@ HIGH_FREQ_PARTNER_TAKE = 9 # 高頻配腳號顯示數量
 # 弱號：窗口期內只出現 1 次，可隨配額取得入選機會。
 PRINT_WEAK_NUM_ANALYSIS = True
 WEAK_NUM_TAKE = 1 # 每組最多抽取幾個弱號補入候選。
-WEAK_NUM_RANDOM_SEED: int | None = 20261003
+WEAK_NUM_RANDOM_SEED: Optional[int] = 20261003
 
 # predict mode 最後投注分組顯示。
 PRINT_PREDICT_BET_GROUPS = True
@@ -105,7 +105,7 @@ GROUPS = {
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
-    special: int | None
+    special: Optional[int]
 
 
 class NumWeight(TypedDict):
@@ -114,7 +114,7 @@ class NumWeight(TypedDict):
     recent_score: float
     repeat_score: float
     score: float
-    latest_rank: int | None
+    latest_rank: Optional[int]
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -164,7 +164,7 @@ def read_next_draw_date() -> str:
     return rows[-1].get("next_draw_date", "") if rows else ""
 
 
-def format_nums(nums: list[int], special: int | None = None) -> str:
+def format_nums(nums: list[int], special: Optional[int] = None) -> str:
     """將球號列表格式化為 [1,2,3]；特別號會以 * 標示。"""
     parts = [str(num) for num in nums]
     if special is not None:
@@ -182,7 +182,7 @@ def total_candidate_count() -> int:
     return sum(BASE_GROUP_TAKE_COUNTS.values())
 
 
-def format_group_quota(take_counts: dict[int, int] | None = None) -> str:
+def format_group_quota(take_counts: Optional[dict[int, int]] = None) -> str:
     """格式化 ABCD 各組配額與總候選球數。"""
     counts = take_counts or BASE_GROUP_TAKE_COUNTS
     quota_parts = [f"{GROUPS[group_id][0]}={counts[group_id]}" for group_id in GROUPS]
@@ -246,7 +246,7 @@ def group_nums(row: DrawRow, group_id: int) -> list[int]:
     return sorted(num for num in row["nums"] if start_num <= num <= end_num)
 
 
-def group_special(row: DrawRow, group_id: int) -> int | None:
+def group_special(row: DrawRow, group_id: int) -> Optional[int]:
     """取出某期特別號是否落在指定 ABCD 組範圍內。"""
     _code, _name, start_num, end_num = GROUPS[group_id]
     special = row["special"]
@@ -255,7 +255,7 @@ def group_special(row: DrawRow, group_id: int) -> int | None:
     return special if start_num <= special <= end_num else None
 
 
-def display_ball_count(normal_count: int, special: int | None) -> float:
+def display_ball_count(normal_count: int, special: Optional[int]) -> float:
     """計算顯示用球數；同組正號達 3 球且有特別號時加 0.5。"""
     if special is not None and normal_count >= 3:
         return normal_count + 0.5
@@ -347,7 +347,7 @@ def analyze_group_weights(
 def select_group_candidates(
     weights: list[NumWeight],
     group_id: int,
-    take_counts: dict[int, int] | None = None,
+    take_counts: Optional[dict[int, int]] = None,
 ) -> list[int]:
     """依權重排序取出某組基礎熱號候選。"""
     take_count = (take_counts or BASE_GROUP_TAKE_COUNTS)[group_id]
@@ -559,7 +559,7 @@ def save_once_backtest_result(record: dict[str, object]) -> None:
         json.dump(data, handle, ensure_ascii=False, indent=2)
 
 
-def latest_trace_record(trace: dict[str, object]) -> dict[str, object] | None:
+def latest_trace_record(trace: dict[str, object]) -> Optional[dict[str, object]]:
     """從 trace 資料中取出最後一筆紀錄。"""
     records = trace.get("records")
     if isinstance(records, list) and records:
@@ -592,7 +592,7 @@ def migrate_once_backtest_results_from_weight_json() -> None:
         json.dump(trace, handle, ensure_ascii=False, indent=2)
 
 
-def print_old_new_compare(old_record: dict[str, object] | None, new_record: dict[str, object]) -> None:
+def print_old_new_compare(old_record: Optional[dict[str, object]], new_record: dict[str, object]) -> None:
     """在開關啟用時，列印上一筆與新一筆權重分數差異。"""
     if not PRINT_WEIGHT_COMPARE:
         return
@@ -652,7 +652,7 @@ def missing_nums_text(window_rows: list[tuple[int, DrawRow]]) -> str:
 
 def weak_nums_data(
     window_rows: list[tuple[int, DrawRow]],
-    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
 ) -> dict[int, list[int]]:
     """回傳扣除沒出現、高頻膽、高頻配腳後的其餘弱號。"""
     group_counts = group_window_num_counts(window_rows)
@@ -675,7 +675,7 @@ def weak_nums_data(
 
 def weak_nums_text(
     window_rows: list[tuple[int, DrawRow]],
-    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
 ) -> list[str]:
     """格式化 ABCD 弱號顯示文字。"""
     if not PRINT_WEAK_NUM_ANALYSIS:
@@ -741,7 +741,7 @@ def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tup
 
 def high_freq_pair_text(
     window_rows: list[tuple[int, DrawRow]],
-    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
 ) -> list[str]:
     """分析合條件窗口結果中的高頻膽號與伴號。"""
     if not PRINT_HIGH_FREQ_PAIR_ANALYSIS:
@@ -767,7 +767,7 @@ def high_freq_pair_text(
     ]
 
 
-def recent_draw_nums(row: DrawRow | None) -> set[int]:
+def recent_draw_nums(row: Optional[DrawRow]) -> set[int]:
     """取得某期全部正號與特別號，用於避開最近一期重複號。"""
     if row is None:
         return set()
@@ -810,7 +810,7 @@ def select_final_group_candidates(
     pair_data: dict[int, tuple[list[int], list[int]]],
     weak_data: dict[int, list[int]],
     recent_nums: set[int],
-    take_counts: dict[int, int] | None = None,
+    take_counts: Optional[dict[int, int]] = None,
 ) -> list[int]:
     """高頻膽 1 + 高頻配腳 1 + 弱號機會 + 扣分後權重補滿。"""
     counts = take_counts or BASE_GROUP_TAKE_COUNTS
@@ -877,7 +877,7 @@ def print_hit_count_summary(
     backtest_offset: int,
     window_count: int,
     hit_stats: Counter[float],
-    high_freq_dan_hit_stats: Counter[float] | None = None,
+    high_freq_dan_hit_stats: Optional[Counter[float]] = None,
 ) -> None:
     """打印回測期內預測候選球命中球數統計。"""
     pred_count = total_candidate_count()
@@ -996,13 +996,13 @@ def best_window_hits(window_stats: dict[int, Counter[float]]) -> list[dict[str, 
     return rows
 
 
-def summary_csv_headers(window_counts: list[int] | None = None) -> list[str]:
+def summary_csv_headers(window_counts: Optional[list[int]] = None) -> list[str]:
     """建立窗口期累積命中 CSV 欄位。"""
     counts = window_counts or WINDOW_DRAW_COUNT_LIST
     return ["hit_count"] + [f"window_{window_count}" for window_count in counts] + ["total"]
 
 
-def empty_summary_rows(window_counts: list[int] | None = None) -> dict[str, dict[str, int]]:
+def empty_summary_rows(window_counts: Optional[list[int]] = None) -> dict[str, dict[str, int]]:
     """建立 6 至 3 球的空累積統計列。"""
     counts = window_counts or WINDOW_DRAW_COUNT_LIST
     rows: dict[str, dict[str, int]] = {}
@@ -1013,7 +1013,7 @@ def empty_summary_rows(window_counts: list[int] | None = None) -> dict[str, dict
     return rows
 
 
-def window_count_from_key(key: str) -> int | None:
+def window_count_from_key(key: str) -> Optional[int]:
     """從 window_N 欄位名稱取出窗口期。"""
     if not key.startswith("window_"):
         return None
@@ -1093,7 +1093,7 @@ def read_window_summary_csv(path: Path) -> dict[str, dict[str, int]]:
 def write_window_summary_csv(
     path: Path,
     rows: dict[str, dict[str, int]],
-    window_counts: list[int] | None = None,
+    window_counts: Optional[list[int]] = None,
 ) -> None:
     """寫入窗口期命中累積 CSV。"""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -1241,9 +1241,9 @@ def append_backtest_record_csv(
     pred_nums: list[int],
     hit_nums: list[int],
     hit_sp_nums: list[int],
-    high_freq_dan_nums: list[int] | None = None,
-    high_freq_dan_hit_nums: list[int] | None = None,
-    high_freq_dan_hit_sp_nums: list[int] | None = None,
+    high_freq_dan_nums: Optional[list[int]] = None,
+    high_freq_dan_hit_nums: Optional[list[int]] = None,
+    high_freq_dan_hit_sp_nums: Optional[list[int]] = None,
 ) -> None:
     """追加一筆回測預測投注紀錄到 CSV。"""
     dan_nums = high_freq_dan_nums or []
@@ -1316,7 +1316,7 @@ def hit_level_text(hit_count: float) -> str:
     return "low_hit"
 
 
-def config_snapshot(backtest_count: int | None, window_count: int, take_counts: dict[int, int] | None) -> dict[str, object]:
+def config_snapshot(backtest_count: Optional[int], window_count: int, take_counts: Optional[dict[int, int]]) -> dict[str, object]:
     """保存本次回測/預測使用的核心參數，方便之後比較優化效果。"""
     counts = take_counts or BASE_GROUP_TAKE_COUNTS
     return {
@@ -1343,12 +1343,12 @@ def config_snapshot(backtest_count: int | None, window_count: int, take_counts: 
 
 def build_score_record(
     check_row: DrawRow,
-    backtest_count: int | None,
+    backtest_count: Optional[int],
     window_count: int,
     group_weights: dict[int, list[NumWeight]],
     pred_nums: list[int],
     hit_count: float,
-    take_counts: dict[int, int] | None = None,
+    take_counts: Optional[dict[int, int]] = None,
 ) -> dict[str, object]:
     """建立一筆可寫入 JSON 的回測/預測權重紀錄。"""
     group_scores: dict[str, dict[str, float]] = {}
@@ -1561,7 +1561,7 @@ def print_predict_bet_groups(
     group_pred_map: dict[int, list[int]],
     pair_data: dict[int, tuple[list[int], list[int]]],
     next_draw_date: str,
-    take_counts: dict[int, int] | None = None,
+    take_counts: Optional[dict[int, int]] = None,
 ) -> None:
     """列印 predict mode 的投注分組組合與高頻膽號候選組。"""
     if not PRINT_PREDICT_BET_GROUPS:

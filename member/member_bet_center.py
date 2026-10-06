@@ -10,6 +10,7 @@ import pandas as pd
 import streamlit as st
 
 
+from typing import Optional
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -50,7 +51,7 @@ PRIZE_TABLE = {
 }
 
 
-def require_login() -> str | None:
+def require_login() -> Optional[str]:
     """未登入時阻止使用會員投注中心。"""
 
     email = st.session_state.get("login_email_val")
@@ -154,7 +155,7 @@ def load_ball_image_base64(num: int) -> str:
     return base64.b64encode(img_path.read_bytes()).decode("utf-8")
 
 
-def render_ball_images(nums: list[int], highlight: dict | None = None) -> None:
+def render_ball_images(nums: list[int], highlight: Optional[dict] = None) -> None:
     """用球圖顯示投注號碼；中正號紅圈，中特號藍框。"""
 
     highlight = highlight or {}
@@ -227,7 +228,7 @@ def calculate_simple_payout(numbers: list[int], draw_result: dict, bet_unit: int
     return int(payout)
 
 
-def calculate_hit_summary(numbers: list[int], draw_result: dict | None) -> tuple[float | None, str, dict]:
+def calculate_hit_summary(numbers: list[int], draw_result: Optional[dict]) -> tuple[Optional[float], str, dict]:
     """計算中獎球數、獎項及球圖高亮。"""
 
     if not draw_result:
@@ -257,7 +258,7 @@ def calculate_hit_summary(numbers: list[int], draw_result: dict | None) -> tuple
     return score, prize, highlight
 
 
-def format_hit_score(score: float | None) -> str:
+def format_hit_score(score: Optional[float]) -> str:
     """中獎球數格式，例如 0.5、1、1.5。"""
 
     if score is None:
@@ -265,7 +266,7 @@ def format_hit_score(score: float | None) -> str:
     return str(int(score)) if float(score).is_integer() else f"{score:g}"
 
 
-def format_result_mood(score: float | None) -> str:
+def format_result_mood(score: Optional[float]) -> str:
     """根據中獎球數顯示開獎心情。"""
 
     if score is None:
@@ -684,7 +685,7 @@ def render_bet_records_tab(email: str, key_prefix: str = "member") -> None:
             st.markdown("</div>", unsafe_allow_html=True)
 
     with st.expander("表格檢視"):
-        st.dataframe(normalize_bet_rows(rows), hide_index=True, width="stretch")
+        st.dataframe(normalize_bet_rows(rows), hide_index=True)
 
 
 def render_admin_member_data_tab() -> None:

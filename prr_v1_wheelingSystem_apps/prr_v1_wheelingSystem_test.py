@@ -1,6 +1,7 @@
 import itertools
 
 
+from typing import Optional
 # ===== 手動參數區 =====
 # 8-17 個候選號碼。
 CHOSEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
@@ -18,7 +19,7 @@ GUARANTEE_OPTIONS = [
 SELECT_OPTION = 3
 
 # 每個方案最多生成多少注；None 表示不限制。
-MAX_TICKETS_LIMIT: int | None = None
+MAX_TICKETS_LIMIT: Optional[int] = None
 
 # 是否使用互動輸入；False 時直接使用以上參數。
 USE_INPUT_MODE = False

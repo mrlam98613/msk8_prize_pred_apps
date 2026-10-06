@@ -2,7 +2,7 @@ from pathlib import Path
 import csv
 from collections import Counter
 from itertools import combinations
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 ''' 
 A,B,C,D, (1-9) , (10-20) , (21-31) , (32-40), (分單雙分佈)
@@ -70,7 +70,7 @@ GROUP_CODES = {
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
-    special: int | None
+    special: Optional[int]
     prize_count: float
 
 
@@ -132,7 +132,7 @@ def read_next_draw_date() -> str:
 
 def format_nums(
     nums: list[int],
-    special: int | None = None,
+    special: Optional[int] = None,
     show_special_placeholder: bool = False,
     special_placeholder: str = "_",
 ) -> str:
@@ -145,7 +145,7 @@ def format_nums(
     return "[" + ",".join(parts) + "]"
 
 
-def format_hit_nums(nums: list[int], special: int | None = None) -> str:
+def format_hit_nums(nums: list[int], special: Optional[int] = None) -> str:
     ''' 格式化命中號碼，不加入特號佔位符。 '''
     return format_nums(nums, special, False)
 
@@ -172,7 +172,7 @@ def selected_nums(row: DrawRow, start_num: int, end_num: int) -> list[int]:
     return sorted(num for num in row["nums"] if start_num <= num <= end_num)
 
 
-def selected_special(row: DrawRow, start_num: int, end_num: int) -> int | None:
+def selected_special(row: DrawRow, start_num: int, end_num: int) -> Optional[int]:
     ''' 判斷特號 N7 是否落在指定分組範圍內。 '''
     special = row["special"]
     if special is None:
@@ -180,7 +180,7 @@ def selected_special(row: DrawRow, start_num: int, end_num: int) -> int | None:
     return special if start_num <= special <= end_num else None
 
 
-def display_ball_count(normal_count: int, special: int | None) -> float:
+def display_ball_count(normal_count: int, special: Optional[int]) -> float:
     ''' 計算顯示球數；正號達 3 球時特號加 0.5。 '''
     if special is not None and normal_count >= 3:
         return normal_count + 0.5
@@ -272,7 +272,7 @@ def group_only_text(row: DrawRow, name: str, start_num: int, end_num: int) -> st
 def lotto_list_text(row: DrawRow) -> str:
     ''' 將所選組別內的正號合併成一個 []，特號不在所選組別時用 _ 佔位。 '''
     nums: list[int] = []
-    special: int | None = None
+    special: Optional[int] = None
     for _name, start_num, end_num in selected_groups():
         nums.extend(selected_nums(row, start_num, end_num))
         group_special = selected_special(row, start_num, end_num)

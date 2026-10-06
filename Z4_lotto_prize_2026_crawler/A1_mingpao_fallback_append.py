@@ -22,7 +22,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import pandas as pd
 import requests
@@ -146,7 +146,7 @@ def clean_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def parse_date_text(value: str) -> str | None:
+def parse_date_text(value: str) -> Optional[str]:
     text = clean_text(value)
     patterns = [
         r"(\d{4})[年/-](\d{1,2})[月/-](\d{1,2})日?",
@@ -312,7 +312,7 @@ def append_unique_row(path: Path, row: dict[str, Any], columns: list[str], date_
             if col not in df.columns:
                 df[col] = ""
         df = pd.concat([df[columns], pd.DataFrame([row], columns=columns)], ignore_index=True)
-        df[date_column] = df[date_column].astype(str).str.strip()
+        df[date_column] = df[date_column].map(lambda value: str(value).strip())
         df = df.drop_duplicates(subset=[date_column], keep="last")
         df = df.sort_values(date_column).reset_index(drop=True)
     else:

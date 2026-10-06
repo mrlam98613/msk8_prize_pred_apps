@@ -25,7 +25,7 @@ from calendar import monthrange
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import pandas as pd
 import requests
@@ -319,7 +319,7 @@ def next_month(year: int, month: int) -> tuple[int, int]:
     return year, month + 1
 
 
-def target_months(today: date | None = None) -> list[tuple[int, int]]:
+def target_months(today: Optional[date] = None) -> list[tuple[int, int]]:
     today = today or date.today()
     months = [(today.year, today.month)]
     if today.day >= 15:
@@ -366,7 +366,7 @@ def has_month(existing_dates: set[str], year: int, month: int) -> bool:
     return bool(expected) and expected.issubset(existing_dates)
 
 
-def has_current_and_next_month(existing_dates: set[str], today: date | None = None) -> bool:
+def has_current_and_next_month(existing_dates: set[str], today: Optional[date] = None) -> bool:
     today = today or date.today()
     next_year, next_month_value = next_month(today.year, today.month)
     return has_month(existing_dates, today.year, today.month) and has_month(existing_dates, next_year, next_month_value)
@@ -384,7 +384,7 @@ def has_non_fixed_draw_dates(existing_dates: set[str], months: list[tuple[int, i
     return False
 
 
-def should_download_m7(existing_dates: set[str], today: date | None = None) -> bool:
+def should_download_m7(existing_dates: set[str], today: Optional[date] = None) -> bool:
     today = today or date.today()
     current_and_next = [(today.year, today.month), next_month(today.year, today.month)]
     if has_non_fixed_draw_dates(existing_dates, current_and_next):
@@ -397,7 +397,7 @@ def should_download_m7(existing_dates: set[str], today: date | None = None) -> b
     return False
 
 
-def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> list[str] | None:
+def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str]]:
     start_time = time.perf_counter()
     start_year, start_month = months[0]
     end_year, end_month = months[-1]
@@ -405,7 +405,7 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> list[str] | None:
     end_date = f"{end_year}{end_month:02d}{monthrange(end_year, end_month)[1]:02d}"
 
     print("🌐 正在嘗試下載馬會開獎日網頁資料，可能需要一些時間...")
-    response: requests.Response | None = None
+    response: Optional[requests.Response] = None
     try:
         response = make_session().post(
             HKJC_GRAPHQL_URL,
@@ -460,7 +460,7 @@ def write_m7(dates: list[str]) -> None:
             writer.writerows(rows)
 
 
-def download_fixtures_to_csv(today: date | None = None) -> bool:
+def download_fixtures_to_csv(today: Optional[date] = None) -> bool:
     today = today or date.today()
     existing_dates = read_existing_m7_dates()
     if not should_download_m7(existing_dates, today):
@@ -533,7 +533,7 @@ def validate_draw(draw: dict[str, Any]) -> DrawRecord:
     )
 
 
-def parse_next_draw(draw: dict[str, Any]) -> NextDrawInfo | None:
+def parse_next_draw(draw: dict[str, Any]) -> Optional[NextDrawInfo]:
     draw_date = str(draw.get("drawDate", "")).strip()[:10]
     if not draw_date:
         return None
@@ -557,9 +557,9 @@ def parse_next_draw(draw: dict[str, Any]) -> NextDrawInfo | None:
     )
 
 
-def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], NextDrawInfo | None]:
+def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], Optional[NextDrawInfo]]:
     session = make_session()
-    response: requests.Response | None = None
+    response: Optional[requests.Response] = None
     try:
         response = session.post(
             HKJC_GRAPHQL_URL,
@@ -612,7 +612,7 @@ def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], NextD
     return records, next_draw
 
 
-def download_next_draw_from_home(session: requests.Session, latest_draw_date: str) -> NextDrawInfo | None:
+def download_next_draw_from_home(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
     """馬會首頁 query 通常同時回傳最新一期及下一期。失敗時回傳 None。"""
     try:
         response = session.post(
@@ -638,13 +638,13 @@ def download_next_draw_from_home(session: requests.Session, latest_draw_date: st
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def download_next_draw_by_recent_range(session: requests.Session, latest_draw_date: str) -> NextDrawInfo | None:
+def download_next_draw_by_recent_range(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
     """跟馬會前端相同，用最近約 60 日範圍補抓下一期資料。"""
     end_dt = date.today()
     start_dt = end_dt - timedelta(days=60)
     start_date = start_dt.strftime("%Y%m%d")
     end_date = end_dt.strftime("%Y%m%d")
-    response: requests.Response | None = None
+    response: Optional[requests.Response] = None
     try:
         response = session.post(
             HKJC_GRAPHQL_URL,
@@ -686,12 +686,12 @@ def download_next_draw_by_recent_range(session: requests.Session, latest_draw_da
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def download_next_draw_by_date_range(session: requests.Session, latest_draw_date: str) -> NextDrawInfo | None:
+def download_next_draw_by_date_range(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
     """用最新一期日期後 7 日範圍補抓下一期，避免首頁 query 沒帶下一期資料。"""
     latest_dt = datetime.strptime(latest_draw_date, "%Y-%m-%d").date()
     start_date = (latest_dt + timedelta(days=1)).strftime("%Y%m%d")
     end_date = (latest_dt + timedelta(days=7)).strftime("%Y%m%d")
-    response: requests.Response | None = None
+    response: Optional[requests.Response] = None
     try:
         response = session.post(
             HKJC_GRAPHQL_URL,
@@ -733,7 +733,7 @@ def download_next_draw_by_date_range(session: requests.Session, latest_draw_date
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def log_next_draw_status(latest_draw_date: str, next_draw: NextDrawInfo | None) -> None:
+def log_next_draw_status(latest_draw_date: str, next_draw: Optional[NextDrawInfo]) -> None:
     """記錄下一期資料是否齊全，避免 M3/M4 靜默套用舊資料。"""
     expected_date, _ = get_next_draw_date(latest_draw_date)
     if next_draw is None:
@@ -801,7 +801,7 @@ def create_m2_merged_history() -> None:
     m1_df = m1_df[M2_COLUMNS].copy()
 
     merged_df = pd.concat([base_df, m1_df], ignore_index=True)
-    merged_df["ndate"] = merged_df["ndate"].astype(str).str.strip()
+    merged_df["ndate"] = merged_df["ndate"].map(lambda value: str(value).strip())
     for col in M2_COLUMNS[1:]:
         merged_df[col] = pd.to_numeric(merged_df[col], errors="coerce").fillna(0).astype(int)
     merged_df = merged_df.drop_duplicates(subset=["ndate"], keep="last")
@@ -809,7 +809,7 @@ def create_m2_merged_history() -> None:
     merged_df.to_csv(M2_CSV, index=False, encoding="utf-8-sig")
 
 
-def get_next_draw_date(last_draw_date: str, next_draw: NextDrawInfo | None = None) -> tuple[str, int]:
+def get_next_draw_date(last_draw_date: str, next_draw: Optional[NextDrawInfo] = None) -> tuple[str, int]:
     if next_draw:
         return next_draw.draw_date, next_draw.week
 
@@ -820,13 +820,13 @@ def get_next_draw_date(last_draw_date: str, next_draw: NextDrawInfo | None = Non
     return dt.strftime("%Y-%m-%d"), dt.isoweekday()
 
 
-def estimate_next_prize_fund(latest: DrawRecord, next_draw: NextDrawInfo | None = None) -> int:
+def estimate_next_prize_fund(latest: DrawRecord, next_draw: Optional[NextDrawInfo] = None) -> int:
     if next_draw and next_draw.estimated_prize > 0:
         return next_draw.estimated_prize
     return 0
 
 
-def estimate_next_jackpot(next_draw: NextDrawInfo | None = None) -> int:
+def estimate_next_jackpot(next_draw: Optional[NextDrawInfo] = None) -> int:
     if next_draw and next_draw.jackpot > 0:
         return next_draw.jackpot
     return 0
@@ -867,7 +867,7 @@ def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
             if col not in old_df.columns:
                 old_df[col] = 0
         m6_df = pd.concat([old_df[M6_COLUMNS], new_df], ignore_index=True)
-        m6_df["nDdate"] = m6_df["nDdate"].astype(str).str.strip()
+        m6_df["nDdate"] = m6_df["nDdate"].map(lambda value: str(value).strip())
         m6_df = m6_df.drop_duplicates(subset=["nDdate"], keep="last")
         m6_df = m6_df.sort_values("nDdate").reset_index(drop=True)
     else:
@@ -876,7 +876,7 @@ def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
     m6_df.to_csv(M6_CSV, index=False, encoding="utf-8-sig")
 
 
-def create_m4_prize_summary(records: list[DrawRecord], next_draw: NextDrawInfo | None = None) -> None:
+def create_m4_prize_summary(records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None) -> None:
     latest = records[-1]
     next_draw_date, week = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     row = {
@@ -901,7 +901,7 @@ def create_m4_prize_summary(records: list[DrawRecord], next_draw: NextDrawInfo |
             if col not in old_df.columns:
                 old_df[col] = ""
         m4_df = pd.concat([old_df[M4_COLUMNS], pd.DataFrame([row], columns=M4_COLUMNS)], ignore_index=True)
-        m4_df["last_draw_date"] = m4_df["last_draw_date"].astype(str).str.strip()
+        m4_df["last_draw_date"] = m4_df["last_draw_date"].map(lambda value: str(value).strip())
         m4_df = m4_df.drop_duplicates(subset=["last_draw_date"], keep="last")
         m4_df = m4_df.sort_values("last_draw_date").reset_index(drop=True)
     else:
@@ -921,7 +921,7 @@ def format_zh_date_with_week(date_text: str) -> str:
     return f"{format_zh_date(date_text)} ({week_text})"
 
 
-def create_m3_prize_results(records: list[DrawRecord], next_draw: NextDrawInfo | None = None) -> None:
+def create_m3_prize_results(records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None) -> None:
     latest = records[-1]
     next_draw_date, _ = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     numbers_text = ", ".join(str(num) for num in [*latest.numbers, latest.extra_number])

@@ -3,3380 +3,6 @@
     {
       "mode": "once_backtest",
       "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 20,
-      "check_date": "2026-08-08",
-      "check_nums": "[1,3,7,31,32,_,*_]",
-      "check_display_ball_count": 5.0,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 12
-                },
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 19,
-      "check_date": "2026-08-11",
-      "check_nums": "[11,19,28,36,_,_,*13]",
-      "check_display_ball_count": 4.5,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 18,
-      "check_date": "2026-08-13",
-      "check_nums": "[21,27,35,40,_,_,*23]",
-      "check_display_ball_count": 4.5,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 17,
-      "check_date": "2026-08-15",
-      "check_nums": "[4,16,25,27,28,33,*14]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 5.5,
-              "label": "5.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 4.5,
-              "label": "4.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.5,
-              "hit_label": "4.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 5.5,
-              "hit_label": "5.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 16,
-      "check_date": "2026-08-18",
-      "check_nums": "[7,8,9,14,39,_,*_]",
-      "check_display_ball_count": 5.0,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 15,
-      "check_date": "2026-08-20",
-      "check_nums": "[7,9,10,15,24,_,*34]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 14,
-      "check_date": "2026-08-22",
-      "check_nums": "[7,9,12,25,34,40,*29]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 13,
-      "check_date": "2026-08-25",
-      "check_nums": "[1,18,19,25,34,38,*7]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 12,
-      "check_date": "2026-08-27",
-      "check_nums": "[12,17,25,31,_,_,*35]",
-      "check_display_ball_count": 4.5,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 11,
-      "check_date": "2026-08-29",
-      "check_nums": "[4,7,8,11,26,30,*_]",
-      "check_display_ball_count": 6.0,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 10,
-      "check_date": "2026-09-05",
-      "check_nums": "[9,18,26,30,33,_,*28]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 9,
-      "check_date": "2026-09-08",
-      "check_nums": "[9,23,28,29,35,_,*38]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 12
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 8,
-      "check_date": "2026-09-10",
-      "check_nums": "[22,23,31,32,35,_,*34]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            },
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 7,
-      "check_date": "2026-09-12",
-      "check_nums": "[9,18,24,33,40,_,*11]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 12
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 6,
-      "check_date": "2026-09-15",
-      "check_nums": "[2,5,6,9,29,30,*19]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.5,
-              "label": "4.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.5,
-              "hit_label": "4.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 5,
-      "check_date": "2026-09-17",
-      "check_nums": "[4,17,31,_,_,_,*8]",
-      "check_display_ball_count": 3.5,
-      "check_raw_1_40_count_n1_to_n7": 4,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 4,
-      "check_date": "2026-09-19",
-      "check_nums": "[5,8,11,14,19,31,*21]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.5,
-              "label": "4.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            },
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.5,
-              "hit_label": "4.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 3,
-      "check_date": "2026-09-22",
-      "check_nums": "[2,34,35,_,_,_,*_]",
-      "check_display_ball_count": 3.0,
-      "check_raw_1_40_count_n1_to_n7": 3,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 2,
-      "check_date": "2026-09-26",
-      "check_nums": "[4,28,31,_,_,_,*19]",
-      "check_display_ball_count": 3.5,
-      "check_raw_1_40_count_n1_to_n7": 4,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 1,
-      "check_date": "2026-10-03",
-      "check_nums": "[8,23,29,31,34,_,*_]",
-      "check_display_ball_count": 5.0,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        12,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 5.0,
-              "label": "5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 12
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 5.0,
-              "hit_label": "5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 5.0,
-              "label": "5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            },
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 12
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 12,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 5.0,
-              "hit_label": "5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 5.0,
-              "hit_label": "5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 5.0,
-              "hit_label": "5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 50,
-      "check_date": "2026-05-26",
-      "check_nums": "[10,11,18,32,34,_,*33]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 5.0,
-              "label": "5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 5.0,
-              "hit_label": "5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            },
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 49,
-      "check_date": "2026-05-28",
-      "check_nums": "[7,13,25,35,40,_,*_]",
-      "check_display_ball_count": 5.0,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 48,
-      "check_date": "2026-05-30",
-      "check_nums": "[1,12,21,39,40,_,*_]",
-      "check_display_ball_count": 5.0,
-      "check_raw_1_40_count_n1_to_n7": 5,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                },
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 47,
-      "check_date": "2026-06-02",
-      "check_nums": "[9,14,16,35,37,_,*20]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 0.5,
-              "hit_label": "0.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 46,
-      "check_date": "2026-06-04",
-      "check_nums": "[4,7,15,37,_,_,*_]",
-      "check_display_ball_count": 4.0,
-      "check_raw_1_40_count_n1_to_n7": 4,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 45,
-      "check_date": "2026-06-06",
-      "check_nums": "[5,12,19,20,34,36,*_]",
-      "check_display_ball_count": 6.0,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 44,
-      "check_date": "2026-06-09",
-      "check_nums": "[8,11,14,26,33,40,*30]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                },
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 4.0,
-              "label": "4",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 4.0,
-              "hit_label": "4"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 43,
-      "check_date": "2026-06-11",
-      "check_nums": "[3,6,9,10,28,29,*27]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 30
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 42,
-      "check_date": "2026-06-14",
-      "check_nums": "[10,12,17,29,32,35,*1]",
-      "check_display_ball_count": 6.5,
-      "check_raw_1_40_count_n1_to_n7": 7,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.5,
-              "label": "3.5",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 18
-                },
-                {
-                  "periods": 1,
-                  "window_count": 24
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 3.5,
-              "hit_label": "3.5"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.5,
-              "hit_label": "2.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 0.0,
-              "hit_label": "0"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
-      "check_offset": 41,
-      "check_date": "2026-06-18",
-      "check_nums": "[6,20,26,31,34,_,*24]",
-      "check_display_ball_count": 5.5,
-      "check_raw_1_40_count_n1_to_n7": 6,
-      "eligible_for_prediction_eval": true,
-      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
-      "window_counts": [
-        16,
-        18,
-        24,
-        30,
-        40
-      ],
-      "config": {
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "auto_distribute_group_take": true,
-        "birthday_num_match_mode": ">=",
-        "combination_take_count": 1
-      },
-      "results": {
-        "abcd_prediction_candidates": {
-          "hit_windows": [
-            {
-              "hit_count": 3.0,
-              "label": "3",
-              "windows": [
-                {
-                  "periods": 1,
-                  "window_count": 40
-                }
-              ]
-            }
-          ],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 1.5,
-              "hit_label": "1.5"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 3.0,
-              "hit_label": "3"
-            }
-          ]
-        },
-        "high_freq_dan_combined": {
-          "hit_windows": [],
-          "best_by_window": [
-            {
-              "window_count": 16,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 18,
-              "hit_count": 1.0,
-              "hit_label": "1"
-            },
-            {
-              "window_count": 24,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 30,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            },
-            {
-              "window_count": 40,
-              "hit_count": 2.0,
-              "hit_label": "2"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "mode": "once_backtest",
-      "purpose": "predict_mode_manual_window_selection",
       "check_offset": 40,
       "check_date": "2026-06-20",
       "check_nums": "[5,7,10,15,16,_,*_]",
@@ -22443,6 +19069,2986 @@
               "window_count": 30,
               "hit_count": 5.0,
               "hit_label": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 30,
+      "check_date": "2026-07-16",
+      "check_nums": "[18,21,26,30,32,_,*27]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 29,
+      "check_date": "2026-07-21",
+      "check_nums": "[1,6,37,_,_,_,*8]",
+      "check_display_ball_count": 3.5,
+      "check_raw_1_40_count_n1_to_n7": 4,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 28,
+      "check_date": "2026-07-23",
+      "check_nums": "[4,7,15,29,32,_,*23]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 27,
+      "check_date": "2026-07-25",
+      "check_nums": "[5,7,12,26,31,_,*11]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 5.0,
+              "label": "5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 5.0,
+              "hit_label": "5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 5.0,
+              "hit_label": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 26,
+      "check_date": "2026-07-28",
+      "check_nums": "[4,7,14,20,21,30,*34]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 25,
+      "check_date": "2026-07-30",
+      "check_nums": "[1,2,14,17,23,35,*_]",
+      "check_display_ball_count": 6.0,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 24,
+      "check_date": "2026-08-01",
+      "check_nums": "[1,7,16,22,32,37,*23]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 23,
+      "check_date": "2026-08-04",
+      "check_nums": "[4,11,13,16,31,33,*38]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 22,
+      "check_date": "2026-08-06",
+      "check_nums": "[13,24,29,30,_,_,*3]",
+      "check_display_ball_count": 4.5,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 21,
+      "check_date": "2026-08-08",
+      "check_nums": "[1,3,7,31,32,_,*_]",
+      "check_display_ball_count": 5.0,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 20,
+      "check_date": "2026-08-11",
+      "check_nums": "[11,19,28,36,_,_,*13]",
+      "check_display_ball_count": 4.5,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 19,
+      "check_date": "2026-08-13",
+      "check_nums": "[21,27,35,40,_,_,*23]",
+      "check_display_ball_count": 4.5,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 18,
+      "check_date": "2026-08-15",
+      "check_nums": "[4,16,25,27,28,33,*14]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 17,
+      "check_date": "2026-08-18",
+      "check_nums": "[7,8,9,14,39,_,*_]",
+      "check_display_ball_count": 5.0,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 16,
+      "check_date": "2026-08-20",
+      "check_nums": "[7,9,10,15,24,_,*34]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 15,
+      "check_date": "2026-08-22",
+      "check_nums": "[7,9,12,25,34,40,*29]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 14,
+      "check_date": "2026-08-25",
+      "check_nums": "[1,18,19,25,34,38,*7]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 13,
+      "check_date": "2026-08-27",
+      "check_nums": "[12,17,25,31,_,_,*35]",
+      "check_display_ball_count": 4.5,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 12,
+      "check_date": "2026-08-29",
+      "check_nums": "[4,7,8,11,26,30,*_]",
+      "check_display_ball_count": 6.0,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 11,
+      "check_date": "2026-09-05",
+      "check_nums": "[9,18,26,30,33,_,*28]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 10,
+      "check_date": "2026-09-08",
+      "check_nums": "[9,23,28,29,35,_,*38]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 9,
+      "check_date": "2026-09-10",
+      "check_nums": "[22,23,31,32,35,_,*34]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 8,
+      "check_date": "2026-09-12",
+      "check_nums": "[9,18,24,33,40,_,*11]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 0.5,
+              "hit_label": "0.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 7,
+      "check_date": "2026-09-15",
+      "check_nums": "[2,5,6,9,29,30,*19]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 6,
+      "check_date": "2026-09-17",
+      "check_nums": "[4,17,31,_,_,_,*8]",
+      "check_display_ball_count": 3.5,
+      "check_raw_1_40_count_n1_to_n7": 4,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 0.0,
+              "hit_label": "0"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 5,
+      "check_date": "2026-09-19",
+      "check_nums": "[5,8,11,14,19,31,*21]",
+      "check_display_ball_count": 6.5,
+      "check_raw_1_40_count_n1_to_n7": 7,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                }
+              ]
+            },
+            {
+              "hit_count": 3.5,
+              "label": "3.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.5,
+              "hit_label": "3.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 4,
+      "check_date": "2026-09-22",
+      "check_nums": "[2,34,35,_,_,_,*_]",
+      "check_display_ball_count": 3.0,
+      "check_raw_1_40_count_n1_to_n7": 3,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 3,
+      "check_date": "2026-09-26",
+      "check_nums": "[4,28,31,_,_,_,*19]",
+      "check_display_ball_count": 3.5,
+      "check_raw_1_40_count_n1_to_n7": 4,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 1.0,
+              "hit_label": "1"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 1.5,
+              "hit_label": "1.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 2.5,
+              "hit_label": "2.5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 2,
+      "check_date": "2026-10-03",
+      "check_nums": "[8,23,29,31,34,_,*_]",
+      "check_display_ball_count": 5.0,
+      "check_raw_1_40_count_n1_to_n7": 5,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 3.0,
+              "label": "3",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 2.0,
+              "hit_label": "2"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 3.0,
+              "hit_label": "3"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 5.0,
+              "label": "5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 5.0,
+              "hit_label": "5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 5.0,
+              "hit_label": "5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 5.0,
+              "hit_label": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "mode": "once_backtest",
+      "purpose": "predict_mode_manual_window_selection",
+      "check_offset": 1,
+      "check_date": "2026-10-06",
+      "check_nums": "[9,29,31,34,36,_,*28]",
+      "check_display_ball_count": 5.5,
+      "check_raw_1_40_count_n1_to_n7": 6,
+      "eligible_for_prediction_eval": true,
+      "eligibility_rule": "N1..N7 開出 1-40 號達 3 球或以上",
+      "window_counts": [
+        16,
+        18,
+        24,
+        30
+      ],
+      "config": {
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "auto_distribute_group_take": true,
+        "birthday_num_match_mode": ">=",
+        "combination_take_count": 1
+      },
+      "results": {
+        "abcd_prediction_candidates": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 24
+                },
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            },
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 4.0,
+              "hit_label": "4"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            }
+          ]
+        },
+        "high_freq_dan_combined": {
+          "hit_windows": [
+            {
+              "hit_count": 4.5,
+              "label": "4.5",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 16
+                },
+                {
+                  "periods": 1,
+                  "window_count": 18
+                },
+                {
+                  "periods": 1,
+                  "window_count": 24
+                }
+              ]
+            },
+            {
+              "hit_count": 4.0,
+              "label": "4",
+              "windows": [
+                {
+                  "periods": 1,
+                  "window_count": 30
+                }
+              ]
+            }
+          ],
+          "best_by_window": [
+            {
+              "window_count": 16,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            },
+            {
+              "window_count": 18,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            },
+            {
+              "window_count": 24,
+              "hit_count": 4.5,
+              "hit_label": "4.5"
+            },
+            {
+              "window_count": 30,
+              "hit_count": 4.0,
+              "hit_label": "4"
             }
           ]
         }

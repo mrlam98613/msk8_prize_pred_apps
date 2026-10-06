@@ -3,6 +3,7 @@ import csv
 import random
 
 
+from typing import Optional
 CURRENT_DIR = Path(__file__).resolve().parent
 PRED_17_BALLS_CSV = CURRENT_DIR / "pred_17_balls.csv"
 
@@ -187,7 +188,7 @@ def build_lotto_num(pred_17_balls: list[int]) -> list[int]:
     return LOTTO_NUM
 
 
-def split_lotto_num(lotto_num: list[int]) -> tuple[list[int], int | None]:
+def split_lotto_num(lotto_num: list[int]) -> tuple[list[int], Optional[int]]:
     """將 lotto_num 拆成正號與特號；最後一個 0 代表沒有特號。"""
     clean_nums = [num for num in lotto_num if num is not None]
     if clean_nums and clean_nums[-1] == 0:
@@ -219,7 +220,7 @@ def safe_comb(n: int, r: int) -> int:
     return result
 
 
-def prize_counts_for_ticket(ticket: tuple[int, ...], lotto_list: list[int], special_num: int | None) -> tuple[str, int]:
+def prize_counts_for_ticket(ticket: tuple[int, ...], lotto_list: list[int], special_num: Optional[int]) -> tuple[str, int]:
     """計算一組 7 字複式拆 7 注後，1-7 獎中獎注數及派彩。"""
     normal_hit = sum(1 for num in ticket if num in set(lotto_list))
     special_hit = 1 if special_num is not None and special_num in ticket else 0
@@ -243,7 +244,7 @@ def prize_counts_for_ticket(ticket: tuple[int, ...], lotto_list: list[int], spec
     return "沒有中獎", 0
 
 
-def pred_hit_summary(pred_17_balls: list[int], lotto_list: list[int], special_num: int | None) -> tuple[list[int], list[int], float]:
+def pred_hit_summary(pred_17_balls: list[int], lotto_list: list[int], special_num: Optional[int]) -> tuple[list[int], list[int], float]:
     """計算預測 17 球整體命中核對開獎號的球數。"""
     pred_set = set(pred_17_balls)
     normal_hits = [num for num in lotto_list if num in pred_set]
@@ -252,7 +253,7 @@ def pred_hit_summary(pred_17_balls: list[int], lotto_list: list[int], special_nu
     return normal_hits, special_hits, hit_score
 
 
-def print_pred_hit_summary(pred_17_balls: list[int], lotto_list: list[int], special_num: int | None) -> None:
+def print_pred_hit_summary(pred_17_balls: list[int], lotto_list: list[int], special_num: Optional[int]) -> None:
     """打印 C 部份：預測 17 球整體命中核對開獎號。"""
     pred_normal_hits, pred_special_hits, pred_hit_score = pred_hit_summary(pred_17_balls, lotto_list, special_num)
     print("C. 預測球包含核對開獎號")

@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 import csv
 import sys
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -173,14 +173,14 @@ def score_window_summary(
     return scores
 
 
-def best_window_by_score(scores: dict[int, float]) -> int | None:
+def best_window_by_score(scores: dict[int, float]) -> Optional[int]:
     """取分數最高的窗口期；同分時取較短窗口。"""
     if not scores:
         return None
     return max(scores, key=lambda window_count: (scores[window_count], -window_count))
 
 
-def read_window_hit_score(path: Path) -> tuple[list[int], dict[int, float], int | None]:
+def read_window_hit_score(path: Path) -> tuple[list[int], dict[int, float], Optional[int]]:
     """讀取窗口期命中統計並計算最佳窗口期。"""
     window_counts, rows = read_window_hit_summary(path)
     scores = score_window_summary(window_counts, rows)
@@ -235,7 +235,7 @@ def print_recent_hit_reference() -> None:
 
 def choose_window(
     candidate_windows: list[int],
-    default_window: int | None,
+    default_window: Optional[int],
 ) -> int:
     """互動環境讓用戶選窗口期；非互動時使用最佳窗口。"""
     unique_windows = sorted(set(candidate_windows))

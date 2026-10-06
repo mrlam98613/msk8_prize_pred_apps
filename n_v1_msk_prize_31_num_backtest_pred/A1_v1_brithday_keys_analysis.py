@@ -1,6 +1,6 @@
 from pathlib import Path
 import csv
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 """
 A1_v1_brithday_keys_analysis：
@@ -88,7 +88,7 @@ def parse_nums(row: dict[str, str]) -> list[int]:
     return nums
 
 
-def parse_special_num(row: dict[str, str]) -> int | None:
+def parse_special_num(row: dict[str, str]) -> Optional[int]:
     """抽取 N7 特號。"""
 
     try:

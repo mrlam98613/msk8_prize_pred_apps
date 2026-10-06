@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import csv
 import html
+from collections import Counter
 from pathlib import Path
-from typing import TypedDict
+from typing import Optional, TypedDict, Union
 
 import streamlit as st
 
@@ -19,6 +20,13 @@ COMBINATION_TAKE_COUNT = 4
 BIRTHDAY_NUM_MATCH_MODE = ">="
 PRIZE_OPTION = 3
 PRIZE_PRINT_SHOW = True
+PRINT_ABCD_PROPERTY_ANALYSIS = True
+PRINT_HIGH_FREQ_PAIR_ANALYSIS = True
+PRINT_WEAK_NUM_ANALYSIS = True
+HIGH_FREQ_MIN_PAIR_COUNT = 2
+HIGH_FREQ_DAN_TAKE = 5
+HIGH_FREQ_PARTNER_TAKE = 9
+HIGH_FREQ_PARTNER_POOL_TAKE = 9
 DEFAULT_BACKTEST_DRAW_COUNT = 13
 DEFAULT_SELECT_GROUPS = "1,2,3,4"
 DEFAULT_COMBINATION_TAKE_COUNT = 4
@@ -45,7 +53,7 @@ GROUPS = {
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
-    special: int | None
+    special: Optional[int]
     prize_count: float
 
 
@@ -79,7 +87,7 @@ def parse_int_list(raw_text: str) -> list[int]:
     return values
 
 
-def format_input_numbers(values: list[int] | tuple[int, ...]) -> str:
+def format_input_numbers(values: Union[list[int], tuple[int, ...]]) -> str:
     return ",".join(str(value) for value in values)
 
 
@@ -117,6 +125,14 @@ def selected_group_codes_text() -> str:
     return "(" + ",".join(GROUPS[group_id][0] for group_id in SELECT_GROUPS) + ")"
 
 
+def selected_group_ids_text() -> str:
+    return "(" + ", ".join(str(group_id) for group_id in SELECT_GROUPS) + ")"
+
+
+def selected_group_ids() -> tuple[int, ...]:
+    return tuple(SELECT_GROUPS)
+
+
 def selected_normal_nums(row: DrawRow) -> list[int]:
     nums: list[int] = []
     for _code, _name, start_num, end_num in selected_groups():
@@ -124,7 +140,12 @@ def selected_normal_nums(row: DrawRow) -> list[int]:
     return sorted(set(nums))
 
 
-def selected_special(row: DrawRow) -> int | None:
+def group_normal_nums(row: DrawRow, group_id: int) -> list[int]:
+    _code, _name, start_num, end_num = GROUPS[group_id]
+    return sorted(num for num in row["nums"] if start_num <= num <= end_num)
+
+
+def selected_special(row: DrawRow) -> Optional[int]:
     special = row["special"]
     if special is None:
         return None
@@ -132,6 +153,14 @@ def selected_special(row: DrawRow) -> int | None:
         if start_num <= special <= end_num:
             return special
     return None
+
+
+def group_special(row: DrawRow, group_id: int) -> Optional[int]:
+    special = row["special"]
+    if special is None:
+        return None
+    _code, _name, start_num, end_num = GROUPS[group_id]
+    return special if start_num <= special <= end_num else None
 
 
 def display_ball_count(row: DrawRow) -> float:
@@ -150,7 +179,7 @@ def format_prize_count(value: float) -> str:
     return str(int(value)) if value.is_integer() else f"{value:g}"
 
 
-def format_nums(nums: list[int], special: int | None = None) -> str:
+def format_nums(nums: list[int], special: Optional[int] = None) -> str:
     parts = [str(num) for num in nums]
     if special is not None:
         parts.append(f"*{special}")
@@ -163,6 +192,15 @@ def is_matched(count: int) -> bool:
     if BIRTHDAY_NUM_MATCH_MODE == "<=":
         return count <= COMBINATION_TAKE_COUNT
     return count >= COMBINATION_TAKE_COUNT
+
+
+def abcd_property_row_count(row: DrawRow) -> int:
+    count = len(selected_normal_nums(row))
+    return count + (1 if selected_special(row) is not None else 0)
+
+
+def is_abcd_property_row_matched(row: DrawRow) -> bool:
+    return is_matched(abcd_property_row_count(row))
 
 
 def backtest_rows(draws: list[DrawRow]) -> list[tuple[int, DrawRow]]:
@@ -236,6 +274,145 @@ def render_summary(period_rows: list[tuple[int, DrawRow]]) -> None:
     )
 
 
+def group_window_num_counts(
+    period_rows: list[tuple[int, DrawRow]],
+    matched_only: bool = False,
+) -> dict[int, Counter[int]]:
+    counters: dict[int, Counter[int]] = {group_id: Counter() for group_id in GROUPS}
+    for _row_index, row in period_rows:
+        if matched_only and not is_abcd_property_row_matched(row):
+            continue
+        for group_id in GROUPS:
+            counters[group_id].update(group_normal_nums(row, group_id))
+            special = group_special(row, group_id)
+            if special is not None:
+                counters[group_id][special] += 1
+    return counters
+
+
+def missing_nums_text(period_rows: list[tuple[int, DrawRow]]) -> str:
+    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    parts: list[str] = []
+    for group_id in selected_group_ids():
+        code, _name, start_num, end_num = GROUPS[group_id]
+        missing_nums = [
+            num
+            for num in range(start_num, end_num + 1)
+            if group_counts[group_id][num] == 0
+        ]
+        parts.append(f"{code}{format_nums(missing_nums)}")
+    return "ABCD 沒出現球號 = " + "，".join(parts)
+
+
+def high_freq_pair_data(period_rows: list[tuple[int, DrawRow]]) -> dict[int, tuple[list[int], list[int]]]:
+    result: dict[int, tuple[list[int], list[int]]] = {}
+
+    for group_id in selected_group_ids():
+        pair_rows: list[list[int]] = []
+        for _row_index, row in period_rows:
+            if not is_abcd_property_row_matched(row):
+                continue
+            nums = group_normal_nums(row, group_id)
+            special = group_special(row, group_id)
+            pair_nums = sorted(set(nums + ([special] if special is not None else [])))
+            if len(pair_nums) >= 2:
+                pair_rows.append(pair_nums)
+
+        dan_counter: Counter[int] = Counter()
+        partner_counter_by_dan: dict[int, Counter[int]] = {}
+        for nums in pair_rows:
+            for dan_num in nums:
+                dan_counter[dan_num] += 1
+                partner_counter = partner_counter_by_dan.setdefault(dan_num, Counter())
+                for partner_num in nums:
+                    if partner_num != dan_num:
+                        partner_counter[partner_num] += 1
+
+        dan_nums = [
+            num
+            for num, count in sorted(dan_counter.items(), key=lambda item: (-item[1], item[0]))
+            if count > HIGH_FREQ_MIN_PAIR_COUNT
+        ][:HIGH_FREQ_DAN_TAKE]
+        if not dan_nums:
+            result[group_id] = ([], [])
+            continue
+
+        partner_counter: Counter[int] = Counter()
+        for dan_num in dan_nums:
+            partner_counter.update(partner_counter_by_dan.get(dan_num, Counter()))
+        for dan_num in dan_nums:
+            partner_counter.pop(dan_num, None)
+
+        partner_pool = sorted(
+            partner_counter,
+            key=lambda partner_num: (-partner_counter[partner_num], partner_num),
+        )[:HIGH_FREQ_PARTNER_POOL_TAKE]
+        result[group_id] = (dan_nums, sorted(partner_pool[:HIGH_FREQ_PARTNER_TAKE]))
+
+    return result
+
+
+def high_freq_pair_text(pair_data: dict[int, tuple[list[int], list[int]]]) -> list[str]:
+    if not PRINT_HIGH_FREQ_PAIR_ANALYSIS:
+        return []
+
+    dan_parts: list[str] = []
+    partner_parts: list[str] = []
+    for group_id in selected_group_ids():
+        code = GROUPS[group_id][0]
+        dan_nums, partner_nums = pair_data.get(group_id, ([], []))
+        dan_parts.append(f"{code}{format_nums(dan_nums)}")
+        partner_parts.append(f"{code}{format_nums(partner_nums)}")
+    return [
+        "ABCD 高頻膽號 = " + "，".join(dan_parts),
+        "ABCD 高頻配腳號 = " + "，".join(partner_parts),
+    ]
+
+
+def weak_nums_text(
+    period_rows: list[tuple[int, DrawRow]],
+    pair_data: dict[int, tuple[list[int], list[int]]],
+) -> list[str]:
+    if not PRINT_WEAK_NUM_ANALYSIS:
+        return []
+
+    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    parts: list[str] = []
+    for group_id in selected_group_ids():
+        code, _name, start_num, end_num = GROUPS[group_id]
+        dan_nums, partner_nums = pair_data.get(group_id, ([], []))
+        assigned_nums = set(dan_nums) | set(partner_nums)
+        weak_nums = [
+            num
+            for num in range(start_num, end_num + 1)
+            if group_counts[group_id][num] > 0 and num not in assigned_nums
+        ]
+        parts.append(f"{code}{format_nums(weak_nums)}")
+    return ["ABCD 弱號 = " + "，".join(parts)]
+
+
+def render_abcd_property_analysis(period_rows: list[tuple[int, DrawRow]]) -> None:
+    if not PRINT_ABCD_PROPERTY_ANALYSIS:
+        return
+
+    pair_data = high_freq_pair_data(period_rows)
+    section_title("A/B/C/D 選組分析屬性")
+    st.markdown(
+        f"**{selected_group_ids_text()} A/B/C/D 選組分析屬性**  \n"
+        f"ABCD 屬性條件：各組獨立，每期合併分組總球數 "
+        f"{BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球 (包括特號)"
+    )
+    st.markdown("/> -------------")
+    lines = [missing_nums_text(period_rows)]
+    lines.extend(high_freq_pair_text(pair_data))
+    lines.extend(weak_nums_text(period_rows, pair_data))
+    for line in lines:
+        st.markdown(
+            f'<div class="prr-v3-property-line">{html.escape(line)}</div>',
+            unsafe_allow_html=True,
+        )
+
+
 def reset_param_state() -> None:
     for key, value in PARAM_STATE_KEYS.items():
         st.session_state[key] = value
@@ -276,19 +453,20 @@ def main() -> None:
             margin: 0.45rem 0 0.85rem;
         }
         .prr-v3-table {
-            width: max-content;
+            width: 100%;
             min-width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
             background: #ffffff !important;
             color: #000000 !important;
-            font-size: 0.84rem;
+            font-size: 0.78rem;
         }
         .prr-v3-table th,
         .prr-v3-table td {
             background: #ffffff !important;
             color: #000000 !important;
             border-bottom: 1px solid #dddddd;
-            padding: 4px 5px;
+            padding: 3px 4px;
             text-align: left;
             white-space: nowrap;
         }
@@ -298,39 +476,50 @@ def main() -> None:
         }
         .prr-v3-result-table th:nth-child(1),
         .prr-v3-result-table td:nth-child(1) {
-            width: 3.1rem;
+            width: 2.9rem;
         }
         .prr-v3-result-table th:nth-child(2),
         .prr-v3-result-table td:nth-child(2) {
-            width: 5.8rem;
+            width: 5.4rem;
         }
         .prr-v3-result-table th:nth-child(3),
         .prr-v3-result-table td:nth-child(3) {
-            max-width: 8.8rem;
+            width: 7.2rem;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .prr-v3-result-table th:nth-child(4),
         .prr-v3-result-table td:nth-child(4) {
-            width: 3.4rem;
+            width: 2.9rem;
             text-align: center;
         }
         .prr-v3-result-table th:nth-child(5),
         .prr-v3-result-table td:nth-child(5) {
-            width: 4.2rem;
+            width: 3.5rem;
             text-align: center;
+        }
+        .prr-v3-property-line {
+            margin: 0.34rem 0;
+            font-size: 1rem;
+            line-height: 1.55;
+            font-weight: 700;
+            color: #111111;
+            overflow-wrap: anywhere;
         }
         @media (max-width: 430px) {
             .prr-v3-table {
-                font-size: 0.74rem;
+                font-size: 0.68rem;
             }
             .prr-v3-table th,
             .prr-v3-table td {
-                padding: 3px 4px;
+                padding: 2px 3px;
             }
             .prr-v3-result-table th:nth-child(3),
             .prr-v3-result-table td:nth-child(3) {
-                max-width: 7.5rem;
+                width: 6.2rem;
+            }
+            .prr-v3-property-line {
+                font-size: 0.94rem;
             }
         }
         </style>
@@ -382,8 +571,8 @@ def main() -> None:
         "顯示中獎注數欄位",
         key="prr_v3_prize_print_show",
     )
-    submitted = st.button("執行查詢", key="prr_v3_submit", type="primary", use_container_width=True)
-    st.button("Reset", key="prr_v3_reset", use_container_width=True, on_click=reset_param_state)
+    submitted = st.button("執行查詢", key="prr_v3_submit", type="primary")
+    st.button("Reset", key="prr_v3_reset", on_click=reset_param_state)
 
     if not submitted:
         st.info("輸入參數後按「執行查詢」。")
@@ -444,3 +633,4 @@ def main() -> None:
     section_title(f"近 {BACKTEST_DRAW_COUNT_LIST[0]} 期開獎紀錄")
     rows = detail_rows(draws, period_rows)
     render_compact_table(rows, table_class="prr-v3-table prr-v3-result-table")
+    render_abcd_property_analysis(period_rows)

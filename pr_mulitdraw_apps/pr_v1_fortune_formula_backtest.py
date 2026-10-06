@@ -1,7 +1,7 @@
 from pathlib import Path
 import csv
 from itertools import combinations
-from typing import TypedDict
+from typing import Optional, TypedDict, Union
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -28,7 +28,7 @@ PRINT_BACKTEST_DETAIL = False
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
-    special: int | None
+    special: Optional[int]
     prize_count: float
 
 
@@ -82,7 +82,7 @@ def read_draws() -> list[DrawRow]:
     return [row for row in [parse_m6_row(raw) for raw in read_csv_rows(M6_CSV)] if row["date"]]
 
 
-def format_nums(nums: list[int] | tuple[int, ...]) -> str:
+def format_nums(nums: Union[list[int], tuple[int, ...]]) -> str:
     """格式化號碼列表。"""
     return "[" + ",".join(str(num) for num in nums) + "]"
 

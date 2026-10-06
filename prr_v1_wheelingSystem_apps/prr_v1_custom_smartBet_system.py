@@ -2,7 +2,7 @@ import itertools
 import random
 import re
 import unicodedata
-from typing import TypedDict
+from typing import Optional, TypedDict, Union
 
 '''
 用戶自選智慧 1 or 2 膽拖 12 配腳 ，投注系統
@@ -119,7 +119,7 @@ def input_custom_numbers() -> tuple[list[int], list[int]]:
         return fixed_nums, drag_nums
 
 
-def input_max_tickets_limit() -> int | None:
+def input_max_tickets_limit() -> Optional[int]:
     """輸入注數上限。"""
     while True:
         raw_text = input("每個方案最多計算多少注？直接 Enter = 不限制：").strip()
@@ -186,7 +186,7 @@ def generate_custom_wheel(
     drag_nums: list[int],
     match_if: int,
     guarantee: int,
-    max_limit: int | None,
+    max_limit: Optional[int],
     drag_take_count: int,
 ) -> tuple[list[tuple[int, ...]], set[tuple[int, ...]]]:
     """用 膽 + N 拖的可用注單，生成符合保證條件的組合。"""
@@ -221,7 +221,7 @@ def generate_custom_wheel(
     return selected_tickets, uncovered_subsets
 
 
-def calculate_option_results(fixed_nums: list[int], drag_nums: list[int], max_limit: int | None) -> list[CalculatedOption]:
+def calculate_option_results(fixed_nums: list[int], drag_nums: list[int], max_limit: Optional[int]) -> list[CalculatedOption]:
     """計算 6 字單式與 7 字複式的保證方案摘要。"""
     results: list[CalculatedOption] = []
     option_no = 1
@@ -320,7 +320,7 @@ def print_ticket_details(result: CalculatedOption) -> None:
     print("-" * 52)
 
 
-def format_nums(nums: list[int] | tuple[int, ...]) -> str:
+def format_nums(nums: Union[list[int], tuple[int, ...]]) -> str:
     """格式化號碼列表。"""
     return "[" + ",".join(f"{num:02d}" for num in nums) + "]"
 

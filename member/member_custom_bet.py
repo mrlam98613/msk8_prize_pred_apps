@@ -11,6 +11,7 @@ import sys
 import streamlit as st
 
 
+from typing import Optional
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -282,7 +283,7 @@ def generate_numbers(seed_numbers: list[int], bet_size: int) -> list[int]:
 def generate_banker_leg_numbers(
     seed_numbers: list[int],
     banker_count: int = 1,
-    leg_count: int | None = None,
+    leg_count: Optional[int] = None,
 ) -> tuple[list[int], list[int]]:
     """用種子優先補膽，再補足最少配腳。"""
 
@@ -520,8 +521,8 @@ def save_custom_bet(
     bet_unit: int,
     total_bets: int,
     total_cost: int,
-    bankers: list[int] | None = None,
-    legs: list[int] | None = None,
+    bankers: Optional[list[int]] = None,
+    legs: Optional[list[int]] = None,
 ) -> bool:
     """儲存自定投注到會員投注紀錄。"""
 
@@ -716,7 +717,6 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
         "重設選號",
         key="clear_banker_leg_seed_numbers",
         disabled=False,
-        width="stretch",
         on_click=clear_banker_leg_custom_bet,
     )
 
@@ -725,7 +725,6 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
         "膽拖不補發",
         key="custom_generate_banker_leg_numbers",
         disabled=True,
-        width="stretch",
     )
 
     can_save = (
@@ -739,7 +738,6 @@ def render_banker_leg_bet_page(email: str, bet_date: str, bet_unit: int) -> None
         "儲存至會員投注紀錄",
         key="save_banker_leg_bet",
         disabled=not can_save,
-        width="stretch",
         on_click=save_banker_leg_custom_bet,
         args=(email, bet_date, combined_nums, bankers, legs, bet_unit, total_bets, total_cost),
     )
@@ -807,7 +805,6 @@ def render_custom_bet_page(email: str) -> None:
         "重設選號",
         key="clear_custom_seed_numbers",
         disabled=not bool(seeds),
-        width="stretch",
         on_click=clear_standard_custom_bet,
     )
 
@@ -816,7 +813,6 @@ def render_custom_bet_page(email: str) -> None:
         "補發未完成選球",
         key="custom_generate_numbers",
         disabled=not bool(seeds),
-        width="stretch",
         on_click=generate_standard_custom_bet,
         args=(seeds, bet_size, signature),
     )
@@ -831,7 +827,6 @@ def render_custom_bet_page(email: str) -> None:
         "儲存至會員投注紀錄",
         key="save_custom_bet",
         disabled=not can_save,
-        width="stretch",
         on_click=save_standard_custom_bet,
         args=(email, bet_date, bet_type, nums, bet_unit, total_bets, total_cost),
     )

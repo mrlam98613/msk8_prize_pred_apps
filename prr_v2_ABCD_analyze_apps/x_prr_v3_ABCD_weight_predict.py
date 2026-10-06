@@ -5,7 +5,7 @@ from pathlib import Path
 import csv
 import json
 import random
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -46,12 +46,12 @@ PRINT_HIGH_FREQ_PAIR_ANALYSIS = True
 HIGH_FREQ_MIN_PAIR_COUNT = 2 # 高頻配對最少出現次數
 HIGH_FREQ_DAN_TAKE = 2 # 高頻膽號選取數量
 HIGH_FREQ_PARTNER_TAKE = 5 # 高頻配腳號選取數量
-HIGH_FREQ_PARTNER_RANDOM_SEED: int | None = None # 高頻配腳隨機種子；None 表示每次執行都不同。
+HIGH_FREQ_PARTNER_RANDOM_SEED: Optional[int] = None # 高頻配腳隨機種子；None 表示每次執行都不同。
 
 # predict mode 最後投注分組顯示。
 PRINT_PREDICT_BET_GROUPS = True
 RANDOM_BET_GROUP_TAKE = 9 # 在下期預測顯示中，系統在總候選球中，隨機取出 9 球。
-RANDOM_BET_GROUP_SEED: int | None = 20261003
+RANDOM_BET_GROUP_SEED: Optional[int] = 20261003
 
 
 # A/B/C/D 每組預測球數，預設 4 + 5 + 5 + 4 = 18 球。
@@ -73,7 +73,7 @@ GROUPS = {
 class DrawRow(TypedDict):
     date: str
     nums: list[int]
-    special: int | None
+    special: Optional[int]
 
 
 class NumWeight(TypedDict):
@@ -82,7 +82,7 @@ class NumWeight(TypedDict):
     recent_score: float
     repeat_score: float
     score: float
-    latest_rank: int | None
+    latest_rank: Optional[int]
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -132,7 +132,7 @@ def read_next_draw_date() -> str:
     return rows[-1].get("next_draw_date", "") if rows else ""
 
 
-def format_nums(nums: list[int], special: int | None = None) -> str:
+def format_nums(nums: list[int], special: Optional[int] = None) -> str:
     """將球號列表格式化為 [1,2,3]；特別號會以 * 標示。"""
     parts = [str(num) for num in nums]
     if special is not None:
@@ -162,7 +162,7 @@ def group_nums(row: DrawRow, group_id: int) -> list[int]:
     return sorted(num for num in row["nums"] if start_num <= num <= end_num)
 
 
-def group_special(row: DrawRow, group_id: int) -> int | None:
+def group_special(row: DrawRow, group_id: int) -> Optional[int]:
     """取出某期特別號是否落在指定 ABCD 組範圍內。"""
     _code, _name, start_num, end_num = GROUPS[group_id]
     special = row["special"]
@@ -171,7 +171,7 @@ def group_special(row: DrawRow, group_id: int) -> int | None:
     return special if start_num <= special <= end_num else None
 
 
-def display_ball_count(normal_count: int, special: int | None) -> float:
+def display_ball_count(normal_count: int, special: Optional[int]) -> float:
     """計算顯示用球數；同組正號達 3 球且有特別號時加 0.5。"""
     if special is not None and normal_count >= 3:
         return normal_count + 0.5
@@ -349,7 +349,7 @@ def save_trace_record(record: dict[str, object]) -> None:
         json.dump(trace, handle, ensure_ascii=False, indent=2)
 
 
-def latest_trace_record(trace: dict[str, object]) -> dict[str, object] | None:
+def latest_trace_record(trace: dict[str, object]) -> Optional[dict[str, object]]:
     """從 trace 資料中取出最後一筆紀錄。"""
     records = trace.get("records")
     if isinstance(records, list) and records:
@@ -358,7 +358,7 @@ def latest_trace_record(trace: dict[str, object]) -> dict[str, object] | None:
     return None
 
 
-def print_old_new_compare(old_record: dict[str, object] | None, new_record: dict[str, object]) -> None:
+def print_old_new_compare(old_record: Optional[dict[str, object]], new_record: dict[str, object]) -> None:
     """在開關啟用時，列印上一筆與新一筆權重分數差異。"""
     if not PRINT_WEIGHT_COMPARE:
         return
@@ -458,7 +458,7 @@ def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tup
 
 def high_freq_pair_text(
     window_rows: list[tuple[int, DrawRow]],
-    pair_data: dict[int, tuple[list[int], list[int]]] | None = None,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
 ) -> list[str]:
     """分析合條件窗口結果中的高頻膽號與伴號。"""
     if not PRINT_HIGH_FREQ_PAIR_ANALYSIS:
@@ -484,7 +484,7 @@ def high_freq_pair_text(
     ]
 
 
-def recent_draw_nums(row: DrawRow | None) -> set[int]:
+def recent_draw_nums(row: Optional[DrawRow]) -> set[int]:
     """取得某期全部正號與特別號，用於避開最近一期重複號。"""
     if row is None:
         return set()
