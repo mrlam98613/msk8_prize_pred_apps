@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+from typing import Optional
 
 import streamlit as st
 
@@ -18,7 +19,6 @@ from db import (  # noqa: E402
     hash_password,
     init_db,
     init_member_bet_db,
-    is_valid_local_phone,
     update_member_simple,
 )
 from css import white_black_style  # noqa: E402
@@ -27,13 +27,20 @@ from css import white_black_style  # noqa: E402
 ADMIN_EMAIL = "98687989"
 ADMIN_PHONE = "98687989"
 ADMIN_PASSWORD = "7989"
-AUTH_TABS = ["會員登入", "會員註冊", "忘記登入"]
+AUTH_TABS = ["會員登入", "會員註冊", "忘記電話號"]
 
 
-def normalize_phone(phone: str | None) -> str:
-    """統一整理電話號碼，登入和註冊都只接受 8 位本地號碼。"""
+def normalize_phone(phone: Optional[str]) -> str:
+    """統一整理電話號碼；登入頁只接受數字，最少 8 位。"""
 
     return str(phone or "").strip()
+
+
+def is_valid_member_phone(phone: str) -> bool:
+    """會員登入頁電話格式：只接受數字，長度最少 8 位，不輸入地區。"""
+
+    normalized_phone = normalize_phone(phone)
+    return normalized_phone.isdigit() and len(normalized_phone) >= 8
 
 
 def auto_password_from_phone(phone: str) -> str:
@@ -130,19 +137,19 @@ def render_admin_member_manager() -> None:
         if st.session_state.get(f"editing_member_{member_id}"):
             with st.container(border=True):
                 new_phone = st.text_input(
-                    "新電話號碼（8 位數字，不用地區號）",
+                    "新電話號碼（最少 8 位數字，不用地區號）",
                     value=phone,
                     key=f"phone_{member_id}",
                 )
                 new_nickname = st.text_input(
-                    "會員暱稱（可不填）",
+                    "會員暱稱",
                     value=nickname,
                     key=f"nickname_{member_id}",
                 )
                 if st.button("確認修改", key=f"save_member_{member_id}"):
                     new_phone = normalize_phone(new_phone)
-                    if not is_valid_local_phone(new_phone):
-                        st.error("手機號碼請輸入 8 位數字，不需要地區號。")
+                    if not is_valid_member_phone(new_phone):
+                        st.error("手機號碼請輸入最少 8 位數字，不需要地區號。")
                     else:
                         update_member_simple(member_id, new_phone, new_nickname)
                         st.success("會員資料已更新。")
@@ -167,15 +174,15 @@ def render_login_tab() -> None:
     if notice:
         st.success(notice)
 
-    phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="login_phone")
+    phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="login_phone")
     password = st.text_input("登入密碼（電話號碼後 4 位）", type="password", key="member_login_password")
 
     if st.button("登入", key="login_btn", type="primary"):
         phone = normalize_phone(phone)
         password = str(password or "")
 
-        if not is_valid_local_phone(phone):
-            st.error("電話號碼請輸入 8 位數字，不需要地區號。")
+        if not is_valid_member_phone(phone):
+            st.error("電話號碼請輸入最少 8 位數字，不需要地區號。")
             return
 
         member = find_member_by_phone(phone)
@@ -191,15 +198,18 @@ def render_login_tab() -> None:
 def render_register_tab() -> None:
     st.header("會員註冊")
 
-    reg_phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="reg_phone")
-    reg_nickname = st.text_input("會員暱稱（可不填）", key="reg_nickname")
+    reg_phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="reg_phone")
+    reg_nickname = st.text_input("會員暱稱（必須輸入，中英文都可以）", key="reg_nickname")
 
     if st.button("註冊", key="reg_btn", type="primary"):
         reg_phone = normalize_phone(reg_phone)
+        reg_nickname = str(reg_nickname or "").strip()
         reg_password = auto_password_from_phone(reg_phone)
 
-        if not is_valid_local_phone(reg_phone):
-            st.warning("手機號碼請輸入 8 位數字，不需要地區號。")
+        if not reg_nickname:
+            st.warning("請輸入會員暱稱，中英文都可以。")
+        elif not is_valid_member_phone(reg_phone):
+            st.warning("手機號碼請輸入最少 8 位數字，不需要地區號。")
         elif find_member_by_phone(reg_phone):
             st.warning("此電話號碼已註冊。")
         else:
@@ -213,9 +223,9 @@ def render_register_tab() -> None:
 
 
 def render_forgot_password_tab() -> None:
-    st.header("忘記登入")
+    st.header("忘記電話號")
 
-    forgot_phone = st.text_input("電話號碼（8 位數字，不用地區號）", key="forgot_phone")
+    forgot_phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="forgot_phone")
     forgot_password = st.text_input(
         "登入密碼（電話號碼後 4 位）",
         type="password",
@@ -226,8 +236,8 @@ def render_forgot_password_tab() -> None:
         forgot_phone = normalize_phone(forgot_phone)
         forgot_password = str(forgot_password or "")
 
-        if not is_valid_local_phone(forgot_phone):
-            st.warning("手機號碼請輸入 8 位數字，不需要地區號。")
+        if not is_valid_member_phone(forgot_phone):
+            st.warning("手機號碼請輸入最少 8 位數字，不需要地區號。")
         else:
             member = find_member_by_phone(forgot_phone)
             if member and member[3] == hash_password(forgot_password):

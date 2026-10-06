@@ -4,6 +4,7 @@ import csv
 from datetime import datetime
 import re
 import sys
+from typing import TypedDict
 
 import streamlit as st
 
@@ -17,6 +18,22 @@ from css import white_black_style
 
 M3_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M3_lotto_prize_results.csv"
 BALLS_DIR = PROJECT_ROOT / "A_msk_balls_png"
+
+
+class PrizeRow(TypedDict):
+    name: str
+    payout: str
+    units: str
+
+
+class M3Info(TypedDict):
+    period: str
+    latest_date: str
+    numbers: list[int]
+    next_draw_date: str
+    jackpot: str
+    estimated_prize: str
+    prizes: list[PrizeRow]
 
 
 @st.cache_data(show_spinner=False)
@@ -44,11 +61,11 @@ def parse_money(value: str) -> int:
         return 0
 
 
-def format_money(value: str | int | float) -> str:
+def format_money(value: object) -> str:
     return f"${parse_money(str(value)):,}"
 
 
-def format_date_with_weekday(value: str) -> str:
+def format_date_with_weekday(value: object) -> str:
     text = str(value or "").strip()
     if not text or "(" in text or "（" in text:
         return text
@@ -80,8 +97,8 @@ def get_file_signature(path: Path) -> tuple[int, int]:
 
 
 @st.cache_data(show_spinner=False)
-def load_m3_info(path: Path, file_signature: tuple[int, int]) -> dict[str, object]:
-    info = {
+def load_m3_info(path: Path, file_signature: tuple[int, int]) -> M3Info:
+    info: M3Info = {
         "period": "",
         "latest_date": "",
         "numbers": [],

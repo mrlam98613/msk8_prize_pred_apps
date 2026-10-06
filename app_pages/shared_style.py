@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def apply_new_page_style() -> None:
-    """Apply shared visual style for new Streamlit 1.64 pages."""
+    """Apply shared visual style for app pages."""
     st.html(
         """
         <style>

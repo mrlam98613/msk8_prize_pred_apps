@@ -1,24 +1,38 @@
 from __future__ import annotations
 
 import csv
-from collections import Counter
+import html
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict
 
 import streamlit as st
 
-from new_app_pages.shared_style import apply_new_page_style, page_header, section_title
+from app_pages.shared_style import apply_new_page_style, page_header, section_title
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-BACKTEST_DRAW_COUNT_LIST = [30]
+BACKTEST_DRAW_COUNT_LIST = [13]
 SELECT_GROUPS = (1, 2, 3, 4)
-COMBINATION_TAKE_COUNT = 5
+COMBINATION_TAKE_COUNT = 4
 BIRTHDAY_NUM_MATCH_MODE = ">="
 PRIZE_OPTION = 3
-PRIZE_PRINT_SHOW = False
+PRIZE_PRINT_SHOW = True
+DEFAULT_BACKTEST_DRAW_COUNT = 13
+DEFAULT_SELECT_GROUPS = "1,2,3,4"
+DEFAULT_COMBINATION_TAKE_COUNT = 4
+DEFAULT_MATCH_MODE = ">="
+DEFAULT_PRIZE_OPTION = 3
+DEFAULT_PRIZE_PRINT_SHOW = True
+PARAM_STATE_KEYS = {
+    "prr_v3_backtest_text": str(DEFAULT_BACKTEST_DRAW_COUNT),
+    "prr_v3_groups_text": DEFAULT_SELECT_GROUPS,
+    "prr_v3_take_count": DEFAULT_COMBINATION_TAKE_COUNT,
+    "prr_v3_match_mode": DEFAULT_MATCH_MODE,
+    "prr_v3_prize_option": DEFAULT_PRIZE_OPTION,
+    "prr_v3_prize_print_show": DEFAULT_PRIZE_PRINT_SHOW,
+}
 
 GROUPS = {
     1: ("A", "1-9", 1, 9),
@@ -166,45 +180,48 @@ def detail_rows(draws: list[DrawRow], period_rows: list[tuple[int, DrawRow]]) ->
         normal_nums = selected_normal_nums(row)
         matched = is_matched(len(normal_nums))
         record: dict[str, object] = {
-            "近 N期": rank,
+            "近期": f"近{rank}期",
             "日期": row["date"],
-            "號碼": "",
-            "N球": "",
+            "查詢開獎號": "",
+            "總球數": "",
         }
         if PRIZE_PRINT_SHOW:
-            record[f"Pz{PRIZE_OPTION}"] = ""
+            record[f"{PRIZE_OPTION}獎注數"] = ""
         if matched:
-            record["號碼"] = format_nums(normal_nums, selected_special(row))
-            record["N球"] = format_ball_count(display_ball_count(row))
+            record["查詢開獎號"] = format_nums(normal_nums, selected_special(row))
+            record["總球數"] = format_ball_count(display_ball_count(row))
             if PRIZE_PRINT_SHOW:
-                record[f"Pz{PRIZE_OPTION}"] = format_prize_count(row["prize_count"])
+                record[f"{PRIZE_OPTION}獎注數"] = format_prize_count(row["prize_count"])
         records.append(record)
     return records
 
 
-def hot_cold_pairs(counter: Counter[int], nums: list[int]) -> str:
-    pairs = sorted(((num, counter.get(num, 0)) for num in nums), key=lambda item: (-item[1], item[0]))
-    return "[" + ",".join(f"{num}({count})" for num, count in pairs) + "]"
+def render_compact_table(rows: list[dict[str, object]], table_class: str = "prr-v3-table") -> None:
+    if not rows:
+        st.info("沒有資料。")
+        return
 
-
-def group_hot_cold_rows(period_rows: list[tuple[int, DrawRow]]) -> list[dict[str, str]]:
-    counter: Counter[int] = Counter()
-    for _row_index, row in period_rows:
-        counter.update(num for num in row["nums"] if 1 <= num <= 40)
-
-    records: list[dict[str, str]] = []
-    for group_id in SELECT_GROUPS:
-        code, name, start_num, end_num = GROUPS[group_id]
-        odd_nums = [num for num in range(start_num, end_num + 1) if num % 2 == 1]
-        even_nums = [num for num in range(start_num, end_num + 1) if num % 2 == 0]
-        records.append(
-            {
-                "組別": f"{code}組 {name}",
-                "單數": hot_cold_pairs(counter, odd_nums),
-                "雙數": hot_cold_pairs(counter, even_nums),
-            }
+    headers = list(rows[0].keys())
+    header_html = "".join(f"<th>{html.escape(str(header))}</th>" for header in headers)
+    body_html = []
+    for row in rows:
+        cells = "".join(
+            f"<td>{html.escape(str(row.get(header, '')))}</td>"
+            for header in headers
         )
-    return records
+        body_html.append(f"<tr>{cells}</tr>")
+
+    st.markdown(
+        f"""
+        <div class="prr-v3-table-wrap">
+            <table class="{table_class}">
+                <thead><tr>{header_html}</tr></thead>
+                <tbody>{''.join(body_html)}</tbody>
+            </table>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_summary(period_rows: list[tuple[int, DrawRow]]) -> None:
@@ -219,6 +236,16 @@ def render_summary(period_rows: list[tuple[int, DrawRow]]) -> None:
     )
 
 
+def reset_param_state() -> None:
+    for key, value in PARAM_STATE_KEYS.items():
+        st.session_state[key] = value
+
+
+def init_param_state() -> None:
+    for key, value in PARAM_STATE_KEYS.items():
+        st.session_state.setdefault(key, value)
+
+
 def main() -> None:
     global BACKTEST_DRAW_COUNT_LIST
     global BIRTHDAY_NUM_MATCH_MODE
@@ -227,26 +254,136 @@ def main() -> None:
     global PRIZE_PRINT_SHOW
     global SELECT_GROUPS
 
+    BACKTEST_DRAW_COUNT_LIST = [DEFAULT_BACKTEST_DRAW_COUNT]
+    SELECT_GROUPS = tuple(parse_int_list(DEFAULT_SELECT_GROUPS))
+    COMBINATION_TAKE_COUNT = DEFAULT_COMBINATION_TAKE_COUNT
+    BIRTHDAY_NUM_MATCH_MODE = DEFAULT_MATCH_MODE
+    PRIZE_OPTION = DEFAULT_PRIZE_OPTION
+    PRIZE_PRINT_SHOW = DEFAULT_PRIZE_PRINT_SHOW
+
+    init_param_state()
     apply_new_page_style()
+    st.markdown(
+        """
+        <style>
+        .prr-v3-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px;
+            background: #ffffff !important;
+            margin: 0.45rem 0 0.85rem;
+        }
+        .prr-v3-table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-size: 0.84rem;
+        }
+        .prr-v3-table th,
+        .prr-v3-table td {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border-bottom: 1px solid #dddddd;
+            padding: 4px 5px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .prr-v3-table th {
+            font-weight: 900;
+            background: #f3f5f7 !important;
+        }
+        .prr-v3-result-table th:nth-child(1),
+        .prr-v3-result-table td:nth-child(1) {
+            width: 3.1rem;
+        }
+        .prr-v3-result-table th:nth-child(2),
+        .prr-v3-result-table td:nth-child(2) {
+            width: 5.8rem;
+        }
+        .prr-v3-result-table th:nth-child(3),
+        .prr-v3-result-table td:nth-child(3) {
+            max-width: 8.8rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .prr-v3-result-table th:nth-child(4),
+        .prr-v3-result-table td:nth-child(4) {
+            width: 3.4rem;
+            text-align: center;
+        }
+        .prr-v3-result-table th:nth-child(5),
+        .prr-v3-result-table td:nth-child(5) {
+            width: 4.2rem;
+            text-align: center;
+        }
+        @media (max-width: 430px) {
+            .prr-v3-table {
+                font-size: 0.74rem;
+            }
+            .prr-v3-table th,
+            .prr-v3-table td {
+                padding: 3px 4px;
+            }
+            .prr-v3-result-table th:nth-child(3),
+            .prr-v3-result-table td:nth-child(3) {
+                max-width: 7.5rem;
+            }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     page_header(
-        "prr_v3 , 1-40 ABCD 分組，開獎紀錄查詢",
+        "ABCD 分組 ，開獎紀錄查詢",
         "A(1-9), B(10-20), C(21-31), D(32-40)",
     )
 
     section_title("參數設定")
-    with st.form("prr_v3_multi_group_params"):
-        backtest_text = st.text_input("回測期", value=format_input_numbers(BACKTEST_DRAW_COUNT_LIST))
-        groups_text = st.text_input(
-            "SELECT_GROUPS",
-            value=format_input_numbers(SELECT_GROUPS),
-            help="輸入組別數字：1=A(1-9)，2=B(10-20)，3=C(21-31)，4=D(32-40)。例如：1,2,3,4 或 2，3，4。",
-        )
-        take_count = st.text_input("COMBINATION_TAKE_COUNT", value=str(COMBINATION_TAKE_COUNT))
-        match_mode = st.text_input("BIRTHDAY_NUM_MATCH_MODE", value=BIRTHDAY_NUM_MATCH_MODE)
-        prize_option = st.text_input("PRIZE_OPTION", value=str(PRIZE_OPTION))
-        prize_print_show = st.checkbox("PRIZE_PRINT_SHOW", value=PRIZE_PRINT_SHOW)
-        st.caption("SELECT_GROUPS 數字提示：1=A(1-9)，2=B(10-20)，3=C(21-31)，4=D(32-40)")
-        submitted = st.form_submit_button("執行查詢")
+    st.session_state["prr_v3_take_count"] = to_int(
+        st.session_state.get("prr_v3_take_count"),
+        default=DEFAULT_COMBINATION_TAKE_COUNT,
+    )
+    st.session_state["prr_v3_prize_option"] = to_int(
+        st.session_state.get("prr_v3_prize_option"),
+        default=DEFAULT_PRIZE_OPTION,
+    )
+    backtest_text = st.text_input(
+        "回測期 (13-30，預設=13期)",
+        key="prr_v3_backtest_text",
+    )
+    groups_text = st.text_input(
+        "選擇 ABCD 組 (預設=1,2,3,4)",
+        key="prr_v3_groups_text",
+    )
+    st.number_input(
+        "開獎期球數查詢 (預設=4球)",
+        min_value=0,
+        max_value=7,
+        step=1,
+        key="prr_v3_take_count",
+    )
+    match_mode = st.selectbox(
+        "合球數條件 (預設=>=)",
+        [">=", "=="],
+        key="prr_v3_match_mode",
+    )
+    prize_option = st.number_input(
+        "中獎注數 (預設=3獎)",
+        min_value=1,
+        max_value=10,
+        step=1,
+        key="prr_v3_prize_option",
+    )
+    prize_print_show = st.checkbox(
+        "顯示中獎注數欄位",
+        key="prr_v3_prize_print_show",
+    )
+    submitted = st.button("執行查詢", key="prr_v3_submit", type="primary", use_container_width=True)
+    st.button("Reset", key="prr_v3_reset", use_container_width=True, on_click=reset_param_state)
 
     if not submitted:
         st.info("輸入參數後按「執行查詢」。")
@@ -255,19 +392,21 @@ def main() -> None:
     try:
         parsed_backtest = parse_int_list(backtest_text)
         parsed_groups = parse_int_list(groups_text)
-        parsed_take_count = to_int(take_count, default=-1)
+        parsed_take_count = to_int(st.session_state.get("prr_v3_take_count"), default=-1)
         parsed_prize_option = to_int(prize_option, default=-1)
         parsed_match_mode = match_mode.strip()
         if not parsed_backtest or parsed_backtest[0] <= 0:
-            raise ValueError("BACKTEST_DRAW_COUNT_LIST 最少需要一個正整數，例如 [30]。")
+            raise ValueError("回測期最少需要一個正整數，例如 13。")
+        if not 13 <= parsed_backtest[0] <= 30:
+            raise ValueError("回測期只可輸入 13 至 30。")
         if not parsed_groups or any(group_id not in GROUPS for group_id in parsed_groups):
-            raise ValueError("SELECT_GROUPS 只可輸入 1,2,3,4，例如 (1,2,3,4)。")
+            raise ValueError("選擇 ABCD 組只可輸入 1,2,3,4，例如 1,2,3,4。")
         if parsed_take_count < 0:
-            raise ValueError("COMBINATION_TAKE_COUNT 需要整數。")
-        if parsed_match_mode not in (">=", "==", "<="):
-            raise ValueError('BIRTHDAY_NUM_MATCH_MODE 只可輸入 ">="、"==" 或 "<="。')
+            raise ValueError("開獎期球數查詢需要整數。")
+        if parsed_match_mode not in (">=", "=="):
+            raise ValueError('合球數條件只可輸入 ">=" 或 "=="。')
         if parsed_prize_option <= 0:
-            raise ValueError("PRIZE_OPTION 需要正整數。")
+            raise ValueError("中獎注數需要正整數。")
 
         BACKTEST_DRAW_COUNT_LIST = [parsed_backtest[0]]
         SELECT_GROUPS = tuple(parsed_groups)
@@ -297,39 +436,11 @@ def main() -> None:
                 if PRIZE_PRINT_SHOW
                 else "開獎日期，合併號碼，N球"
             ),
-        },
-        border="horizontal",
-        width="content",
+        }
     )
 
     render_summary(period_rows)
 
-    section_title("近 30 期開獎紀錄")
+    section_title(f"近 {BACKTEST_DRAW_COUNT_LIST[0]} 期開獎紀錄")
     rows = detail_rows(draws, period_rows)
-    column_config: Any = {
-        "近 N期": st.column_config.NumberColumn("近 N期", width="small", format="%d"),
-        "日期": st.column_config.TextColumn("日期", width="medium"),
-        "號碼": st.column_config.TextColumn("號碼", width="large"),
-        "N球": st.column_config.TextColumn("N球", width="small"),
-    }
-    if PRIZE_PRINT_SHOW:
-        column_config[f"Pz{PRIZE_OPTION}"] = st.column_config.TextColumn(f"Pz{PRIZE_OPTION}", width="small")
-
-    st.dataframe(
-        rows,
-        hide_index=True,
-        width="stretch",
-        column_config=column_config,
-    )
-
-    section_title("A-D 分組單雙冷熱門累計")
-    st.dataframe(
-        group_hot_cold_rows(period_rows),
-        hide_index=True,
-        width="stretch",
-        column_config={
-            "組別": st.column_config.TextColumn("組別", width="small"),
-            "單數": st.column_config.TextColumn("單數", width="large"),
-            "雙數": st.column_config.TextColumn("雙數", width="large"),
-        },
-    )
+    render_compact_table(rows, table_class="prr-v3-table prr-v3-result-table")

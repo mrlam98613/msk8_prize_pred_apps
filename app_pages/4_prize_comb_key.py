@@ -2,7 +2,7 @@ from pathlib import Path
 import csv
 import html
 import sys
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 import streamlit as st
 
@@ -16,11 +16,11 @@ from css import white_black_style
 
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 
-DEFAULT_RECENT_DRAW_COUNT = 24
-DEFAULT_MIN_SELECTED_COUNT = 3
+DEFAULT_RECENT_DRAW_COUNT = 13
+DEFAULT_MIN_SELECTED_COUNT = 5
 DEFAULT_MATCH_MODE = ">="
 DEFAULT_NUM_MIN = 1
-DEFAULT_NUM_MAX = 31
+DEFAULT_NUM_MAX = 40
 DEFAULT_PRIZE_OPTION = 3
 DEFAULT_SHOW_PRIZE_COUNT = True
 
@@ -67,7 +67,7 @@ def parse_draw_numbers(row: dict[str, str]) -> list[int]:
     return nums
 
 
-def parse_special_number(row: dict[str, str]) -> int | None:
+def parse_special_number(row: dict[str, str]) -> Optional[int]:
     try:
         special = int(row.get("N7", ""))
     except ValueError:

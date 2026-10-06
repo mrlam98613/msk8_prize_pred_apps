@@ -235,6 +235,18 @@ def select_page_path(page: dict) -> Path:
     return page["path"]
 
 
+def reset_prr_v3_param_state() -> None:
+    for key in [
+        "prr_v3_backtest_text",
+        "prr_v3_groups_text",
+        "prr_v3_take_count",
+        "prr_v3_match_mode",
+        "prr_v3_prize_option",
+        "prr_v3_prize_print_show",
+    ]:
+        st.session_state.pop(key, None)
+
+
 def main() -> None:
     st.set_page_config(page_title="MSK 8 投注預測", page_icon="🎯", layout="centered")
     
@@ -267,6 +279,10 @@ def main() -> None:
     selected_page = next(
         page for page in PAGES if page_label(page) == selected_label
     )
+    previous_page = st.session_state.get("current_page_label")
+    if previous_page != selected_label and selected_page["path"].name == "1_prr_v3_mulit_group_analyze.py":
+        reset_prr_v3_param_state()
+    st.session_state["current_page_label"] = selected_label
     run_page_file(select_page_path(selected_page))
 
 
