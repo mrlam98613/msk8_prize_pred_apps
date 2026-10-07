@@ -24,7 +24,13 @@ TREND_PRED_CSV = CURRENT_DIR / "backtest_pred_data" / "trend_pred.csv"
 
 # MODE 可選："backtest" 或 "predict"。
 VERSION = "S1_v1 1-40"
-MODE = "predict" # 只有 predict 同步趨勢預測。 backtest mode 獨立。
+'''
+只有 predict 同步趨勢預測。 backtest mode 獨立。 
+BACKTEST_DRAW_COUNT_LIST = [1] 同步 
+WINDOW_DRAW_COUNT_LIST = [19] 同步
+'''
+
+MODE = "predict" # 
 BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [19]
 
