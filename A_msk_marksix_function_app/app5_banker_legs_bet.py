@@ -123,15 +123,16 @@ def calculate_mark6_banker(bet_bankers, bet_legs, hit_banker=1, hit_legs=2, extr
 # 範例：2膽拖8腳，中2膽5拖，特別號碼在拖中且選中
 # 膽拖投基查輸入 
 banker = 3 #投注膽數量 1,2,3,4,5 膽
-legs = 6 #投注配腳數量 1膽-6 leg-48 leg，2-5-47，3-4-46，4-3-45，5-2-44
+legs = 5 #投注配腳數量 1膽-6 leg-48 leg，2-5-47，3-4-46，4-3-45，5-2-44
 bet_unit = 5 # 每注金額
 # ----
 
 # 膽拖中基條本輸入
 # 注意：matched_* 為「命中數（可含特號）」。若 *_hit_special=1，表示該區命中中有 1 個是特別號。
-matched_banker = 3 # 命中膽數量（含特號）
-banker_hit_special = 1 # 0 or 1 # 膽中包含特別號
-matched_legs = 4 # 命中配腳數量（含特號）
+matched_banker = 0 # 命中膽數量（含特號）
+banker_hit_special = 0 # 0 or 1 # 膽中包含特別號
+# ---
+matched_legs = 5 # 命中配腳數量（含特號）
 leg_hit_special = 0 # 0 or 1 # 配腳中包含特別號
 
 # Call 總注數，派彩結果

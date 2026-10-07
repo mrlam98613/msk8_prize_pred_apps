@@ -20,7 +20,7 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 VERSION = "S1_v1 1-40"
 MODE = "predict" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [13]
+WINDOW_DRAW_COUNT_LIST = [19]
 
 # 走勢提示門檻。
 RECENT_WINDOW_SHORT = 5
