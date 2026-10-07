@@ -41,7 +41,7 @@ def latest_m2_date() -> str:
     if "ndate" not in df.columns or df.empty:
         raise ValueError("M2 缺少 ndate 或沒有資料")
 
-    dates = df["ndate"].astype(str).str.strip()
+    dates = df["ndate"].map(lambda value: str(value).strip())
     valid_dates = dates[dates.map(is_valid_date)]
     if valid_dates.empty:
         raise ValueError("M2 找不到有效 ndate")

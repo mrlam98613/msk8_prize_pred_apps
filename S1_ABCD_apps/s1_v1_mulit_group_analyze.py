@@ -1,5 +1,6 @@
 from pathlib import Path
 import csv
+import importlib.util
 from collections import Counter
 from itertools import combinations
 from typing import Optional, TypedDict
@@ -17,11 +18,13 @@ CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
+COMBO_TREND_SCRIPT = CURRENT_DIR / "S1_v1_combo_trend_analyze.py"
+TREND_PRED_CSV = CURRENT_DIR / "backtest_pred_data" / "trend_pred.csv"
 
 
 # MODE 可選："backtest" 或 "predict"。
 VERSION = "S1_v1 1-40"
-MODE = "backtest"
+MODE = "predict" # 只有 predict 同步趨勢預測。 backtest mode 獨立。
 BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [19]
 
@@ -66,6 +69,11 @@ HIGH_FREQ_MIN_PAIR_COUNT = 2 # 高頻膽號門檻：同組配對出現次數必�
 HIGH_FREQ_DAN_TAKE = 5 # 每組最多顯示幾個高頻膽號。
 HIGH_FREQ_PARTNER_TAKE = 9 # 每組最多顯示幾個高頻配腳號。
 HIGH_FREQ_PARTNER_POOL_TAKE = 9 # 高頻配腳先取前 N 個強配腳，再輸出指定數量。
+
+# 是否顯示維度熱門號：近 1 期只作比對；由近 2 期起，每 6 期切一個維度。
+PRINT_DIMENSION_HOT_NUM_ANALYSIS = True
+DIMENSION_DRAW_COUNT = 6 # 每個維度包含幾期。
+DIMENSION_HOT_MIN_COUNT = 2 # 同一維度內單球重開次數必須達到此數值。
 
 GROUPS = {
     1: ("1-9", 1, 9), # 9 球
@@ -143,6 +151,36 @@ def read_next_draw_date() -> str:
     ''' 從 M4 摘要讀取下一期開獎日期。 '''
     rows = read_csv_rows(M4_CSV)
     return rows[-1].get("next_draw_date", "") if rows else ""
+
+
+def read_trend_pred_rows() -> list[dict[str, str]]:
+    ''' 讀取組合走趨 predict mode 產生的 trend_pred.csv。 '''
+    if not TREND_PRED_CSV.exists():
+        return []
+    return read_csv_rows(TREND_PRED_CSV)
+
+
+def sync_trend_pred_csv(window_count: int) -> None:
+    ''' predict 模式先同步執行組合走趨分析，產生同窗口期 trend_pred.csv。 '''
+    if not COMBO_TREND_SCRIPT.exists():
+        print(f"未找到組合走趨分析程式：{COMBO_TREND_SCRIPT}")
+        return
+
+    spec = importlib.util.spec_from_file_location("s1_combo_trend_predict", COMBO_TREND_SCRIPT)
+    if spec is None or spec.loader is None:
+        print(f"未能載入組合走趨分析程式：{COMBO_TREND_SCRIPT}")
+        return
+
+    combo_trend = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(combo_trend)
+    combo_draws = combo_trend.read_draws()
+    combo_next_draw_infos = combo_trend.read_next_draw_infos()
+    combo_record = combo_trend.build_predict_trend_record(
+        combo_draws,
+        window_count,
+        combo_next_draw_infos,
+    )
+    combo_trend.write_csv_rows(combo_trend.TREND_PRED_CSV, [combo_record])
 
 
 def format_nums(
@@ -555,18 +593,20 @@ def high_freq_pair_text(
 def weak_nums_text(
     window_rows: list[tuple[int, DrawRow]],
     pair_data: dict[int, tuple[list[int], list[int]]],
+    extra_assigned_nums: Optional[dict[int, set[int]]] = None,
 ) -> list[str]:
     """格式化扣除沒出現、高頻膽、高頻配腳後的其餘弱號。"""
     if not PRINT_WEAK_NUM_ANALYSIS:
         return []
 
+    extra_assigned_nums = extra_assigned_nums or {}
     group_counts = group_window_num_counts(window_rows, matched_only=True)
     parts: list[str] = []
     for group_id in selected_group_ids():
         _name, start_num, end_num = GROUPS[group_id]
         code = GROUP_CODES[group_id]
         dan_nums, partner_nums = pair_data.get(group_id, ([], []))
-        assigned_nums = set(dan_nums) | set(partner_nums)
+        assigned_nums = set(dan_nums) | set(partner_nums) | extra_assigned_nums.get(group_id, set())
         weak_nums = [
             num
             for num in range(start_num, end_num + 1)
@@ -576,12 +616,27 @@ def weak_nums_text(
     return ["ABCD 弱號 = " + "，".join(parts)]
 
 
-def print_abcd_property_analysis(window_rows: list[tuple[int, DrawRow]]) -> None:
+def dimension_hot_num_sets(
+    hot_by_dimension: dict[int, dict[int, list[int]]],
+) -> dict[int, set[int]]:
+    """將多維度熱門號合併成各組集合；同號可在不同維度重複顯示，但弱號只需扣除一次。"""
+    hot_sets: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
+    for group_hot_nums in hot_by_dimension.values():
+        for group_id, nums in group_hot_nums.items():
+            hot_sets.setdefault(group_id, set()).update(nums)
+    return hot_sets
+
+
+def print_abcd_property_analysis(
+    window_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> None:
     """打印 ABCD 沒出現、高頻膽、高頻配腳、弱號分析。"""
     if not PRINT_ABCD_PROPERTY_ANALYSIS:
         return
 
     pair_data = high_freq_pair_data(window_rows)
+    dimension_hot_sets = dimension_hot_num_sets(dimension_hot_nums(window_rows, target_index))
     print()
     print(
         f"---------------- {format_group_ids(selected_group_ids())} "
@@ -595,8 +650,144 @@ def print_abcd_property_analysis(window_rows: list[tuple[int, DrawRow]]) -> None
     print(missing_nums_text(window_rows))
     for line in high_freq_pair_text(pair_data):
         print(line)
-    for line in weak_nums_text(window_rows, pair_data):
+    for line in weak_nums_text(window_rows, pair_data, dimension_hot_sets):
         print(line)
+
+
+def group_nums_with_special(row: DrawRow, group_id: int) -> list[int]:
+    """取得某組正號與特號；特號同一球號只保留一次。"""
+    _name, start_num, end_num = GROUPS[group_id]
+    nums = selected_nums(row, start_num, end_num)
+    special = selected_special(row, start_num, end_num)
+    if special is not None:
+        nums.append(special)
+    return sorted(set(nums))
+
+
+def dimension_rows(
+    window_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+    dimension_no: int,
+) -> list[tuple[int, DrawRow]]:
+    """取得指定維度資料；#1=近2-7期，#2=近8-13期。"""
+    rank_start = 2 + (dimension_no - 1) * DIMENSION_DRAW_COUNT
+    rank_end = rank_start + DIMENSION_DRAW_COUNT - 1
+    return [
+        (row_index, row)
+        for row_index, row in window_rows
+        if rank_start <= target_index - row_index + 1 <= rank_end
+    ]
+
+
+def dimension_hot_nums(
+    window_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> dict[int, dict[int, list[int]]]:
+    """統計各維度內，各組單獨 1 球重開達到門檻的熱門號。"""
+    dimension_count = max(0, (len(window_rows) - 1) // DIMENSION_DRAW_COUNT)
+    result: dict[int, dict[int, list[int]]] = {}
+
+    for dimension_no in range(1, dimension_count + 1):
+        counters: dict[int, Counter[int]] = {group_id: Counter() for group_id in GROUPS}
+        for _row_index, row in dimension_rows(window_rows, target_index, dimension_no):
+            for group_id in selected_group_ids():
+                nums = group_nums_with_special(row, group_id)
+                if len(nums) == 1:
+                    counters[group_id][nums[0]] += 1
+
+        result[dimension_no] = {}
+        for group_id in selected_group_ids():
+            hot_nums = [
+                num
+                for num, count in sorted(counters[group_id].items(), key=lambda item: (-item[1], item[0]))
+                if count >= DIMENSION_HOT_MIN_COUNT
+            ]
+            result[dimension_no][group_id] = sorted(hot_nums)
+
+    return result
+
+
+def near_one_dimension_hits(
+    near_one_row: DrawRow,
+    hot_by_dimension: dict[int, dict[int, list[int]]],
+) -> list[str]:
+    """用近 1 期開獎號比對維度熱門號。"""
+    near_one_nums = {
+        num
+        for num in near_one_row["nums"]
+        if 1 <= num <= 40
+    }
+    if near_one_row["special"] is not None and 1 <= near_one_row["special"] <= 40:
+        near_one_nums.add(near_one_row["special"])
+
+    hit_parts: list[str] = []
+    for dimension_no in sorted(hot_by_dimension):
+        dimension_hot_nums_set = {
+            num
+            for group_hot_nums in hot_by_dimension[dimension_no].values()
+            for num in group_hot_nums
+        }
+        hits = sorted(near_one_nums & dimension_hot_nums_set)
+        if hits:
+            hit_parts.append(f"#{dimension_no}{format_nums(hits)}")
+    return hit_parts
+
+
+def print_dimension_hot_num_analysis(
+    window_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> None:
+    """打印維度熱門號分析；近 1 期只用來比對，不納入維度統計。"""
+    if not PRINT_DIMENSION_HOT_NUM_ANALYSIS:
+        return
+    if len(window_rows) < DIMENSION_DRAW_COUNT + 1:
+        return
+
+    hot_by_dimension = dimension_hot_nums(window_rows, target_index)
+    if not hot_by_dimension:
+        return
+
+    print()
+    print("----- 維度熱門號分析 -----")
+    print(
+        f"維度規則：近 1 期只作比對；由近 2 期起每 {DIMENSION_DRAW_COUNT} 期一維，"
+        f"同組單獨 1 球重開 >= {DIMENSION_HOT_MIN_COUNT} 次"
+    )
+    for dimension_no in sorted(hot_by_dimension, reverse=True):
+        parts: list[str] = []
+        for group_id in selected_group_ids():
+            code = GROUP_CODES[group_id]
+            parts.append(f"{code}{format_nums(hot_by_dimension[dimension_no].get(group_id, []))}")
+        print(f"#{dimension_no} 維{dimension_no}：" + "，".join(parts))
+
+    near_one_row = max(window_rows, key=lambda item: item[0])[1]
+    hit_parts = near_one_dimension_hits(near_one_row, hot_by_dimension)
+    hit_text = "，".join(hit_parts) if hit_parts else "[]"
+    print(f"近 1 期比對：{near_one_row['date']}，開獎號 {all_check_nums_text(near_one_row)}，{hit_text}")
+
+
+def print_trend_pred_analysis() -> None:
+    """打印組合走趨 predict mode 的下期系統預測。"""
+    print()
+    print("---- 下期 系統預測 mode 走趨分析  -----")
+    rows = read_trend_pred_rows()
+    if not rows:
+        print(f"未讀取到 trend_pred.csv：{TREND_PRED_CSV}")
+        return
+
+    for row in rows:
+        next_draw_date = row.get("nextDraw date", "")
+        pred_mode = row.get("pred_mode", "")
+        trend_text = row.get("走趨分析", "")
+        score = row.get("走勢分數", "")
+        level = row.get("走勢判斷", "")
+        print(
+            f"下期日期：{next_draw_date or '未知'}，"
+            f"pred_mode：{pred_mode or '未知'}，"
+            f"{trend_text or '未有走趨分析'}，"
+            f"走勢分數：{score or '0'}，"
+            f"走勢判斷：{level or '未知'}"
+        )
 
 
 def print_group_odd_even_hot_cold(window_rows: list[tuple[int, DrawRow]]) -> None:
@@ -765,7 +956,8 @@ def print_backtest_window(
     print_draw_rows(draws, window_rows, check_index - 1)
     print_window_result_separator()
     print_matched_window_count(window_rows)
-    print_abcd_property_analysis(window_rows)
+    print_abcd_property_analysis(window_rows, check_index - 1)
+    print_dimension_hot_num_analysis(window_rows, check_index - 1)
     print_group_odd_even_hot_cold(window_rows)
     print_group_rbg_hot_cold(window_rows)
     print()
@@ -784,9 +976,13 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print_draw_rows(draws, window_rows, latest_index)
     print_window_result_separator()
     print_matched_window_count(window_rows)
-    print_abcd_property_analysis(window_rows)
+    print_abcd_property_analysis(window_rows, latest_index)
+    print_dimension_hot_num_analysis(window_rows, latest_index)
+    print_trend_pred_analysis()
     print_group_odd_even_hot_cold(window_rows)
     print_group_rbg_hot_cold(window_rows)
+    print()
+    print("------ 下期開獎日期 ------------------")
     print(f"下期開獎日期：{next_draw_date or '未知'}")
     print()
 
@@ -824,6 +1020,7 @@ def main() -> None:
     elif MODE == "predict":
         next_draw_date = read_next_draw_date()
         for window_count in WINDOW_DRAW_COUNT_LIST:
+            sync_trend_pred_csv(window_count)
             print_predict_window(draws, window_count, next_draw_date)
     else:
         raise ValueError('MODE 只能是 "backtest" 或 "predict"')

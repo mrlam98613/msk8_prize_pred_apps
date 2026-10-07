@@ -15,12 +15,18 @@ S1 組合走趨分析：獨立腳本，不依賴其它程式。
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.csv"
+M3_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M3_lotto_prize_results.csv"
+M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
+OUTPUT_DIR = CURRENT_DIR / "backtest_pred_data"
+TREND_BACKTEST_CSV = OUTPUT_DIR / "trend_backtest.csv"
+TREND_PRED_CSV = OUTPUT_DIR / "trend_pred.csv"
 
 
 VERSION = "S1_v1 1-40"
-MODE = "predict" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
-BACKTEST_DRAW_COUNT_LIST = [1]
+MODE = "backtest" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
+BACKTEST_DRAW_COUNT_LIST = [4]
 WINDOW_DRAW_COUNT_LIST = [19]
+ABCD_POOL_MIN_FUND = 20_000_000.0
 
 # 走勢提示門檻。
 RECENT_WINDOW_SHORT = 5
@@ -48,6 +54,24 @@ class TrendGroupConfig(TypedDict):
     take_count: int
     match_mode: str
     note: str
+
+
+class PrizeFundInfo(TypedDict):
+    snowball: float
+    estimated_first_prize_fund: float
+
+
+class NextDrawInfo(TypedDict):
+    next_draw_date: str
+    next_draw_prize_fund: float
+
+
+class BacktestTrendStats(TypedDict):
+    total: int
+    hit: int
+    failed: int
+    selected_counts: dict[str, int]
+    hit_counts: dict[str, int]
 
 
 TREND_GROUP_SETS: dict[str, TrendGroupConfig] = {
@@ -86,12 +110,36 @@ def read_csv_rows(path: Path) -> list[dict[str, str]]:
         ]
 
 
+def write_csv_rows(path: Path, rows: list[dict[str, object]]) -> None:
+    ''' 寫出 CSV；使用 utf-8-sig 方便試算表直接讀中文。 '''
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        return
+
+    fieldnames = list(rows[0].keys())
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def to_int(value: object, default: int = 0) -> int:
     ''' 安全轉換數值為 int，失敗時回傳 default。 '''
     if not isinstance(value, (int, float, str)):
         return default
     try:
         return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def to_money(value: object, default: float = 0.0) -> float:
+    ''' 安全轉換金額文字為 float。 '''
+    if not isinstance(value, (int, float, str)):
+        return default
+    try:
+        text = str(value).replace(",", "").replace("$", "").strip()
+        return float(text)
     except (TypeError, ValueError):
         return default
 
@@ -109,6 +157,74 @@ def parse_m6_row(row: dict[str, str]) -> DrawRow:
 def read_draws() -> list[DrawRow]:
     ''' 讀取所有有效歷史開獎紀錄。 '''
     return [row for row in [parse_m6_row(raw) for raw in read_csv_rows(M6_CSV)] if row["date"]]
+
+
+def read_prize_fund_info() -> PrizeFundInfo:
+    ''' 從 M3 讀取多寶 / 金多寶與估計頭獎基金。 '''
+    info: PrizeFundInfo = {
+        "snowball": 0.0,
+        "estimated_first_prize_fund": 0.0,
+    }
+    if not M3_CSV.exists():
+        return info
+
+    with M3_CSV.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.reader(handle)
+        for row in reader:
+            if len(row) < 2:
+                continue
+            label = row[0].strip()
+            amount = to_money(row[1])
+            if label == "多寶 / 金多寶":
+                info["snowball"] = amount
+            elif label == "估計頭獎基金":
+                info["estimated_first_prize_fund"] = amount
+    return info
+
+
+def read_historical_prize_funds() -> dict[str, float]:
+    ''' 從 M4 讀取每個 next_draw_date 的估計頭獎基金。 '''
+    if not M4_CSV.exists():
+        return {}
+
+    funds: dict[str, float] = {}
+    for row in read_csv_rows(M4_CSV):
+        next_draw_date = row.get("next_draw_date", "")
+        if not next_draw_date:
+            continue
+        funds[next_draw_date] = to_money(row.get("next_draw_prize_fund"))
+    return funds
+
+
+def read_next_draw_infos() -> dict[str, NextDrawInfo]:
+    ''' 從 M4 讀取每個 last_draw_date 對應的下期日期與估計頭獎基金。 '''
+    if not M4_CSV.exists():
+        return {}
+
+    infos: dict[str, NextDrawInfo] = {}
+    for row in read_csv_rows(M4_CSV):
+        last_draw_date = row.get("last_draw_date", "")
+        next_draw_date = row.get("next_draw_date", "")
+        if not last_draw_date or not next_draw_date:
+            continue
+        infos[last_draw_date] = {
+            "next_draw_date": next_draw_date,
+            "next_draw_prize_fund": to_money(row.get("next_draw_prize_fund")),
+        }
+    return infos
+
+
+def is_abcd_pool_fund_eligible(prize_fund: PrizeFundInfo) -> bool:
+    ''' 判斷是否達到採用 ABCD 全候選池的多寶/基金門檻。 '''
+    return (
+        prize_fund["snowball"] >= ABCD_POOL_MIN_FUND
+        or prize_fund["estimated_first_prize_fund"] >= ABCD_POOL_MIN_FUND
+    )
+
+
+def is_abcd_pool_amount_eligible(amount: float) -> bool:
+    ''' 判斷單一基金金額是否達到採用 ABCD 全候選池門檻。 '''
+    return amount >= ABCD_POOL_MIN_FUND
 
 
 def format_group_ids(group_ids: tuple[int, ...]) -> str:
@@ -243,16 +359,23 @@ def next_draw_bet_advice(name: str, level: str) -> str:
     ''' 依組合池與走勢強弱，產生下期投注走趨建議。 '''
     if name in ("ABC", "BCD"):
         if level == "強":
-            return f"{name}：走勢強，可用單/複式，3+3+3 = 9 號以膽拖投注。"
+            return f"{name}：走勢強，可用單/複式，3+3+3 = 9 球以膽拖投注。"
         if level.startswith("中"):
-            return f"{name}：走勢中，可小注單/複式，3+3+3 = 9 號以膽拖追蹤。"
-        return f"{name}：走勢{level}，只投注單式 或複式 7 字，不建議 9 號膽拖加碼。"
+            return f"{name}：走勢中，可小注單/複式，3+3+3 = 9 球以膽拖追蹤。"
+        return f"{name}：走勢{level}，只投注單式 或複式 7 字，不建議 9 球膽拖加碼。"
 
     if level == "強":
         return f"{name}：走勢強，可用 強 12 球- 膽拖，或聰明組合。"
     if level.startswith("中"):
         return f"{name}：走勢中，可用 12 球膽拖小注追蹤，或降低組合注數。"
     return f"{name}：走勢{level}，只投注單式 或複式 7 字，暫不建議 12 球組合。"
+
+
+def candidate_pool_name(name: str) -> str:
+    ''' 格式化候選池投注名稱。 '''
+    if name in ("ABC", "BCD"):
+        return f"{name} 9 球膽拖池"
+    return "ABCD 12 球全候選池"
 
 
 def trend_sequence(values: list[bool]) -> str:
@@ -302,13 +425,158 @@ def print_trend_summary(values: list[bool]) -> None:
     print(f"系統提示：{bet_advice(level)}")
 
 
+def trend_matches_for_rows(
+    window_rows: list[tuple[int, DrawRow]],
+    group_ids: tuple[int, ...],
+    take_count: int,
+    match_mode: str,
+) -> list[bool]:
+    ''' 只計算窗口期走勢序列，不列印。 '''
+    return [
+        is_matched(pool_ball_count(row, group_ids), take_count, match_mode)
+        for _row_index, row in window_rows
+    ]
+
+
+def analyze_trend_groups(
+    window_rows: list[tuple[int, DrawRow]],
+) -> tuple[dict[str, str], dict[str, float]]:
+    ''' 回傳各組合池的走勢判斷與分數。 '''
+    trend_levels: dict[str, str] = {}
+    trend_scores: dict[str, float] = {}
+    for name, config in TREND_GROUP_SETS.items():
+        values = trend_matches_for_rows(
+            window_rows,
+            config["group_ids"],
+            config["take_count"],
+            config["match_mode"],
+        )
+        trend_levels[name] = trend_level(values)
+        trend_scores[name] = trend_score(values)
+    return trend_levels, trend_scores
+
+
+def select_trend_pool(trend_scores: dict[str, float], abcd_eligible: bool) -> str:
+    ''' 從 ABC / BCD / ABCD 三選一；ABCD 需先達基金門檻。 '''
+    eligible_names = [
+        name
+        for name in TREND_GROUP_SETS
+        if name != "ABCD" or abcd_eligible
+    ]
+    return max(eligible_names, key=lambda name: trend_scores.get(name, -9999.0))
+
+
+def selected_pool_hit(check_row: DrawRow, selected_name: str) -> bool:
+    ''' 用核對期實際開獎，判斷三選一候選池是否命中自身條件。 '''
+    config = TREND_GROUP_SETS[selected_name]
+    count = pool_ball_count(check_row, config["group_ids"])
+    return is_matched(count, config["take_count"], config["match_mode"])
+
+
+def selected_pool_check_text(check_row: DrawRow, selected_name: str) -> str:
+    ''' 格式化核對期命中結果。 '''
+    config = TREND_GROUP_SETS[selected_name]
+    group_ids = config["group_ids"]
+    nums = pool_nums(check_row, group_ids)
+    special = pool_special(check_row, group_ids)
+    count = len(nums) + (1 if special is not None else 0)
+    matched = is_matched(count, config["take_count"], config["match_mode"])
+    result = "命中" if matched else "失敗"
+    return (
+        f"核對期：{check_row['date']}，{selected_name} 開獎 {format_nums(nums, special)} "
+        f"/> {count} 球，條件 {config['match_mode']} {config['take_count']} 球，{result}"
+    )
+
+
+def trend_values_for_name(window_rows: list[tuple[int, DrawRow]], name: str) -> list[bool]:
+    ''' 取得指定組合池在窗口期的走勢序列。 '''
+    config = TREND_GROUP_SETS[name]
+    return trend_matches_for_rows(
+        window_rows,
+        config["group_ids"],
+        config["take_count"],
+        config["match_mode"],
+    )
+
+
+def build_backtest_trend_record(
+    draws: list[DrawRow],
+    check_index: int,
+    backtest_count: int,
+    window_count: int,
+    backtest_index: int,
+    total_backtest_count: int,
+    historical_funds: dict[str, float],
+) -> dict[str, object]:
+    ''' 建立單一期回測三選一核對 CSV record。 '''
+    window_start_index = max(0, check_index - window_count)
+    window_rows = [
+        (row_index, row)
+        for row_index, row in enumerate(draws[window_start_index:check_index], start=window_start_index)
+    ]
+    trend_levels, trend_scores = analyze_trend_groups(window_rows)
+    check_row = draws[check_index]
+    historical_fund = historical_funds.get(check_row["date"], 0.0)
+    abcd_eligible = is_abcd_pool_amount_eligible(historical_fund)
+    selected_name = select_trend_pool(trend_scores, abcd_eligible)
+    config = TREND_GROUP_SETS[selected_name]
+    nums = pool_nums(check_row, config["group_ids"])
+    special = pool_special(check_row, config["group_ids"])
+    check_count = len(nums) + (1 if special is not None else 0)
+    hit = is_matched(check_count, config["take_count"], config["match_mode"])
+
+    return {
+        "date": check_row["date"],
+        "系統選mode": selected_name,
+        "球膽拖池": 12 if selected_name == "ABCD" else 9,
+        "走勢分數": f"{trend_scores.get(selected_name, 0.0):.1f}",
+        "走勢判斷": trend_levels.get(selected_name, "弱"),
+        "開獎號": format_nums(nums, special),
+        "條件>=": config["take_count"],
+        "核對預測": "中" if hit else "不中",
+    }
+
+
+def build_predict_trend_record(
+    draws: list[DrawRow],
+    window_count: int,
+    next_draw_infos: dict[str, NextDrawInfo],
+) -> dict[str, object]:
+    ''' 建立下期預測三選一 CSV record。 '''
+    latest_index = len(draws) - 1
+    window_start_index = max(0, latest_index - window_count + 1)
+    window_rows = [
+        (row_index, row)
+        for row_index, row in enumerate(draws[window_start_index:latest_index + 1], start=window_start_index)
+    ]
+    trend_levels, trend_scores = analyze_trend_groups(window_rows)
+    latest_row = draws[latest_index]
+    next_draw_info = next_draw_infos.get(latest_row["date"])
+    prize_fund = read_prize_fund_info()
+    abcd_eligible = is_abcd_pool_fund_eligible(prize_fund)
+    selected_name = select_trend_pool(trend_scores, abcd_eligible)
+
+    return {
+        "nextDraw date": next_draw_info["next_draw_date"] if next_draw_info else "",
+        "pred_mode": selected_name,
+        "走趨分析": "選 12 球 以膽拖投注" if selected_name == "ABCD" else "選 9 球 以膽拖投注",
+        "走勢分數": f"{trend_scores.get(selected_name, 0.0):.1f}",
+        "走勢判斷": trend_levels.get(selected_name, "弱"),
+    }
+
+
 def print_combo_trend_sections(
     window_rows: list[tuple[int, DrawRow]],
     target_index: int,
+    mode: str,
+    check_row: Optional[DrawRow] = None,
+    next_draw_info: Optional[NextDrawInfo] = None,
+    historical_fund: Optional[float] = None,
 ) -> None:
     ''' 列印各組合池的走趨分析區塊。 '''
     print("追蹤條件：各組合池獨立門檻，特號 N7 以 1 球計入")
     trend_levels: dict[str, str] = {}
+    trend_scores: dict[str, float] = {}
 
     for name, config in TREND_GROUP_SETS.items():
         group_ids = config["group_ids"]
@@ -323,17 +591,78 @@ def print_combo_trend_sections(
         values = print_window_rows(window_rows, target_index, group_ids, take_count, match_mode)
         print_trend_summary(values)
         trend_levels[name] = trend_level(values)
-    print_next_draw_bet_summary(trend_levels)
+        trend_scores[name] = trend_score(values)
+    if mode == "backtest":
+        if check_row is None:
+            raise ValueError("backtest 模式需要 check_row")
+        print_backtest_check_summary(trend_levels, trend_scores, check_row, historical_fund or 0.0)
+    else:
+        print_next_draw_bet_summary(trend_levels, trend_scores, next_draw_info)
     print()
 
 
-def print_next_draw_bet_summary(trend_levels: dict[str, str]) -> None:
-    ''' 列印下期投注走趨總結。 '''
+def print_backtest_check_summary(
+    trend_levels: dict[str, str],
+    trend_scores: dict[str, float],
+    check_row: DrawRow,
+    historical_fund: float,
+) -> None:
+    ''' 列印回測模式的核對期分組分析。 '''
+    abcd_fund_eligible = is_abcd_pool_amount_eligible(historical_fund)
+    selected_name = select_trend_pool(trend_scores, abcd_fund_eligible)
+
     print()
-    print("---------------- 下期投注走趨總結 ----------------")
+    print("---------------- 回測核對走趨總結 ----------------")
+    if abcd_fund_eligible:
+        print(f"核對期日期：{check_row['date']}；頭獎基金：{historical_fund:,.0f}；適合多組包圍投注。")
+    else:
+        print(f"核對期日期：{check_row['date']}；頭獎基金：{historical_fund:,.0f}；不宜包圍投注。")
     for name in TREND_GROUP_SETS:
         level = trend_levels.get(name, "弱")
         print(next_draw_bet_advice(name, level))
+    print("/> -------------")
+    print(
+        f"系統三選一核對：{selected_name}，{candidate_pool_name(selected_name)}，"
+        f"走勢分數 {trend_scores.get(selected_name, 0.0):.1f}，"
+        f"走勢判斷：{trend_levels.get(selected_name, '弱')}"
+    )
+    print(selected_pool_check_text(check_row, selected_name))
+
+
+def print_next_draw_bet_summary(
+    trend_levels: dict[str, str],
+    trend_scores: dict[str, float],
+    next_draw_info: Optional[NextDrawInfo],
+) -> None:
+    ''' 列印下期投注走趨總結。 '''
+    prize_fund = read_prize_fund_info()
+    abcd_fund_eligible = is_abcd_pool_fund_eligible(prize_fund)
+    selected_name = select_trend_pool(trend_scores, abcd_fund_eligible)
+
+    print()
+    print("---------------- 下期投注走趨總結 ----------------")
+    if next_draw_info is not None:
+        print(
+            f"下期日期：{next_draw_info['next_draw_date']}；"
+            f"M4 估計頭獎基金：{next_draw_info['next_draw_prize_fund']:,.0f}"
+        )
+    print(
+        f"多寶 / 金多寶：{prize_fund['snowball']:,.0f}；"
+        f"估計頭獎基金：{prize_fund['estimated_first_prize_fund']:,.0f}；"
+        f"ABCD 門檻：{ABCD_POOL_MIN_FUND:,.0f}"
+    )
+    if abcd_fund_eligible:
+        print("ABCD 全候選池資格：達標，可納入三選一。")
+    else:
+        print("ABCD 全候選池資格：未達標，只觀察，不納入三選一投注建議。")
+    for name in TREND_GROUP_SETS:
+        level = trend_levels.get(name, "弱")
+        print(next_draw_bet_advice(name, level))
+    print(
+        f"系統三選一：{selected_name}，{candidate_pool_name(selected_name)}，"
+        f"走勢分數 {trend_scores.get(selected_name, 0.0):.1f}，"
+        f"走勢判斷：{trend_levels.get(selected_name, '弱')}"
+    )
 
 
 def print_combo_trend_window(
@@ -343,6 +672,7 @@ def print_combo_trend_window(
     window_count: int,
     backtest_index: int,
     total_backtest_count: int,
+    historical_funds: dict[str, float],
 ) -> None:
     ''' 列印單一回測期、單一窗口期的組合走趨分析。 '''
     display_backtest_index = total_backtest_count - backtest_index + 1
@@ -357,10 +687,79 @@ def print_combo_trend_window(
         f"回測期= {backtest_count}，窗口期 = {window_count} ======"
     )
     print("backtest：窗口期不包括核對期，預留核對預測")
-    print_combo_trend_sections(window_rows, check_index - 1)
+    check_row = draws[check_index]
+    print_combo_trend_sections(
+        window_rows,
+        check_index - 1,
+        "backtest",
+        check_row=check_row,
+        historical_fund=historical_funds.get(check_row["date"], 0.0),
+    )
 
 
-def print_predict_window(draws: list[DrawRow], window_count: int) -> None:
+def init_backtest_trend_stats() -> BacktestTrendStats:
+    ''' 初始化走趨三選一回測統計。 '''
+    return {
+        "total": 0,
+        "hit": 0,
+        "failed": 0,
+        "selected_counts": {name: 0 for name in TREND_GROUP_SETS},
+        "hit_counts": {name: 0 for name in TREND_GROUP_SETS},
+    }
+
+
+def update_backtest_trend_stats(
+    stats: BacktestTrendStats,
+    draws: list[DrawRow],
+    check_index: int,
+    window_count: int,
+    historical_funds: dict[str, float],
+) -> None:
+    ''' 以單一期回測資料更新三選一預測命中統計。 '''
+    window_start_index = max(0, check_index - window_count)
+    window_rows = [
+        (row_index, row)
+        for row_index, row in enumerate(draws[window_start_index:check_index], start=window_start_index)
+    ]
+    if not window_rows:
+        return
+
+    _trend_levels, trend_scores = analyze_trend_groups(window_rows)
+    check_row = draws[check_index]
+    historical_fund = historical_funds.get(check_row["date"], 0.0)
+    selected_name = select_trend_pool(
+        trend_scores,
+        is_abcd_pool_amount_eligible(historical_fund),
+    )
+    stats["total"] += 1
+    stats["selected_counts"][selected_name] += 1
+    if selected_pool_hit(check_row, selected_name):
+        stats["hit"] += 1
+        stats["hit_counts"][selected_name] += 1
+    else:
+        stats["failed"] += 1
+
+
+def print_backtest_trend_stats(stats: BacktestTrendStats, window_count: int) -> None:
+    ''' 打印三選一預測走趨回測統計。 '''
+    total = stats["total"]
+    hit = stats["hit"]
+    failed = stats["failed"]
+    hit_percent = (hit / total * 100) if total else 0
+
+    print()
+    print(f"---------------- 預測走趨回測統計，窗口期 = {window_count} ----------------")
+    print(f"預測走趨命中 {hit} / {total} 期，({hit_percent:.0f} %)")
+    for name in TREND_GROUP_SETS:
+        print(f"{name} = {stats['hit_counts'][name]} / {total}")
+    print(f"失敗預測 = {failed} / {total}")
+
+
+def print_predict_window(
+    draws: list[DrawRow],
+    window_count: int,
+    next_draw_infos: dict[str, NextDrawInfo],
+) -> None:
     ''' 列印 predict 模式最後窗口期；包含最後一期已開號。 '''
     latest_index = len(draws) - 1
     window_start_index = max(0, latest_index - window_count + 1)
@@ -371,7 +770,12 @@ def print_predict_window(draws: list[DrawRow], window_count: int) -> None:
 
     print(f"====== {VERSION} 組合走趨分析，predict，窗口期 = {window_count} ======")
     print("predict：窗口期包含最後一期已開號，用於預測下一期")
-    print_combo_trend_sections(window_rows, latest_index)
+    print_combo_trend_sections(
+        window_rows,
+        latest_index,
+        "predict",
+        next_draw_info=next_draw_infos.get(draws[latest_index]["date"]),
+    )
 
 
 def print_query_setting() -> None:
@@ -401,11 +805,14 @@ def main() -> None:
     print_query_setting()
     latest_index = len(draws) - 1
     if MODE == "backtest":
+        historical_funds = read_historical_prize_funds()
         for backtest_count in BACKTEST_DRAW_COUNT_LIST:
             first_check_index = max(0, latest_index - backtest_count + 1)
             check_indices = range(first_check_index, latest_index + 1)
             total_backtest_count = len(check_indices)
             for window_count in WINDOW_DRAW_COUNT_LIST:
+                stats = init_backtest_trend_stats()
+                backtest_records: list[dict[str, object]] = []
                 for backtest_index, check_index in enumerate(check_indices, start=1):
                     print_combo_trend_window(
                         draws,
@@ -414,10 +821,37 @@ def main() -> None:
                         window_count,
                         backtest_index,
                         total_backtest_count,
+                        historical_funds,
                     )
+                    backtest_records.append(
+                        build_backtest_trend_record(
+                            draws,
+                            check_index,
+                            backtest_count,
+                            window_count,
+                            backtest_index,
+                            total_backtest_count,
+                            historical_funds,
+                        )
+                    )
+                    update_backtest_trend_stats(
+                        stats,
+                        draws,
+                        check_index,
+                        window_count,
+                        historical_funds,
+                    )
+                print_backtest_trend_stats(stats, window_count)
+                write_csv_rows(TREND_BACKTEST_CSV, backtest_records)
+                print(f"回測預測資料已存檔：{TREND_BACKTEST_CSV}")
     elif MODE == "predict":
+        next_draw_infos = read_next_draw_infos()
+        pred_records: list[dict[str, object]] = []
         for window_count in WINDOW_DRAW_COUNT_LIST:
-            print_predict_window(draws, window_count)
+            print_predict_window(draws, window_count, next_draw_infos)
+            pred_records.append(build_predict_trend_record(draws, window_count, next_draw_infos))
+        write_csv_rows(TREND_PRED_CSV, pred_records)
+        print(f"下期預測資料已存檔：{TREND_PRED_CSV}")
     else:
         raise ValueError('MODE 只能是 "backtest" 或 "predict"')
 
