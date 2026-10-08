@@ -24,9 +24,6 @@ PRINT_ABCD_PROPERTY_ANALYSIS = True
 PRINT_HIGH_FREQ_PAIR_ANALYSIS = True
 PRINT_WEAK_NUM_ANALYSIS = True
 HIGH_FREQ_MIN_PAIR_COUNT = 2
-HIGH_FREQ_DAN_TAKE = 5
-HIGH_FREQ_PARTNER_TAKE = 9
-HIGH_FREQ_PARTNER_POOL_TAKE = 9
 PRINT_DIMENSION_HOT_NUM_ANALYSIS = True
 DIMENSION_DRAW_COUNT = 6
 DIMENSION_HOT_MIN_COUNT = 2
@@ -167,11 +164,11 @@ def group_special(row: DrawRow, group_id: int) -> Optional[int]:
 
 
 def display_ball_count(row: DrawRow) -> float:
-    normal_count = len(selected_normal_nums(row))
-    special = selected_special(row)
-    if special is not None and normal_count >= 3:
-        return normal_count + 0.5
-    return float(normal_count)
+    return float(selected_ball_count(row))
+
+
+def selected_ball_count(row: DrawRow) -> int:
+    return len(selected_normal_nums(row)) + (1 if selected_special(row) is not None else 0)
 
 
 def format_ball_count(value: float) -> str:
@@ -206,8 +203,7 @@ def is_matched(count: int) -> bool:
 
 
 def abcd_property_row_count(row: DrawRow) -> int:
-    count = len(selected_normal_nums(row))
-    return count + (1 if selected_special(row) is not None else 0)
+    return selected_ball_count(row)
 
 
 def is_abcd_property_row_matched(row: DrawRow) -> bool:
@@ -227,7 +223,7 @@ def detail_rows(draws: list[DrawRow], period_rows: list[tuple[int, DrawRow]]) ->
     for row_index, row in period_rows:
         rank = latest_index - row_index + 1
         normal_nums = selected_normal_nums(row)
-        matched = is_matched(len(normal_nums))
+        matched = is_matched(selected_ball_count(row))
         record: dict[str, object] = {
             "近期": f"近{rank}期",
             "日期": row["date"],
@@ -250,12 +246,15 @@ def render_compact_table(rows: list[dict[str, object]], table_class: str = "prr-
         st.info("沒有資料。")
         return
 
+    def cell_html(value: object) -> str:
+        return html.escape(str(value)).replace(",", ",<wbr>")
+
     headers = list(rows[0].keys())
     header_html = "".join(f"<th>{html.escape(str(header))}</th>" for header in headers)
     body_html = []
     for row in rows:
         cells = "".join(
-            f"<td>{html.escape(str(row.get(header, '')))}</td>"
+            f"<td>{cell_html(row.get(header, ''))}</td>"
             for header in headers
         )
         body_html.append(f"<tr>{cells}</tr>")
@@ -274,7 +273,7 @@ def render_compact_table(rows: list[dict[str, object]], table_class: str = "prr-
 
 
 def render_summary(period_rows: list[tuple[int, DrawRow]]) -> None:
-    matched_count = sum(1 for _row_index, row in period_rows if is_matched(len(selected_normal_nums(row))))
+    matched_count = sum(1 for _row_index, row in period_rows if is_matched(selected_ball_count(row)))
     total_count = len(period_rows)
     matched_percent = (matched_count / total_count * 100) if total_count else 0
 
@@ -301,8 +300,19 @@ def group_window_num_counts(
     return counters
 
 
+def property_source_rows(
+    period_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> list[tuple[int, DrawRow]]:
+    return [
+        (row_index, row)
+        for row_index, row in period_rows
+        if target_index - row_index + 1 >= 2
+    ]
+
+
 def missing_nums_text(period_rows: list[tuple[int, DrawRow]]) -> str:
-    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    group_counts = group_window_num_counts(period_rows, matched_only=False)
     parts: list[str] = []
     for group_id in selected_group_ids():
         code, _name, start_num, end_num = GROUPS[group_id]
@@ -312,11 +322,11 @@ def missing_nums_text(period_rows: list[tuple[int, DrawRow]]) -> str:
             if group_counts[group_id][num] == 0
         ]
         parts.append(f"{code}{format_nums(missing_nums)}")
-    return "ABCD 沒出現球號 = " + "，".join(parts)
+    return "ANB 缺席球 = " + "，".join(parts)
 
 
 def missing_nums_by_group(period_rows: list[tuple[int, DrawRow]]) -> dict[int, list[int]]:
-    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    group_counts = group_window_num_counts(period_rows, matched_only=False)
     result: dict[int, list[int]] = {}
     for group_id in selected_group_ids():
         _code, _name, start_num, end_num = GROUPS[group_id]
@@ -332,46 +342,27 @@ def high_freq_pair_data(period_rows: list[tuple[int, DrawRow]]) -> dict[int, tup
     result: dict[int, tuple[list[int], list[int]]] = {}
 
     for group_id in selected_group_ids():
-        pair_rows: list[list[int]] = []
+        multi_open_counter: Counter[int] = Counter()
         for _row_index, row in period_rows:
-            if not is_abcd_property_row_matched(row):
-                continue
             nums = group_normal_nums(row, group_id)
             special = group_special(row, group_id)
-            pair_nums = sorted(set(nums + ([special] if special is not None else [])))
-            if len(pair_nums) >= 2:
-                pair_rows.append(pair_nums)
-
-        dan_counter: Counter[int] = Counter()
-        partner_counter_by_dan: dict[int, Counter[int]] = {}
-        for nums in pair_rows:
-            for dan_num in nums:
-                dan_counter[dan_num] += 1
-                partner_counter = partner_counter_by_dan.setdefault(dan_num, Counter())
-                for partner_num in nums:
-                    if partner_num != dan_num:
-                        partner_counter[partner_num] += 1
+            open_nums = sorted(set(nums + ([special] if special is not None else [])))
+            if len(open_nums) >= 2:
+                multi_open_counter.update(open_nums)
 
         dan_nums = [
             num
-            for num, count in sorted(dan_counter.items(), key=lambda item: (-item[1], item[0]))
-            if count > HIGH_FREQ_MIN_PAIR_COUNT
-        ][:HIGH_FREQ_DAN_TAKE]
-        if not dan_nums:
-            result[group_id] = ([], [])
-            continue
-
-        partner_counter: Counter[int] = Counter()
-        for dan_num in dan_nums:
-            partner_counter.update(partner_counter_by_dan.get(dan_num, Counter()))
-        for dan_num in dan_nums:
-            partner_counter.pop(dan_num, None)
-
-        partner_pool = sorted(
-            partner_counter,
-            key=lambda partner_num: (-partner_counter[partner_num], partner_num),
-        )[:HIGH_FREQ_PARTNER_POOL_TAKE]
-        result[group_id] = (dan_nums, sorted(partner_pool[:HIGH_FREQ_PARTNER_TAKE]))
+            for num, count in sorted(multi_open_counter.items(), key=lambda item: (-item[1], item[0]))
+            if count >= HIGH_FREQ_MIN_PAIR_COUNT
+        ]
+        partner_nums = sorted(
+            [
+                num
+                for num, count in sorted(multi_open_counter.items(), key=lambda item: (-item[1], item[0]))
+                if count == 1 and num not in dan_nums
+            ]
+        )
+        result[group_id] = (dan_nums, partner_nums)
 
     return result
 
@@ -388,51 +379,71 @@ def high_freq_pair_text(pair_data: dict[int, tuple[list[int], list[int]]]) -> li
         dan_parts.append(f"{code}{format_nums(dan_nums)}")
         partner_parts.append(f"{code}{format_nums(partner_nums)}")
     return [
-        "ABCD 高頻膽號 = " + "，".join(dan_parts),
-        "ABCD 高頻配腳號 = " + "，".join(partner_parts),
+        "HFB 高頻膽號 = " + "，".join(dan_parts),
+        "HFL 高頻腳號 = " + "，".join(partner_parts),
     ]
 
 
 def weak_nums_text(
     period_rows: list[tuple[int, DrawRow]],
     pair_data: dict[int, tuple[list[int], list[int]]],
-    extra_assigned_nums: Optional[dict[int, set[int]]] = None,
 ) -> list[str]:
     if not PRINT_WEAK_NUM_ANALYSIS:
         return []
 
-    extra_assigned_nums = extra_assigned_nums or {}
-    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    group_counts = group_window_num_counts(period_rows, matched_only=False)
+    single_open_nums: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
+    for _row_index, row in period_rows:
+        for group_id in selected_group_ids():
+            nums = group_nums_with_special(row, group_id)
+            if len(nums) == 1:
+                single_open_nums[group_id].add(nums[0])
+
     parts: list[str] = []
     for group_id in selected_group_ids():
         code, _name, start_num, end_num = GROUPS[group_id]
         dan_nums, partner_nums = pair_data.get(group_id, ([], []))
-        assigned_nums = set(dan_nums) | set(partner_nums) | extra_assigned_nums.get(group_id, set())
-        weak_nums = [
+        missing_nums = {
             num
             for num in range(start_num, end_num + 1)
-            if group_counts[group_id][num] > 0 and num not in assigned_nums
+            if group_counts[group_id][num] == 0
+        }
+        assigned_nums = missing_nums | set(dan_nums) | set(partner_nums)
+        otn_nums = [
+            num
+            for num in sorted(single_open_nums[group_id])
+            if num not in assigned_nums
         ]
-        parts.append(f"{code}{format_nums(weak_nums)}")
-    return ["ABCD 弱號 = " + "，".join(parts)]
+        parts.append(f"{code}{format_nums(otn_nums)}")
+    return ["OTN 單次球 = " + "，".join(parts)]
 
 
 def weak_nums_by_group(
     period_rows: list[tuple[int, DrawRow]],
     pair_data: dict[int, tuple[list[int], list[int]]],
-    extra_assigned_nums: Optional[dict[int, set[int]]] = None,
 ) -> dict[int, list[int]]:
-    extra_assigned_nums = extra_assigned_nums or {}
-    group_counts = group_window_num_counts(period_rows, matched_only=True)
+    group_counts = group_window_num_counts(period_rows, matched_only=False)
+    single_open_nums: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
+    for _row_index, row in period_rows:
+        for group_id in selected_group_ids():
+            nums = group_nums_with_special(row, group_id)
+            if len(nums) == 1:
+                single_open_nums[group_id].add(nums[0])
+
     result: dict[int, list[int]] = {}
     for group_id in selected_group_ids():
         _code, _name, start_num, end_num = GROUPS[group_id]
         dan_nums, partner_nums = pair_data.get(group_id, ([], []))
-        assigned_nums = set(dan_nums) | set(partner_nums) | extra_assigned_nums.get(group_id, set())
-        result[group_id] = [
+        missing_nums = {
             num
             for num in range(start_num, end_num + 1)
-            if group_counts[group_id][num] > 0 and num not in assigned_nums
+            if group_counts[group_id][num] == 0
+        }
+        assigned_nums = missing_nums | set(dan_nums) | set(partner_nums)
+        result[group_id] = [
+            num
+            for num in sorted(single_open_nums[group_id])
+            if num not in assigned_nums
         ]
     return result
 
@@ -486,16 +497,6 @@ def dimension_hot_nums(
     return result
 
 
-def dimension_hot_num_sets(
-    hot_by_dimension: dict[int, dict[int, list[int]]],
-) -> dict[int, set[int]]:
-    hot_sets: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
-    for group_hot_nums in hot_by_dimension.values():
-        for group_id, nums in group_hot_nums.items():
-            hot_sets.setdefault(group_id, set()).update(nums)
-    return hot_sets
-
-
 def near_one_dimension_hits(
     near_one_row: DrawRow,
     hot_by_dimension: dict[int, dict[int, list[int]]],
@@ -517,18 +518,33 @@ def near_one_dimension_hits(
     return hit_parts
 
 
+def near_one_high_freq_dan_hits(
+    near_one_row: DrawRow,
+    pair_data: dict[int, tuple[list[int], list[int]]],
+) -> list[int]:
+    near_one_nums = {num for num in near_one_row["nums"] if 1 <= num <= 40}
+    if near_one_row["special"] is not None and 1 <= near_one_row["special"] <= 40:
+        near_one_nums.add(near_one_row["special"])
+
+    dan_nums = {
+        num
+        for group_id in selected_group_ids()
+        for num in pair_data.get(group_id, ([], []))[0]
+    }
+    return sorted(near_one_nums & dan_nums)
+
+
 def property_analysis_rows(
     period_rows: list[tuple[int, DrawRow]],
     pair_data: dict[int, tuple[list[int], list[int]]],
-    dimension_hot_sets: dict[int, set[int]],
 ) -> list[dict[str, object]]:
     missing_by_group = missing_nums_by_group(period_rows)
-    weak_by_group = weak_nums_by_group(period_rows, pair_data, dimension_hot_sets)
+    weak_by_group = weak_nums_by_group(period_rows, pair_data)
     row_sources: list[tuple[str, dict[int, list[int]]]] = [
-        ("未出現", missing_by_group),
+        ("缺席球", missing_by_group),
         ("高頻膽號", {group_id: pair_data.get(group_id, ([], []))[0] for group_id in selected_group_ids()}),
-        ("高頻配腳", {group_id: pair_data.get(group_id, ([], []))[1] for group_id in selected_group_ids()}),
-        ("弱球號", weak_by_group),
+        ("高頻腳號", {group_id: pair_data.get(group_id, ([], []))[1] for group_id in selected_group_ids()}),
+        ("單次球", weak_by_group),
     ]
 
     rows: list[dict[str, object]] = []
@@ -541,13 +557,28 @@ def property_analysis_rows(
     return rows
 
 
-def render_abcd_property_analysis(period_rows: list[tuple[int, DrawRow]], target_index: int) -> None:
-    if not PRINT_ABCD_PROPERTY_ANALYSIS:
-        return
+def dimension_hot_rows(
+    hot_by_dimension: dict[int, dict[int, list[int]]],
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for dimension_no in sorted(hot_by_dimension, reverse=True):
+        row: dict[str, object] = {"維度": f"#{dimension_no}"}
+        for group_id in selected_group_ids():
+            code = GROUPS[group_id][0]
+            row[code] = format_nums(hot_by_dimension[dimension_no].get(group_id, []))
+        rows.append(row)
+    return rows
 
-    pair_data = high_freq_pair_data(period_rows)
-    hot_by_dimension = dimension_hot_nums(period_rows, target_index)
-    dimension_hot_sets = dimension_hot_num_sets(hot_by_dimension)
+
+def render_abcd_property_analysis(
+    period_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> dict[int, tuple[list[int], list[int]]]:
+    if not PRINT_ABCD_PROPERTY_ANALYSIS:
+        return {}
+
+    analysis_rows = property_source_rows(period_rows, target_index)
+    pair_data = high_freq_pair_data(analysis_rows)
     section_title("A/B/C/D 選組分析屬性")
     st.markdown(
         f"**{selected_group_ids_text()} A/B/C/D 選組分析屬性**  \n"
@@ -556,12 +587,17 @@ def render_abcd_property_analysis(period_rows: list[tuple[int, DrawRow]], target
     )
     st.markdown("/> -------------")
     render_compact_table(
-        property_analysis_rows(period_rows, pair_data, dimension_hot_sets),
+        property_analysis_rows(analysis_rows, pair_data),
         table_class="prr-v3-table prr-v3-property-table",
     )
+    return pair_data
 
 
-def render_dimension_hot_num_analysis(period_rows: list[tuple[int, DrawRow]], target_index: int) -> None:
+def render_dimension_hot_num_analysis(
+    period_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
+) -> None:
     if not PRINT_DIMENSION_HOT_NUM_ANALYSIS:
         return
     if len(period_rows) < DIMENSION_DRAW_COUNT + 1:
@@ -571,28 +607,24 @@ def render_dimension_hot_num_analysis(period_rows: list[tuple[int, DrawRow]], ta
     if not hot_by_dimension:
         return
 
-    section_title("維度熱門號分析")
+    section_title("維度熱門號分析 #1/#2/#3")
     st.markdown(
         f"維度規則：近 1 期只作比對；由近 2 期起每 {DIMENSION_DRAW_COUNT} 期一維，"
         f"同組單獨 1 球重開 >= {DIMENSION_HOT_MIN_COUNT} 次"
     )
-    for dimension_no in sorted(hot_by_dimension, reverse=True):
-        parts: list[str] = []
-        for group_id in selected_group_ids():
-            code = GROUPS[group_id][0]
-            parts.append(f"{code}{format_nums(hot_by_dimension[dimension_no].get(group_id, []))}")
-        st.markdown(
-            f'<div class="prr-v3-property-line">#{dimension_no} 維{dimension_no}：'
-            f'{html.escape("，".join(parts))}</div>',
-            unsafe_allow_html=True,
-        )
+    render_compact_table(
+        dimension_hot_rows(hot_by_dimension),
+        table_class="prr-v3-table prr-v3-property-table",
+    )
 
     near_one_row = max(period_rows, key=lambda item: item[0])[1]
     hit_parts = near_one_dimension_hits(near_one_row, hot_by_dimension)
     hit_text = "，".join(hit_parts) if hit_parts else "[]"
+    dan_hits = near_one_high_freq_dan_hits(near_one_row, pair_data or {})
     st.markdown(
         f'<div class="prr-v3-property-line">近 1 期比對：{html.escape(near_one_row["date"])}，'
-        f'開獎號 {html.escape(all_check_nums_text(near_one_row))}，{html.escape(hit_text)}</div>',
+        f'開獎號 {html.escape(all_check_nums_text(near_one_row))}，'
+        f'重開提示：維度 {html.escape(hit_text)}，HFB {html.escape(format_nums(dan_hits))}</div>',
         unsafe_allow_html=True,
     )
 
@@ -689,8 +721,9 @@ def main() -> None:
         .prr-v3-property-table th,
         .prr-v3-property-table td {
             white-space: normal;
-            overflow-wrap: anywhere;
-            word-break: break-word;
+            overflow-wrap: normal;
+            word-break: normal;
+            overflow: hidden;
             line-height: 1.28;
             padding: 4px 3px;
             vertical-align: top;
@@ -698,7 +731,7 @@ def main() -> None:
         .prr-v3-property-table th:nth-child(1),
         .prr-v3-property-table td:nth-child(1) {
             width: 4.8rem;
-            text-align: center;
+            text-align: left;
             font-weight: 900;
         }
         .prr-v3-property-table th:nth-child(2),
@@ -860,5 +893,5 @@ def main() -> None:
     rows = detail_rows(draws, period_rows)
     render_compact_table(rows, table_class="prr-v3-table prr-v3-result-table")
     latest_index = len(draws) - 1
-    render_abcd_property_analysis(period_rows, latest_index)
-    render_dimension_hot_num_analysis(period_rows, latest_index)
+    pair_data = render_abcd_property_analysis(period_rows, latest_index)
+    render_dimension_hot_num_analysis(period_rows, latest_index, pair_data)

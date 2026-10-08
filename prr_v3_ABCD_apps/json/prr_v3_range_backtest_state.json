@@ -4,10 +4,7 @@
   "range_backtest_to": 1,
   "backtest_window_hit_draw": 30,
   "window_draw_count_list": [
-    16,
-    18,
-    24,
-    30
+    13
   ],
   "base_group_take_counts": {
     "A": 3,
@@ -19,7 +16,7 @@
   "auto_distribute_max_transfer": 2,
   "auto_distribute_min_group_take": 2,
   "auto_distribute_min_gap_percent": 10,
-  "combination_take_count": 1,
+  "combination_take_count": 5,
   "birthday_num_match_mode": ">=",
   "high_freq_min_pair_count": 2,
   "high_freq_dan_take": 5,

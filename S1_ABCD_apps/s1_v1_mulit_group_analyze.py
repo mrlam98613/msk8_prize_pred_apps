@@ -11,7 +11,25 @@ A,B,C,D, (1-9) , (10-20) , (21-31) , (32-40), (分組查詢)
 10-20, [11,13,15,17,19], [10,12,14,16,18,20] = 11 球
 21-31, [21,23,25,27,29,31], [22,24,26,28,30] = 11 球
 32-40, [33,35,37,39], [32,34,36,38,40] = 9 球 
+重點已改好：
+- 近 1 期不納入 ABCD 四類屬性累計
+- 四類屬性只用近 2 至 N 期
+- 查詢條件 N1..N7，特號 = 1 球
+- HFB 高頻膽號 / HFL 高頻腳號改為同組雙開或多開期分析
+- 同組雙開或多開期內出現 >= 2 次 = HFB 高頻膽號
+- 同組雙開或多開期內出現 1 次 = HFL 高頻腳號
+- ANB 缺席球 / HFB 高頻膽號 / HFL 高頻腳號 / OTN 單次球 四類互斥，合計補滿該組全部號碼
+- 維度熱門號保持獨立，可與以上四類重複
+- 近 1 期比對現在會顯示
+absent_number_balls = ANB / 缺席球 
+high_frequency_banker = HFB / 高頻膽號 
+high_frequency_leg = HFL / 高頻腳號 
+once_times_number = OTN / 單次球
+維度 = #1,#2 #3 / 
 
+1-9 ＝9 球，10-20 ＝11 球，21- 31 ＝11 球，32-40 ＝9 球。
+所以 ABCD 1-40 球分析。
+最後顯示 1-40 ，必定分析出 在那屬性分組在。
 '''
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -20,6 +38,8 @@ M6_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M6_lotto_history_prize.cs
 M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.csv"
 COMBO_TREND_SCRIPT = CURRENT_DIR / "S1_v1_combo_trend_analyze.py"
 TREND_PRED_CSV = CURRENT_DIR / "backtest_pred_data" / "trend_pred.csv"
+BACKTEST_ABCD_GROUP_RESULTS_CSV = CURRENT_DIR / "backtest_pred_data" / "backtest_ABCD_group_results.csv"
+LASTDRAW_HIT_HFB_RESULTS_CSV = CURRENT_DIR / "backtest_pred_data" / "lastDraw_hit_HFB_results.csv"
 
 
 # MODE 可選："backtest" 或 "predict"。
@@ -30,8 +50,8 @@ BACKTEST_DRAW_COUNT_LIST = [1] 同步
 WINDOW_DRAW_COUNT_LIST = [19] 同步
 '''
 
-MODE = "predict" # 
-BACKTEST_DRAW_COUNT_LIST = [1]
+MODE = "backtest" # 
+BACKTEST_DRAW_COUNT_LIST = [50]
 WINDOW_DRAW_COUNT_LIST = [19]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
@@ -68,13 +88,10 @@ PRINT_ODD_EVEN_GROUP_ANALYSIS = False
 PRINT_RBG_GROUP_ANALYSIS = False
 
 # 是否顯示 ABCD 四種分析屬性。
-PRINT_ABCD_PROPERTY_ANALYSIS = True # True 顯示沒出現球號、高頻膽號、高頻配腳號、弱號。
-PRINT_HIGH_FREQ_PAIR_ANALYSIS = True # True 顯示高頻膽號與高頻配腳號。
-PRINT_WEAK_NUM_ANALYSIS = True # True 顯示扣除沒出現、高頻膽、高頻配腳後的弱號。
-HIGH_FREQ_MIN_PAIR_COUNT = 2 # 高頻膽號門檻：同組配對出現次數必須大於此數值。
-HIGH_FREQ_DAN_TAKE = 5 # 每組最多顯示幾個高頻膽號。
-HIGH_FREQ_PARTNER_TAKE = 9 # 每組最多顯示幾個高頻配腳號。
-HIGH_FREQ_PARTNER_POOL_TAKE = 9 # 高頻配腳先取前 N 個強配腳，再輸出指定數量。
+PRINT_ABCD_PROPERTY_ANALYSIS = True # True 顯示 ANB/HFB/HFL/OTN 四類屬性。
+PRINT_HIGH_FREQ_PAIR_ANALYSIS = True # True 顯示 HFB 高頻膽號與 HFL 高頻腳號。
+PRINT_WEAK_NUM_ANALYSIS = True # True 顯示 OTN 單次球。
+HIGH_FREQ_MIN_PAIR_COUNT = 2 # HFB 高頻膽號門檻：同組雙開或多開期內出現次數必須達到此數值。
 
 # 是否顯示維度熱門號：近 1 期只作比對；由近 2 期起，每 6 期切一個維度。
 PRINT_DIMENSION_HOT_NUM_ANALYSIS = True
@@ -166,6 +183,19 @@ def read_trend_pred_rows() -> list[dict[str, str]]:
     return read_csv_rows(TREND_PRED_CSV)
 
 
+def write_csv_rows(path: Path, rows: list[dict[str, object]]) -> None:
+    ''' 寫出 CSV；使用 utf-8-sig 方便試算表直接讀中文。 '''
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        return
+
+    fieldnames = list(rows[0].keys())
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def sync_trend_pred_csv(window_count: int) -> None:
     ''' predict 模式先同步執行組合走趨分析，產生同窗口期 trend_pred.csv。 '''
     if not COMBO_TREND_SCRIPT.exists():
@@ -211,7 +241,8 @@ def format_hit_nums(nums: list[int], special: Optional[int] = None) -> str:
 
 def format_ball_count(value: float) -> str:
     ''' 格式化球數，整數不顯示小數點。 '''
-    return str(int(value)) if value.is_integer() else f"{value:g}"
+    numeric_value = float(value)
+    return str(int(numeric_value)) if numeric_value.is_integer() else f"{numeric_value:g}"
 
 
 def prize_text(value: float) -> str:
@@ -283,16 +314,8 @@ def selected_group_ids() -> tuple[int, ...]:
 
 
 def row_ball_count(row: DrawRow) -> float:
-    ''' 計算某期开奖在所選組別中的總球數。 '''
-    normal_count = sum(
-        len(selected_nums(row, start_num, end_num))
-        for _name, start_num, end_num in selected_groups()
-    )
-    has_special = any(
-        selected_special(row, start_num, end_num) is not None
-        for _name, start_num, end_num in selected_groups()
-    )
-    return display_ball_count(normal_count, row["special"] if has_special else None)
+    ''' 計算查詢顯示球數；N1..N7 以 7 球計，特號當 1 球。 '''
+    return float(row_selected_ball_count(row))
 
 
 def row_selected_normal_count(row: DrawRow) -> int:
@@ -301,6 +324,25 @@ def row_selected_normal_count(row: DrawRow) -> int:
         len(selected_nums(row, start_num, end_num))
         for _name, start_num, end_num in selected_groups()
     )
+
+
+def row_selected_special_count(row: DrawRow) -> int:
+    ''' 計算某期开奖在所選組別中的特號 N7 數量；查詢時特號當 1 球。 '''
+    return sum(
+        1
+        for _name, start_num, end_num in selected_groups()
+        if selected_special(row, start_num, end_num) is not None
+    )
+
+
+def row_selected_ball_count(row: DrawRow) -> int:
+    ''' 計算查詢用 N1..N7 總球數；特號當 1 球。 '''
+    return row_selected_normal_count(row) + row_selected_special_count(row)
+
+
+def row_selected_hit_ball_count(row: DrawRow) -> float:
+    ''' 計算核對/比對用球數；正號當 1 球，特號當 0.5 球。 '''
+    return row_selected_normal_count(row) + (0.5 if row_selected_special_count(row) else 0)
 
 
 def row_selected_normal_nums(row: DrawRow) -> list[int]:
@@ -327,12 +369,7 @@ def is_abcd_property_matched(count: int) -> bool:
 
 def abcd_property_row_count(row: DrawRow) -> int:
     ''' 計算 ABCD 屬性分析用的每期合併分組總球數，包括特號。 '''
-    count = row_selected_normal_count(row)
-    has_special = any(
-        selected_special(row, start_num, end_num) is not None
-        for _name, start_num, end_num in selected_groups()
-    )
-    return count + (1 if has_special else 0)
+    return row_selected_ball_count(row)
 
 
 def is_abcd_property_row_matched(row: DrawRow) -> bool:
@@ -343,10 +380,10 @@ def is_abcd_property_row_matched(row: DrawRow) -> bool:
 def group_result_text(row: DrawRow, name: str, start_num: int, end_num: int) -> str:
     ''' 產生單組詳細顯示文字，包含組名與單組球數。 '''
     nums = selected_nums(row, start_num, end_num)
-    if not is_matched(len(nums)):
-        return f"[{name}] [] /> 0 球"
     special = selected_special(row, start_num, end_num)
-    ball_count = display_ball_count(len(nums), special)
+    ball_count = len(nums) + (1 if special is not None else 0)
+    if not is_matched(ball_count):
+        return f"[{name}] [] /> 0 球"
     return f"[{name}] {format_nums(nums, special)} /> {format_ball_count(ball_count)} 球"
 
 
@@ -430,7 +467,7 @@ def print_draw_rows(
     for row_index, row in window_rows:
         rank = target_index - row_index + 1
         result_text = ""
-        if is_matched(row_selected_normal_count(row)):
+        if is_matched(row_selected_ball_count(row)):
             result_text = f"{row_result_text(row)}{prize_print_text(row)}"
         print(
             f"近 {rank:>2}期：{row['date']}，{result_text}"
@@ -439,7 +476,7 @@ def print_draw_rows(
 
 def matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> int:
     ''' 統計窗口期內符合查詢條件的期數。 '''
-    return sum(1 for _row_index, row in window_rows if is_matched(row_selected_normal_count(row)))
+    return sum(1 for _row_index, row in window_rows if is_matched(row_selected_ball_count(row)))
 
 
 def print_matched_window_count(window_rows: list[tuple[int, DrawRow]]) -> None:
@@ -480,7 +517,7 @@ def matched_window_num_counters(window_rows: list[tuple[int, DrawRow]]) -> tuple
     num_counter: Counter[int] = Counter()
     special_counter: Counter[int] = Counter()
     for _row_index, row in window_rows:
-        if not is_matched(row_selected_normal_count(row)):
+        if not is_matched(row_selected_ball_count(row)):
             continue
         for num in row["nums"]:
             if 1 <= num <= 40:
@@ -510,9 +547,21 @@ def group_window_num_counts(
     return counters
 
 
+def property_analysis_rows(
+    window_rows: list[tuple[int, DrawRow]],
+    target_index: int,
+) -> list[tuple[int, DrawRow]]:
+    """ABCD 四類屬性分析用資料；近 1 期不納入，只用近 2 至 N 期。"""
+    return [
+        (row_index, row)
+        for row_index, row in window_rows
+        if target_index - row_index + 1 >= 2
+    ]
+
+
 def missing_nums_text(window_rows: list[tuple[int, DrawRow]]) -> str:
     """顯示窗口期內 A/B/C/D 各組沒有出現過的號碼。"""
-    group_counts = group_window_num_counts(window_rows, matched_only=True)
+    group_counts = group_window_num_counts(window_rows, matched_only=False)
     parts: list[str] = []
     for group_id in selected_group_ids():
         _name, start_num, end_num = GROUPS[group_id]
@@ -523,55 +572,36 @@ def missing_nums_text(window_rows: list[tuple[int, DrawRow]]) -> str:
             if group_counts[group_id][num] == 0
         ]
         parts.append(f"{code}{format_nums(missing)}")
-    return "ABCD 沒出現球號 = " + "，".join(parts)
+    return "ANB 缺席球 = " + "，".join(parts)
 
 
 def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tuple[list[int], list[int]]]:
-    """回傳每組的高頻膽號與同場非膽配腳號。"""
+    """回傳每組的 HFB 高頻膽號與 HFL 高頻腳號；只看同組雙開或多開期。"""
     result: dict[int, tuple[list[int], list[int]]] = {}
 
     for group_id in selected_group_ids():
         _name, start_num, end_num = GROUPS[group_id]
-        pair_rows: list[list[int]] = []
+        multi_open_counter: Counter[int] = Counter()
         for _row_index, row in window_rows:
-            if not is_abcd_property_row_matched(row):
-                continue
             nums = selected_nums(row, start_num, end_num)
             special = selected_special(row, start_num, end_num)
-            pair_nums = sorted(set(nums + ([special] if special is not None else [])))
-            if len(pair_nums) >= 2:
-                pair_rows.append(pair_nums)
-
-        dan_counter: Counter[int] = Counter()
-        partner_counter_by_dan: dict[int, Counter[int]] = {}
-        for nums in pair_rows:
-            for dan_num in nums:
-                dan_counter[dan_num] += 1
-                partner_counter = partner_counter_by_dan.setdefault(dan_num, Counter())
-                for partner_num in nums:
-                    if partner_num != dan_num:
-                        partner_counter[partner_num] += 1
+            open_nums = sorted(set(nums + ([special] if special is not None else [])))
+            if len(open_nums) >= 2:
+                multi_open_counter.update(open_nums)
 
         dan_nums = [
             num
-            for num, count in sorted(dan_counter.items(), key=lambda item: (-item[1], item[0]))
-            if count > HIGH_FREQ_MIN_PAIR_COUNT
-        ][:HIGH_FREQ_DAN_TAKE]
-        if not dan_nums:
-            result[group_id] = ([], [])
-            continue
-
-        partner_counter: Counter[int] = Counter()
-        for dan_num in dan_nums:
-            partner_counter.update(partner_counter_by_dan.get(dan_num, Counter()))
-        for dan_num in dan_nums:
-            partner_counter.pop(dan_num, None)
-
-        partner_pool = sorted(
-            partner_counter,
-            key=lambda partner_num: (-partner_counter[partner_num], partner_num),
-        )[:HIGH_FREQ_PARTNER_POOL_TAKE]
-        result[group_id] = (dan_nums, sorted(partner_pool[:HIGH_FREQ_PARTNER_TAKE]))
+            for num, count in sorted(multi_open_counter.items(), key=lambda item: (-item[1], item[0]))
+            if count >= HIGH_FREQ_MIN_PAIR_COUNT
+        ]
+        partner_nums = sorted(
+            [
+                num
+                for num, count in sorted(multi_open_counter.items(), key=lambda item: (-item[1], item[0]))
+                if count == 1 and num not in dan_nums
+            ]
+        )
+        result[group_id] = (dan_nums, partner_nums)
 
     return result
 
@@ -579,7 +609,7 @@ def high_freq_pair_data(window_rows: list[tuple[int, DrawRow]]) -> dict[int, tup
 def high_freq_pair_text(
     pair_data: dict[int, tuple[list[int], list[int]]],
 ) -> list[str]:
-    """格式化 ABCD 高頻膽號與高頻配腳號。"""
+    """格式化 HFB 高頻膽號與 HFL 高頻腳號。"""
     if not PRINT_HIGH_FREQ_PAIR_ANALYSIS:
         return []
 
@@ -591,58 +621,57 @@ def high_freq_pair_text(
         dan_parts.append(f"{code}{format_nums(dan_nums)}")
         partner_parts.append(f"{code}{format_nums(partner_nums)}")
     return [
-        "ABCD 高頻膽號 = " + "，".join(dan_parts),
-        "ABCD 高頻配腳號 = " + "，".join(partner_parts),
+        "HFB 高頻膽號 = " + "，".join(dan_parts),
+        "HFL 高頻腳號 = " + "，".join(partner_parts),
     ]
 
 
 def weak_nums_text(
     window_rows: list[tuple[int, DrawRow]],
     pair_data: dict[int, tuple[list[int], list[int]]],
-    extra_assigned_nums: Optional[dict[int, set[int]]] = None,
 ) -> list[str]:
-    """格式化扣除沒出現、高頻膽、高頻配腳後的其餘弱號。"""
+    """格式化 OTN 單次球；同組該期只開 1 球時的球號。"""
     if not PRINT_WEAK_NUM_ANALYSIS:
         return []
 
-    extra_assigned_nums = extra_assigned_nums or {}
-    group_counts = group_window_num_counts(window_rows, matched_only=True)
+    group_counts = group_window_num_counts(window_rows, matched_only=False)
+    single_open_nums: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
+    for _row_index, row in window_rows:
+        for group_id in selected_group_ids():
+            nums = group_nums_with_special(row, group_id)
+            if len(nums) == 1:
+                single_open_nums[group_id].add(nums[0])
+
     parts: list[str] = []
     for group_id in selected_group_ids():
         _name, start_num, end_num = GROUPS[group_id]
         code = GROUP_CODES[group_id]
         dan_nums, partner_nums = pair_data.get(group_id, ([], []))
-        assigned_nums = set(dan_nums) | set(partner_nums) | extra_assigned_nums.get(group_id, set())
-        weak_nums = [
+        missing_nums = {
             num
             for num in range(start_num, end_num + 1)
-            if group_counts[group_id][num] > 0 and num not in assigned_nums
+            if group_counts[group_id][num] == 0
+        }
+        assigned_nums = missing_nums | set(dan_nums) | set(partner_nums)
+        otn_nums = [
+            num
+            for num in sorted(single_open_nums[group_id])
+            if num not in assigned_nums
         ]
-        parts.append(f"{code}{format_nums(weak_nums)}")
-    return ["ABCD 弱號 = " + "，".join(parts)]
-
-
-def dimension_hot_num_sets(
-    hot_by_dimension: dict[int, dict[int, list[int]]],
-) -> dict[int, set[int]]:
-    """將多維度熱門號合併成各組集合；同號可在不同維度重複顯示，但弱號只需扣除一次。"""
-    hot_sets: dict[int, set[int]] = {group_id: set() for group_id in GROUPS}
-    for group_hot_nums in hot_by_dimension.values():
-        for group_id, nums in group_hot_nums.items():
-            hot_sets.setdefault(group_id, set()).update(nums)
-    return hot_sets
+        parts.append(f"{code}{format_nums(otn_nums)}")
+    return ["OTN 單次球 = " + "，".join(parts)]
 
 
 def print_abcd_property_analysis(
     window_rows: list[tuple[int, DrawRow]],
     target_index: int,
-) -> None:
-    """打印 ABCD 沒出現、高頻膽、高頻配腳、弱號分析。"""
+) -> dict[int, tuple[list[int], list[int]]]:
+    """打印 ANB/HFB/HFL/OTN 四類分析屬性。"""
     if not PRINT_ABCD_PROPERTY_ANALYSIS:
-        return
+        return {}
 
-    pair_data = high_freq_pair_data(window_rows)
-    dimension_hot_sets = dimension_hot_num_sets(dimension_hot_nums(window_rows, target_index))
+    analysis_rows = property_analysis_rows(window_rows, target_index)
+    pair_data = high_freq_pair_data(analysis_rows)
     print()
     print(
         f"---------------- {format_group_ids(selected_group_ids())} "
@@ -653,11 +682,12 @@ def print_abcd_property_analysis(
         f"{BIRTHDAY_NUM_MATCH_MODE} {COMBINATION_TAKE_COUNT} 球 (包括特號)"
     )
     print("/> -------------")
-    print(missing_nums_text(window_rows))
+    print(missing_nums_text(analysis_rows))
     for line in high_freq_pair_text(pair_data):
         print(line)
-    for line in weak_nums_text(window_rows, pair_data, dimension_hot_sets):
+    for line in weak_nums_text(analysis_rows, pair_data):
         print(line)
+    return pair_data
 
 
 def group_nums_with_special(row: DrawRow, group_id: int) -> list[int]:
@@ -739,9 +769,31 @@ def near_one_dimension_hits(
     return hit_parts
 
 
+def near_one_high_freq_dan_hits(
+    near_one_row: DrawRow,
+    pair_data: dict[int, tuple[list[int], list[int]]],
+) -> list[int]:
+    """用近 1 期開獎號比對高頻膽號。"""
+    near_one_nums = {
+        num
+        for num in near_one_row["nums"]
+        if 1 <= num <= 40
+    }
+    if near_one_row["special"] is not None and 1 <= near_one_row["special"] <= 40:
+        near_one_nums.add(near_one_row["special"])
+
+    dan_nums = {
+        num
+        for group_id in selected_group_ids()
+        for num in pair_data.get(group_id, ([], []))[0]
+    }
+    return sorted(near_one_nums & dan_nums)
+
+
 def print_dimension_hot_num_analysis(
     window_rows: list[tuple[int, DrawRow]],
     target_index: int,
+    pair_data: Optional[dict[int, tuple[list[int], list[int]]]] = None,
 ) -> None:
     """打印維度熱門號分析；近 1 期只用來比對，不納入維度統計。"""
     if not PRINT_DIMENSION_HOT_NUM_ANALYSIS:
@@ -754,7 +806,7 @@ def print_dimension_hot_num_analysis(
         return
 
     print()
-    print("----- 維度熱門號分析 -----")
+    print("----- 維度熱門號分析 #1/#2/#3 -----")
     print(
         f"維度規則：近 1 期只作比對；由近 2 期起每 {DIMENSION_DRAW_COUNT} 期一維，"
         f"同組單獨 1 球重開 >= {DIMENSION_HOT_MIN_COUNT} 次"
@@ -768,8 +820,107 @@ def print_dimension_hot_num_analysis(
 
     near_one_row = max(window_rows, key=lambda item: item[0])[1]
     hit_parts = near_one_dimension_hits(near_one_row, hot_by_dimension)
-    hit_text = "，".join(hit_parts) if hit_parts else "[]"
-    print(f"近 1 期比對：{near_one_row['date']}，開獎號 {all_check_nums_text(near_one_row)}，{hit_text}")
+    dimension_hit_text = "，".join(hit_parts) if hit_parts else "[]"
+    hfb_nums = merged_hfb_nums(pair_data or {})
+    dan_hits, dan_special = hfb_check_nums(near_one_row, hfb_nums)
+    dan_hit_count = hfb_hit_score(dan_hits, dan_special)
+    near_one_hit_count = row_selected_hit_ball_count(near_one_row)
+    print(
+        f"近 1 期比對：{near_one_row['date']}，開獎號 {all_check_nums_text(near_one_row)}，"
+        f"/> {format_ball_count(near_one_hit_count)} 球，"
+        f"重開提示：維度 {dimension_hit_text}，"
+        f"HFB {format_nums(dan_hits, dan_special)} /> {format_ball_count(dan_hit_count)} 球"
+    )
+
+
+def merged_hfb_nums(pair_data: dict[int, tuple[list[int], list[int]]]) -> list[int]:
+    """合併所選組別的 HFB 高頻膽號。"""
+    nums = {
+        num
+        for group_id in selected_group_ids()
+        for num in pair_data.get(group_id, ([], []))[0]
+    }
+    return sorted(nums)
+
+
+def hfb_check_nums(check_row: DrawRow, hfb_nums: list[int]) -> tuple[list[int], Optional[int]]:
+    """用核對期 N1..N7 比對 HFB；特號命中時以 * 顯示。"""
+    hfb_set = set(hfb_nums)
+    normal_hits = sorted(num for num in row_selected_normal_nums(check_row) if num in hfb_set)
+    special = next(
+        (
+            selected_special(check_row, start_num, end_num)
+            for _name, start_num, end_num in selected_groups()
+            if selected_special(check_row, start_num, end_num) is not None
+        ),
+        None,
+    )
+    special_hit = special if special is not None and special in hfb_set else None
+    return normal_hits, special_hit
+
+
+def hfb_hit_score(hit_nums: list[int], hit_special: Optional[int]) -> float:
+    """HFB 對獎命中球數；特號以 0.5 球計。"""
+    return len(hit_nums) + (0.5 if hit_special is not None else 0)
+
+
+def hfb_near_one_score(pair_data: dict[int, tuple[list[int], list[int]]], near_one_row: DrawRow) -> float:
+    """窗口近 1 期與 HFB 的重開命中球數；特號以 0.5 球計。"""
+    hfb_nums = merged_hfb_nums(pair_data)
+    hit_nums, hit_special = hfb_check_nums(near_one_row, hfb_nums)
+    return hfb_hit_score(hit_nums, hit_special)
+
+
+def print_backtest_hfb_check(pair_data: dict[int, tuple[list[int], list[int]]], check_row: DrawRow) -> float:
+    """打印 backtest 每一期最後的 HFB 高頻膽號核對。"""
+    hfb_nums = merged_hfb_nums(pair_data)
+    hit_nums, hit_special = hfb_check_nums(check_row, hfb_nums)
+    hit_count = hfb_hit_score(hit_nums, hit_special)
+    check_count = row_selected_ball_count(check_row)
+    print()
+    print("---- HFB 高頻膽號核對 -----")
+    print(f"HFB 高頻膽號 = {format_nums(hfb_nums)} /> {len(hfb_nums)} 球")
+    print(
+        f"核對期 {check_row['date']}，{lotto_list_text(check_row)} /> {check_count} 球，"
+        f"HFB 命中：{format_nums(hit_nums, hit_special)} /> {hit_count} 球"
+    )
+    return hit_count
+
+
+def backtest_hfb_result_record(
+    pair_data: dict[int, tuple[list[int], list[int]]],
+    check_row: DrawRow,
+) -> dict[str, object]:
+    """建立 backtest HFB 核對結果 CSV record。"""
+    hfb_nums = merged_hfb_nums(pair_data)
+    hit_nums, hit_special = hfb_check_nums(check_row, hfb_nums)
+    hit_count = hfb_hit_score(hit_nums, hit_special)
+    return {
+        "date": check_row["date"],
+        "(ABCD 1-40)": all_check_nums_text(check_row),
+        "條件球數": row_selected_ball_count(check_row),
+        "高頻膽號候選池數量": len(hfb_nums),
+        "命中號": format_nums(hit_nums, hit_special),
+        "命中球數": format_ball_count(hit_count),
+    }
+
+
+def lastdraw_hit_hfb_result_record(
+    pair_data: dict[int, tuple[list[int], list[int]]],
+    near_one_row: DrawRow,
+) -> dict[str, object]:
+    """建立近 1 期比對 HFB 回測結果 CSV record。"""
+    hfb_nums = merged_hfb_nums(pair_data)
+    hit_nums, hit_special = hfb_check_nums(near_one_row, hfb_nums)
+    hit_count = hfb_hit_score(hit_nums, hit_special)
+    return {
+        "lastDraw_data": near_one_row["date"],
+        "(ABCD 1-40)": all_check_nums_text(near_one_row),
+        "條件球數": format_ball_count(row_selected_hit_ball_count(near_one_row)),
+        "高頻膽號候選池數量": len(hfb_nums),
+        "命中號": format_nums(hit_nums, hit_special),
+        "命中球數": format_ball_count(hit_count),
+    }
 
 
 def print_trend_pred_analysis() -> None:
@@ -859,7 +1010,7 @@ def fortune_candidate_pool(window_rows: list[tuple[int, DrawRow]]) -> tuple[list
     matched_nums_list = [
         row_selected_normal_nums(row)
         for _row_index, row in window_rows
-        if is_matched(row_selected_normal_count(row))
+        if is_matched(row_selected_ball_count(row))
     ]
 
     num_counter: Counter[int] = Counter()
@@ -907,7 +1058,7 @@ def fortune_check_text(candidate_combs: list[tuple[int, int, int]], check_row: D
 
 def print_fortune_keys_analysis(window_rows: list[tuple[int, DrawRow]]) -> list[tuple[int, int, int]]:
     ''' 打印 fortune_keys 單號高頻與 C(6,3) 預測組合，並回傳 20 組候選。 '''
-    matched_count = sum(1 for _row_index, row in window_rows if is_matched(row_selected_normal_count(row)))
+    matched_count = sum(1 for _row_index, row in window_rows if is_matched(row_selected_ball_count(row)))
     candidate_nums, candidate_combs = fortune_candidate_pool(window_rows)
 
     print("----- fortune_keys 分析 -----")
@@ -920,7 +1071,7 @@ def print_fortune_keys_analysis(window_rows: list[tuple[int, DrawRow]]) -> list[
 
     single_counter: Counter[int] = Counter()
     for _row_index, row in window_rows:
-        if is_matched(row_selected_normal_count(row)):
+        if is_matched(row_selected_ball_count(row)):
             single_counter.update(row_selected_normal_nums(row))
     single_text = "，".join(
         f"{num}({count})"
@@ -940,7 +1091,7 @@ def print_backtest_window(
     window_count: int,
     backtest_index: int,
     total_backtest_count: int,
-) -> None:
+) -> tuple[float, float, dict[str, object], dict[str, object]]:
     """打印單一期 backtest 窗口資料與核對日期。"""
     check_row = draws[check_index]
     display_backtest_index = total_backtest_count - backtest_index + 1
@@ -949,10 +1100,16 @@ def print_backtest_window(
         (row_index, row)
         for row_index, row in enumerate(draws[window_start_index:check_index], start=window_start_index)
     ]
+    pair_data_for_stats = high_freq_pair_data(property_analysis_rows(window_rows, check_index - 1))
+    near_one_row = max(window_rows, key=lambda item: item[0])[1] if window_rows else check_row
+    near_one_hfb_score = hfb_near_one_score(pair_data_for_stats, near_one_row)
+    check_hfb_score = hfb_hit_score(*hfb_check_nums(check_row, merged_hfb_nums(pair_data_for_stats)))
+    result_record = backtest_hfb_result_record(pair_data_for_stats, check_row)
+    lastdraw_result_record = lastdraw_hit_hfb_result_record(pair_data_for_stats, near_one_row)
 
     if PRINT_BACKTEST_MODE == "simple":
         print(f"核對日期 ： {check_row['date']}: {all_check_nums_text(check_row)}")
-        return
+        return check_hfb_score, near_one_hfb_score, result_record, lastdraw_result_record
 
     print(
         f"======[回測 {display_backtest_index}] "
@@ -962,11 +1119,13 @@ def print_backtest_window(
     print_draw_rows(draws, window_rows, check_index - 1)
     print_window_result_separator()
     print_matched_window_count(window_rows)
-    print_abcd_property_analysis(window_rows, check_index - 1)
-    print_dimension_hot_num_analysis(window_rows, check_index - 1)
+    pair_data = print_abcd_property_analysis(window_rows, check_index - 1)
+    print_dimension_hot_num_analysis(window_rows, check_index - 1, pair_data)
+    check_hfb_score = print_backtest_hfb_check(pair_data, check_row)
     print_group_odd_even_hot_cold(window_rows)
     print_group_rbg_hot_cold(window_rows)
     print()
+    return check_hfb_score, near_one_hfb_score, result_record, lastdraw_result_record
 
 
 def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date: str) -> None:
@@ -982,8 +1141,8 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print_draw_rows(draws, window_rows, latest_index)
     print_window_result_separator()
     print_matched_window_count(window_rows)
-    print_abcd_property_analysis(window_rows, latest_index)
-    print_dimension_hot_num_analysis(window_rows, latest_index)
+    pair_data = print_abcd_property_analysis(window_rows, latest_index)
+    print_dimension_hot_num_analysis(window_rows, latest_index, pair_data)
     print_trend_pred_analysis()
     print_group_odd_even_hot_cold(window_rows)
     print_group_rbg_hot_cold(window_rows)
@@ -991,6 +1150,28 @@ def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date
     print("------ 下期開獎日期 ------------------")
     print(f"下期開獎日期：{next_draw_date or '未知'}")
     print()
+
+
+def hfb_stat_levels() -> list[float]:
+    """HFB 命中統計顯示級距。"""
+    return [value / 2 for value in range(12, 5, -1)]
+
+
+def format_stat_score(value: float) -> str:
+    """格式化統計球數，整數不顯示 .0。"""
+    return str(int(value)) if value.is_integer() else f"{value:g}"
+
+
+def print_hfb_hit_stat_table(title: str, counter: Counter[float], total_count: int) -> None:
+    """打印 HFB 命中球數分布統計。"""
+    print()
+    print(title)
+    print("命中球數 | 期數")
+    print("-----+----------")
+    for level in hfb_stat_levels():
+        count = counter.get(level, 0)
+        percent = (count / total_count * 100) if total_count else 0
+        print(f"{format_stat_score(level):<5}| {count}期 ({percent:.1f}%)")
 
 
 def main() -> None:
@@ -1014,8 +1195,12 @@ def main() -> None:
             check_indices = range(first_check_index, latest_index + 1)
             for window_count in WINDOW_DRAW_COUNT_LIST:
                 total_backtest_count = len(check_indices)
+                check_hfb_counter: Counter[float] = Counter()
+                near_one_hfb_counter: Counter[float] = Counter()
+                backtest_result_records: list[dict[str, object]] = []
+                lastdraw_result_records: list[dict[str, object]] = []
                 for backtest_index, check_index in enumerate(check_indices, start=1):
-                    print_backtest_window(
+                    check_hfb_score, near_one_hfb_score, result_record, lastdraw_result_record = print_backtest_window(
                         draws,
                         check_index,
                         backtest_count,
@@ -1023,6 +1208,22 @@ def main() -> None:
                         backtest_index,
                         total_backtest_count,
                     )
+                    check_hfb_counter[check_hfb_score] += 1
+                    near_one_hfb_counter[near_one_hfb_score] += 1
+                    backtest_result_records.append(result_record)
+                    lastdraw_result_records.append(lastdraw_result_record)
+                print_hfb_hit_stat_table(
+                    f"----- 回測期 {backtest_count}，全部高頻膽號合併，命中核對期，窗口期={window_count} -----",
+                    check_hfb_counter,
+                    total_backtest_count,
+                )
+                print_hfb_hit_stat_table(
+                    f"----- 回測期 {backtest_count}，近 1 期比對，HFB 高頻膽號重開提示，窗口期={window_count} -----",
+                    near_one_hfb_counter,
+                    total_backtest_count,
+                )
+                write_csv_rows(BACKTEST_ABCD_GROUP_RESULTS_CSV, backtest_result_records)
+                write_csv_rows(LASTDRAW_HIT_HFB_RESULTS_CSV, lastdraw_result_records)
     elif MODE == "predict":
         next_draw_date = read_next_draw_date()
         for window_count in WINDOW_DRAW_COUNT_LIST:
