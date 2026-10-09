@@ -22,19 +22,26 @@ TREND_BACKTEST_CSV = OUTPUT_DIR / "trend_backtest.csv"
 TREND_PRED_CSV = OUTPUT_DIR / "trend_pred.csv"
 
 
-VERSION = "S1_v1 1-40"
-MODE = "predict" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
-BACKTEST_DRAW_COUNT_LIST = [30]
-WINDOW_DRAW_COUNT_LIST = [19]
+VERSION = "S1_v1 1-40 Trend Predict Analyze"
+MODE = "backtest" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
+BACKTEST_DRAW_COUNT_LIST = [1]
+WINDOW_DRAW_COUNT_LIST = [10]
 ABCD_POOL_MIN_FUND = 20_000_000.0
 
+# LOTTO_LIST=True 時，所選組別號碼合併成一個 [] 顯示；False 則按 A/B/C/D 分組顯示。
+''' 
+False = 近 10期:2026-08-27，[12,17]，[25,31]，[*35] /> 4.5 球
+True  = 近 10期:2026-08-27，[12,17,25,31,*35] /> 4.5 球
+'''
+LOTTO_LIST = False
+
 # 走勢提示門檻。
-RECENT_WINDOW_SHORT = 5
-RECENT_WINDOW_LONG = 10
-HOT_STREAK_STRONG = 3
-RECENT5_STRONG_COUNT = 4
-RECENT5_WEAK_COUNT = 2
-BREAK_STREAK_STOP = 2
+RECENT_WINDOW_SHORT = 5 # 近期短窗口：統計最近 5 期合條件次數。
+RECENT_WINDOW_LONG = 10 # 近期長窗口：統計最近 10 期合條件次數，用於走勢分數。
+HOT_STREAK_STRONG = 3 # 強勢連續門檻：最近連續合條件達 3 期即判斷偏強。
+RECENT5_STRONG_COUNT = 4 # 近 5 期強勢門檻：近 5 期中 4 期合條件即判斷偏強。
+RECENT5_WEAK_COUNT = 2 # 近 5 期弱勢門檻：近 5 期合條件少於或等於 2 期即判斷偏弱。
+BREAK_STREAK_STOP = 2 # 中斷門檻：最近連續 2 期不合條件即判斷走勢已斷。
 
 GROUPS = {
     1: ("A", "1-9", 1, 9),
@@ -240,6 +247,26 @@ def format_nums(nums: list[int], special: Optional[int] = None) -> str:
     return "[" + ",".join(parts) + "]"
 
 
+def selected_group_nums(row: DrawRow, group_id: int) -> tuple[list[int], Optional[int]]:
+    ''' 取得某一期在指定 A/B/C/D 組內的正號與特號。 '''
+    _code, _name, start_num, end_num = GROUPS[group_id]
+    nums = sorted(num for num in row["nums"] if start_num <= num <= end_num)
+    special = row["special"]
+    group_special = special if special is not None and start_num <= special <= end_num else None
+    return nums, group_special
+
+
+def pool_lotto_text(row: DrawRow, group_ids: tuple[int, ...]) -> str:
+    ''' 依 LOTTO_LIST 格式化大組合池開獎號。 '''
+    if LOTTO_LIST:
+        return format_nums(pool_nums(row, group_ids), pool_special(row, group_ids))
+
+    return "，".join(
+        format_nums(*selected_group_nums(row, group_id))
+        for group_id in group_ids
+    )
+
+
 def is_matched(count: int, take_count: int, match_mode: str) -> bool:
     ''' 判斷球數是否符合追蹤條件。 '''
     if match_mode == "==":
@@ -400,7 +427,7 @@ def print_window_rows(
         matched = is_matched(count, take_count, match_mode)
         matches.append(matched)
         mark = "H" if matched else "-"
-        result_text = f"{format_nums(nums, special)} /> {count} 球" if matched else ""
+        result_text = f"{pool_lotto_text(row, group_ids)} /> {count} 球" if matched else ""
         print(f"近 {rank:>2}期：{row['date']}，{mark}，{result_text}")
     return matches
 
@@ -483,7 +510,7 @@ def selected_pool_check_text(check_row: DrawRow, selected_name: str) -> str:
     matched = is_matched(count, config["take_count"], config["match_mode"])
     result = "命中" if matched else "失敗"
     return (
-        f"核對期：{check_row['date']}，{selected_name} 開獎 {format_nums(nums, special)} "
+        f"核對期：{check_row['date']}，{selected_name} 開獎 {pool_lotto_text(check_row, group_ids)} "
         f"/> {count} 球，條件 {config['match_mode']} {config['take_count']} 球，{result}"
     )
 

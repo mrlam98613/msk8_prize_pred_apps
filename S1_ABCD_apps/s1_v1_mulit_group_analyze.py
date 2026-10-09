@@ -43,7 +43,7 @@ LASTDRAW_HIT_HFB_RESULTS_CSV = CURRENT_DIR / "backtest_pred_data" / "lastDraw_hi
 
 
 # MODE 可選："backtest" 或 "predict"。
-VERSION = "S1_v1 1-40"
+VERSION = "S1_v1 1-40 mulit_group_analyze"
 '''
 只有 predict 同步趨勢預測。 backtest mode 獨立。 
 BACKTEST_DRAW_COUNT_LIST = [1] 同步 
@@ -51,8 +51,8 @@ WINDOW_DRAW_COUNT_LIST = [19] 同步
 '''
 
 MODE = "backtest" # 
-BACKTEST_DRAW_COUNT_LIST = [50]
-WINDOW_DRAW_COUNT_LIST = [19]
+BACKTEST_DRAW_COUNT_LIST = [1]
+WINDOW_DRAW_COUNT_LIST = [10]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
@@ -72,7 +72,7 @@ BIRTHDAY_NUM_MATCH_MODE = ">="
 False = 近 10期:2026-08-27,[12,17],[25,31],[*35] /> 4.5 球
 Treu = 近 10期:2026-08-27,[12,17,25,31,*35] /> 4.5 球
 '''
-LOTTO_LIST = True
+LOTTO_LIST = False
 
 # PRINT_BACKTEST_MODE 可選 "detail" 或 "simple"。
 # detail 會打印窗口期明細；simple 只打印每期核對、預測球與命中統計。
@@ -843,6 +843,16 @@ def merged_hfb_nums(pair_data: dict[int, tuple[list[int], list[int]]]) -> list[i
     return sorted(nums)
 
 
+def merged_hfl_nums(pair_data: dict[int, tuple[list[int], list[int]]]) -> list[int]:
+    """合併所選組別的 HFL 高頻配腳號。"""
+    nums = {
+        num
+        for group_id in selected_group_ids()
+        for num in pair_data.get(group_id, ([], []))[1]
+    }
+    return sorted(nums)
+
+
 def hfb_check_nums(check_row: DrawRow, hfb_nums: list[int]) -> tuple[list[int], Optional[int]]:
     """用核對期 N1..N7 比對 HFB；特號命中時以 * 顯示。"""
     hfb_set = set(hfb_nums)
@@ -872,19 +882,25 @@ def hfb_near_one_score(pair_data: dict[int, tuple[list[int], list[int]]], near_o
 
 
 def print_backtest_hfb_check(pair_data: dict[int, tuple[list[int], list[int]]], check_row: DrawRow) -> float:
-    """打印 backtest 每一期最後的 HFB 高頻膽號核對。"""
+    """打印 backtest 每一期最後的 HFB 高頻膽號 / HFL 高頻配腳號核對。"""
     hfb_nums = merged_hfb_nums(pair_data)
-    hit_nums, hit_special = hfb_check_nums(check_row, hfb_nums)
-    hit_count = hfb_hit_score(hit_nums, hit_special)
+    hfl_nums = merged_hfl_nums(pair_data)
+    hfb_hit_nums, hfb_hit_special = hfb_check_nums(check_row, hfb_nums)
+    hfb_hit_count = hfb_hit_score(hfb_hit_nums, hfb_hit_special)
+    hfl_hit_nums, hfl_hit_special = hfb_check_nums(check_row, hfl_nums)
+    hfl_hit_count = hfb_hit_score(hfl_hit_nums, hfl_hit_special)
     check_count = row_selected_ball_count(check_row)
     print()
-    print("---- HFB 高頻膽號核對 -----")
+    print("---- HFB 高頻膽號 / HFL 高頻配腳號核對 -----")
     print(f"HFB 高頻膽號 = {format_nums(hfb_nums)} /> {len(hfb_nums)} 球")
+    print()
+    print(f"HFL 高頻配腳號 = {format_nums(hfl_nums)} /> {len(hfl_nums)} 球")
     print(
         f"核對期 {check_row['date']}，{lotto_list_text(check_row)} /> {check_count} 球，"
-        f"HFB 命中：{format_nums(hit_nums, hit_special)} /> {hit_count} 球"
+        f"HFB 命中：{format_nums(hfb_hit_nums, hfb_hit_special)} /> {format_ball_count(hfb_hit_count)} 球，"
+        f"HFL 命中：{format_nums(hfl_hit_nums, hfl_hit_special)} /> {format_ball_count(hfl_hit_count)} 球"
     )
-    return hit_count
+    return hfb_hit_count
 
 
 def backtest_hfb_result_record(
