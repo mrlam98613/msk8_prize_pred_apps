@@ -50,9 +50,9 @@ BACKTEST_DRAW_COUNT_LIST = [1] 同步
 WINDOW_DRAW_COUNT_LIST = [19] 同步
 '''
 
-MODE = "backtest" # 
+MODE = "predict" # 
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [10]
+WINDOW_DRAW_COUNT_LIST = [19]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
@@ -64,7 +64,7 @@ SELECT_GROUPS = (2, 4)         # 只選 10-20 + 32-40
 SELECT_GROUPS = (1,2,3,4) # select group index = 1
 
 # 每一期在指定範圍內有多少球才算符合條件。
-COMBINATION_TAKE_COUNT = 5
+COMBINATION_TAKE_COUNT = 4
 BIRTHDAY_NUM_MATCH_MODE = ">="
 
 # LOTTO_LIST=True 時，每期將所選組別號碼合併成一個 [] 顯示；False 則按組別分開顯示。

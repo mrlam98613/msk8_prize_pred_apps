@@ -25,7 +25,7 @@ TREND_PRED_CSV = OUTPUT_DIR / "v2_trend_pred.csv"
 VERSION = "S1_v2 1-40 Trend Predict Analyze"
 MODE = "predict" # "backtest" 不包含核對期；"predict" 包含最後一期已開號。
 BACKTEST_DRAW_COUNT_LIST = [3]
-WINDOW_DRAW_COUNT_LIST = [13]
+WINDOW_DRAW_COUNT_LIST = [19]
 ABCD_POOL_MIN_FUND = 20_000_000.0
 
 # v2 只分析這一個自選組合，不做三選一回測總結。
