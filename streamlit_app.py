@@ -17,12 +17,31 @@ PAGES = [
             "path": CONTENT_DIR / "0_lotto_info.py",
             # 來源 A_msk_lottery_data_folder \ M2_last_upgrade_lotto_data.csv & M3_lotto_prize_results.csv
     },
+    # {
+    #     "label": "PRR v3 ABCD 分組查詢",
+    #     "icon": "🧩",
+    #     "path": CONTENT_DIR / "1_prr_v3_mulit_group_analyze.py",
+    #     # 來源 prr_v3_ABCD_apps / prr_v3_mulit_group_analyze.py
+    # },
     {
-        "label": "PRR v3 ABCD 分組查詢",
-        "icon": "🧩",
-        "path": CONTENT_DIR / "1_prr_v3_mulit_group_analyze.py",
-        # 來源 prr_v3_ABCD_apps / prr_v3_mulit_group_analyze.py
+            "label": "S1 v2 ABCD 組合走趨分析",
+            "icon": "📈",
+            "path": CONTENT_DIR / "1_s1_v2_combo_trend_analyze.py",
+            # 來源 S1_ABCD_apps / s1_v2_combo_trend_analyze.py
     },
+    {
+        "label": "S1 v2 ABCD 分組 backtest 分析",
+        "icon": "📊",
+        "path": CONTENT_DIR / "2_s1_v2_backtest_mode.py",
+        # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
+    },
+    {
+        "label": "S1 v2 ABCD 分組 HFB/HFL/RBG 分析",
+        "icon": "🧭",
+        "path": CONTENT_DIR / "1_s1_v2_milit_group_analyze.py",
+        # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
+    },
+    
     {
         "label": "生日號中獎號碼-組合特色分析",
         "icon": "💰",

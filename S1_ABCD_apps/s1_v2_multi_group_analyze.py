@@ -52,7 +52,7 @@ WINDOW_DRAW_COUNT_LIST = [19] 同步
 
 MODE = "backtest" # 
 BACKTEST_DRAW_COUNT_LIST = [10]
-WINDOW_DRAW_COUNT_LIST = [13]
+WINDOW_DRAW_COUNT_LIST = [19]
 
 # SELECT_GROUPS 可選 1,2,3,4；例如 (1,) 只查 1-9，(1,2,3,4) 全組別。
 '''
@@ -980,8 +980,8 @@ def print_dimension_hot_num_analysis(
     near_one_hit_count = row_selected_hit_ball_count(near_one_row)
     merged_dimension_total_count = len(merged_dimension_hits) + (1 if merged_dimension_special is not None else 0)
     print()
-    print("---- 近 1 期 比對，維度#1..N / HFB / HBL / RBG，分析重開號結果。")
-    print(f"近 1 期比對：{near_one_row['date']}，開獎號 {all_check_nums_text(near_one_row)} /> {format_ball_count(near_one_hit_count)} 球")
+    print("---- 最近 1 期 比對，維度#1..N / HFB / HBL / RBG，分析重開號結果。")
+    print(f"最近 1 期：{near_one_row['date']}，開獎號 {all_check_nums_text(near_one_row)} /> {format_ball_count(near_one_hit_count)} 球")
     print("----")
     print(
         f"重開號：維度 {dimension_hit_text}，不重號"
@@ -1233,7 +1233,7 @@ def print_backtest_window(
     window_count: int,
     backtest_index: int,
     total_backtest_count: int,
-) -> tuple[float, float, float, int, dict[str, object], dict[str, object]]:
+) -> tuple[float, float, float, int, float, int, dict[str, object], dict[str, object]]:
     """打印單一期 backtest 窗口資料與核對日期。"""
     check_row = draws[check_index]
     display_backtest_index = total_backtest_count - backtest_index + 1
@@ -1246,14 +1246,17 @@ def print_backtest_window(
     near_one_row = max(window_rows, key=lambda item: item[0])[1] if window_rows else check_row
     near_one_hfb_score = hfb_near_one_score(pair_data_for_stats, near_one_row)
     check_hfb_score = hfb_hit_score(*hfb_check_nums(check_row, merged_hfb_nums(pair_data_for_stats)))
+    hfl_nums_for_stats = merged_hfl_nums(pair_data_for_stats)
+    check_hfl_score = hfb_hit_score(*hfb_check_nums(check_row, hfl_nums_for_stats))
     dimension_rbg_hit_score = dimension_rbg_hit_score_for_window(window_rows, check_index - 1, check_row)
     dimension_rbg_pool_size = dimension_rbg_pool_size_for_window(window_rows, check_index - 1)
+    hfl_pool_size = len(hfl_nums_for_stats)
     result_record = backtest_hfb_result_record(pair_data_for_stats, check_row)
     lastdraw_result_record = lastdraw_hit_hfb_result_record(pair_data_for_stats, near_one_row)
 
     if PRINT_BACKTEST_MODE == "simple":
         print(f"核對日期 ： {check_row['date']}: {all_check_nums_text(check_row)}")
-        return check_hfb_score, near_one_hfb_score, dimension_rbg_hit_score, dimension_rbg_pool_size, result_record, lastdraw_result_record
+        return check_hfb_score, near_one_hfb_score, dimension_rbg_hit_score, dimension_rbg_pool_size, check_hfl_score, hfl_pool_size, result_record, lastdraw_result_record
 
     print(
         f"======[回測 {display_backtest_index}] "
@@ -1268,8 +1271,11 @@ def print_backtest_window(
     hot_by_dimension = dimension_hot_nums(window_rows, check_index - 1)
     rbg_scores = dimension_num_scores(hot_by_dimension)
     check_hfb_score = print_backtest_hfb_check(pair_data, check_row, display_backtest_index, rbg_scores)
+    hfl_nums_for_stats = merged_hfl_nums(pair_data)
+    check_hfl_score = hfb_hit_score(*hfb_check_nums(check_row, hfl_nums_for_stats))
+    hfl_pool_size = len(hfl_nums_for_stats)
     print()
-    return check_hfb_score, near_one_hfb_score, dimension_rbg_hit_score, dimension_rbg_pool_size, result_record, lastdraw_result_record
+    return check_hfb_score, near_one_hfb_score, dimension_rbg_hit_score, dimension_rbg_pool_size, check_hfl_score, hfl_pool_size, result_record, lastdraw_result_record
 
 
 def print_predict_window(draws: list[DrawRow], window_count: int, next_draw_date: str) -> None:
@@ -1365,9 +1371,11 @@ def main() -> None:
             for window_count in WINDOW_DRAW_COUNT_LIST:
                 total_backtest_count = len(check_indices)
                 check_hfb_counter: Counter[float] = Counter()
+                check_hfl_counter: Counter[float] = Counter()
                 near_one_hfb_counter: Counter[float] = Counter()
                 dimension_rbg_counter: Counter[float] = Counter()
                 hfb_candidate_pool_sizes: list[int] = []
+                hfl_candidate_pool_sizes: list[int] = []
                 dimension_rbg_pool_sizes: list[int] = []
                 backtest_result_records: list[dict[str, object]] = []
                 lastdraw_result_records: list[dict[str, object]] = []
@@ -1377,6 +1385,8 @@ def main() -> None:
                         near_one_hfb_score,
                         dimension_rbg_hit_score,
                         dimension_rbg_pool_size,
+                        check_hfl_score,
+                        hfl_pool_size,
                         result_record,
                         lastdraw_result_record,
                     ) = print_backtest_window(
@@ -1388,9 +1398,11 @@ def main() -> None:
                         total_backtest_count,
                     )
                     check_hfb_counter[check_hfb_score] += 1
+                    check_hfl_counter[check_hfl_score] += 1
                     near_one_hfb_counter[near_one_hfb_score] += 1
                     dimension_rbg_counter[dimension_rbg_hit_score] += 1
                     hfb_candidate_pool_sizes.append(object_to_int(result_record["高頻膽號候選池數量"]))
+                    hfl_candidate_pool_sizes.append(hfl_pool_size)
                     dimension_rbg_pool_sizes.append(dimension_rbg_pool_size)
                     backtest_result_records.append(result_record)
                     lastdraw_result_records.append(lastdraw_result_record)
@@ -1399,6 +1411,12 @@ def main() -> None:
                     check_hfb_counter,
                     total_backtest_count,
                     hfb_candidate_pool_sizes,
+                )
+                print_hfb_hit_stat_table(
+                    f"----- 回測期 {backtest_count}，全部高頻配腳號合併，命中核對期，窗口期={window_count} -----",
+                    check_hfl_counter,
+                    total_backtest_count,
+                    hfl_candidate_pool_sizes,
                 )
                 print_hfb_hit_stat_table(
                     f"----- 回測期 {backtest_count}，近 1 期比對，HFB 高頻膽號重開提示，窗口期={window_count} -----",
