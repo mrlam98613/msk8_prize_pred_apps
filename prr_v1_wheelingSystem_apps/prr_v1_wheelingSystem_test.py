@@ -3,6 +3,7 @@ import itertools
 
 from typing import Optional
 # ===== 手動參數區 =====
+
 # 8-17 個候選號碼。
 CHOSEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 
