@@ -41,7 +41,7 @@ COMBINATION_TAKE_COUNT = 3
 COMB_MATCH_MODE = ">="
 STRONG_COMBINATION_TAKE_COUNT = 5
 # False=原有分組顯示；True=原有合併顯示；"sort"=按每期 ABCD 球數排序顯示
-LOTTO_LIST = True # False / True / "sort", 3 種 參數顯示 。
+LOTTO_LIST = False # False / True / "sort", 3 種 參數顯示 。
 PREDICT = True
 PRINT_BACKTEST_MODE = "detail"
 PRIZE_OPTION = 3
@@ -56,7 +56,7 @@ STAND_SORT_MODE = "date"
 prize3_sort_mode = True
 prize3_unit_sort = ">="
 prize3_unit_count = 50
-prize3_max_count = 10
+prize3_max_count = 7
 
 
 GROUPS = {
@@ -902,6 +902,52 @@ def prize3_top_abcd_rows(
     return sorted_rows
 
 
+def print_prize3_group_combination_analysis(
+    sorted_rows: list[tuple[int, DrawRow]],
+) -> None:
+    """按 3 獎排序結果，整理各組 4/3/2 球組合及合併球池。"""
+    group_combinations: dict[int, dict[int, list[str]]] = {
+        group_id: {4: [], 3: [], 2: []}
+        for group_id in selected_group_ids()
+    }
+    merged_nums: list[int] = []
+    seen_nums: set[int] = set()
+
+    for _row_index, row in sorted_rows:
+        for group_id in selected_group_ids():
+            _name, start_num, end_num = GROUPS[group_id]
+            nums = selected_nums(row, start_num, end_num)
+            special = selected_special(row, start_num, end_num)
+            ball_count = len(nums) + (1 if special is not None else 0)
+            if ball_count not in (2, 3, 4):
+                continue
+            code = GROUP_CODES[group_id]
+            group_combinations[group_id][ball_count].append(
+                f"{code}{format_nums(nums, special)}"
+            )
+            for num in nums + ([special] if special is not None else []):
+                if num not in seen_nums:
+                    seen_nums.add(num)
+                    merged_nums.append(num)
+
+    print("------- 3獎中獎最多注數，人氣熱門組別 主力號 組合分析 ---------")
+    has_combination = False
+    for group_id in selected_group_ids():
+        parts: list[str] = []
+        for ball_count in (4, 3, 2):
+            parts.extend(group_combinations[group_id][ball_count])
+        if parts:
+            has_combination = True
+            print(",".join(parts))
+    if has_combination:
+        print(
+            f"合併：{format_nums(merged_nums)} /> {len(merged_nums)} 球"
+        )
+    else:
+        print("沒有符合 4、3、2 球的同組組合。")
+    print()
+
+
 def print_prize3_sorted_rows(
     window_rows: list[tuple[int, DrawRow]],
 ) -> list[tuple[int, DrawRow]]:
@@ -941,6 +987,7 @@ def print_prize3_sorted_rows(
         print(
             f"排序 {rank:>2}：{row['date']}，{main_text}，{detail_text}"
         )
+    print_prize3_group_combination_analysis(display_rows)
     print()
     return display_rows
 
