@@ -41,6 +41,12 @@ PAGES = [
         "path": CONTENT_DIR / "1_s1_v2_milit_group_analyze.py",
         # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
     },
+    {
+        "label": "S3 v2 3 獎注數回測分析",
+        "icon": "🎯",
+        "path": CONTENT_DIR / "1_s3_v2_prize3_count_backtest_app.py",
+        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_search_prize3_app.py
+    },
     
     {
         "label": "生日號中獎號碼-組合特色分析",

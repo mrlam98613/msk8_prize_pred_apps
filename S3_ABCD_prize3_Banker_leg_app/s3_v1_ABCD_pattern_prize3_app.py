@@ -21,6 +21,12 @@ A,B,C,D, (1-9) , (10-20) , (21-31) , (32-40), (分組查詢)
 A/D 預期位置 = 133 × 9 ÷ 40 = 29.925
 B/C 預期位置 = 133 × 11 ÷ 40 = 36.575
 
+基本日期查詢明細
+ABCD 分組球數走勢
+查詢條件統計
+主力/副組走勢表
+基本查詢後的 ABCD 分析
+
 '''
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -37,27 +43,30 @@ MODE = "predict" # backtest / predict mode input
 BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [13] # 最少查詢 7 期
 SELECT_GROUPS = 1,2,3,4 # Select 1,2,3,4 
-COMBINATION_TAKE_COUNT = 3
+COMBINATION_TAKE_COUNT = 5
 COMB_MATCH_MODE = ">="
 STRONG_COMBINATION_TAKE_COUNT = 5
 # False=原有分組顯示；True=原有合併顯示；"sort"=按每期 ABCD 球數排序顯示
-LOTTO_LIST = False # False / True / "sort", 3 種 參數顯示 。
+LOTTO_LIST = "sort" # False / True / "sort", 3 種 參數顯示 。
 PREDICT = True
 PRINT_BACKTEST_MODE = "detail"
 PRIZE_OPTION = 3
 PRIZE_PRINT_SHOW = True
 # 保留 ABCD 屬性分析功能；暫時不顯示分析結果。
-PRINT_ABCD_PROPERTY_ANALYSIS = True
+PRINT_ABCD_PROPERTY_ANALYSIS = False
 
 # 基本查詢排序："date" 或 "prize3"。
 STAND_SORT_MODE = "date"
 
-# 獨立的 3 獎注數排序功能。
-prize3_sort_mode = True
-prize3_unit_sort = ">="
-prize3_unit_count = 50
-prize3_max_count = 7
-
+# 獨立的 3 獎注數排序功能。=======
+prize3_sort_mode = True # 中獎注數 搜尋。
+prize3_unit_sort = ">=" # 中獎注數 搜尋 條件 
+prize3_unit_count = 80  # 中獎注數 
+prize3_max_count = 12 # 前 N 期 
+prize3_date_sort = False  # True=日期由遠到近，False=Pz3 注數由多至少
+# 3 獎搜尋、篩選及排序後，獨立顯示 ABCD 屬性分析。
+PRINT_PRIZE3_PROPERTY_ANALYSIS = True
+# ====================
 
 GROUPS = {
     1: ("1-9", 1, 9), # 9 球
@@ -241,6 +250,10 @@ def validate_prize3_sort_settings() -> None:
     """檢查獨立 3 獎排序參數。"""
     if not isinstance(prize3_sort_mode, bool):
         raise ValueError("prize3_sort_mode 只可設定為 True 或 False。")
+    if not isinstance(PRINT_PRIZE3_PROPERTY_ANALYSIS, bool):
+        raise ValueError("PRINT_PRIZE3_PROPERTY_ANALYSIS 只可設定為 True 或 False。")
+    if not isinstance(prize3_date_sort, bool):
+        raise ValueError("prize3_date_sort 只可設定為 True 或 False。")
     if prize3_unit_sort not in (">=", "==", "<="):
         raise ValueError('prize3_unit_sort 只可設定為 ">=", "==" 或 "<="。')
     if prize3_unit_count < 0:
@@ -813,13 +826,15 @@ def weak_nums_text(
 def print_abcd_property_analysis(
     window_rows: list[tuple[int, DrawRow]],
     target_index: int,
+    title_prefix: str = "",
 ) -> dict[int, tuple[list[int], list[int]]]:
     """打印 ANB/HFB/HFL/OTN 四類分析屬性。"""
     analysis_rows = property_analysis_rows(window_rows, target_index)
     pair_data = high_freq_pair_data(analysis_rows)
     print()
+    title_text = f"{title_prefix} " if title_prefix else ""
     print(
-        f"---------------- {format_group_ids(selected_group_ids())} "
+        f"---------------- {title_text}{format_group_ids(selected_group_ids())} "
         "A/B/C/D 選組分析屬性 ----------------"
     )
     print(
@@ -965,13 +980,18 @@ def print_prize3_sorted_rows(
             prize3_unit_sort,
         )
     ]
-    display_rows = prize3_sorted_window_rows(filtered_rows)[:prize3_max_count]
+    if prize3_date_sort:
+        display_rows = sorted(filtered_rows, key=lambda item: item[1]["date"])[:prize3_max_count]
+        sort_description = "按日期由遠至少"
+    else:
+        display_rows = prize3_sorted_window_rows(filtered_rows)[:prize3_max_count]
+        sort_description = "按 3 獎注數由多至少"
 
     print("----- 3 獎中獎注數排序分析 -----")
     print(
         f"窗口期 {available_count} 期，Pz{PRIZE_OPTION} "
         f"{prize3_unit_sort} {prize3_unit_count} 注，"
-        f"按注數由多至少，最多 {prize3_max_count} 期。"
+        f"{sort_description}，最多 {prize3_max_count} 期。"
     )
     if not display_rows:
         print("沒有符合 3 獎注數條件的期數。")
@@ -988,6 +1008,16 @@ def print_prize3_sorted_rows(
             f"排序 {rank:>2}：{row['date']}，{main_text}，{detail_text}"
         )
     print_prize3_group_combination_analysis(display_rows)
+    if PRINT_PRIZE3_PROPERTY_ANALYSIS:
+        prize3_property_rows = [
+            (analysis_index, row)
+            for analysis_index, (_row_index, row) in enumerate(display_rows)
+        ]
+        print_abcd_property_analysis(
+            prize3_property_rows,
+            len(prize3_property_rows),
+            "中獎注數搜尋條件 分析",
+        )
     print()
     return display_rows
 

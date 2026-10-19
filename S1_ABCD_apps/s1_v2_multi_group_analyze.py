@@ -50,7 +50,7 @@ BACKTEST_DRAW_COUNT_LIST = [1] 同步
 WINDOW_DRAW_COUNT_LIST = [19] 同步
 '''
 
-MODE = "predict" # 
+MODE = "backtest" # 
 BACKTEST_DRAW_COUNT_LIST = [10]
 WINDOW_DRAW_COUNT_LIST = [19]
 

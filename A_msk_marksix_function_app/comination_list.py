@@ -1,7 +1,7 @@
 import itertools
 
-number = [2,5,6,7,8,9]
-RC = 2
+number = [2,3,4,5,6,7,8,9]
+RC = 4
 combinations = list(itertools.combinations(number, RC))
 
 print(f"查詢 {len(number)} 個數字, 每組 {RC} 個, 總其有：{len(combinations)} 組\n")
