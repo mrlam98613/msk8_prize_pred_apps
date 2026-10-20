@@ -53,8 +53,8 @@ BACKTEST_HFB_HFL_HIT_COUNTS: list[float] = []
 # S3 v2 3 獎搜尋分析
 VERSION = "S3_v2 3_獎中獎最多注數-搜尋分析 "
 
-MODE = "backtest" # backtest / predict mode input
-BACKTEST_DRAW_COUNT_LIST = [10]
+MODE = "predict" # backtest / predict mode input
+BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [25] # 最少查詢 7 期
 SELECT_GROUPS = 1,2,3,4 # Select 1,2,3,4 
 COMB_MATCH_MODE = ">="

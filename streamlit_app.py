@@ -35,17 +35,29 @@ PAGES = [
         "path": CONTENT_DIR / "2_s1_v2_backtest_mode.py",
         # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
     },
+    # {
+    #     "label": "S1 v2 ABCD 分組 HFB/HFL/RBG 分析",
+    #     "icon": "🧭",
+    #     "path": CONTENT_DIR / "1_s1_v2_milit_group_analyze.py",
+    #     # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
+    # },
     {
-        "label": "S1 v2 ABCD 分組 HFB/HFL/RBG 分析",
-        "icon": "🧭",
-        "path": CONTENT_DIR / "1_s1_v2_milit_group_analyze.py",
-        # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
-    },
-    {
-        "label": "S3 v2 3 獎注數回測分析",
+        "label": "中5字 3獎_人氣球號_分析",
         "icon": "🎯",
         "path": CONTENT_DIR / "1_s3_v2_prize3_count_backtest_app.py",
         # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_search_prize3_app.py
+    },
+    {
+        "label": "中5字 3_獎人氣球號-預測 ",
+        "icon": "📌",
+        "path": CONTENT_DIR / "1_s3_v3_prize3_predict_app.py",
+        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v3_prize3_predict_app.py
+    },
+    {
+        "label": "S3 v3 智能組合球池",
+        "icon": "🎯",
+        "path": CONTENT_DIR / "1_s3_v3_wheeling_system_app.py",
+        # 讀取 S3 v3 預測結果，建立 3 類候選球池
     },
     
     {
@@ -60,12 +72,12 @@ PAGES = [
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
         # 主要查詢 A_msk_lottery_data_folder \ M7_lotto_open_days.csv
     },
-    {
-        "label": "1,2,3 獎中獎注數生日號分析",
-        "icon": "🔎",
-        "path": CONTENT_DIR / "4_prize_comb_key.py",
-        # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
-    },
+    # {
+    #     "label": "1,2,3 獎中獎注數生日號分析",
+    #     "icon": "🔎",
+    #     "path": CONTENT_DIR / "4_prize_comb_key.py",
+    #     # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
+    # },
     {
         "label": "複式，投注-派彩查詢",
         "icon": "🧮",

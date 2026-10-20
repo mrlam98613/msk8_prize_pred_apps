@@ -10,7 +10,7 @@ from typing import Any, cast
 
 import streamlit as st
 
-from app_pages.shared_style import apply_new_page_style, page_header
+from app_pages.shared_style import apply_new_page_style
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -79,7 +79,13 @@ def compact_separators(output: str) -> str:
 
 def last_backtest_block(output: str) -> str:
     lines = output.splitlines()
-    starts = [index for index, line in enumerate(lines) if line.startswith("======[回測")]
+    starts = [
+        index
+        for index, line in enumerate(lines)
+        if "[回測 1]" in line and "回測" in line
+    ]
+    if not starts:
+        starts = [index for index, line in enumerate(lines) if "回測" in line and "[回測" in line]
     if not starts:
         return output.strip()
     start = starts[-1]
@@ -89,7 +95,7 @@ def last_backtest_block(output: str) -> str:
 def split_summary(output: str) -> tuple[str, str]:
     lines = output.splitlines()
     summary_start = next(
-        (index for index, line in enumerate(lines) if line.startswith("----- 回測期")),
+        (index for index, line in enumerate(lines) if line.startswith("-- 回測期")),
         len(lines),
     )
     detail = "\n".join(lines[:summary_start]).strip()
@@ -98,25 +104,73 @@ def split_summary(output: str) -> tuple[str, str]:
 
 
 def main() -> None:
-    st.set_page_config(page_title="S3 v2 3 獎回測", page_icon="📊", layout="centered")
+    st.set_page_config(page_title="S3 v2 3 獎回測", page_icon="📊", layout="wide")
     apply_new_page_style()
-    page_header("S3 v2 3 獎回測", "只顯示最後一期回測明細及各組統計。")
+    st.html(
+        """
+        <style>
+        .block-container {
+            max-width: none !important;
+        }
+        div[data-testid="stCodeBlock"] {
+            width: 100% !important;
+        }
+        div[data-testid="stCodeBlock"] pre {
+            white-space: pre !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+        }
+        </style>
+        """
+    )
+    st.write("3獎（開獎號 5 個正號 = 3 獎）中獎注數，查詢 S3 v2 回測版。")
+    st.caption("A（1-9）、B（10-20）、C（21-31）、D（32-40），開獎號範圍 1-40。")
 
     with st.form("s3_v2_prize3_count_backtest_parameters_form_v1", border=True):
         st.subheader("回測參數")
         backtest_count = st.number_input("回測期", min_value=1, value=DEFAULT_BACKTEST_COUNT, step=1)
         window_count = st.number_input("窗口期", min_value=7, value=DEFAULT_WINDOW_COUNT, step=1)
-        select_groups = st.multiselect("SELECT_GROUPS", [1, 2, 3, 4], default=list(DEFAULT_SELECT_GROUPS))
-        match_mode = st.selectbox("COMB_MATCH_MODE", [">=", "==", "<="], index=0)
-        combination_take_count = st.number_input(
-            "COMBINATION_TAKE_COUNT", min_value=0, value=DEFAULT_TAKE_COUNT, step=1
+        select_groups = st.multiselect(
+            "ABCD 組別",
+            [1, 2, 3, 4],
+            default=list(DEFAULT_SELECT_GROUPS),
         )
-        prize_option = st.number_input("PRIZE_OPTION", min_value=1, max_value=3, value=3, step=1)
-        prize_print_show = st.checkbox("PRIZE_PRINT_SHOW", value=False)
-        prize_unit_sort = st.selectbox("prize3_unit_sort", [">=", "==", "<="], index=0)
-        prize_unit_count = st.number_input("prize3_unit_count", min_value=0, value=DEFAULT_PRIZE_COUNT, step=1)
-        prize_max_count = st.number_input("prize3_max_count", min_value=1, value=DEFAULT_PRIZE_MAX_COUNT, step=1)
-        prize_date_sort = st.checkbox("prize3_date_sort", value=DEFAULT_PRIZE_DATE_SORT)
+        match_mode = st.selectbox("查詢條件", [">=", "==", "<="], index=0)
+        combination_take_count = st.number_input(
+            "條件開號組合",
+            min_value=0,
+            value=DEFAULT_TAKE_COUNT,
+            step=1,
+        )
+        prize_option = st.number_input(
+            "中獎獎項（3 獎）",
+            min_value=1,
+            max_value=3,
+            value=3,
+            step=1,
+        )
+        prize_print_show = st.checkbox("顯示中獎注數", value=False)
+        prize_unit_sort = st.selectbox(
+            "中獎注數搜尋條件 >=",
+            [">=", "==", "<="],
+            index=0,
+        )
+        prize_unit_count = st.number_input(
+            "中獎注數",
+            min_value=0,
+            value=DEFAULT_PRIZE_COUNT,
+            step=1,
+        )
+        prize_max_count = st.number_input(
+            "中獎注數排序最前 N 期",
+            min_value=1,
+            value=DEFAULT_PRIZE_MAX_COUNT,
+            step=1,
+        )
+        prize_date_sort = st.checkbox(
+            "中獎注數排序預設日期",
+            value=DEFAULT_PRIZE_DATE_SORT,
+        )
         submitted = st.form_submit_button("開始回測", type="primary", width="stretch")
 
     if not submitted and "s3_v2_output" not in st.session_state:
@@ -143,8 +197,8 @@ def main() -> None:
     detail, summary = split_summary(last_backtest_block(output))
 
     st.subheader("最後一期回測")
-    st.code(detail, language="text", wrap_lines=True)
+    st.code(detail, language="text", wrap_lines=False)
 
     st.subheader("回測統計")
-    st.code(summary or "沒有符合條件的統計結果。", language="text", wrap_lines=True)
+    st.code(summary or "沒有符合條件的統計結果。", language="text", wrap_lines=False)
 
