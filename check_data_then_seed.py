@@ -25,10 +25,6 @@ def now_string() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 
-def write_log(message: str) -> None:
-    print(message)
-
-
 def is_valid_date(value: object) -> bool:
     return bool(DATE_PATTERN.match(str(value).strip()))
 
@@ -74,13 +70,13 @@ def main() -> int:
         m2_latest = latest_m2_date()
         m3_latest, m3_next = m3_dates()
         if m2_latest != m3_latest:
-            write_log(f"{now_string()} M2/M3 最新期不一致。M2={m2_latest}；M3={m3_latest}")
+            print(f"{now_string()} M2/M3 最新期不一致。M2={m2_latest}；M3={m3_latest}")
             return 1
 
-        write_log(f"{now_string()} M2/M3 最新期一致。最新期={m2_latest}；下期={m3_next}")
+        print(f"{now_string()} M2/M3 最新期一致。最新期={m2_latest}；下期={m3_next}")
         return 0
     except Exception as exc:
-        write_log(f"{now_string()} 檢查資料失敗：{exc}")
+        print(f"{now_string()} 檢查資料失敗：{exc}")
         return 1
 
 

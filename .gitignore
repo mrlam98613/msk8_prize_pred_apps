@@ -23,3 +23,6 @@ wheels/
 # A_msk_lottery_data_folder/*.*
 # A_msk_marksix_function_app/*.*
 # A_msk_balls_png/*.*
+
+# Runtime scheduler state
+Z4_lotto_prize_2026_crawler/.m7_last_attempt_date

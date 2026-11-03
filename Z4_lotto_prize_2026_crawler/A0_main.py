@@ -36,7 +36,6 @@ from urllib3.util.retry import Retry
 PROJECT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PROJECT_DIR.parent
 DATA_DIR = PROJECT_DIR / "Lotto_Data_Folder"
-LOG_PATH = PROJECT_DIR / "log" / "lotto_download_log.txt"
 WEBAPP_DATA_DIR = REPO_ROOT / "A_msk_lottery_data_folder"
 
 M1_CSV = DATA_DIR / "M1_Z4_lotto_data.csv" # M1-Z4.csv 馬會抓取最新資料 合併至 M2.csv
@@ -44,7 +43,8 @@ M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv" # M2.csv 最後更新的開
 M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv" # M3.csv 1,2,3獎中獎注數及每注獎金
 M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv" # M4.csv 1,2,3獎中獎注數及每注獎金統計
 M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv" # M6.csv 1,2,3獎中獎注數及每注獎金歷史紀錄
-M7_CSV = DATA_DIR / "M7_lotto_open_days.csv" # M7.csv 馬會公布的開獎日，固定每週二、四、六，若有非固定開獎日，則以馬會公布為準。
+M7_CSV = DATA_DIR / "M7_lotto_open_days.csv" # M7.csv 馬會官方公布的每月預定攬珠開獎日。
+M7_ATTEMPT_DATE_FILE = PROJECT_DIR / ".m7_last_attempt_date"
 
 WEBAPP_M2_CSV = WEBAPP_DATA_DIR / "M2_last_upgrade_lotto_data.csv"
 WEBAPP_M4_CSV = WEBAPP_DATA_DIR / "M4_lotto_prize_summary.csv"
@@ -54,7 +54,6 @@ WEBAPP_M6_CSV = WEBAPP_DATA_DIR / "M6_lotto_history_prize.csv"
 HKJC_GRAPHQL_URL = "https://info.cld.hkjc.com/graphql/base/"
 DOWNLOAD_LIMIT = 100
 REQUEST_TIMEOUT = (8, 15)
-DRAW_WEEKDAYS = {2, 4, 6}  # Tuesday, Thursday, Saturday
 M7_FIELD = "開獎日期 (Date)"
 REQUEST_HEADERS = {
     "User-Agent": (
@@ -230,18 +229,11 @@ class NextDrawInfo:
 
 def ensure_folders() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     WEBAPP_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def now_string() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
-
-def write_log(message: str) -> None:
-    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with LOG_PATH.open("w", encoding="utf-8") as f:
-        f.write(message.rstrip() + "\n\n")
 
 
 def read_latest_date_from_csv(path: Path, date_column: str) -> str:
@@ -278,22 +270,10 @@ def describe_response(response: requests.Response) -> str:
     )
 
 
-def run_timed_step(label: str, func, timings: list[tuple[str, float]], *args, **kwargs):
-    print(f"⏳ {label} 開始，下載網頁或產生檔案可能需要一些時間...")
-    start_time = time.perf_counter()
+def run_timed_step(label: str, func, *args, **kwargs):
     result = func(*args, **kwargs)
-    elapsed = time.perf_counter() - start_time
-    timings.append((label, elapsed))
-    print(f"✅ {label} 完成，耗時 {elapsed:.2f} 秒")
+    print(f"✅ {label} 完成｜{now_string()}")
     return result
-
-
-def format_timing_report(timings: list[tuple[str, float]]) -> str:
-    if not timings:
-        return ""
-    rows = ["下載/產生耗時："]
-    rows.extend(f"- {label}: {elapsed:.2f} 秒" for label, elapsed in timings)
-    return "\n".join(rows)
 
 
 def make_session() -> requests.Session:
@@ -322,7 +302,7 @@ def next_month(year: int, month: int) -> tuple[int, int]:
 def target_months(today: Optional[date] = None) -> list[tuple[int, int]]:
     today = today or date.today()
     months = [(today.year, today.month)]
-    if today.day >= 15:
+    if today.day >= 20:
         months.append(next_month(today.year, today.month))
     return months
 
@@ -342,69 +322,25 @@ def read_existing_m7_dates() -> set[str]:
     return existing_dates
 
 
-def month_dates(year: int, month: int) -> list[str]:
-    last_day = monthrange(year, month)[1]
-    dates = []
-    for day in range(1, last_day + 1):
-        current = date(year, month, day)
-        if current.isoweekday() in DRAW_WEEKDAYS:
-            dates.append(current.strftime("%Y-%m-%d"))
-    return dates
-
-
-def build_fixed_fixture_dates(months: list[tuple[int, int]]) -> list[str]:
-    """以六合彩固定二、四、六開獎日，補齊指定月份。"""
-
-    dates: list[str] = []
-    for year, month in months:
-        dates.extend(month_dates(year, month))
-    return sorted(set(dates))
-
-
-def has_month(existing_dates: set[str], year: int, month: int) -> bool:
-    expected = set(month_dates(year, month))
-    return bool(expected) and expected.issubset(existing_dates)
-
-
-def has_current_and_next_month(existing_dates: set[str], today: Optional[date] = None) -> bool:
+def should_download_m7(today: Optional[date] = None) -> bool:
     today = today or date.today()
-    next_year, next_month_value = next_month(today.year, today.month)
-    return has_month(existing_dates, today.year, today.month) and has_month(existing_dates, next_year, next_month_value)
-
-
-def has_non_fixed_draw_dates(existing_dates: set[str], months: list[tuple[int, int]]) -> bool:
-    month_set = set(months)
-    for value in existing_dates:
-        try:
-            current = datetime.strptime(value, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if (current.year, current.month) in month_set and current.isoweekday() not in DRAW_WEEKDAYS:
-            return True
-    return False
-
-
-def should_download_m7(existing_dates: set[str], today: Optional[date] = None) -> bool:
-    today = today or date.today()
-    current_and_next = [(today.year, today.month), next_month(today.year, today.month)]
-    if has_non_fixed_draw_dates(existing_dates, current_and_next):
+    if not M7_ATTEMPT_DATE_FILE.exists():
         return True
-    if has_current_and_next_month(existing_dates, today):
-        return False
-    for year, month in target_months(today):
-        if not has_month(existing_dates, year, month):
-            return True
-    return False
+    last_attempt = M7_ATTEMPT_DATE_FILE.read_text(encoding="utf-8").strip()
+    return last_attempt != today.isoformat()
+
+
+def mark_m7_attempt(today: date) -> None:
+    M7_ATTEMPT_DATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    M7_ATTEMPT_DATE_FILE.write_text(today.isoformat(), encoding="utf-8")
 
 
 def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str]]:
-    start_time = time.perf_counter()
     start_year, start_month = months[0]
     end_year, end_month = months[-1]
     start_date = f"{start_year}{start_month:02d}01"
     end_date = f"{end_year}{end_month:02d}{monthrange(end_year, end_month)[1]:02d}"
 
-    print("🌐 正在嘗試下載馬會開獎日網頁資料，可能需要一些時間...")
     response: Optional[requests.Response] = None
     try:
         response = make_session().post(
@@ -427,8 +363,6 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str
             detail = f"{detail}\n{describe_response(response)}"
         print(f"⚠️ 馬會開獎日下載失敗：{detail}")
         return None
-    finally:
-        print(f"⏱️ 開獎日下載耗時：{time.perf_counter() - start_time:.2f} 秒")
 
     if data.get("errors"):
         print(f"⚠️ 馬會開獎日 GraphQL 回傳錯誤：{data['errors']}")
@@ -440,11 +374,10 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str
         if not draw_date:
             continue
         try:
-            dt = datetime.strptime(draw_date, "%Y-%m-%d").date()
+            datetime.strptime(draw_date, "%Y-%m-%d")
         except ValueError:
             continue
-        if dt.isoweekday() in DRAW_WEEKDAYS:
-            dates.append(draw_date)
+        dates.append(draw_date)
 
     return sorted(set(dates)) or None
 
@@ -463,28 +396,31 @@ def write_m7(dates: list[str]) -> None:
 def download_fixtures_to_csv(today: Optional[date] = None) -> bool:
     today = today or date.today()
     existing_dates = read_existing_m7_dates()
-    if not should_download_m7(existing_dates, today):
-        print("ℹ️ M7 已有需要月份的固定開獎日，跳過下載。")
+    if not should_download_m7(today):
+        print("ℹ️ M7 馬會每月預定攬珠開獎日：今日已執行，正常跳過。")
         if existing_dates and not M7_CSV.exists():
             write_m7(sorted(existing_dates))
         return False
 
+    # 先記錄嘗試日期，確保即使馬會暫時回傳錯誤，同一天也不會重複請求。
+    mark_m7_attempt(today)
     months = target_months(today)
     dates = fetch_hkjc_fixture_dates(months)
     if dates is None:
-        fallback_dates = sorted(existing_dates | set(build_fixed_fixture_dates(months)))
-        if not fallback_dates:
-            print("⚠️ 未能取得馬會已公布開獎日，保留現有 M7。")
-            return False
-        write_m7(fallback_dates)
-        print(
-            "⚠️ 未能取得馬會已公布開獎日，"
-            f"已用固定二、四、六補齊 M7，共 {len(fallback_dates)} 個開獎日。"
-        )
-        return True
+        print("⚠️ 未能取得馬會官方預定開獎日，保留現有 M7。")
+        return False
 
-    write_m7(dates)
-    print(f"✅ 已更新 M7_lotto_open_days.csv，共 {len(dates)} 個開獎日。")
+    refreshed_months = set(months)
+    preserved_dates = set()
+    for value in existing_dates:
+        try:
+            old_date = datetime.strptime(value, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if (old_date.year, old_date.month) not in refreshed_months:
+            preserved_dates.add(value)
+
+    write_m7(sorted(preserved_dates | set(dates)))
     return True
 
 
@@ -608,7 +544,7 @@ def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], Optio
         next_draw = download_next_draw_by_recent_range(session, records[-1].draw_date)
     if next_draw is None:
         next_draw = download_next_draw_by_date_range(session, records[-1].draw_date)
-    log_next_draw_status(records[-1].draw_date, next_draw)
+    log_next_draw_status(next_draw)
     return records, next_draw
 
 
@@ -664,11 +600,11 @@ def download_next_draw_by_recent_range(session: requests.Session, latest_draw_da
         detail = f"{exc}"
         if response is not None:
             detail = f"{detail}\n{describe_response(response)}"
-        write_log(f"{now_string()} ⚠️ 下一期最近 60 日補抓失敗。\n{detail}")
+        print(f"{now_string()} ⚠️ 下一期最近 60 日補抓失敗。\n{detail}")
         return None
 
     if data.get("errors"):
-        write_log(f"{now_string()} ⚠️ 下一期最近 60 日 GraphQL 回傳錯誤：{data['errors']}")
+        print(f"{now_string()} ⚠️ 下一期最近 60 日 GraphQL 回傳錯誤：{data['errors']}")
         return None
 
     candidates = []
@@ -677,7 +613,7 @@ def download_next_draw_by_recent_range(session: requests.Session, latest_draw_da
         if candidate and candidate.draw_date > latest_draw_date:
             candidates.append(candidate)
     if not candidates:
-        write_log(
+        print(
             f"{now_string()} ⚠️ 下一期最近 60 日沒有找到 draw。\n"
             f"/> latest_draw_date={latest_draw_date}\n"
             f"/> startDate={start_date}, endDate={end_date}"
@@ -711,11 +647,11 @@ def download_next_draw_by_date_range(session: requests.Session, latest_draw_date
         detail = f"{exc}"
         if response is not None:
             detail = f"{detail}\n{describe_response(response)}"
-        write_log(f"{now_string()} ⚠️ 下一期日期範圍補抓失敗。\n{detail}")
+        print(f"{now_string()} ⚠️ 下一期日期範圍補抓失敗。\n{detail}")
         return None
 
     if data.get("errors"):
-        write_log(f"{now_string()} ⚠️ 下一期日期範圍 GraphQL 回傳錯誤：{data['errors']}")
+        print(f"{now_string()} ⚠️ 下一期日期範圍 GraphQL 回傳錯誤：{data['errors']}")
         return None
 
     candidates = []
@@ -724,7 +660,7 @@ def download_next_draw_by_date_range(session: requests.Session, latest_draw_date
         if candidate and candidate.draw_date > latest_draw_date:
             candidates.append(candidate)
     if not candidates:
-        write_log(
+        print(
             f"{now_string()} ⚠️ 下一期日期範圍沒有找到 draw。\n"
             f"/> latest_draw_date={latest_draw_date}\n"
             f"/> startDate={start_date}, endDate={end_date}"
@@ -733,36 +669,22 @@ def download_next_draw_by_date_range(session: requests.Session, latest_draw_date
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def log_next_draw_status(latest_draw_date: str, next_draw: Optional[NextDrawInfo]) -> None:
-    """記錄下一期資料是否齊全，避免 M3/M4 靜默套用舊資料。"""
-    expected_date, _ = get_next_draw_date(latest_draw_date)
+def log_next_draw_status(next_draw: Optional[NextDrawInfo]) -> None:
+    """檢查馬會下一期資料是否取得及彩金欄位是否齊全。"""
     if next_draw is None:
-        write_log(
-            f"{now_string()} ⚠️ 未獲取下一期最新資訊。\n"
-            f"/> 最新一期：{latest_draw_date}\n"
-            f"/> 預計下一期：{expected_date}\n"
-            "/> M3 多寶 / 金多寶及估計頭獎基金會標示未獲取最新資訊。"
+        print(
+            f"{now_string()} ⚠️ 未取得馬會下一期資料。"
+            "M3 多寶 / 金多寶及估計頭獎基金會標示未取得最新資訊。"
         )
         return
 
-    warnings = []
-    if next_draw.draw_date != expected_date:
-        warnings.append(f"下一期日期不一致：expected={expected_date}, got={next_draw.draw_date}")
+    missing = []
     if next_draw.jackpot <= 0:
-        warnings.append("Jackpot / Snowball 缺失或為 0")
+        missing.append("多寶 / 金多寶金額")
     if next_draw.estimated_prize <= 0:
-        warnings.append("Estimated 1st Division Prize Fund 缺失或為 0")
-
-    if warnings:
-        write_log(
-            f"{now_string()} ⚠️ 下一期資料不齊全。\n"
-            f"/> latest_draw_date={latest_draw_date}\n"
-            f"/> next_draw_date={next_draw.draw_date}\n"
-            f"/> draw_id={next_draw.draw_id or '-'}\n"
-            f"/> jackpot={next_draw.jackpot}\n"
-            f"/> estimatedPrize={next_draw.estimated_prize}\n"
-            f"/> warnings：{'；'.join(warnings)}"
-        )
+        missing.append("估計頭獎基金")
+    if missing:
+        print(f"{now_string()} ⚠️ 馬會下一期資料缺少：{'、'.join(missing)}。")
 
 
 def draw_to_m2_row(record: DrawRecord) -> dict[str, Any]:
@@ -981,45 +903,32 @@ def validate_outputs() -> tuple[str, str]:
 
 def run() -> bool:
     ensure_folders()
-    timings: list[tuple[str, float]] = []
     try:
-        run_timed_step("M7 開獎日期檔", download_fixtures_to_csv, timings)
-        records, next_draw = run_timed_step("馬會官方開獎資料下載", download_draws, timings)
-        run_timed_step("M1 最新紀錄", create_m1_latest_history, timings, records)
-        run_timed_step("M2 合併紀錄", create_m2_merged_history, timings)
-        run_timed_step("M3 最新及下期資料", create_m3_prize_results, timings, records, next_draw=next_draw)
-        run_timed_step("M4 摘要資料", create_m4_prize_summary, timings, records, next_draw=next_draw)
-        run_timed_step("M6 派彩紀錄", create_m6_lotto_history_prize, timings, records)
-        run_timed_step("同步到 WebApp", copy_to_webapp, timings)
-        latest_date, next_date = run_timed_step("輸出核對", validate_outputs, timings)
+        run_timed_step("M7 馬會每月預定攬珠開獎日", download_fixtures_to_csv)
+        records, next_draw = run_timed_step("馬會官方開獎資料下載", download_draws)
+        run_timed_step("M1 最新紀錄", create_m1_latest_history, records)
+        run_timed_step("M2 合併紀錄", create_m2_merged_history)
+        run_timed_step("M3 最新及下期資料", create_m3_prize_results, records, next_draw=next_draw)
+        run_timed_step("M4 摘要資料", create_m4_prize_summary, records, next_draw=next_draw)
+        run_timed_step("M6 派彩紀錄", create_m6_lotto_history_prize, records)
+        run_timed_step("同步到 WebApp", copy_to_webapp)
+        latest_date, next_date = run_timed_step("輸出核對", validate_outputs)
     except Exception as exc:
-        timing_report = format_timing_report(timings)
         message = (
-            f"{now_string()} Z4 執行失敗。\n"
-            f"錯誤原因：{exc}\n"
+            f"{now_string()} ❌ Z4 執行失敗：{exc}\n"
             f"{local_data_status()}\n"
-            "保護狀態：本次失敗未完成同步，WebApp 會保留上一次成功的 CSV。"
+            "本次失敗未完成同步，WebApp 會保留上一次成功的 CSV。"
         )
-        if timing_report:
-            message = f"{message}\n{timing_report}"
-        write_log(message)
-        print(f"❌ {message}")
+        print(message)
         return False
 
-    timing_report = format_timing_report(timings)
-    message = (
-        f"{now_string()} Z4 下載完成。\n"
-        f"/> 最新一期：{latest_date}\n"
-        f"/> 下期開獎日期：{next_date}\n"
-        f"/> 下期期號：{next_draw.draw_id if next_draw else '-'}\n"
-        f"/> 已同步 M2/M3/M4/M6/M7 到 A_msk_lottery_data_folder。"
+    print(
+        f"✅ Z4 全部步驟完成｜{now_string()}\n"
+        f"最新一期：{latest_date}；下期開獎：{next_date}；"
+        f"下期期號：{next_draw.draw_id if next_draw else '-'}\n"
+        "已同步 M2/M3/M4/M6/M7 到 A_msk_lottery_data_folder。"
     )
-    if timing_report:
-        message = f"{message}\n{timing_report}"
-    write_log(message)
-    print(f"✅ {message}")
     return True
-
 
 if __name__ == "__main__":
     run()

@@ -33,7 +33,6 @@ PROJECT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PROJECT_DIR.parent
 DATA_DIR = PROJECT_DIR / "Lotto_Data_Folder"
 WEBAPP_DATA_DIR = REPO_ROOT / "A_msk_lottery_data_folder"
-LOG_PATH = PROJECT_DIR / "log" / "lotto_download_log.txt"
 
 MINGPAO_URL = "https://news.mingpao.com/pns/%E5%85%AD%E5%90%88%E5%BD%A9/marksix"
 
@@ -114,12 +113,6 @@ class MingpaoDraw:
 
 def now_string() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
-
-def write_log(message: str) -> None:
-    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with LOG_PATH.open("w", encoding="utf-8") as f:
-        f.write(message.rstrip() + "\n\n")
 
 
 def clean_text(value: str) -> str:
@@ -416,7 +409,6 @@ def run(apply: bool = False) -> bool:
                 f"/> 本地最新：{current_latest}"
             )
             print(message)
-            write_log(message)
             return False
         if apply:
             apply_append(draw)
@@ -433,12 +425,10 @@ def run(apply: bool = False) -> bool:
             f"/> 估計頭獎基金：{draw.next_prize_fund}"
         )
         print(message)
-        write_log(message)
         return apply
     except Exception as exc:
         message = f"{now_string()} 明報後備失敗：{exc}"
         print(message)
-        write_log(message)
         return False
 
 
