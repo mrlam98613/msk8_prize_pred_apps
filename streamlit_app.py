@@ -141,13 +141,17 @@ def render_member_status() -> None:
         st.caption("會員狀態：尚未登入")
         return
 
+    phone = st.session_state.get("login_member_phone") or email
+    nickname = st.session_state.get("login_member_nickname") or "未填暱稱"
     role = "管理員" if login_state == "admin" else "會員"
-    st.caption(f"會員狀態：{email}（{role}）")
+    st.markdown(f"**會員狀態：{phone}｜{nickname}（{role}）**")
     if st.button("登出", key="main_member_logout"):
         reset_member_custom_bet_state()
         st.session_state["login_state"] = None
         st.session_state["login_email_val"] = None
         st.session_state["login_member_id"] = None
+        st.session_state["login_member_phone"] = None
+        st.session_state["login_member_nickname"] = None
         st.session_state["redirect_to_member_bet_center"] = False
         st.rerun()
 
@@ -309,7 +313,6 @@ def main() -> None:
     selected_label = st.selectbox(
         "請選擇網頁功能",
         page_labels,
-        index=page_labels.index(st.session_state["main_page_selector"]),
         key="main_page_selector",
     )
 

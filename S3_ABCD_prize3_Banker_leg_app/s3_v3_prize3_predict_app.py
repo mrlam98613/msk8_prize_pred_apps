@@ -56,7 +56,7 @@ VERSION = "S3_v3 3_獎最人氣球號預測 "
 
 MODE = "predict" # backtest / predict mode input
 BACKTEST_DRAW_COUNT_LIST = [1]
-WINDOW_DRAW_COUNT_LIST = [19] # 最少查詢 7 期
+WINDOW_DRAW_COUNT_LIST = [13] # 最少查詢 7 期
 SELECT_GROUPS = 1,2,3,4 # Select 1,2,3,4 
 COMB_MATCH_MODE = ">="
 COMBINATION_TAKE_COUNT = 5

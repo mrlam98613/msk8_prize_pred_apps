@@ -41123,6 +41123,144 @@
       "hit_count": 4.5,
       "hit_level": "high_hit",
       "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-27",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 1,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "8": 8.75,
+          "3": 7.75,
+          "9": 6.75,
+          "5": 5.0,
+          "7": 4.75,
+          "4": 3.25,
+          "2": 3.25,
+          "1": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "12": 3.5,
+          "11": 3.25,
+          "14": 2.75,
+          "19": 2.75,
+          "16": 2.0,
+          "13": 1.75,
+          "10": 1.75,
+          "17": 1.75,
+          "20": 1.5,
+          "18": 1.5,
+          "15": 0.0
+        },
+        "C": {
+          "29": 9.0,
+          "31": 8.25,
+          "26": 3.75,
+          "21": 3.75,
+          "28": 3.25,
+          "25": 2.0,
+          "27": 1.75,
+          "30": 1.75,
+          "24": 1.5,
+          "23": 1.25,
+          "22": 0.0
+        },
+        "D": {
+          "34": 7.0,
+          "40": 3.25,
+          "36": 3.25,
+          "38": 2.0,
+          "33": 1.5,
+          "37": 1.5,
+          "35": 1.25,
+          "32": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          26,
+          28,
+          29,
+          31
+        ],
+        "D": [
+          34,
+          36,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        8,
+        9,
+        11,
+        12,
+        14,
+        16,
+        19,
+        21,
+        26,
+        28,
+        29,
+        31,
+        34,
+        36,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
     }
   ]
 }

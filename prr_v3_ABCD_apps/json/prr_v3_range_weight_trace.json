@@ -1,4146 +1,6 @@
 {
   "records": [
     {
-      "check_date": "2026-06-04",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 46,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 9.25,
-          "2": 6.0,
-          "4": 4.5,
-          "1": 3.75,
-          "9": 3.5,
-          "8": 2.5,
-          "5": 1.75,
-          "6": 1.5,
-          "3": 1.25
-        },
-        "B": {
-          "20": 5.0,
-          "16": 4.75,
-          "13": 3.75,
-          "11": 3.75,
-          "14": 3.5,
-          "12": 3.25,
-          "10": 3.25,
-          "18": 3.25,
-          "15": 1.75,
-          "19": 1.5,
-          "17": 1.5
-        },
-        "C": {
-          "25": 6.75,
-          "27": 6.5,
-          "21": 5.0,
-          "28": 4.5,
-          "23": 4.25,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "26": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "35": 5.0,
-          "40": 5.0,
-          "34": 5.0,
-          "37": 3.25,
-          "36": 3.0,
-          "39": 2.0,
-          "32": 2.0,
-          "38": 1.25,
-          "33": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          13,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        10,
-        11,
-        12,
-        13,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        35,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 0.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-04",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 46,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 9.5,
-          "2": 7.5,
-          "4": 5.75,
-          "1": 3.75,
-          "9": 3.5,
-          "8": 2.75,
-          "5": 1.75,
-          "6": 1.5,
-          "3": 1.25
-        },
-        "B": {
-          "20": 6.25,
-          "11": 5.0,
-          "16": 4.75,
-          "10": 4.75,
-          "13": 3.75,
-          "14": 3.5,
-          "18": 3.5,
-          "12": 3.25,
-          "17": 2.75,
-          "15": 1.75,
-          "19": 1.5
-        },
-        "C": {
-          "27": 8.0,
-          "25": 6.75,
-          "21": 5.0,
-          "28": 4.5,
-          "23": 4.5,
-          "30": 3.0,
-          "26": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "34": 5.25,
-          "35": 5.0,
-          "40": 5.0,
-          "37": 3.25,
-          "39": 3.25,
-          "32": 3.25,
-          "36": 3.0,
-          "38": 1.25,
-          "33": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          13,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          35
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        10,
-        11,
-        12,
-        13,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        34,
-        35
-      ],
-      "prediction_count": 16,
-      "hit_count": 0.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-04",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 46,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.0,
-          "2": 8.25,
-          "4": 6.5,
-          "8": 5.5,
-          "9": 3.75,
-          "1": 3.75,
-          "6": 3.0,
-          "5": 2.0,
-          "3": 1.5
-        },
-        "B": {
-          "20": 8.25,
-          "16": 6.5,
-          "11": 6.5,
-          "14": 6.25,
-          "13": 5.25,
-          "10": 5.0,
-          "12": 4.75,
-          "17": 4.5,
-          "18": 3.5,
-          "19": 3.0,
-          "15": 2.0
-        },
-        "C": {
-          "28": 8.75,
-          "27": 8.5,
-          "25": 8.25,
-          "23": 6.25,
-          "21": 5.25,
-          "30": 3.25,
-          "26": 3.25,
-          "22": 3.0,
-          "31": 2.0,
-          "24": 1.25,
-          "29": 1.25
-        },
-        "D": {
-          "40": 7.5,
-          "34": 6.75,
-          "35": 6.25,
-          "32": 4.75,
-          "37": 3.5,
-          "39": 3.5,
-          "36": 3.25,
-          "33": 2.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          13,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        13,
-        14,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        33
-      ],
-      "prediction_count": 16,
-      "hit_count": 0.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-04",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 46,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.25,
-          "2": 10.25,
-          "9": 7.5,
-          "8": 7.5,
-          "4": 7.0,
-          "6": 5.75,
-          "1": 4.0,
-          "5": 3.25,
-          "3": 1.75
-        },
-        "B": {
-          "20": 9.75,
-          "11": 9.25,
-          "16": 7.0,
-          "14": 6.75,
-          "12": 6.25,
-          "18": 6.25,
-          "17": 6.0,
-          "13": 5.5,
-          "10": 5.25,
-          "19": 4.5,
-          "15": 2.0
-        },
-        "C": {
-          "28": 12.0,
-          "27": 11.25,
-          "23": 8.75,
-          "25": 8.25,
-          "21": 7.0,
-          "26": 5.75,
-          "22": 4.5,
-          "30": 3.5,
-          "31": 2.0,
-          "24": 1.5,
-          "29": 1.25
-        },
-        "D": {
-          "40": 7.75,
-          "34": 6.75,
-          "35": 6.25,
-          "32": 6.0,
-          "37": 4.75,
-          "33": 4.0,
-          "39": 3.5,
-          "36": 3.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          7,
-          9
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        13,
-        18,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        32,
-        33
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-04",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 46,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "2": 14.5,
-          "7": 11.5,
-          "4": 10.0,
-          "6": 9.0,
-          "9": 8.25,
-          "8": 8.25,
-          "5": 4.75,
-          "1": 4.0,
-          "3": 3.0
-        },
-        "B": {
-          "18": 11.75,
-          "20": 11.75,
-          "16": 11.0,
-          "13": 10.5,
-          "11": 10.25,
-          "14": 8.25,
-          "12": 8.25,
-          "10": 6.75,
-          "19": 6.5,
-          "17": 6.5,
-          "15": 5.75
-        },
-        "C": {
-          "28": 15.75,
-          "27": 12.25,
-          "23": 11.25,
-          "25": 10.25,
-          "22": 7.75,
-          "26": 7.75,
-          "21": 7.25,
-          "30": 5.0,
-          "31": 4.5,
-          "24": 2.75,
-          "29": 1.5
-        },
-        "D": {
-          "37": 10.25,
-          "34": 9.75,
-          "35": 9.0,
-          "40": 8.0,
-          "32": 8.0,
-          "39": 5.0,
-          "33": 4.75,
-          "36": 3.75,
-          "38": 3.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          13,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          22,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        13,
-        16,
-        18,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        34,
-        38
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-06",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 45,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.25,
-          "4": 6.5,
-          "2": 6.0,
-          "1": 3.75,
-          "9": 3.5,
-          "8": 2.5,
-          "5": 1.75,
-          "6": 1.25,
-          "3": 1.25
-        },
-        "B": {
-          "16": 4.75,
-          "20": 4.75,
-          "15": 3.75,
-          "13": 3.75,
-          "14": 3.25,
-          "11": 3.25,
-          "10": 3.0,
-          "18": 3.0,
-          "12": 2.0,
-          "19": 1.5,
-          "17": 1.5
-        },
-        "C": {
-          "27": 6.5,
-          "21": 5.0,
-          "25": 5.0,
-          "28": 4.0,
-          "23": 2.75,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "26": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "37": 5.0,
-          "35": 5.0,
-          "40": 5.0,
-          "34": 4.5,
-          "36": 2.75,
-          "39": 2.0,
-          "32": 1.75,
-          "33": 0.0,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          13,
-          14,
-          15,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          35,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        13,
-        14,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        35,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-06",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 45,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.25,
-          "4": 7.75,
-          "2": 7.25,
-          "1": 3.75,
-          "9": 3.5,
-          "8": 2.5,
-          "5": 1.75,
-          "6": 1.5,
-          "3": 1.25
-        },
-        "B": {
-          "20": 5.0,
-          "16": 4.75,
-          "11": 4.75,
-          "10": 4.25,
-          "15": 3.75,
-          "13": 3.75,
-          "14": 3.5,
-          "12": 3.25,
-          "18": 3.0,
-          "19": 1.5,
-          "17": 1.5
-        },
-        "C": {
-          "27": 6.5,
-          "25": 5.25,
-          "21": 5.0,
-          "28": 4.5,
-          "23": 4.25,
-          "30": 2.75,
-          "26": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "37": 6.25,
-          "35": 5.0,
-          "40": 5.0,
-          "34": 4.75,
-          "36": 3.0,
-          "39": 2.0,
-          "32": 1.75,
-          "38": 1.25,
-          "33": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          13,
-          15,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          35,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        10,
-        11,
-        13,
-        16,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        35,
-        37
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-06",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 45,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.75,
-          "4": 8.5,
-          "2": 8.25,
-          "8": 5.5,
-          "9": 3.75,
-          "1": 3.75,
-          "6": 2.75,
-          "5": 1.75,
-          "3": 1.5
-        },
-        "B": {
-          "16": 6.5,
-          "11": 6.5,
-          "20": 6.5,
-          "14": 6.0,
-          "13": 5.0,
-          "10": 5.0,
-          "12": 4.75,
-          "17": 4.25,
-          "15": 3.75,
-          "18": 3.5,
-          "19": 3.0
-        },
-        "C": {
-          "27": 8.0,
-          "28": 7.25,
-          "25": 6.75,
-          "23": 6.0,
-          "21": 5.25,
-          "30": 3.25,
-          "26": 3.25,
-          "22": 3.0,
-          "31": 1.75,
-          "24": 1.25,
-          "29": 1.25
-        },
-        "D": {
-          "37": 6.5,
-          "34": 6.5,
-          "40": 6.25,
-          "35": 5.0,
-          "39": 3.25,
-          "32": 3.25,
-          "36": 3.25,
-          "33": 2.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          13,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        13,
-        14,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.0,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-06",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 45,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 12.25,
-          "2": 8.75,
-          "4": 8.5,
-          "9": 7.5,
-          "8": 6.25,
-          "6": 4.5,
-          "1": 3.75,
-          "5": 3.25,
-          "3": 1.75
-        },
-        "B": {
-          "20": 9.5,
-          "11": 9.25,
-          "14": 6.75,
-          "16": 6.5,
-          "12": 6.25,
-          "18": 6.25,
-          "17": 6.0,
-          "13": 5.25,
-          "10": 5.25,
-          "19": 4.5,
-          "15": 4.0
-        },
-        "C": {
-          "28": 12.0,
-          "27": 11.0,
-          "23": 8.75,
-          "25": 6.75,
-          "21": 6.5,
-          "26": 5.75,
-          "22": 4.5,
-          "30": 3.5,
-          "31": 2.0,
-          "24": 1.25,
-          "29": 1.25
-        },
-        "D": {
-          "37": 7.75,
-          "40": 7.75,
-          "34": 6.75,
-          "35": 6.25,
-          "32": 6.0,
-          "39": 3.5,
-          "36": 3.25,
-          "33": 2.75,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          37,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        13,
-        14,
-        16,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        32,
-        33
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-06",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 45,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 13.5,
-          "2": 13.0,
-          "4": 11.75,
-          "6": 8.75,
-          "9": 8.25,
-          "8": 7.75,
-          "5": 4.75,
-          "1": 4.0,
-          "3": 3.0
-        },
-        "B": {
-          "20": 11.75,
-          "16": 10.75,
-          "13": 10.5,
-          "18": 10.5,
-          "11": 10.25,
-          "14": 8.25,
-          "12": 8.25,
-          "15": 7.75,
-          "10": 6.75,
-          "17": 6.5,
-          "19": 6.0
-        },
-        "C": {
-          "28": 15.75,
-          "27": 12.25,
-          "23": 11.25,
-          "25": 8.5,
-          "26": 7.75,
-          "21": 7.25,
-          "22": 7.25,
-          "30": 5.0,
-          "31": 4.5,
-          "24": 2.75,
-          "29": 1.5
-        },
-        "D": {
-          "37": 12.0,
-          "34": 8.5,
-          "40": 8.0,
-          "32": 8.0,
-          "35": 7.75,
-          "39": 5.0,
-          "33": 4.25,
-          "36": 3.75,
-          "38": 3.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          13,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        13,
-        16,
-        18,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        33,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-09",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 44,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.0,
-          "2": 5.75,
-          "4": 5.0,
-          "5": 3.75,
-          "1": 3.5,
-          "9": 3.25,
-          "8": 2.5,
-          "6": 1.25,
-          "3": 1.25
-        },
-        "B": {
-          "20": 8.0,
-          "12": 5.0,
-          "15": 3.75,
-          "19": 3.5,
-          "16": 3.5,
-          "13": 3.5,
-          "14": 3.25,
-          "11": 3.25,
-          "10": 3.0,
-          "18": 3.0,
-          "17": 1.25
-        },
-        "C": {
-          "25": 4.75,
-          "27": 4.75,
-          "28": 4.0,
-          "21": 3.5,
-          "23": 2.75,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "26": 1.25,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "34": 6.5,
-          "37": 5.0,
-          "35": 4.75,
-          "40": 4.75,
-          "36": 3.5,
-          "39": 2.0,
-          "32": 1.75,
-          "33": 0.0,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          12,
-          13,
-          15,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        12,
-        13,
-        15,
-        16,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        34,
-        35
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-09",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 44,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.0,
-          "4": 6.5,
-          "2": 6.0,
-          "5": 3.75,
-          "1": 3.75,
-          "9": 3.5,
-          "8": 2.5,
-          "6": 1.25,
-          "3": 1.25
-        },
-        "B": {
-          "20": 8.25,
-          "12": 6.25,
-          "16": 4.75,
-          "15": 3.75,
-          "19": 3.5,
-          "13": 3.5,
-          "14": 3.25,
-          "11": 3.25,
-          "10": 3.0,
-          "18": 3.0,
-          "17": 1.5
-        },
-        "C": {
-          "21": 5.0,
-          "27": 5.0,
-          "25": 4.75,
-          "28": 4.0,
-          "23": 4.0,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "26": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "34": 6.5,
-          "37": 6.25,
-          "36": 4.75,
-          "35": 4.75,
-          "40": 4.75,
-          "39": 2.0,
-          "32": 1.75,
-          "38": 1.25,
-          "33": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          12,
-          13,
-          15,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        12,
-        13,
-        15,
-        16,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        35,
-        37
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-09",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 44,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 11.5,
-          "4": 8.25,
-          "2": 7.75,
-          "8": 4.25,
-          "5": 3.75,
-          "1": 3.75,
-          "9": 3.5,
-          "6": 2.75,
-          "3": 1.5
-        },
-        "B": {
-          "20": 9.75,
-          "12": 7.75,
-          "16": 6.5,
-          "11": 6.25,
-          "14": 6.0,
-          "19": 5.0,
-          "13": 5.0,
-          "10": 4.75,
-          "17": 4.0,
-          "15": 3.75,
-          "18": 3.5
-        },
-        "C": {
-          "28": 7.25,
-          "27": 6.5,
-          "25": 5.5,
-          "21": 5.25,
-          "23": 4.75,
-          "30": 3.25,
-          "22": 3.0,
-          "26": 2.75,
-          "31": 1.75,
-          "24": 1.25,
-          "29": 0.0
-        },
-        "D": {
-          "34": 7.25,
-          "37": 6.5,
-          "40": 6.25,
-          "36": 5.25,
-          "35": 5.0,
-          "39": 3.25,
-          "32": 3.25,
-          "38": 1.5,
-          "33": 1.25
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        13,
-        14,
-        16,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.0,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-09",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 44,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 12.0,
-          "4": 8.5,
-          "2": 8.5,
-          "9": 6.25,
-          "8": 6.0,
-          "6": 4.5,
-          "5": 3.75,
-          "1": 3.75,
-          "3": 1.5
-        },
-        "B": {
-          "20": 13.0,
-          "12": 9.25,
-          "11": 7.75,
-          "19": 6.5,
-          "14": 6.5,
-          "16": 6.5,
-          "17": 5.75,
-          "10": 5.25,
-          "13": 5.0,
-          "18": 5.0,
-          "15": 3.75
-        },
-        "C": {
-          "28": 11.5,
-          "27": 9.25,
-          "23": 7.5,
-          "25": 6.75,
-          "21": 6.5,
-          "26": 5.75,
-          "22": 4.5,
-          "30": 3.25,
-          "31": 1.75,
-          "24": 1.25,
-          "29": 1.25
-        },
-        "D": {
-          "34": 8.75,
-          "37": 7.75,
-          "40": 7.5,
-          "35": 6.25,
-          "32": 6.0,
-          "36": 5.25,
-          "39": 3.5,
-          "33": 2.75,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          23,
-          25,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        14,
-        19,
-        20,
-        21,
-        23,
-        24,
-        27,
-        28,
-        33,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.0,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-09",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 44,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 13.5,
-          "2": 11.75,
-          "4": 10.5,
-          "6": 8.5,
-          "9": 8.0,
-          "8": 7.75,
-          "5": 6.5,
-          "1": 4.0,
-          "3": 1.75
-        },
-        "B": {
-          "20": 15.25,
-          "12": 11.0,
-          "16": 10.75,
-          "18": 10.25,
-          "11": 10.0,
-          "13": 9.25,
-          "19": 8.0,
-          "14": 8.0,
-          "15": 7.75,
-          "17": 6.5,
-          "10": 5.5
-        },
-        "C": {
-          "28": 15.5,
-          "27": 10.5,
-          "23": 9.5,
-          "25": 8.5,
-          "26": 7.75,
-          "21": 7.25,
-          "22": 7.25,
-          "30": 4.75,
-          "31": 4.5,
-          "24": 2.75,
-          "29": 1.5
-        },
-        "D": {
-          "37": 12.0,
-          "34": 10.25,
-          "40": 8.0,
-          "32": 8.0,
-          "35": 7.75,
-          "36": 5.75,
-          "39": 5.0,
-          "33": 4.25,
-          "38": 3.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          13,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          37
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        16,
-        18,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        33,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-11",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 43,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 9.75,
-          "4": 4.75,
-          "2": 4.5,
-          "5": 3.5,
-          "8": 3.25,
-          "9": 3.25,
-          "1": 3.25,
-          "6": 1.25,
-          "3": 0.0
-        },
-        "B": {
-          "20": 8.0,
-          "14": 6.25,
-          "11": 5.25,
-          "12": 4.75,
-          "15": 3.5,
-          "19": 3.25,
-          "16": 3.25,
-          "13": 3.25,
-          "10": 3.0,
-          "18": 3.0,
-          "17": 1.25
-        },
-        "C": {
-          "25": 4.5,
-          "27": 4.5,
-          "26": 3.25,
-          "21": 3.25,
-          "28": 2.75,
-          "23": 2.75,
-          "31": 1.5,
-          "30": 1.5,
-          "22": 1.25,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "40": 8.0,
-          "34": 6.5,
-          "37": 5.0,
-          "35": 3.75,
-          "36": 3.5,
-          "33": 2.0,
-          "39": 1.75,
-          "32": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          15,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        6,
-        7,
-        11,
-        12,
-        14,
-        15,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        33,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-11",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 43,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.0,
-          "4": 6.25,
-          "2": 5.75,
-          "8": 4.5,
-          "5": 3.75,
-          "9": 3.25,
-          "1": 3.25,
-          "6": 1.25,
-          "3": 1.25
-        },
-        "B": {
-          "20": 8.0,
-          "14": 6.25,
-          "11": 5.25,
-          "12": 4.75,
-          "16": 4.75,
-          "15": 3.75,
-          "19": 3.5,
-          "13": 3.5,
-          "10": 3.0,
-          "18": 3.0,
-          "17": 1.25
-        },
-        "C": {
-          "25": 4.75,
-          "27": 4.75,
-          "21": 4.5,
-          "28": 4.0,
-          "26": 3.25,
-          "23": 2.75,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "40": 8.0,
-          "34": 6.5,
-          "37": 5.0,
-          "36": 4.75,
-          "35": 3.75,
-          "33": 2.0,
-          "39": 1.75,
-          "32": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          15,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        14,
-        16,
-        17,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        33,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-11",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 43,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.5,
-          "4": 8.0,
-          "2": 7.75,
-          "8": 6.25,
-          "5": 3.75,
-          "1": 3.75,
-          "9": 3.5,
-          "6": 2.75,
-          "3": 1.5
-        },
-        "B": {
-          "20": 9.75,
-          "14": 9.0,
-          "11": 8.0,
-          "12": 7.5,
-          "16": 5.0,
-          "19": 4.75,
-          "10": 4.5,
-          "17": 4.0,
-          "15": 3.75,
-          "13": 3.75,
-          "18": 3.25
-        },
-        "C": {
-          "28": 7.25,
-          "27": 6.5,
-          "21": 5.25,
-          "25": 5.25,
-          "26": 4.75,
-          "23": 4.5,
-          "30": 3.25,
-          "22": 2.75,
-          "31": 1.75,
-          "24": 0.0,
-          "29": 0.0
-        },
-        "D": {
-          "40": 9.75,
-          "34": 7.0,
-          "37": 6.25,
-          "36": 5.25,
-          "35": 4.0,
-          "33": 3.25,
-          "39": 3.25,
-          "32": 3.0,
-          "38": 1.25
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        11,
-        12,
-        13,
-        14,
-        16,
-        20,
-        21,
-        23,
-        25,
-        27,
-        28,
-        32,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-11",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 43,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.5,
-          "4": 8.5,
-          "2": 8.0,
-          "8": 7.5,
-          "9": 5.0,
-          "5": 3.75,
-          "1": 3.75,
-          "6": 3.25,
-          "3": 1.5
-        },
-        "B": {
-          "20": 12.75,
-          "11": 9.75,
-          "14": 9.5,
-          "12": 9.25,
-          "16": 6.5,
-          "19": 6.25,
-          "17": 5.75,
-          "13": 5.0,
-          "10": 5.0,
-          "18": 4.75,
-          "15": 3.75
-        },
-        "C": {
-          "28": 11.5,
-          "27": 9.25,
-          "23": 7.5,
-          "25": 6.75,
-          "26": 6.5,
-          "21": 6.5,
-          "30": 3.25,
-          "22": 3.0,
-          "31": 1.75,
-          "24": 1.25,
-          "29": 1.25
-        },
-        "D": {
-          "40": 11.0,
-          "34": 8.75,
-          "37": 7.75,
-          "32": 6.0,
-          "36": 5.25,
-          "35": 5.25,
-          "33": 4.5,
-          "39": 3.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          19,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        6,
-        10,
-        11,
-        12,
-        14,
-        19,
-        20,
-        21,
-        23,
-        24,
-        27,
-        28,
-        34,
-        36
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.5,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-11",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 43,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 12.5,
-          "2": 11.75,
-          "4": 10.5,
-          "8": 9.75,
-          "9": 7.75,
-          "6": 7.0,
-          "5": 6.5,
-          "1": 4.0,
-          "3": 1.75
-        },
-        "B": {
-          "20": 15.0,
-          "11": 11.75,
-          "14": 11.0,
-          "12": 11.0,
-          "16": 10.75,
-          "18": 10.25,
-          "13": 8.0,
-          "19": 6.75,
-          "15": 6.5,
-          "17": 6.25,
-          "10": 5.5
-        },
-        "C": {
-          "28": 15.25,
-          "27": 10.25,
-          "26": 9.5,
-          "23": 9.5,
-          "25": 8.25,
-          "21": 7.25,
-          "22": 7.0,
-          "30": 4.75,
-          "31": 4.5,
-          "24": 2.75,
-          "29": 1.5
-        },
-        "D": {
-          "37": 12.0,
-          "40": 11.5,
-          "34": 10.25,
-          "32": 7.75,
-          "35": 6.75,
-          "33": 6.25,
-          "36": 5.5,
-          "39": 4.75,
-          "38": 1.75
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          37,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        16,
-        18,
-        20,
-        21,
-        23,
-        26,
-        27,
-        28,
-        33,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-14",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 42,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 8.25,
-          "9": 6.0,
-          "4": 4.75,
-          "5": 3.5,
-          "6": 3.25,
-          "1": 3.25,
-          "2": 3.0,
-          "3": 2.0,
-          "8": 2.0
-        },
-        "B": {
-          "20": 6.25,
-          "14": 6.0,
-          "11": 5.25,
-          "10": 3.75,
-          "12": 3.75,
-          "15": 3.5,
-          "19": 3.25,
-          "13": 3.25,
-          "16": 3.0,
-          "18": 1.75,
-          "17": 1.25
-        },
-        "C": {
-          "28": 4.75,
-          "25": 4.5,
-          "27": 4.25,
-          "26": 3.25,
-          "21": 3.25,
-          "23": 2.5,
-          "29": 2.0,
-          "31": 1.5,
-          "30": 1.25,
-          "22": 1.25,
-          "24": 0.0
-        },
-        "D": {
-          "40": 7.0,
-          "34": 6.25,
-          "37": 4.75,
-          "36": 3.5,
-          "35": 3.5,
-          "33": 2.0,
-          "39": 1.75,
-          "32": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          4,
-          7,
-          9
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          15,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        2,
-        3,
-        7,
-        11,
-        12,
-        14,
-        15,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        33,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-14",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 42,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 9.75,
-          "9": 6.0,
-          "2": 5.75,
-          "4": 4.75,
-          "8": 4.5,
-          "5": 3.5,
-          "3": 3.25,
-          "6": 3.25,
-          "1": 3.25
-        },
-        "B": {
-          "20": 6.5,
-          "14": 6.0,
-          "11": 5.25,
-          "10": 5.0,
-          "12": 3.75,
-          "15": 3.5,
-          "19": 3.25,
-          "13": 3.25,
-          "16": 3.0,
-          "18": 3.0,
-          "17": 1.25
-        },
-        "C": {
-          "28": 6.0,
-          "25": 4.5,
-          "27": 4.5,
-          "26": 3.25,
-          "21": 3.25,
-          "23": 2.75,
-          "30": 2.75,
-          "29": 2.0,
-          "31": 1.5,
-          "22": 1.25,
-          "24": 0.0
-        },
-        "D": {
-          "40": 7.0,
-          "34": 6.5,
-          "37": 4.75,
-          "36": 3.5,
-          "35": 3.5,
-          "33": 2.0,
-          "39": 1.75,
-          "32": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          7,
-          9
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          15,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        14,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        33,
-        40
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.5,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-14",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 42,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.25,
-          "4": 7.75,
-          "2": 7.75,
-          "9": 6.5,
-          "8": 6.25,
-          "6": 4.75,
-          "5": 3.75,
-          "1": 3.75,
-          "3": 3.5
-        },
-        "B": {
-          "20": 8.25,
-          "14": 7.75,
-          "11": 6.75,
-          "10": 6.5,
-          "12": 6.5,
-          "19": 4.75,
-          "16": 4.75,
-          "15": 3.75,
-          "13": 3.5,
-          "18": 3.25,
-          "17": 2.75
-        },
-        "C": {
-          "28": 8.0,
-          "27": 6.25,
-          "21": 5.0,
-          "25": 5.0,
-          "26": 4.75,
-          "23": 4.25,
-          "30": 3.0,
-          "22": 2.75,
-          "29": 2.0,
-          "31": 1.75,
-          "24": 0.0
-        },
-        "D": {
-          "40": 7.25,
-          "34": 6.75,
-          "37": 6.25,
-          "36": 5.0,
-          "35": 3.75,
-          "33": 3.25,
-          "39": 3.25,
-          "32": 3.0,
-          "38": 1.25
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          19,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        13,
-        14,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        34
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.5,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-14",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 42,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.5,
-          "4": 8.5,
-          "9": 8.0,
-          "2": 8.0,
-          "8": 7.5,
-          "6": 4.75,
-          "5": 3.75,
-          "1": 3.75,
-          "3": 3.5
-        },
-        "B": {
-          "20": 11.0,
-          "11": 9.5,
-          "14": 9.0,
-          "10": 6.75,
-          "12": 6.75,
-          "16": 6.5,
-          "19": 6.25,
-          "13": 5.0,
-          "18": 4.5,
-          "17": 4.5,
-          "15": 3.75
-        },
-        "C": {
-          "28": 11.75,
-          "27": 8.0,
-          "25": 6.75,
-          "26": 6.5,
-          "21": 6.5,
-          "23": 6.0,
-          "29": 3.25,
-          "30": 3.25,
-          "22": 3.0,
-          "31": 1.75,
-          "24": 1.25
-        },
-        "D": {
-          "40": 10.0,
-          "34": 8.25,
-          "37": 6.5,
-          "32": 5.75,
-          "36": 5.25,
-          "35": 5.25,
-          "33": 4.5,
-          "39": 3.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          4,
-          7,
-          9
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          21,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          34,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        14,
-        19,
-        20,
-        21,
-        24,
-        25,
-        27,
-        28,
-        34,
-        36
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-14",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 42,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 12.5,
-          "2": 11.25,
-          "9": 10.75,
-          "4": 10.0,
-          "8": 9.75,
-          "6": 9.0,
-          "5": 5.25,
-          "3": 3.75,
-          "1": 3.75
-        },
-        "B": {
-          "20": 13.25,
-          "11": 11.5,
-          "14": 11.0,
-          "16": 10.75,
-          "18": 10.25,
-          "12": 9.75,
-          "13": 8.0,
-          "10": 7.25,
-          "19": 6.75,
-          "17": 6.0,
-          "15": 5.25
-        },
-        "C": {
-          "28": 17.0,
-          "27": 9.75,
-          "26": 9.25,
-          "23": 9.25,
-          "25": 8.25,
-          "21": 7.0,
-          "22": 7.0,
-          "30": 4.75,
-          "31": 4.5,
-          "29": 3.5,
-          "24": 2.75
-        },
-        "D": {
-          "40": 10.5,
-          "37": 10.5,
-          "34": 10.25,
-          "32": 7.75,
-          "35": 6.75,
-          "33": 6.25,
-          "36": 5.5,
-          "39": 3.5,
-          "38": 1.75
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          7,
-          9
-        ],
-        "B": [
-          11,
-          12,
-          14,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          37,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        14,
-        16,
-        18,
-        20,
-        21,
-        23,
-        26,
-        27,
-        28,
-        34,
-        36
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-18",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 41,
-        "window_count": 16,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 16,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 8.0,
-          "9": 5.0,
-          "4": 4.5,
-          "5": 3.5,
-          "1": 3.25,
-          "2": 3.0,
-          "3": 2.0,
-          "6": 2.0,
-          "8": 2.0
-        },
-        "B": {
-          "12": 8.25,
-          "10": 8.0,
-          "20": 5.0,
-          "11": 4.75,
-          "14": 3.75,
-          "17": 3.25,
-          "19": 3.25,
-          "15": 3.25,
-          "13": 3.25,
-          "16": 3.0,
-          "18": 1.5
-        },
-        "C": {
-          "29": 5.0,
-          "25": 4.25,
-          "27": 4.25,
-          "28": 3.25,
-          "26": 3.25,
-          "21": 3.25,
-          "31": 1.5,
-          "23": 1.25,
-          "30": 1.25,
-          "22": 1.25,
-          "24": 0.0
-        },
-        "D": {
-          "35": 7.0,
-          "40": 7.0,
-          "34": 4.75,
-          "32": 3.5,
-          "37": 3.5,
-          "36": 3.25,
-          "33": 2.0,
-          "39": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          4,
-          7,
-          9
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          17,
-          20
-        ],
-        "C": [
-          25,
-          26,
-          27,
-          28,
-          29
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        2,
-        3,
-        7,
-        10,
-        11,
-        12,
-        16,
-        17,
-        20,
-        21,
-        25,
-        26,
-        27,
-        29,
-        32,
-        35
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-18",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 41,
-        "window_count": 18,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 18,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 9.25,
-          "9": 5.0,
-          "4": 4.5,
-          "2": 4.25,
-          "5": 3.5,
-          "6": 3.25,
-          "8": 3.25,
-          "1": 3.25,
-          "3": 2.0
-        },
-        "B": {
-          "10": 9.5,
-          "12": 8.25,
-          "20": 6.25,
-          "11": 5.25,
-          "14": 5.0,
-          "17": 3.25,
-          "19": 3.25,
-          "15": 3.25,
-          "13": 3.25,
-          "16": 3.0,
-          "18": 3.0
-        },
-        "C": {
-          "29": 5.0,
-          "28": 4.75,
-          "25": 4.5,
-          "27": 4.25,
-          "26": 3.25,
-          "21": 3.25,
-          "23": 2.5,
-          "31": 1.5,
-          "30": 1.25,
-          "22": 1.25,
-          "24": 0.0
-        },
-        "D": {
-          "35": 7.0,
-          "40": 7.0,
-          "34": 6.25,
-          "32": 3.75,
-          "36": 3.5,
-          "37": 3.5,
-          "33": 2.0,
-          "39": 1.75,
-          "38": 0.0
-        }
-      },
-      "group_candidates": {
-        "A": [
-          4,
-          7,
-          9
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          17,
-          20
-        ],
-        "C": [
-          25,
-          26,
-          27,
-          28,
-          29
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        3,
-        7,
-        10,
-        11,
-        12,
-        14,
-        19,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        35
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-18",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 41,
-        "window_count": 24,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 24,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.25,
-          "4": 7.75,
-          "2": 7.5,
-          "9": 5.5,
-          "6": 4.75,
-          "8": 4.75,
-          "5": 3.75,
-          "1": 3.5,
-          "3": 3.25
-        },
-        "B": {
-          "10": 11.0,
-          "12": 10.75,
-          "20": 8.25,
-          "14": 6.75,
-          "11": 6.5,
-          "17": 4.75,
-          "16": 4.75,
-          "15": 3.75,
-          "19": 3.5,
-          "13": 3.5,
-          "18": 3.25
-        },
-        "C": {
-          "28": 7.5,
-          "27": 6.25,
-          "29": 5.0,
-          "26": 4.75,
-          "21": 4.75,
-          "25": 4.75,
-          "23": 4.25,
-          "30": 2.75,
-          "31": 1.75,
-          "22": 1.5,
-          "24": 0.0
-        },
-        "D": {
-          "35": 7.25,
-          "40": 7.0,
-          "34": 6.75,
-          "37": 5.25,
-          "32": 5.0,
-          "36": 4.75,
-          "39": 3.0,
-          "33": 2.0,
-          "38": 1.25
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          17,
-          20
-        ],
-        "C": [
-          21,
-          26,
-          27,
-          28,
-          29
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        12,
-        13,
-        14,
-        15,
-        20,
-        21,
-        25,
-        26,
-        27,
-        28,
-        32,
-        33
-      ],
-      "prediction_count": 16,
-      "hit_count": 2.0,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-18",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 41,
-        "window_count": 30,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 30,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 10.25,
-          "4": 8.5,
-          "2": 8.0,
-          "8": 7.5,
-          "9": 6.75,
-          "6": 4.75,
-          "5": 3.75,
-          "1": 3.75,
-          "3": 3.5
-        },
-        "B": {
-          "10": 11.25,
-          "12": 11.25,
-          "20": 10.75,
-          "11": 8.25,
-          "14": 8.0,
-          "16": 6.5,
-          "19": 6.25,
-          "17": 6.0,
-          "13": 4.75,
-          "18": 4.5,
-          "15": 3.75
-        },
-        "C": {
-          "28": 11.75,
-          "25": 6.5,
-          "27": 6.5,
-          "29": 6.25,
-          "23": 6.0,
-          "21": 5.25,
-          "26": 5.0,
-          "30": 3.25,
-          "22": 3.0,
-          "31": 1.75,
-          "24": 1.25
-        },
-        "D": {
-          "40": 9.75,
-          "35": 8.5,
-          "34": 8.25,
-          "32": 7.5,
-          "37": 5.5,
-          "36": 5.25,
-          "33": 4.5,
-          "39": 3.25,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          14,
-          16,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          27,
-          28,
-          29
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        13,
-        14,
-        20,
-        21,
-        24,
-        25,
-        27,
-        28,
-        32,
-        36
-      ],
-      "prediction_count": 16,
-      "hit_count": 1.5,
-      "hit_level": "low_hit",
-      "is_prize3_like": false
-    },
-    {
-      "check_date": "2026-06-18",
-      "config": {
-        "mode": "backtest",
-        "backtest_count": 41,
-        "window_count": 40,
-        "combination_take_count": 1,
-        "birthday_num_match_mode": ">=",
-        "base_group_take_counts": {
-          "A": 3,
-          "B": 5,
-          "C": 5,
-          "D": 3
-        },
-        "actual_group_take_counts": {
-          "A": 3,
-          "B": 6,
-          "C": 5,
-          "D": 2
-        },
-        "prediction_count": 16,
-        "auto_distribute_group_take": true,
-        "auto_distribute_max_transfer": 2,
-        "auto_distribute_min_group_take": 2,
-        "auto_distribute_min_gap_percent": 10,
-        "recent_draw_score_penalty": 1.0,
-        "high_freq_min_pair_count": 2,
-        "high_freq_dan_take": 5,
-        "high_freq_partner_take": 9,
-        "weak_num_take": 1,
-        "weak_num_random_seed": 20261003
-      },
-      "window_count": 40,
-      "group_take_counts": {
-        "A": 3,
-        "B": 6,
-        "C": 5,
-        "D": 2
-      },
-      "group_scores": {
-        "A": {
-          "7": 12.25,
-          "2": 11.25,
-          "4": 10.0,
-          "9": 9.75,
-          "8": 9.75,
-          "6": 7.75,
-          "5": 5.0,
-          "3": 3.75,
-          "1": 3.75
-        },
-        "B": {
-          "12": 14.0,
-          "20": 12.0,
-          "10": 11.75,
-          "11": 11.25,
-          "16": 10.75,
-          "18": 10.25,
-          "14": 10.0,
-          "17": 8.0,
-          "19": 6.75,
-          "13": 6.5,
-          "15": 5.0
-        },
-        "C": {
-          "28": 17.0,
-          "27": 9.25,
-          "26": 9.0,
-          "23": 9.0,
-          "25": 8.25,
-          "22": 7.0,
-          "21": 6.75,
-          "29": 6.5,
-          "30": 4.75,
-          "31": 3.0,
-          "24": 2.75
-        },
-        "D": {
-          "40": 10.5,
-          "35": 10.25,
-          "34": 10.25,
-          "37": 9.25,
-          "32": 8.5,
-          "33": 6.25,
-          "36": 5.5,
-          "39": 3.5,
-          "38": 1.5
-        }
-      },
-      "group_candidates": {
-        "A": [
-          2,
-          4,
-          7
-        ],
-        "B": [
-          10,
-          11,
-          12,
-          16,
-          18,
-          20
-        ],
-        "C": [
-          23,
-          25,
-          26,
-          27,
-          28
-        ],
-        "D": [
-          35,
-          40
-        ]
-      },
-      "prediction_nums": [
-        1,
-        2,
-        7,
-        10,
-        11,
-        12,
-        16,
-        18,
-        20,
-        21,
-        23,
-        26,
-        27,
-        28,
-        34,
-        36
-      ],
-      "prediction_count": 16,
-      "hit_count": 3.0,
-      "hit_level": "mid_hit",
-      "is_prize3_like": false
-    },
-    {
       "check_date": "2026-06-20",
       "config": {
         "mode": "backtest",
@@ -68998,6 +64858,4146 @@
       "prediction_count": 16,
       "hit_count": 4.5,
       "hit_level": "high_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-08",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 30,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 12.0,
+          "1": 9.0,
+          "4": 7.75,
+          "5": 4.25,
+          "2": 3.0,
+          "6": 1.5,
+          "3": 0.0,
+          "8": 0.0,
+          "9": 0.0
+        },
+        "B": {
+          "16": 7.75,
+          "13": 5.0,
+          "14": 4.5,
+          "11": 3.25,
+          "18": 2.75,
+          "17": 1.75,
+          "20": 1.75,
+          "12": 1.75,
+          "15": 1.5,
+          "10": 1.25,
+          "19": 1.25
+        },
+        "C": {
+          "30": 7.75,
+          "31": 6.5,
+          "21": 4.5,
+          "29": 3.5,
+          "26": 3.25,
+          "24": 2.0,
+          "22": 2.0,
+          "23": 1.75,
+          "27": 1.25,
+          "25": 0.0,
+          "28": 0.0
+        },
+        "D": {
+          "32": 6.5,
+          "37": 4.75,
+          "33": 3.25,
+          "35": 1.75,
+          "38": 1.25,
+          "34": 1.25,
+          "36": 0.0,
+          "39": 0.0,
+          "40": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          18
+        ],
+        "C": [
+          21,
+          26,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          37
+        ]
+      },
+      "prediction_nums": [
+        1,
+        3,
+        7,
+        11,
+        13,
+        14,
+        16,
+        18,
+        21,
+        26,
+        29,
+        30,
+        31,
+        32,
+        33,
+        37
+      ],
+      "prediction_count": 16,
+      "hit_count": 5.0,
+      "hit_level": "prize3_like",
+      "is_prize3_like": true
+    },
+    {
+      "check_date": "2026-08-11",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 29,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 13.5,
+          "1": 10.75,
+          "4": 6.75,
+          "2": 3.0,
+          "5": 2.75,
+          "3": 2.0,
+          "6": 1.5,
+          "8": 0.0,
+          "9": 0.0
+        },
+        "B": {
+          "16": 6.0,
+          "13": 5.0,
+          "14": 3.5,
+          "11": 3.25,
+          "18": 2.5,
+          "17": 1.75,
+          "20": 1.75,
+          "12": 1.5,
+          "15": 1.5,
+          "10": 1.25,
+          "19": 1.25
+        },
+        "C": {
+          "31": 9.25,
+          "30": 6.5,
+          "21": 4.25,
+          "29": 3.5,
+          "26": 2.75,
+          "24": 2.0,
+          "22": 1.75,
+          "23": 1.75,
+          "27": 1.25,
+          "25": 0.0,
+          "28": 0.0
+        },
+        "D": {
+          "32": 9.0,
+          "33": 3.25,
+          "37": 3.25,
+          "35": 1.75,
+          "38": 1.25,
+          "34": 0.0,
+          "36": 0.0,
+          "39": 0.0,
+          "40": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          18
+        ],
+        "C": [
+          21,
+          26,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          37
+        ]
+      },
+      "prediction_nums": [
+        1,
+        3,
+        7,
+        11,
+        13,
+        14,
+        16,
+        18,
+        21,
+        26,
+        29,
+        30,
+        31,
+        32,
+        33,
+        37
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-13",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 28,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 12.0,
+          "1": 9.25,
+          "4": 6.25,
+          "2": 3.0,
+          "5": 2.75,
+          "3": 2.0,
+          "6": 1.25,
+          "8": 0.0,
+          "9": 0.0
+        },
+        "B": {
+          "11": 6.0,
+          "16": 5.75,
+          "13": 4.75,
+          "19": 3.25,
+          "14": 3.25,
+          "17": 1.75,
+          "20": 1.5,
+          "12": 1.5,
+          "15": 1.5,
+          "18": 1.25,
+          "10": 1.25
+        },
+        "C": {
+          "31": 9.0,
+          "30": 4.75,
+          "29": 3.5,
+          "21": 2.75,
+          "26": 2.75,
+          "28": 2.0,
+          "24": 2.0,
+          "22": 1.75,
+          "23": 1.75,
+          "27": 1.25,
+          "25": 0.0
+        },
+        "D": {
+          "32": 9.0,
+          "37": 3.0,
+          "36": 2.0,
+          "33": 1.75,
+          "35": 1.75,
+          "34": 0.0,
+          "38": 0.0,
+          "39": 0.0,
+          "40": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          26,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          36,
+          37
+        ]
+      },
+      "prediction_nums": [
+        1,
+        3,
+        7,
+        11,
+        13,
+        14,
+        16,
+        19,
+        21,
+        26,
+        29,
+        30,
+        31,
+        32,
+        33,
+        37
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-15",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 27,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 9.5,
+          "1": 8.0,
+          "4": 6.0,
+          "3": 2.0,
+          "2": 1.5,
+          "5": 1.5,
+          "6": 1.25,
+          "8": 0.0,
+          "9": 0.0
+        },
+        "B": {
+          "11": 4.75,
+          "16": 4.75,
+          "13": 4.5,
+          "19": 3.25,
+          "14": 3.0,
+          "17": 1.5,
+          "20": 1.5,
+          "12": 1.5,
+          "15": 1.25,
+          "18": 1.25,
+          "10": 1.25
+        },
+        "C": {
+          "31": 9.0,
+          "21": 4.75,
+          "30": 4.5,
+          "27": 3.25,
+          "29": 3.0,
+          "26": 2.75,
+          "28": 2.0,
+          "24": 1.75,
+          "22": 1.75,
+          "23": 1.5,
+          "25": 0.0
+        },
+        "D": {
+          "32": 7.75,
+          "35": 3.5,
+          "37": 3.0,
+          "40": 2.0,
+          "36": 2.0,
+          "33": 1.75,
+          "34": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          27,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          35,
+          37
+        ]
+      },
+      "prediction_nums": [
+        1,
+        3,
+        7,
+        11,
+        13,
+        14,
+        16,
+        19,
+        21,
+        26,
+        29,
+        30,
+        31,
+        32,
+        35,
+        37
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-18",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 26,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 8.75,
+          "4": 8.0,
+          "1": 7.5,
+          "3": 1.75,
+          "2": 1.5,
+          "5": 1.25,
+          "6": 1.25,
+          "8": 0.0,
+          "9": 0.0
+        },
+        "B": {
+          "16": 6.75,
+          "11": 3.75,
+          "13": 3.5,
+          "14": 3.0,
+          "19": 2.0,
+          "17": 1.5,
+          "20": 1.5,
+          "12": 1.25,
+          "15": 1.25,
+          "18": 1.25,
+          "10": 0.0
+        },
+        "C": {
+          "31": 6.25,
+          "27": 5.0,
+          "28": 5.0,
+          "21": 4.75,
+          "30": 4.5,
+          "29": 3.0,
+          "26": 2.5,
+          "25": 2.0,
+          "24": 1.75,
+          "22": 1.5,
+          "23": 1.5
+        },
+        "D": {
+          "32": 5.75,
+          "33": 3.75,
+          "35": 3.5,
+          "37": 2.75,
+          "40": 2.0,
+          "36": 2.0,
+          "34": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          27,
+          28,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          35
+        ]
+      },
+      "prediction_nums": [
+        1,
+        3,
+        7,
+        11,
+        13,
+        15,
+        16,
+        19,
+        21,
+        27,
+        28,
+        30,
+        31,
+        32,
+        35,
+        37
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-20",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 25,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 11.5,
+          "4": 7.5,
+          "1": 7.5,
+          "8": 2.0,
+          "9": 2.0,
+          "3": 1.75,
+          "2": 1.5,
+          "5": 1.25,
+          "6": 1.25
+        },
+        "B": {
+          "16": 6.5,
+          "14": 6.25,
+          "11": 3.25,
+          "13": 3.25,
+          "19": 1.75,
+          "17": 1.5,
+          "20": 1.25,
+          "12": 1.25,
+          "15": 1.25,
+          "10": 0.0,
+          "18": 0.0
+        },
+        "C": {
+          "27": 5.0,
+          "28": 4.75,
+          "31": 4.5,
+          "21": 3.25,
+          "29": 3.0,
+          "30": 3.0,
+          "25": 2.0,
+          "24": 1.75,
+          "22": 1.5,
+          "23": 1.5,
+          "26": 1.25
+        },
+        "D": {
+          "32": 4.5,
+          "33": 3.5,
+          "35": 3.5,
+          "37": 2.75,
+          "39": 2.0,
+          "40": 2.0,
+          "36": 1.75,
+          "34": 0.0,
+          "38": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          27,
+          28,
+          29,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          35
+        ]
+      },
+      "prediction_nums": [
+        3,
+        4,
+        7,
+        11,
+        13,
+        14,
+        15,
+        16,
+        21,
+        27,
+        28,
+        29,
+        31,
+        32,
+        33,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-22",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 24,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 13.5,
+          "4": 6.0,
+          "1": 6.0,
+          "9": 5.0,
+          "8": 2.0,
+          "3": 1.75,
+          "2": 1.25,
+          "5": 1.25,
+          "6": 0.0
+        },
+        "B": {
+          "16": 6.5,
+          "14": 4.5,
+          "15": 3.25,
+          "11": 3.25,
+          "13": 3.0,
+          "10": 2.0,
+          "19": 1.75,
+          "17": 1.25,
+          "20": 1.25,
+          "12": 1.25,
+          "18": 0.0
+        },
+        "C": {
+          "27": 4.75,
+          "28": 4.75,
+          "31": 4.5,
+          "24": 3.5,
+          "21": 3.0,
+          "29": 2.75,
+          "30": 2.75,
+          "25": 2.0,
+          "22": 1.5,
+          "23": 1.25,
+          "26": 1.25
+        },
+        "D": {
+          "32": 4.5,
+          "33": 3.5,
+          "35": 3.0,
+          "39": 2.0,
+          "40": 1.75,
+          "36": 1.75,
+          "37": 1.5,
+          "34": 0.0,
+          "38": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          4,
+          7
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          15,
+          16
+        ],
+        "C": [
+          21,
+          24,
+          27,
+          28,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          35
+        ]
+      },
+      "prediction_nums": [
+        3,
+        4,
+        7,
+        11,
+        13,
+        14,
+        15,
+        16,
+        21,
+        27,
+        28,
+        29,
+        31,
+        32,
+        33,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-25",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 23,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 13.75,
+          "9": 8.5,
+          "4": 4.5,
+          "1": 4.0,
+          "8": 2.0,
+          "3": 1.5,
+          "2": 1.25,
+          "5": 1.25,
+          "6": 0.0
+        },
+        "B": {
+          "16": 6.0,
+          "14": 4.5,
+          "12": 3.25,
+          "11": 3.25,
+          "13": 3.0,
+          "10": 2.0,
+          "15": 2.0,
+          "19": 1.75,
+          "17": 1.25,
+          "20": 1.25,
+          "18": 0.0
+        },
+        "C": {
+          "25": 4.75,
+          "27": 4.5,
+          "31": 4.25,
+          "24": 3.5,
+          "28": 3.5,
+          "21": 3.0,
+          "30": 2.75,
+          "29": 1.5,
+          "22": 1.25,
+          "23": 1.25,
+          "26": 1.25
+        },
+        "D": {
+          "40": 4.75,
+          "33": 3.25,
+          "35": 3.0,
+          "32": 2.75,
+          "34": 2.0,
+          "39": 2.0,
+          "36": 1.75,
+          "37": 1.25,
+          "38": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          13,
+          14,
+          16
+        ],
+        "C": [
+          24,
+          25,
+          27,
+          28,
+          31
+        ],
+        "D": [
+          33,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        16,
+        24,
+        25,
+        27,
+        28,
+        31,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-27",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 22,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 12.25,
+          "9": 8.25,
+          "1": 6.0,
+          "4": 4.25,
+          "8": 1.75,
+          "3": 1.5,
+          "2": 1.25,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "14": 4.25,
+          "16": 4.25,
+          "19": 3.5,
+          "11": 2.75,
+          "13": 2.75,
+          "18": 2.0,
+          "12": 2.0,
+          "10": 2.0,
+          "15": 2.0,
+          "17": 1.25,
+          "20": 1.25
+        },
+        "C": {
+          "25": 8.25,
+          "24": 3.5,
+          "27": 3.5,
+          "28": 3.25,
+          "21": 3.0,
+          "31": 2.75,
+          "30": 2.75,
+          "29": 1.5,
+          "22": 1.25,
+          "23": 1.25,
+          "26": 0.0
+        },
+        "D": {
+          "34": 5.0,
+          "40": 3.75,
+          "33": 3.0,
+          "35": 3.0,
+          "32": 2.75,
+          "38": 2.0,
+          "39": 1.75,
+          "36": 1.5,
+          "37": 1.25
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          13,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          24,
+          25,
+          27,
+          28
+        ],
+        "D": [
+          33,
+          34,
+          40
+        ]
+      },
+      "prediction_nums": [
+        2,
+        7,
+        9,
+        11,
+        13,
+        14,
+        16,
+        19,
+        24,
+        25,
+        27,
+        28,
+        29,
+        34,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-08-29",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 21,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 10.75,
+          "9": 8.0,
+          "1": 6.0,
+          "4": 3.0,
+          "8": 1.75,
+          "3": 1.5,
+          "2": 1.25,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "12": 5.0,
+          "16": 4.25,
+          "19": 3.5,
+          "17": 3.25,
+          "14": 3.0,
+          "11": 2.75,
+          "13": 2.5,
+          "18": 2.0,
+          "10": 1.75,
+          "15": 1.75,
+          "20": 0.0
+        },
+        "C": {
+          "25": 10.25,
+          "31": 4.75,
+          "27": 3.25,
+          "28": 3.25,
+          "24": 3.0,
+          "21": 1.5,
+          "29": 1.25,
+          "30": 1.25,
+          "22": 1.25,
+          "23": 1.25,
+          "26": 0.0
+        },
+        "D": {
+          "34": 5.0,
+          "40": 3.5,
+          "33": 3.0,
+          "35": 2.75,
+          "32": 2.75,
+          "38": 2.0,
+          "39": 1.75,
+          "36": 1.5,
+          "37": 1.25
+        }
+      },
+      "group_candidates": {
+        "A": [
+          1,
+          7,
+          9
+        ],
+        "B": [
+          12,
+          14,
+          16,
+          17,
+          19
+        ],
+        "C": [
+          24,
+          25,
+          27,
+          28,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          40
+        ]
+      },
+      "prediction_nums": [
+        2,
+        7,
+        9,
+        11,
+        12,
+        14,
+        16,
+        19,
+        25,
+        27,
+        28,
+        29,
+        31,
+        34,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-05",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 20,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 12.25,
+          "9": 7.75,
+          "4": 4.75,
+          "1": 4.5,
+          "8": 3.75,
+          "3": 1.25,
+          "2": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "11": 4.75,
+          "12": 4.75,
+          "16": 4.0,
+          "19": 3.5,
+          "13": 2.5,
+          "17": 2.0,
+          "18": 2.0,
+          "10": 1.75,
+          "15": 1.75,
+          "14": 1.75,
+          "20": 0.0
+        },
+        "C": {
+          "25": 9.75,
+          "31": 4.5,
+          "30": 3.25,
+          "24": 3.0,
+          "27": 3.0,
+          "28": 3.0,
+          "26": 2.0,
+          "21": 1.5,
+          "29": 1.25,
+          "22": 1.25,
+          "23": 0.0
+        },
+        "D": {
+          "34": 4.75,
+          "40": 3.25,
+          "33": 2.75,
+          "32": 2.5,
+          "38": 2.0,
+          "39": 1.75,
+          "35": 1.5,
+          "36": 1.5,
+          "37": 1.25
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          13,
+          16,
+          19
+        ],
+        "C": [
+          24,
+          25,
+          27,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        7,
+        9,
+        11,
+        12,
+        14,
+        16,
+        19,
+        24,
+        25,
+        27,
+        28,
+        31,
+        34,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-08",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 19,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "7": 10.75,
+          "9": 9.5,
+          "4": 4.75,
+          "8": 3.5,
+          "1": 3.0,
+          "3": 1.25,
+          "2": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "18": 4.75,
+          "12": 4.75,
+          "11": 4.5,
+          "19": 3.0,
+          "16": 2.75,
+          "13": 2.5,
+          "17": 2.0,
+          "10": 1.75,
+          "15": 1.75,
+          "14": 1.5,
+          "20": 0.0
+        },
+        "C": {
+          "25": 9.5,
+          "30": 6.25,
+          "26": 5.0,
+          "31": 4.5,
+          "24": 3.0,
+          "27": 3.0,
+          "28": 2.75,
+          "21": 1.5,
+          "29": 1.25,
+          "22": 0.0,
+          "23": 0.0
+        },
+        "D": {
+          "33": 4.75,
+          "34": 4.5,
+          "40": 3.25,
+          "38": 1.75,
+          "39": 1.5,
+          "35": 1.5,
+          "36": 1.25,
+          "32": 1.25,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          16,
+          18,
+          19
+        ],
+        "C": [
+          24,
+          25,
+          26,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        7,
+        9,
+        11,
+        12,
+        14,
+        18,
+        19,
+        25,
+        26,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 3.0,
+      "hit_level": "mid_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-10",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 18,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 11.25,
+          "7": 9.5,
+          "4": 3.5,
+          "8": 3.5,
+          "1": 3.0,
+          "3": 1.25,
+          "2": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "18": 4.75,
+          "12": 3.5,
+          "11": 3.25,
+          "19": 3.0,
+          "17": 1.75,
+          "10": 1.5,
+          "15": 1.5,
+          "14": 1.5,
+          "16": 1.5,
+          "13": 1.25,
+          "20": 0.0
+        },
+        "C": {
+          "25": 9.25,
+          "30": 6.25,
+          "26": 5.0,
+          "28": 4.75,
+          "29": 3.25,
+          "31": 3.0,
+          "24": 2.75,
+          "27": 2.75,
+          "23": 2.0,
+          "21": 1.25,
+          "22": 0.0
+        },
+        "D": {
+          "33": 3.5,
+          "34": 3.5,
+          "35": 3.25,
+          "40": 3.0,
+          "38": 1.75,
+          "39": 1.5,
+          "36": 1.25,
+          "32": 1.25,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          25,
+          26,
+          28,
+          29,
+          30
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        3,
+        7,
+        9,
+        11,
+        12,
+        14,
+        18,
+        19,
+        25,
+        26,
+        28,
+        29,
+        30,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-12",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 17,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 11.0,
+          "7": 9.0,
+          "8": 3.25,
+          "4": 3.0,
+          "1": 3.0,
+          "3": 1.25,
+          "2": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "18": 3.75,
+          "12": 3.25,
+          "11": 3.0,
+          "19": 3.0,
+          "17": 1.75,
+          "10": 1.5,
+          "15": 1.5,
+          "14": 1.5,
+          "16": 1.25,
+          "13": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "25": 7.75,
+          "31": 6.0,
+          "23": 5.0,
+          "26": 4.75,
+          "30": 4.75,
+          "28": 4.5,
+          "27": 2.5,
+          "22": 2.0,
+          "29": 2.0,
+          "24": 1.5,
+          "21": 1.25
+        },
+        "D": {
+          "35": 6.25,
+          "32": 3.25,
+          "33": 3.25,
+          "34": 3.25,
+          "40": 2.75,
+          "38": 1.75,
+          "39": 1.5,
+          "36": 1.25,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          7,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          26,
+          30,
+          31
+        ],
+        "D": [
+          32,
+          33,
+          35
+        ]
+      },
+      "prediction_nums": [
+        3,
+        7,
+        9,
+        11,
+        12,
+        14,
+        18,
+        19,
+        25,
+        26,
+        28,
+        30,
+        31,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 4.5,
+      "hit_level": "high_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-15",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 16,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 12.5,
+          "7": 7.5,
+          "4": 3.0,
+          "8": 3.0,
+          "1": 1.5,
+          "2": 0.0,
+          "3": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "18": 7.75,
+          "12": 3.25,
+          "11": 3.0,
+          "19": 2.75,
+          "17": 1.75,
+          "10": 1.5,
+          "15": 1.5,
+          "14": 1.25,
+          "16": 1.25,
+          "13": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "25": 7.5,
+          "23": 5.0,
+          "28": 4.5,
+          "26": 4.5,
+          "30": 4.5,
+          "31": 3.75,
+          "24": 3.5,
+          "27": 2.5,
+          "22": 2.0,
+          "29": 2.0,
+          "21": 1.25
+        },
+        "D": {
+          "35": 6.25,
+          "33": 6.0,
+          "40": 4.75,
+          "34": 3.0,
+          "32": 2.0,
+          "38": 1.5,
+          "39": 1.25,
+          "36": 1.25,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          26,
+          28,
+          30
+        ],
+        "D": [
+          33,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        4,
+        7,
+        9,
+        11,
+        12,
+        14,
+        18,
+        19,
+        23,
+        25,
+        26,
+        28,
+        30,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-17",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 15,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 14.0,
+          "7": 7.25,
+          "4": 3.0,
+          "8": 3.0,
+          "2": 2.0,
+          "5": 2.0,
+          "6": 2.0,
+          "1": 1.5,
+          "3": 0.0
+        },
+        "B": {
+          "18": 7.75,
+          "12": 3.0,
+          "11": 1.75,
+          "17": 1.5,
+          "19": 1.5,
+          "10": 1.25,
+          "15": 1.25,
+          "14": 1.25,
+          "16": 1.25,
+          "13": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "30": 8.0,
+          "25": 7.25,
+          "29": 4.75,
+          "23": 4.75,
+          "31": 3.5,
+          "26": 3.5,
+          "24": 3.25,
+          "28": 3.0,
+          "27": 2.5,
+          "22": 2.0,
+          "21": 1.25
+        },
+        "D": {
+          "33": 6.0,
+          "35": 6.0,
+          "40": 4.75,
+          "34": 3.0,
+          "32": 2.0,
+          "38": 1.5,
+          "39": 1.25,
+          "36": 0.0,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        4,
+        7,
+        9,
+        11,
+        12,
+        15,
+        17,
+        18,
+        23,
+        25,
+        28,
+        29,
+        30,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-19",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 14,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 13.75,
+          "7": 5.25,
+          "4": 4.75,
+          "8": 2.75,
+          "2": 2.0,
+          "5": 2.0,
+          "6": 2.0,
+          "1": 1.5,
+          "3": 0.0
+        },
+        "B": {
+          "18": 6.75,
+          "17": 3.5,
+          "12": 2.75,
+          "11": 1.5,
+          "19": 1.5,
+          "10": 1.25,
+          "15": 1.25,
+          "14": 1.25,
+          "16": 1.25,
+          "13": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 7.75,
+          "25": 7.0,
+          "30": 6.75,
+          "29": 4.75,
+          "23": 4.5,
+          "24": 3.25,
+          "26": 3.25,
+          "28": 3.0,
+          "22": 1.75,
+          "27": 1.25,
+          "21": 0.0
+        },
+        "D": {
+          "33": 5.0,
+          "35": 4.5,
+          "40": 3.25,
+          "34": 2.75,
+          "32": 1.75,
+          "38": 1.5,
+          "39": 1.25,
+          "36": 0.0,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        4,
+        7,
+        9,
+        11,
+        12,
+        15,
+        17,
+        18,
+        23,
+        25,
+        29,
+        30,
+        31,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-22",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 13,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 13.25,
+          "7": 5.25,
+          "5": 5.0,
+          "8": 4.75,
+          "4": 3.5,
+          "2": 2.0,
+          "6": 2.0,
+          "1": 1.25,
+          "3": 0.0
+        },
+        "B": {
+          "18": 6.0,
+          "11": 3.5,
+          "17": 3.5,
+          "14": 3.25,
+          "19": 3.25,
+          "12": 2.75,
+          "10": 1.25,
+          "15": 1.25,
+          "13": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 9.75,
+          "30": 6.5,
+          "25": 4.0,
+          "29": 3.75,
+          "23": 3.5,
+          "24": 3.0,
+          "26": 3.0,
+          "22": 1.75,
+          "28": 1.75,
+          "21": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "35": 3.5,
+          "33": 3.25,
+          "40": 3.0,
+          "34": 2.5,
+          "32": 1.75,
+          "38": 1.25,
+          "39": 1.25,
+          "36": 0.0,
+          "37": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          5,
+          7,
+          9
+        ],
+        "B": [
+          11,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        4,
+        7,
+        9,
+        11,
+        12,
+        15,
+        17,
+        18,
+        23,
+        25,
+        29,
+        30,
+        31,
+        33,
+        35,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-09-26",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 12,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 11.5,
+          "2": 4.75,
+          "5": 4.75,
+          "7": 4.0,
+          "8": 3.5,
+          "4": 3.5,
+          "6": 1.75,
+          "1": 1.25,
+          "3": 0.0
+        },
+        "B": {
+          "18": 4.5,
+          "11": 3.5,
+          "19": 3.25,
+          "17": 3.25,
+          "12": 2.5,
+          "14": 2.0,
+          "10": 1.25,
+          "15": 1.25,
+          "13": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 9.5,
+          "30": 6.25,
+          "25": 3.75,
+          "29": 3.25,
+          "23": 3.25,
+          "24": 3.0,
+          "26": 3.0,
+          "22": 1.75,
+          "28": 1.5,
+          "21": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "35": 6.75,
+          "34": 4.5,
+          "33": 3.25,
+          "40": 3.0,
+          "32": 1.75,
+          "38": 1.25,
+          "36": 0.0,
+          "37": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          2,
+          5,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          25,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        4,
+        5,
+        9,
+        11,
+        15,
+        17,
+        18,
+        19,
+        23,
+        25,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-03",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 11,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 9.25,
+          "4": 7.5,
+          "2": 4.75,
+          "5": 4.75,
+          "8": 3.25,
+          "7": 2.5,
+          "6": 1.75,
+          "1": 1.25,
+          "3": 0.0
+        },
+        "B": {
+          "18": 4.5,
+          "11": 3.25,
+          "19": 3.25,
+          "17": 3.0,
+          "12": 2.5,
+          "14": 2.0,
+          "10": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 11.0,
+          "30": 6.0,
+          "25": 3.75,
+          "28": 3.5,
+          "29": 3.25,
+          "23": 3.0,
+          "26": 2.75,
+          "24": 1.75,
+          "22": 1.5,
+          "21": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "35": 6.5,
+          "34": 4.5,
+          "33": 3.25,
+          "40": 3.0,
+          "32": 1.5,
+          "38": 1.25,
+          "36": 0.0,
+          "37": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          2,
+          4,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          25,
+          28,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        2,
+        4,
+        9,
+        11,
+        12,
+        14,
+        17,
+        18,
+        23,
+        25,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 4.0,
+      "hit_level": "high_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-06",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 10,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 7.5,
+          "8": 6.0,
+          "4": 6.0,
+          "2": 3.75,
+          "5": 3.5,
+          "6": 1.75,
+          "7": 1.25,
+          "1": 1.25,
+          "3": 0.0
+        },
+        "B": {
+          "18": 4.0,
+          "11": 3.0,
+          "19": 3.0,
+          "17": 3.0,
+          "14": 1.75,
+          "12": 1.25,
+          "10": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 12.75,
+          "29": 6.75,
+          "23": 6.5,
+          "30": 4.25,
+          "28": 3.5,
+          "26": 2.5,
+          "25": 2.5,
+          "24": 1.5,
+          "22": 1.5,
+          "21": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "35": 6.5,
+          "34": 6.25,
+          "33": 2.75,
+          "40": 1.5,
+          "32": 1.5,
+          "38": 1.25,
+          "36": 0.0,
+          "37": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          28,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        4,
+        8,
+        9,
+        11,
+        14,
+        17,
+        18,
+        19,
+        23,
+        28,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 4.5,
+      "hit_level": "high_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-08",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 9,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 9.0,
+          "8": 6.0,
+          "4": 5.0,
+          "2": 3.25,
+          "5": 3.25,
+          "6": 1.5,
+          "7": 1.25,
+          "1": 0.0,
+          "3": 0.0
+        },
+        "B": {
+          "11": 3.0,
+          "17": 3.0,
+          "18": 2.75,
+          "14": 1.75,
+          "19": 1.75,
+          "12": 1.25,
+          "10": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 14.75,
+          "29": 9.25,
+          "23": 6.25,
+          "30": 4.0,
+          "28": 3.25,
+          "26": 2.5,
+          "24": 1.5,
+          "22": 1.5,
+          "25": 1.25,
+          "21": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "34": 8.25,
+          "35": 6.0,
+          "33": 2.75,
+          "36": 2.0,
+          "40": 1.5,
+          "32": 1.5,
+          "37": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          28,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        4,
+        8,
+        9,
+        11,
+        14,
+        17,
+        18,
+        19,
+        23,
+        26,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 3.0,
+      "hit_level": "mid_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-10",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 8,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 9.0,
+          "8": 5.0,
+          "4": 4.5,
+          "2": 3.25,
+          "5": 3.25,
+          "6": 1.5,
+          "7": 1.25,
+          "1": 0.0,
+          "3": 0.0
+        },
+        "B": {
+          "18": 4.75,
+          "19": 3.75,
+          "11": 3.0,
+          "14": 1.75,
+          "17": 1.5,
+          "10": 0.0,
+          "12": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0,
+          "20": 0.0
+        },
+        "C": {
+          "31": 14.75,
+          "29": 9.25,
+          "23": 4.5,
+          "30": 4.0,
+          "24": 3.5,
+          "28": 3.0,
+          "26": 2.5,
+          "22": 1.25,
+          "21": 0.0,
+          "25": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "34": 8.25,
+          "35": 4.25,
+          "40": 3.5,
+          "33": 2.75,
+          "36": 2.0,
+          "32": 1.25,
+          "37": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          24,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          34,
+          35,
+          40
+        ]
+      },
+      "prediction_nums": [
+        4,
+        8,
+        9,
+        11,
+        14,
+        17,
+        18,
+        19,
+        23,
+        28,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 3.5,
+      "hit_level": "mid_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-13",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 7,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 8.75,
+          "8": 3.25,
+          "4": 3.25,
+          "2": 3.25,
+          "5": 3.0,
+          "6": 1.5,
+          "1": 0.0,
+          "3": 0.0,
+          "7": 0.0
+        },
+        "B": {
+          "18": 4.5,
+          "14": 3.5,
+          "19": 3.5,
+          "12": 2.0,
+          "20": 2.0,
+          "11": 1.5,
+          "17": 1.5,
+          "10": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0
+        },
+        "C": {
+          "31": 14.25,
+          "29": 9.0,
+          "23": 4.25,
+          "24": 3.25,
+          "28": 3.0,
+          "30": 2.75,
+          "22": 1.25,
+          "26": 1.25,
+          "21": 0.0,
+          "25": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "34": 10.0,
+          "33": 4.5,
+          "35": 4.25,
+          "40": 3.25,
+          "37": 2.0,
+          "36": 2.0,
+          "32": 1.25,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          4,
+          8,
+          9
+        ],
+        "B": [
+          12,
+          14,
+          18,
+          19,
+          20
+        ],
+        "C": [
+          23,
+          24,
+          28,
+          29,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        4,
+        8,
+        9,
+        11,
+        14,
+        17,
+        18,
+        19,
+        23,
+        24,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-15",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 6,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 10.0,
+          "5": 6.25,
+          "8": 3.25,
+          "4": 3.25,
+          "2": 2.75,
+          "3": 2.0,
+          "6": 1.25,
+          "1": 0.0,
+          "7": 0.0
+        },
+        "B": {
+          "17": 3.5,
+          "14": 3.5,
+          "19": 3.5,
+          "18": 3.25,
+          "12": 2.0,
+          "20": 2.0,
+          "11": 1.5,
+          "10": 0.0,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0
+        },
+        "C": {
+          "31": 14.0,
+          "29": 8.5,
+          "23": 4.25,
+          "24": 3.25,
+          "28": 3.0,
+          "21": 2.0,
+          "26": 2.0,
+          "30": 1.25,
+          "22": 1.25,
+          "25": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "34": 9.5,
+          "35": 4.0,
+          "33": 3.25,
+          "40": 3.25,
+          "37": 2.0,
+          "36": 1.75,
+          "32": 1.25,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          5,
+          8,
+          9
+        ],
+        "B": [
+          12,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          23,
+          24,
+          28,
+          29,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          35
+        ]
+      },
+      "prediction_nums": [
+        3,
+        5,
+        9,
+        12,
+        14,
+        17,
+        18,
+        19,
+        23,
+        24,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-17",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 5,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "9": 7.25,
+          "8": 6.75,
+          "3": 5.0,
+          "5": 4.75,
+          "4": 2.75,
+          "2": 2.75,
+          "7": 2.0,
+          "6": 1.25,
+          "1": 0.0
+        },
+        "B": {
+          "14": 3.5,
+          "17": 3.25,
+          "19": 3.25,
+          "18": 3.0,
+          "10": 2.0,
+          "12": 2.0,
+          "20": 2.0,
+          "11": 1.5,
+          "13": 0.0,
+          "15": 0.0,
+          "16": 0.0
+        },
+        "C": {
+          "31": 13.25,
+          "29": 4.75,
+          "24": 3.0,
+          "23": 3.0,
+          "21": 2.0,
+          "26": 2.0,
+          "28": 1.5,
+          "30": 1.25,
+          "22": 1.25,
+          "25": 0.0,
+          "27": 0.0
+        },
+        "D": {
+          "34": 9.5,
+          "36": 4.75,
+          "33": 3.25,
+          "40": 3.0,
+          "35": 2.75,
+          "37": 2.0,
+          "32": 1.25,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          8,
+          9
+        ],
+        "B": [
+          10,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          21,
+          23,
+          24,
+          29,
+          31
+        ],
+        "D": [
+          33,
+          34,
+          36
+        ]
+      },
+      "prediction_nums": [
+        4,
+        8,
+        9,
+        12,
+        14,
+        17,
+        18,
+        19,
+        23,
+        24,
+        29,
+        30,
+        31,
+        34,
+        35,
+        36
+      ],
+      "prediction_count": 16,
+      "hit_count": 2.5,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-20",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 4,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "3": 8.5,
+          "8": 6.25,
+          "9": 6.25,
+          "5": 4.5,
+          "4": 2.75,
+          "2": 2.75,
+          "7": 2.0,
+          "6": 1.25,
+          "1": 0.0
+        },
+        "B": {
+          "17": 3.25,
+          "14": 3.0,
+          "18": 3.0,
+          "19": 3.0,
+          "13": 2.0,
+          "10": 2.0,
+          "12": 1.75,
+          "20": 1.75,
+          "11": 1.25,
+          "15": 0.0,
+          "16": 0.0
+        },
+        "C": {
+          "31": 10.5,
+          "29": 8.0,
+          "30": 3.25,
+          "24": 3.0,
+          "27": 2.0,
+          "21": 2.0,
+          "26": 2.0,
+          "23": 1.5,
+          "28": 1.5,
+          "22": 0.0,
+          "25": 0.0
+        },
+        "D": {
+          "34": 8.0,
+          "40": 6.0,
+          "36": 3.75,
+          "33": 3.0,
+          "37": 1.75,
+          "35": 1.5,
+          "32": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          8,
+          9
+        ],
+        "B": [
+          13,
+          14,
+          17,
+          18,
+          19
+        ],
+        "C": [
+          24,
+          27,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          34,
+          36,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        4,
+        8,
+        10,
+        14,
+        17,
+        18,
+        19,
+        21,
+        24,
+        29,
+        30,
+        31,
+        34,
+        36,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 3.5,
+      "hit_level": "mid_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-22",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 3,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "8": 9.25,
+          "3": 8.25,
+          "5": 7.25,
+          "7": 5.0,
+          "2": 4.5,
+          "9": 4.5,
+          "4": 2.75,
+          "6": 1.25,
+          "1": 0.0
+        },
+        "B": {
+          "17": 3.0,
+          "14": 3.0,
+          "19": 3.0,
+          "13": 2.0,
+          "10": 2.0,
+          "12": 1.75,
+          "20": 1.75,
+          "18": 1.75,
+          "11": 1.25,
+          "15": 0.0,
+          "16": 0.0
+        },
+        "C": {
+          "29": 10.75,
+          "31": 10.25,
+          "21": 4.75,
+          "30": 3.25,
+          "27": 2.0,
+          "26": 1.75,
+          "24": 1.75,
+          "23": 1.5,
+          "28": 1.5,
+          "22": 0.0,
+          "25": 0.0
+        },
+        "D": {
+          "34": 7.5,
+          "40": 3.75,
+          "36": 3.5,
+          "33": 1.75,
+          "37": 1.75,
+          "35": 1.25,
+          "32": 0.0,
+          "38": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          5,
+          8
+        ],
+        "B": [
+          10,
+          13,
+          14,
+          17,
+          19
+        ],
+        "C": [
+          21,
+          27,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          34,
+          36,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        4,
+        8,
+        10,
+        13,
+        14,
+        17,
+        19,
+        21,
+        27,
+        29,
+        30,
+        31,
+        34,
+        36,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-24",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 2,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "8": 9.0,
+          "3": 8.0,
+          "5": 6.0,
+          "7": 4.75,
+          "4": 4.5,
+          "2": 3.25,
+          "9": 3.25,
+          "1": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "12": 3.75,
+          "11": 3.25,
+          "17": 3.0,
+          "14": 3.0,
+          "19": 2.75,
+          "16": 2.0,
+          "13": 2.0,
+          "10": 1.75,
+          "20": 1.75,
+          "18": 1.5,
+          "15": 0.0
+        },
+        "C": {
+          "31": 9.75,
+          "29": 9.5,
+          "21": 4.75,
+          "27": 2.0,
+          "30": 2.0,
+          "26": 1.75,
+          "24": 1.5,
+          "23": 1.5,
+          "28": 1.25,
+          "22": 0.0,
+          "25": 0.0
+        },
+        "D": {
+          "34": 7.5,
+          "40": 3.5,
+          "36": 3.25,
+          "38": 2.0,
+          "33": 1.75,
+          "37": 1.75,
+          "35": 1.25,
+          "32": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          5,
+          8
+        ],
+        "B": [
+          11,
+          12,
+          14,
+          17,
+          19
+        ],
+        "C": [
+          21,
+          27,
+          29,
+          30,
+          31
+        ],
+        "D": [
+          34,
+          36,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        5,
+        8,
+        11,
+        12,
+        14,
+        17,
+        19,
+        21,
+        27,
+        29,
+        30,
+        31,
+        34,
+        36,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 0.0,
+      "hit_level": "low_hit",
+      "is_prize3_like": false
+    },
+    {
+      "check_date": "2026-10-27",
+      "config": {
+        "mode": "backtest",
+        "backtest_count": 1,
+        "window_count": 13,
+        "combination_take_count": 5,
+        "birthday_num_match_mode": ">=",
+        "base_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "actual_group_take_counts": {
+          "A": 3,
+          "B": 5,
+          "C": 5,
+          "D": 3
+        },
+        "prediction_count": 16,
+        "auto_distribute_group_take": true,
+        "auto_distribute_max_transfer": 2,
+        "auto_distribute_min_group_take": 2,
+        "auto_distribute_min_gap_percent": 10,
+        "recent_draw_score_penalty": 1.0,
+        "high_freq_min_pair_count": 2,
+        "high_freq_dan_take": 5,
+        "high_freq_partner_take": 9,
+        "weak_num_take": 1,
+        "weak_num_random_seed": 20261003
+      },
+      "window_count": 13,
+      "group_take_counts": {
+        "A": 3,
+        "B": 5,
+        "C": 5,
+        "D": 3
+      },
+      "group_scores": {
+        "A": {
+          "8": 8.75,
+          "3": 7.75,
+          "9": 6.75,
+          "5": 5.0,
+          "7": 4.75,
+          "4": 3.25,
+          "2": 3.25,
+          "1": 0.0,
+          "6": 0.0
+        },
+        "B": {
+          "12": 3.5,
+          "11": 3.25,
+          "14": 2.75,
+          "19": 2.75,
+          "16": 2.0,
+          "13": 1.75,
+          "10": 1.75,
+          "17": 1.75,
+          "20": 1.5,
+          "18": 1.5,
+          "15": 0.0
+        },
+        "C": {
+          "29": 9.0,
+          "31": 8.25,
+          "26": 3.75,
+          "21": 3.75,
+          "28": 3.25,
+          "25": 2.0,
+          "27": 1.75,
+          "30": 1.75,
+          "24": 1.5,
+          "23": 1.25,
+          "22": 0.0
+        },
+        "D": {
+          "34": 7.0,
+          "40": 3.25,
+          "36": 3.25,
+          "38": 2.0,
+          "33": 1.5,
+          "37": 1.5,
+          "35": 1.25,
+          "32": 0.0,
+          "39": 0.0
+        }
+      },
+      "group_candidates": {
+        "A": [
+          3,
+          8,
+          9
+        ],
+        "B": [
+          11,
+          12,
+          14,
+          16,
+          19
+        ],
+        "C": [
+          21,
+          26,
+          28,
+          29,
+          31
+        ],
+        "D": [
+          34,
+          36,
+          40
+        ]
+      },
+      "prediction_nums": [
+        3,
+        8,
+        9,
+        11,
+        12,
+        14,
+        16,
+        19,
+        21,
+        26,
+        28,
+        29,
+        31,
+        34,
+        36,
+        40
+      ],
+      "prediction_count": 16,
+      "hit_count": 1.5,
+      "hit_level": "low_hit",
       "is_prize3_like": false
     }
   ]

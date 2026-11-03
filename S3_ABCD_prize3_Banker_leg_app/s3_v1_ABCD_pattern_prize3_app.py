@@ -37,9 +37,9 @@ M4_CSV = PROJECT_ROOT / "A_msk_lottery_data_folder" / "M4_lotto_prize_summary.cs
 
 # -------------------------
 # S3 ABCD pattern 基本參數
-VERSION = "S3 ABCD 獨立分組 + 3 獎分析 "
+VERSION = "S3 v1 ABCD 獨立分組 + 3 獎分析 "
 
-MODE = "predict" # backtest / predict mode input
+MODE = "backtest" # backtest / predict mode input
 BACKTEST_DRAW_COUNT_LIST = [1]
 WINDOW_DRAW_COUNT_LIST = [13] # 最少查詢 7 期
 SELECT_GROUPS = 1,2,3,4 # Select 1,2,3,4 
@@ -59,7 +59,7 @@ PRINT_ABCD_PROPERTY_ANALYSIS = False
 STAND_SORT_MODE = "date"
 
 # 獨立的 3 獎注數排序功能。=======
-prize3_sort_mode = True # 中獎注數 搜尋。
+prize3_sort_mode = False # 中獎注數 搜尋。
 prize3_unit_sort = ">=" # 中獎注數 搜尋 條件 
 prize3_unit_count = 80  # 中獎注數 
 prize3_max_count = 12 # 前 N 期 

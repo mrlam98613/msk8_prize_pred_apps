@@ -159,27 +159,27 @@ def render_admin_member_manager() -> None:
 
 def render_login_tab() -> None:
     st.header("會員登入")
-    st.markdown(
-        """
-        <style>
-        input[aria-label="登入密碼（電話號碼後 4 位）"] {
-            autocomplete: current-password;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
     notice = st.session_state.pop("member_login_notice", None)
     if notice:
         st.success(notice)
 
     phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="login_phone")
-    password = st.text_input("登入密碼（電話號碼後 4 位）", type="password", key="member_login_password")
+    password = st.number_input(
+        "電話末四位驗證數字",
+        min_value=0,
+        max_value=9999,
+        value=None,
+        step=1,
+        format="%04d",
+        key="member_login_last_four_number",
+    )
 
     if st.button("登入", key="login_btn", type="primary"):
         phone = normalize_phone(phone)
-        password = str(password or "")
+        if password is None:
+            st.error("請輸入電話號碼最後 4 位數字。")
+            return
+        password = f"{int(password):04d}"
 
         if not is_valid_member_phone(phone):
             st.error("電話號碼請輸入最少 8 位數字，不需要地區號。")
@@ -199,7 +199,11 @@ def render_register_tab() -> None:
     st.header("會員註冊")
 
     reg_phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="reg_phone")
-    reg_nickname = st.text_input("會員暱稱（必須輸入，中英文都可以）", key="reg_nickname")
+    reg_nickname = st.text_input(
+        "暱稱（必須輸入，最多 20 字元）",
+        max_chars=20,
+        key="reg_nickname",
+    )
 
     if st.button("註冊", key="reg_btn", type="primary"):
         reg_phone = normalize_phone(reg_phone)
@@ -207,7 +211,7 @@ def render_register_tab() -> None:
         reg_password = auto_password_from_phone(reg_phone)
 
         if not reg_nickname:
-            st.warning("請輸入會員暱稱，中英文都可以。")
+            st.warning("暱稱必須輸入，最多 20 字元。")
         elif not is_valid_member_phone(reg_phone):
             st.warning("手機號碼請輸入最少 8 位數字，不需要地區號。")
         elif find_member_by_phone(reg_phone):
@@ -226,19 +230,24 @@ def render_forgot_password_tab() -> None:
     st.header("忘記電話號")
 
     forgot_phone = st.text_input("電話號碼（最少 8 位數字，不用地區號）", key="forgot_phone")
-    forgot_password = st.text_input(
-        "登入密碼（電話號碼後 4 位）",
-        type="password",
-        key="forgot_pwd",
+    forgot_password = st.number_input(
+        "電話末四位驗證數字",
+        min_value=0,
+        max_value=9999,
+        value=None,
+        step=1,
+        format="%04d",
+        key="forgot_last_four_number",
     )
 
     if st.button("驗證並登入", key="forgot_btn", type="primary"):
         forgot_phone = normalize_phone(forgot_phone)
-        forgot_password = str(forgot_password or "")
-
         if not is_valid_member_phone(forgot_phone):
             st.warning("手機號碼請輸入最少 8 位數字，不需要地區號。")
+        elif forgot_password is None:
+            st.warning("請輸入電話號碼最後 4 位數字。")
         else:
+            forgot_password = f"{int(forgot_password):04d}"
             member = find_member_by_phone(forgot_phone)
             if member and member[3] == hash_password(forgot_password):
                 set_logged_in(member)
