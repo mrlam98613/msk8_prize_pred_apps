@@ -10,19 +10,20 @@ wheels/
 .venv
 
 # Local databases and user-generated member data
-# *.db
-# *.sqlite
-# *.sqlite3
-# !member/members.db
-# member/member_bet_dbs/
+*.db
+*.sqlite
+*.sqlite3
+!member/members.db
+member/member_bet_dbs/
 
 # Local lottery data snapshots
-# Dockerfile
-# Z4_lotto_prize_2026_crawler/log/*.*
-# Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.*
-# A_msk_lottery_data_folder/*.*
-# A_msk_marksix_function_app/*.*
-# A_msk_balls_png/*.*
+crontab.txt
+Dockerfile
+Z4_lotto_prize_2026_crawler/log/*.*
+Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.*
+A_msk_lottery_data_folder/*.*
+A_msk_marksix_function_app/*.*
+A_msk_balls_png/*.*
 
-# Runtime scheduler state
+# Runtime scheduler state 抓虫驗證日期用 
 Z4_lotto_prize_2026_crawler/.m7_last_attempt_date
