@@ -14,7 +14,7 @@ from app_pages.shared_style import apply_new_page_style
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-S3_SCRIPT = PROJECT_ROOT / "S3_ABCD_prize3_Banker_leg_app" / "s3_v2_ABCD_search_prize3_app.py"
+S3_SCRIPT = PROJECT_ROOT / "S3_ABCD_prize3_Banker_leg_app" / "s3_v2_ABCD_backtest_prize3_app.py"
 
 DEFAULT_BACKTEST_COUNT = 1
 DEFAULT_WINDOW_COUNT = 25

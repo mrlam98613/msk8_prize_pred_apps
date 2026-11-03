@@ -45,7 +45,7 @@ PAGES = [
         "label": "中5字 3獎_人氣球號_分析",
         "icon": "🎯",
         "path": CONTENT_DIR / "1_s3_v2_prize3_count_backtest_app.py",
-        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_search_prize3_app.py
+        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_backtest_prize3_app.py
     },
     {
         "label": "中5字 3_獎人氣球號-預測 ",
