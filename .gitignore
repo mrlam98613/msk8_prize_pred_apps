@@ -17,13 +17,11 @@ wheels/
 member/member_bet_dbs/
 
 # Local lottery data snapshots
-crontab.txt
-Dockerfile
-Z4_lotto_prize_2026_crawler/log/*.*
+
+# Dockerfile
 Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.*
 A_msk_lottery_data_folder/*.*
-A_msk_marksix_function_app/*.*
-A_msk_balls_png/*.*
+
 
 # Runtime scheduler state 抓虫驗證日期用 
 Z4_lotto_prize_2026_crawler/.m7_last_attempt_date
