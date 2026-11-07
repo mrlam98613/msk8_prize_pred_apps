@@ -13,7 +13,7 @@ wheels/
 *.db
 *.sqlite
 *.sqlite3
-!member/members.db
+member/members.db
 member/member_bet_dbs/
 
 # Local lottery data snapshots

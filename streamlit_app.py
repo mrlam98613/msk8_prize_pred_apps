@@ -72,12 +72,12 @@ PAGES = [
         "path": CONTENT_DIR / "3_lotto_lucky_day.py",
         # 主要查詢 A_msk_lottery_data_folder \ M7_lotto_open_days.csv
     },
-    # {
-    #     "label": "1,2,3 獎中獎注數生日號分析",
-    #     "icon": "🔎",
-    #     "path": CONTENT_DIR / "4_prize_comb_key.py",
-    #     # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
-    # },
+    {
+        "label": "1,2,3 獎中獎注數生日號分析",
+        "icon": "🔎",
+        "path": CONTENT_DIR / "4_prize_comb_key.py",
+        # 主要查詢 A_msk_lottery_data_folder \ M6_lotto_history_prize.csv
+    },
     {
         "label": "複式，投注-派彩查詢",
         "icon": "🧮",
