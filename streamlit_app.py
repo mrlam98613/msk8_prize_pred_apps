@@ -41,24 +41,24 @@ PAGES = [
     #     "path": CONTENT_DIR / "1_s1_v2_milit_group_analyze.py",
     #     # 來源 S1_ABCD_apps / s1_v2_multi_group_analyze.py
     # },
-    {
-        "label": "中5字 3獎_人氣球號_分析",
-        "icon": "🎯",
-        "path": CONTENT_DIR / "1_s3_v2_prize3_count_backtest_app.py",
-        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_backtest_prize3_app.py
-    },
-    {
-        "label": "中5字 3_獎人氣球號-預測 ",
-        "icon": "📌",
-        "path": CONTENT_DIR / "1_s3_v3_prize3_predict_app.py",
-        # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v3_prize3_predict_app.py
-    },
-    {
-        "label": "S3 v3 智能組合球池",
-        "icon": "🎯",
-        "path": CONTENT_DIR / "1_s3_v3_wheeling_system_app.py",
-        # 讀取 S3 v3 預測結果，建立 3 類候選球池
-    },
+    # {
+    #     "label": "中5字 3獎_人氣球號_分析",
+    #     "icon": "🎯",
+    #     "path": CONTENT_DIR / "1_s3_v2_prize3_count_backtest_app.py",
+    #     # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v2_ABCD_backtest_prize3_app.py
+    # },
+    # {
+    #     "label": "中5字 3_獎人氣球號-預測 ",
+    #     "icon": "📌",
+    #     "path": CONTENT_DIR / "1_s3_v3_prize3_predict_app.py",
+    #     # 來源 S3_ABCD_prize3_Banker_leg_app / s3_v3_prize3_predict_app.py
+    # },
+    # {
+    #     "label": "S3 v3 智能組合球池",
+    #     "icon": "🎯",
+    #     "path": CONTENT_DIR / "1_s3_v3_wheeling_system_app.py",
+    #     # 讀取 S3 v3 預測結果，建立 3 類候選球池
+    # },
     
     {
         "label": "生日號中獎號碼-組合特色分析",
@@ -329,3 +329,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 # streamlit run streamlit_app.py
+# apps 
