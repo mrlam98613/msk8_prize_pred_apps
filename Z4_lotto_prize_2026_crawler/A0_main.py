@@ -924,9 +924,9 @@ def run() -> bool:
 
     print(
         f"✅ Z4 全部步驟完成｜{now_string()}\n"
-        f"最新一期：{latest_date}；下期開獎：{next_date}；"
-        f"下期期號：{next_draw.draw_id if next_draw else '-'}\n"
-        "已同步 M2/M3/M4/M6/M7 到 A_msk_lottery_data_folder。"
+        f"❤️ 最新一期：{latest_date}；💛 下期開獎：{next_date}；"
+        f"💚 下期期號：{next_draw.draw_id if next_draw else '-'}\n"
+        "✅已同步 M2/M3/M4/M6/M7 到 ⭕️ A_msk_lottery_data_folder。"
     )
     return True
 
