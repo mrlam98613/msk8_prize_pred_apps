@@ -7,6 +7,17 @@ member/member_bet_dbs/
 # Development/runtime noise.
 .git
 .venv
+.venv-315/
 __pycache__/
 *.py[oc]
 .DS_Store
+
+# Local crawler state and logs.
+Z4_lotto_prize_2026_crawler/.m7_last_attempt_date
+*.log
+
+# Local secrets.
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml

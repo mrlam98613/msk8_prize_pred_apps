@@ -8,6 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+.venv-315/
 
 # Local databases and user-generated member data
 *.db
@@ -16,12 +17,17 @@ wheels/
 member/members.db
 member/member_bet_dbs/
 
-# Local lottery data snapshots
-
-# Dockerfile
+# Include lottery CSVs needed by the website and crawler.
 Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.*
+!Z4_lotto_prize_2026_crawler/Lotto_Data_Folder/*.csv
 A_msk_lottery_data_folder/*.*
+!A_msk_lottery_data_folder/*.csv
 
-
-# Runtime scheduler state 抓虫驗證日期用 
+# Runtime scheduler state.
 Z4_lotto_prize_2026_crawler/.m7_last_attempt_date
+
+# Local secrets.
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml

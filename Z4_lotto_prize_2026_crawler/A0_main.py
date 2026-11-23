@@ -7,6 +7,21 @@
 # https://bet.hkjc.com/ch/marksix/results
 Z4 六合彩開獎紀錄下載程式。
 
+
+ℹ️ M7 馬會每月預定攬珠開獎日：今日已執行，正常跳過。
+✅ M7 馬會每月預定攬珠開獎日 完成｜2026-11-22 05:00:02
+✅ 馬會官方開獎資料下載 完成｜2026-11-22 05:00:05
+✅ M1 最新紀錄 完成｜2026-11-22 05:00:05
+✅ M2 合併紀錄 完成｜2026-11-22 05:00:05
+✅ M3 最新及下期資料 完成｜2026-11-22 05:00:05
+✅ M4 摘要資料 完成｜2026-11-22 05:00:05
+✅ M6 派彩紀錄 完成｜2026-11-22 05:00:05
+✅ 同步前輸出核對 完成｜2026-11-22 05:00:05
+✅ 同步到 WebApp 完成｜2026-11-22 05:00:05
+✅ Z4 全部步驟完成｜2026-11-22 05:00:05
+❤️ 最新一期：2026-11-19 (四)；💛 下期開獎：2026-11-24 (二)；💚 下期期號：26/124
+✅已同步 M2/M3/M4/M6/M7 到 ⭕️ A_msk_lottery_data_folder。
+
 用途：
 1. 取代舊版依賴第三方網站的開獎紀錄下載。
 2. 從香港賽馬會官方 GraphQL 下載最新開獎紀錄及派彩注數。
@@ -19,6 +34,7 @@ Z4 六合彩開獎紀錄下載程式。
 from __future__ import annotations
 
 import csv
+import re
 import shutil
 import time
 from calendar import monthrange
@@ -32,18 +48,24 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-
 PROJECT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PROJECT_DIR.parent
+
+DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+ZH_DATE_PATTERN = re.compile(r"(\d{4})年(\d{2})月(\d{2})日")
 DATA_DIR = PROJECT_DIR / "Lotto_Data_Folder"
 WEBAPP_DATA_DIR = REPO_ROOT / "A_msk_lottery_data_folder"
 
-M1_CSV = DATA_DIR / "M1_Z4_lotto_data.csv" # M1-Z4.csv 馬會抓取最新資料 合併至 M2.csv
-M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv" # M2.csv 最後更新的開獎資料
-M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv" # M3.csv 1,2,3獎中獎注數及每注獎金
-M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv" # M4.csv 1,2,3獎中獎注數及每注獎金統計
-M6_CSV = DATA_DIR / "M6_lotto_history_prize.csv" # M6.csv 1,2,3獎中獎注數及每注獎金歷史紀錄
-M7_CSV = DATA_DIR / "M7_lotto_open_days.csv" # M7.csv 馬會官方公布的每月預定攬珠開獎日。
+M1_CSV = DATA_DIR / "M1_Z4_lotto_data.csv"  # M1-Z4.csv 馬會抓取最新資料 合併至 M2.csv
+M2_CSV = DATA_DIR / "M2_last_upgrade_lotto_data.csv"  # M2.csv 最後更新的開獎資料
+M3_CSV = DATA_DIR / "M3_lotto_prize_results.csv"  # M3.csv 1,2,3獎中獎注數及每注獎金
+M4_CSV = DATA_DIR / "M4_lotto_prize_summary.csv"  # M4.csv 1,2,3獎中獎注數及每注獎金統計
+M6_CSV = (
+    DATA_DIR / "M6_lotto_history_prize.csv"
+)  # M6.csv 1,2,3獎中獎注數及每注獎金歷史紀錄
+M7_CSV = (
+    DATA_DIR / "M7_lotto_open_days.csv"
+)  # M7.csv 馬會官方公布的每月預定攬珠開獎日。
 M7_ATTEMPT_DATE_FILE = PROJECT_DIR / ".m7_last_attempt_date"
 
 WEBAPP_M2_CSV = WEBAPP_DATA_DIR / "M2_last_upgrade_lotto_data.csv"
@@ -250,17 +272,23 @@ def read_latest_date_from_csv(path: Path, date_column: str) -> str:
 
 
 def local_data_status() -> str:
-    return "\n".join([
-        "本地資料狀態：",
-        f"- Z4 M2 最新期：{read_latest_date_from_csv(M2_CSV, 'ndate')}",
-        f"- WebApp M2 最新期：{read_latest_date_from_csv(WEBAPP_M2_CSV, 'ndate')}",
-        f"- Z4 M6 最新派彩：{read_latest_date_from_csv(M6_CSV, 'nDdate')}",
-        f"- WebApp M6 最新派彩：{read_latest_date_from_csv(WEBAPP_M6_CSV, 'nDdate')}",
-    ])
+    return "\n".join(
+        [
+            "本地資料狀態：",
+            f"- Z4 M2 最新期：{read_latest_date_from_csv(M2_CSV, 'ndate')}",
+            f"- WebApp M2 最新期：{read_latest_date_from_csv(WEBAPP_M2_CSV, 'ndate')}",
+            f"- Z4 M6 最新派彩：{read_latest_date_from_csv(M6_CSV, 'nDdate')}",
+            f"- WebApp M6 最新派彩：{read_latest_date_from_csv(WEBAPP_M6_CSV, 'nDdate')}",
+        ]
+    )
 
 
 def describe_response(response: requests.Response) -> str:
-    request_id = response.headers.get("x-request-id") or response.headers.get("X-Request-ID") or "-"
+    request_id = (
+        response.headers.get("x-request-id")
+        or response.headers.get("X-Request-ID")
+        or "-"
+    )
     content_type = response.headers.get("content-type", "-")
     return (
         f"HTTP 狀態：{response.status_code} {response.reason}\n"
@@ -436,7 +464,9 @@ def validate_draw(draw: dict[str, Any]) -> DrawRecord:
     datetime.strptime(draw_date, "%Y-%m-%d")
 
     draw_result = draw.get("drawResult") or {}
-    numbers = [int(num) for num in (draw_result.get("drawnNo") or draw.get("numbers", []))]
+    numbers = [
+        int(num) for num in (draw_result.get("drawnNo") or draw.get("numbers", []))
+    ]
     if len(numbers) != 6 or not all(1 <= num <= 49 for num in numbers):
         raise ValueError(f"開獎正號格式錯誤：{draw}")
 
@@ -453,10 +483,14 @@ def validate_draw(draw: dict[str, Any]) -> DrawRecord:
         if not prize_type:
             continue
         prizes[prize_type] = clean_int(prize_row.get("dividend", 0))
-        winning_units[prize_type] = clean_int(prize_row.get("winningUnit", 0)) / unit_bet
+        winning_units[prize_type] = (
+            clean_int(prize_row.get("winningUnit", 0)) / unit_bet
+        )
 
     return DrawRecord(
-        draw_id=f"{str(draw.get('year', ''))[2:]}/{int(draw.get('no', 0)):03d}" if draw.get("year") and draw.get("no") else str(draw.get("draw_id", "")).strip(),
+        draw_id=f"{str(draw.get('year', ''))[2:]}/{int(draw.get('no', 0)):03d}"
+        if draw.get("year") and draw.get("no")
+        else str(draw.get("draw_id", "")).strip(),
         draw_date=draw_date,
         numbers=numbers,
         extra_number=extra_number,
@@ -465,7 +499,9 @@ def validate_draw(draw: dict[str, Any]) -> DrawRecord:
         unit_bet=unit_bet,
         derived_first_prize_div=clean_int(lottery_pool.get("derivedFirstPrizeDiv", 0)),
         estimated_prize=clean_int(lottery_pool.get("estimatedPrize", 0)),
-        turnover=clean_int(lottery_pool.get("totalInvestment", draw.get("total_turnover", 0))),
+        turnover=clean_int(
+            lottery_pool.get("totalInvestment", draw.get("total_turnover", 0))
+        ),
     )
 
 
@@ -479,7 +515,11 @@ def parse_next_draw(draw: dict[str, Any]) -> Optional[NextDrawInfo]:
         return None
 
     lottery_pool = draw.get("lotteryPool") or {}
-    draw_id = f"{str(draw.get('year', ''))[2:]}/{int(draw.get('no', 0)):03d}" if draw.get("year") and draw.get("no") else str(draw.get("id", "")).strip()
+    draw_id = (
+        f"{str(draw.get('year', ''))[2:]}/{int(draw.get('no', 0)):03d}"
+        if draw.get("year") and draw.get("no")
+        else str(draw.get("id", "")).strip()
+    )
     close_time = str(draw.get("closeDate", "")).strip()
     return NextDrawInfo(
         draw_id=draw_id,
@@ -493,7 +533,9 @@ def parse_next_draw(draw: dict[str, Any]) -> Optional[NextDrawInfo]:
     )
 
 
-def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], Optional[NextDrawInfo]]:
+def download_draws(
+    limit: int = DOWNLOAD_LIMIT,
+) -> tuple[list[DrawRecord], Optional[NextDrawInfo]]:
     session = make_session()
     response: Optional[requests.Response] = None
     try:
@@ -528,10 +570,14 @@ def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], Optio
     for draw in data.get("data", {}).get("lotteryDraws", []):
         status = str(draw.get("status", "")).lower()
         draw_result = draw.get("drawResult") or {}
-        has_result = bool(draw_result.get("drawnNo")) and bool(draw_result.get("xDrawnNo"))
+        has_result = bool(draw_result.get("drawnNo")) and bool(
+            draw_result.get("xDrawnNo")
+        )
         if status != "result" or not has_result:
             candidate = parse_next_draw(draw)
-            if candidate and (next_draw is None or candidate.draw_date < next_draw.draw_date):
+            if candidate and (
+                next_draw is None or candidate.draw_date < next_draw.draw_date
+            ):
                 next_draw = candidate
             continue
         records.append(validate_draw(draw))
@@ -548,7 +594,9 @@ def download_draws(limit: int = DOWNLOAD_LIMIT) -> tuple[list[DrawRecord], Optio
     return records, next_draw
 
 
-def download_next_draw_from_home(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
+def download_next_draw_from_home(
+    session: requests.Session, latest_draw_date: str
+) -> Optional[NextDrawInfo]:
     """馬會首頁 query 通常同時回傳最新一期及下一期。失敗時回傳 None。"""
     try:
         response = session.post(
@@ -574,7 +622,9 @@ def download_next_draw_from_home(session: requests.Session, latest_draw_date: st
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def download_next_draw_by_recent_range(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
+def download_next_draw_by_recent_range(
+    session: requests.Session, latest_draw_date: str
+) -> Optional[NextDrawInfo]:
     """跟馬會前端相同，用最近約 60 日範圍補抓下一期資料。"""
     end_dt = date.today()
     start_dt = end_dt - timedelta(days=60)
@@ -622,7 +672,9 @@ def download_next_draw_by_recent_range(session: requests.Session, latest_draw_da
     return sorted(candidates, key=lambda item: item.draw_date)[0]
 
 
-def download_next_draw_by_date_range(session: requests.Session, latest_draw_date: str) -> Optional[NextDrawInfo]:
+def download_next_draw_by_date_range(
+    session: requests.Session, latest_draw_date: str
+) -> Optional[NextDrawInfo]:
     """用最新一期日期後 7 日範圍補抓下一期，避免首頁 query 沒帶下一期資料。"""
     latest_dt = datetime.strptime(latest_draw_date, "%Y-%m-%d").date()
     start_date = (latest_dt + timedelta(days=1)).strftime("%Y%m%d")
@@ -702,7 +754,9 @@ def draw_to_m2_row(record: DrawRecord) -> dict[str, Any]:
 
 def create_m1_latest_history(records: list[DrawRecord]) -> None:
     rows = [draw_to_m2_row(record) for record in records]
-    pd.DataFrame(rows, columns=M2_COLUMNS).to_csv(M1_CSV, index=False, encoding="utf-8-sig")
+    pd.DataFrame(rows, columns=M2_COLUMNS).to_csv(
+        M1_CSV, index=False, encoding="utf-8-sig"
+    )
 
 
 def load_existing_m2_history() -> pd.DataFrame:
@@ -725,13 +779,17 @@ def create_m2_merged_history() -> None:
     merged_df = pd.concat([base_df, m1_df], ignore_index=True)
     merged_df["ndate"] = merged_df["ndate"].map(lambda value: str(value).strip())
     for col in M2_COLUMNS[1:]:
-        merged_df[col] = pd.to_numeric(merged_df[col], errors="coerce").fillna(0).astype(int)
+        merged_df[col] = (
+            pd.to_numeric(merged_df[col], errors="coerce").fillna(0).astype(int)
+        )
     merged_df = merged_df.drop_duplicates(subset=["ndate"], keep="last")
     merged_df = merged_df.sort_values("ndate").reset_index(drop=True)
     merged_df.to_csv(M2_CSV, index=False, encoding="utf-8-sig")
 
 
-def get_next_draw_date(last_draw_date: str, next_draw: Optional[NextDrawInfo] = None) -> tuple[str, int]:
+def get_next_draw_date(
+    last_draw_date: str, next_draw: Optional[NextDrawInfo] = None
+) -> tuple[str, int]:
     if next_draw:
         return next_draw.draw_date, next_draw.week
 
@@ -742,7 +800,9 @@ def get_next_draw_date(last_draw_date: str, next_draw: Optional[NextDrawInfo] = 
     return dt.strftime("%Y-%m-%d"), dt.isoweekday()
 
 
-def estimate_next_prize_fund(latest: DrawRecord, next_draw: Optional[NextDrawInfo] = None) -> int:
+def estimate_next_prize_fund(
+    latest: DrawRecord, next_draw: Optional[NextDrawInfo] = None
+) -> int:
     if next_draw and next_draw.estimated_prize > 0:
         return next_draw.estimated_prize
     return 0
@@ -779,7 +839,9 @@ def record_to_m6_row(record: DrawRecord) -> dict[str, Any]:
 
 
 def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
-    new_df = pd.DataFrame([record_to_m6_row(record) for record in records], columns=M6_COLUMNS)
+    new_df = pd.DataFrame(
+        [record_to_m6_row(record) for record in records], columns=M6_COLUMNS
+    )
 
     old_m6_path = M6_CSV if M6_CSV.exists() else WEBAPP_M6_CSV
     if old_m6_path.exists():
@@ -798,7 +860,9 @@ def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
     m6_df.to_csv(M6_CSV, index=False, encoding="utf-8-sig")
 
 
-def create_m4_prize_summary(records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None) -> None:
+def create_m4_prize_summary(
+    records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None
+) -> None:
     latest = records[-1]
     next_draw_date, week = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     row = {
@@ -822,8 +886,13 @@ def create_m4_prize_summary(records: list[DrawRecord], next_draw: Optional[NextD
         for col in M4_COLUMNS:
             if col not in old_df.columns:
                 old_df[col] = ""
-        m4_df = pd.concat([old_df[M4_COLUMNS], pd.DataFrame([row], columns=M4_COLUMNS)], ignore_index=True)
-        m4_df["last_draw_date"] = m4_df["last_draw_date"].map(lambda value: str(value).strip())
+        m4_df = pd.concat(
+            [old_df[M4_COLUMNS], pd.DataFrame([row], columns=M4_COLUMNS)],
+            ignore_index=True,
+        )
+        m4_df["last_draw_date"] = m4_df["last_draw_date"].map(
+            lambda value: str(value).strip()
+        )
         m4_df = m4_df.drop_duplicates(subset=["last_draw_date"], keep="last")
         m4_df = m4_df.sort_values("last_draw_date").reset_index(drop=True)
     else:
@@ -837,13 +906,16 @@ def format_zh_date(date_text: str) -> str:
     return f"{dt.year}年{dt.month:02d}月{dt.day:02d}日"
 
 
-def format_zh_date_with_week(date_text: str) -> str:
+def format_zh_date_with_week(date_text: str, *, iso_date: bool = False) -> str:
     dt = datetime.strptime(date_text, "%Y-%m-%d")
     week_text = "一二三四五六日"[dt.isoweekday() - 1]
-    return f"{format_zh_date(date_text)} ({week_text})"
+    formatted_date = dt.date().isoformat() if iso_date else format_zh_date(date_text)
+    return f"{formatted_date} ({week_text})"
 
 
-def create_m3_prize_results(records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None) -> None:
+def create_m3_prize_results(
+    records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None
+) -> None:
     latest = records[-1]
     next_draw_date, _ = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     numbers_text = ", ".join(str(num) for num in [*latest.numbers, latest.extra_number])
@@ -864,40 +936,110 @@ def create_m3_prize_results(records: list[DrawRecord], next_draw: Optional[NextD
         ("七獎", "7th"),
     ]
     for prize_name, prize_key in prize_names:
-        prize_type = prize_key.replace("st", "").replace("nd", "").replace("rd", "").replace("th", "")
-        rows.append([
-            prize_name,
-            str(latest.prizes.get(prize_type, 0)),
-            str(latest.winning_units.get(prize_type, 0)),
-        ])
-    rows.extend([
-        ["🟢 下一期"],
-        ["開獎日期", format_zh_date_with_week(next_draw_date)],
-        ["多寶 / 金多寶", format_next_money_or_warning(estimate_next_jackpot(next_draw=next_draw))],
-        ["估計頭獎基金", format_next_money_or_warning(estimate_next_prize_fund(latest, next_draw=next_draw))],
-    ])
+        prize_type = (
+            prize_key.replace("st", "")
+            .replace("nd", "")
+            .replace("rd", "")
+            .replace("th", "")
+        )
+        rows.append(
+            [
+                prize_name,
+                str(latest.prizes.get(prize_type, 0)),
+                str(latest.winning_units.get(prize_type, 0)),
+            ]
+        )
+    rows.extend(
+        [
+            ["🟢 下一期"],
+            ["開獎日期", format_zh_date_with_week(next_draw_date)],
+            [
+                "多寶 / 金多寶",
+                format_next_money_or_warning(
+                    estimate_next_jackpot(next_draw=next_draw)
+                ),
+            ],
+            [
+                "估計頭獎基金",
+                format_next_money_or_warning(
+                    estimate_next_prize_fund(latest, next_draw=next_draw)
+                ),
+            ],
+        ]
+    )
     with M3_CSV.open("w", newline="", encoding="utf-8-sig") as f:
         csv.writer(f).writerows(rows)
 
 
 def copy_to_webapp() -> None:
-    for path in [M2_CSV, M3_CSV, M4_CSV, M6_CSV, M7_CSV]:
+    paths = (M2_CSV, M3_CSV, M4_CSV, M6_CSV, M7_CSV)
+    for path in paths:
         if not path.exists():
             raise FileNotFoundError(f"找不到要複製的檔案：{path}")
+    for path in paths:
         shutil.copy2(path, WEBAPP_DATA_DIR / path.name)
 
 
+def is_valid_date(value: object) -> bool:
+    return bool(DATE_PATTERN.match(str(value).strip()))
+
+
+def latest_m2_date(path: Path) -> str:
+    if not path.exists():
+        raise FileNotFoundError(f"找不到 M2：{path}")
+
+    df = pd.read_csv(path, encoding="utf-8-sig", index_col=False)
+    if "ndate" not in df.columns or df.empty:
+        raise ValueError("M2 缺少 ndate 或沒有資料")
+
+    dates = df["ndate"].map(lambda value: str(value).strip())
+    valid_dates = dates[dates.map(is_valid_date)]
+    if valid_dates.empty:
+        raise ValueError("M2 找不到有效 ndate")
+    return str(valid_dates.max())
+
+
+def parse_zh_date(value: str) -> str:
+    match = ZH_DATE_PATTERN.search(value.strip())
+    if match is None:
+        raise ValueError(f"M3 日期格式不正確：{value}")
+    return f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
+
+
+def m3_dates(path: Path) -> tuple[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"找不到 M3：{path}")
+
+    with path.open("r", encoding="utf-8-sig", newline="") as file:
+        rows = [[cell.strip() for cell in row] for row in csv.reader(file) if row]
+
+    row_map = {row[0]: row[1:] for row in rows if len(row) >= 2}
+    if "日期" not in row_map or "開獎日期" not in row_map:
+        raise ValueError("M3 缺少 日期 / 開獎日期")
+
+    return parse_zh_date(row_map["日期"][0]), parse_zh_date(row_map["開獎日期"][0])
+
+
+def validate_m2_m3(m2_path: Path, m3_path: Path) -> tuple[str, str]:
+    m2_latest = latest_m2_date(m2_path)
+    m3_latest, m3_next = m3_dates(m3_path)
+    if m2_latest != m3_latest:
+        raise ValueError(f"M2/M3 最新期不一致。M2={m2_latest}；M3={m3_latest}")
+    return m2_latest, m3_next
+
+
 def validate_outputs() -> tuple[str, str]:
-    m2_df = pd.read_csv(M2_CSV, encoding="utf-8-sig")
+    latest_date, _ = validate_m2_m3(M2_CSV, M3_CSV)
     m4_df = pd.read_csv(M4_CSV, encoding="utf-8-sig")
     m6_df = pd.read_csv(M6_CSV, encoding="utf-8-sig")
-    latest_date = str(m2_df["ndate"].max())
     next_date = str(m4_df.iloc[-1]["next_draw_date"])
     latest_m6_date = str(m6_df["nDdate"].max())
     if not latest_date or not next_date:
         raise ValueError("輸出檔缺少最新/下期日期")
     if latest_m6_date != latest_date:
-        raise ValueError(f"M6 最新日期 {latest_m6_date} 與 M2 最新日期 {latest_date} 不一致")
+        raise ValueError(
+            f"M6 最新日期 {latest_m6_date} 與 M2 最新日期 {latest_date} 不一致"
+        )
     return latest_date, next_date
 
 
@@ -908,27 +1050,30 @@ def run() -> bool:
         records, next_draw = run_timed_step("馬會官方開獎資料下載", download_draws)
         run_timed_step("M1 最新紀錄", create_m1_latest_history, records)
         run_timed_step("M2 合併紀錄", create_m2_merged_history)
-        run_timed_step("M3 最新及下期資料", create_m3_prize_results, records, next_draw=next_draw)
-        run_timed_step("M4 摘要資料", create_m4_prize_summary, records, next_draw=next_draw)
-        run_timed_step("M6 派彩紀錄", create_m6_lotto_history_prize, records)
-        run_timed_step("同步到 WebApp", copy_to_webapp)
-        latest_date, next_date = run_timed_step("輸出核對", validate_outputs)
-    except Exception as exc:
-        message = (
-            f"{now_string()} ❌ Z4 執行失敗：{exc}\n"
-            f"{local_data_status()}\n"
-            "本次失敗未完成同步，WebApp 會保留上一次成功的 CSV。"
+        run_timed_step(
+            "M3 最新及下期資料", create_m3_prize_results, records, next_draw=next_draw
         )
+        run_timed_step(
+            "M4 摘要資料", create_m4_prize_summary, records, next_draw=next_draw
+        )
+        run_timed_step("M6 派彩紀錄", create_m6_lotto_history_prize, records)
+        latest_date, next_date = run_timed_step("同步前輸出核對", validate_outputs)
+        latest_with_week = format_zh_date_with_week(latest_date, iso_date=True)
+        next_with_week = format_zh_date_with_week(next_date, iso_date=True)
+        run_timed_step("同步到 WebApp", copy_to_webapp)
+    except Exception as exc:
+        message = f"{now_string()} ❌ Z4 執行失敗：{exc}\n{local_data_status()}"
         print(message)
         return False
 
     print(
         f"✅ Z4 全部步驟完成｜{now_string()}\n"
-        f"❤️ 最新一期：{latest_date}；💛 下期開獎：{next_date}；"
+        f"❤️ 最新一期：{latest_with_week}；💛 下期開獎：{next_with_week}；"
         f"💚 下期期號：{next_draw.draw_id if next_draw else '-'}\n"
         "✅已同步 M2/M3/M4/M6/M7 到 ⭕️ A_msk_lottery_data_folder。"
     )
     return True
 
+
 if __name__ == "__main__":
-    run()
+    raise SystemExit(0 if run() else 1)
