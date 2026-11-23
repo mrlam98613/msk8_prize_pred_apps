@@ -19,6 +19,6 @@ COPY . .
 RUN mkdir -p /data/member/member_bet_dbs
 
 # Dokploy 對外提供 Streamlit。
-EXPOSE 8502
+EXPOSE 8501
 
 CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
