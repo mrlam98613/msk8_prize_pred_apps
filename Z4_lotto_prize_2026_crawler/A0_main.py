@@ -38,8 +38,10 @@ import re
 import shutil
 import time
 from calendar import monthrange
+from contextlib import redirect_stdout
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
+from io import StringIO
 from pathlib import Path
 from typing import Any, Optional
 
@@ -199,31 +201,6 @@ query marksixDraw {
 }
 """
 
-MARKSIX_FIXTURES_QUERY = """
-fragment lotteryDrawsFragment on LotteryDraw {
-  id
-  year
-  no
-  drawDate
-  status
-  lotteryPool {
-    sell
-    estimatedPrize
-    totalInvestment
-  }
-  drawResult {
-    drawnNo
-    xDrawnNo
-  }
-}
-query marksixResult($startDate: String, $endDate: String, $drawType: LotteryDrawType) {
-  lotteryDraws(startDate: $startDate, endDate: $endDate, drawType: $drawType) {
-    ...lotteryDrawsFragment
-  }
-}
-"""
-
-
 @dataclass(frozen=True)
 class DrawRecord:
     draw_id: str
@@ -250,15 +227,18 @@ class NextDrawInfo:
 
 
 def ensure_folders() -> None:
+    """建立 Z4 資料與 WebApp 同步目錄。"""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     WEBAPP_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def now_string() -> str:
+    """回傳供執行紀錄使用的目前日期與時間。"""
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 
 def read_latest_date_from_csv(path: Path, date_column: str) -> str:
+    """從指定 CSV 日期欄讀取最新日期，供本機狀態報告使用。"""
     if not path.exists():
         return "-"
     try:
@@ -272,6 +252,7 @@ def read_latest_date_from_csv(path: Path, date_column: str) -> str:
 
 
 def local_data_status() -> str:
+    """整理本機資料檔的日期狀態，供更新失敗時排查。"""
     return "\n".join(
         [
             "本地資料狀態：",
@@ -284,6 +265,7 @@ def local_data_status() -> str:
 
 
 def describe_response(response: requests.Response) -> str:
+    """整理 HTTP 狀態、內容類型、請求編號及網址，供排查下載錯誤。"""
     request_id = (
         response.headers.get("x-request-id")
         or response.headers.get("X-Request-ID")
@@ -299,12 +281,14 @@ def describe_response(response: requests.Response) -> str:
 
 
 def run_timed_step(label: str, func, *args, **kwargs):
+    """執行指定步驟，印出完成時間並回傳步驟結果。"""
     result = func(*args, **kwargs)
     print(f"✅ {label} 完成｜{now_string()}")
     return result
 
 
 def make_session() -> requests.Session:
+    """建立帶有馬會請求標頭及重試設定的 HTTP 工作階段。"""
     session = requests.Session()
     retry = Retry(
         total=3,
@@ -322,12 +306,14 @@ def make_session() -> requests.Session:
 
 
 def next_month(year: int, month: int) -> tuple[int, int]:
+    """回傳下一個月的年份及月份，處理跨年。"""
     if month == 12:
         return year + 1, 1
     return year, month + 1
 
 
 def target_months(today: Optional[date] = None) -> list[tuple[int, int]]:
+    """回傳 M7 要抓取的月份，每月 20 日起納入下個月。"""
     today = today or date.today()
     months = [(today.year, today.month)]
     if today.day >= 20:
@@ -336,6 +322,7 @@ def target_months(today: Optional[date] = None) -> list[tuple[int, int]]:
 
 
 def read_existing_m7_dates() -> set[str]:
+    """讀取現有 M7 日期，優先使用 Z4 本地檔案，其次使用 WebApp 副本。"""
     path = M7_CSV if M7_CSV.exists() else WEBAPP_M7_CSV
     if not path.exists():
         return set()
@@ -351,6 +338,7 @@ def read_existing_m7_dates() -> set[str]:
 
 
 def should_download_m7(today: Optional[date] = None) -> bool:
+    """檢查 M7 日期標記，判斷今天是否尚未記錄。"""
     today = today or date.today()
     if not M7_ATTEMPT_DATE_FILE.exists():
         return True
@@ -359,11 +347,13 @@ def should_download_m7(today: Optional[date] = None) -> bool:
 
 
 def mark_m7_attempt(today: date) -> None:
+    """把本次 M7 更新的日期寫入日期標記檔。"""
     M7_ATTEMPT_DATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     M7_ATTEMPT_DATE_FILE.write_text(today.isoformat(), encoding="utf-8")
 
 
 def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str]]:
+    """用指定月份的起訖日期查詢馬會，回傳去重排序的攪珠日期。"""
     start_year, start_month = months[0]
     end_year, end_month = months[-1]
     start_date = f"{start_year}{start_month:02d}01"
@@ -374,7 +364,7 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str
         response = make_session().post(
             HKJC_GRAPHQL_URL,
             json={
-                "query": MARKSIX_FIXTURES_QUERY,
+                "query": MARKSIX_RESULT_QUERY,
                 "variables": {
                     "startDate": start_date,
                     "endDate": end_date,
@@ -411,6 +401,7 @@ def fetch_hkjc_fixture_dates(months: list[tuple[int, int]]) -> Optional[list[str
 
 
 def write_m7(dates: list[str]) -> None:
+    """將去重排序後的攪珠日期寫入 Z4 及 WebApp 的 M7 CSV。"""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     WEBAPP_DATA_DIR.mkdir(parents=True, exist_ok=True)
     rows = [{M7_FIELD: draw_date} for draw_date in sorted(set(dates))]
@@ -422,44 +413,53 @@ def write_m7(dates: list[str]) -> None:
 
 
 def download_fixtures_to_csv(today: Optional[date] = None) -> bool:
+    """檢查 M7 更新條件，取得所有目標月份的資料後更新 CSV。"""
     today = today or date.today()
     existing_dates = read_existing_m7_dates()
-    if not should_download_m7(today):
+    months = target_months(today)
+    month_prefixes = {f"{year:04d}-{month:02d}" for year, month in months}
+    if (
+        month_prefixes <= {value[:7] for value in existing_dates}
+        and not should_download_m7(today)
+    ):
         print("ℹ️ M7 馬會每月預定攬珠開獎日：今日已執行，正常跳過。")
         if existing_dates and not M7_CSV.exists():
             write_m7(sorted(existing_dates))
         return False
 
-    # 先記錄嘗試日期，確保即使馬會暫時回傳錯誤，同一天也不會重複請求。
-    mark_m7_attempt(today)
-    months = target_months(today)
     dates = fetch_hkjc_fixture_dates(months)
     if dates is None:
         print("⚠️ 未能取得馬會官方預定開獎日，保留現有 M7。")
         return False
 
-    refreshed_months = set(months)
-    preserved_dates = set()
-    for value in existing_dates:
-        try:
-            old_date = datetime.strptime(value, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if (old_date.year, old_date.month) not in refreshed_months:
-            preserved_dates.add(value)
+    refreshed_dates = {value for value in dates if value[:7] in month_prefixes}
+    refreshed_months = {value[:7] for value in refreshed_dates}
+    missing_months = month_prefixes - refreshed_months
+    if missing_months:
+        print(
+            f"⚠️ 馬會回應缺少 {', '.join(sorted(missing_months))} 的開獎日，"
+            "保留現有 M7。"
+        )
+        return False
 
-    write_m7(sorted(preserved_dates | set(dates)))
+    preserved_dates = {
+        value for value in existing_dates if value[:7] not in refreshed_months
+    }
+    write_m7(sorted(preserved_dates | refreshed_dates))
+    mark_m7_attempt(today)
     return True
 
 
 def clean_int(value: Any, default: int = 0) -> int:
+    """移除金額字串的逗號和貨幣符號後轉為整數，轉換失敗時回傳預設值。"""
     try:
         return int(float(str(value).replace(",", "").replace("$", "").strip()))
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return default
 
 
 def validate_draw(draw: dict[str, Any]) -> DrawRecord:
+    """驗證開獎日期、正選號和特別號，並整理派彩及投注額。"""
     draw_date = str(draw.get("drawDate") or draw.get("draw_date", "")).strip()[:10]
     datetime.strptime(draw_date, "%Y-%m-%d")
 
@@ -506,6 +506,7 @@ def validate_draw(draw: dict[str, Any]) -> DrawRecord:
 
 
 def parse_next_draw(draw: dict[str, Any]) -> Optional[NextDrawInfo]:
+    """解析下期的日期、期號、截止時間與獎金資料，日期無效時回傳 None。"""
     draw_date = str(draw.get("drawDate", "")).strip()[:10]
     if not draw_date:
         return None
@@ -536,6 +537,7 @@ def parse_next_draw(draw: dict[str, Any]) -> Optional[NextDrawInfo]:
 def download_draws(
     limit: int = DOWNLOAD_LIMIT,
 ) -> tuple[list[DrawRecord], Optional[NextDrawInfo]]:
+    """下載並驗證馬會開獎紀錄，必要時補抓下一期資料。"""
     session = make_session()
     response: Optional[requests.Response] = None
     try:
@@ -606,7 +608,7 @@ def download_next_draw_from_home(
         )
         response.raise_for_status()
         data = response.json()
-    except (requests.RequestException, ValueError):
+    except requests.RequestException, ValueError:
         return None
 
     if data.get("errors"):
@@ -740,6 +742,7 @@ def log_next_draw_status(next_draw: Optional[NextDrawInfo]) -> None:
 
 
 def draw_to_m2_row(record: DrawRecord) -> dict[str, Any]:
+    """將單期開獎紀錄轉成 M1 和 M2 共用的日期及 N1 至 N7 欄位。"""
     return {
         "ndate": record.draw_date,
         "N1": record.numbers[0],
@@ -753,6 +756,7 @@ def draw_to_m2_row(record: DrawRecord) -> dict[str, Any]:
 
 
 def create_m1_latest_history(records: list[DrawRecord]) -> None:
+    """將本次下載的開獎紀錄寫入 M1。"""
     rows = [draw_to_m2_row(record) for record in records]
     pd.DataFrame(rows, columns=M2_COLUMNS).to_csv(
         M1_CSV, index=False, encoding="utf-8-sig"
@@ -769,6 +773,7 @@ def load_existing_m2_history() -> pd.DataFrame:
 
 
 def create_m2_merged_history() -> None:
+    """合併 M1 與 M2 歷史資料，同日保留最新來源並按日期排序。"""
     base_df = load_existing_m2_history()
     m1_df = pd.read_csv(M1_CSV, encoding="utf-8-sig")
     for df in [base_df, m1_df]:
@@ -790,6 +795,7 @@ def create_m2_merged_history() -> None:
 def get_next_draw_date(
     last_draw_date: str, next_draw: Optional[NextDrawInfo] = None
 ) -> tuple[str, int]:
+    """回傳下期日期及星期，缺少官方資料時按週二、四、六推算。"""
     if next_draw:
         return next_draw.draw_date, next_draw.week
 
@@ -803,12 +809,14 @@ def get_next_draw_date(
 def estimate_next_prize_fund(
     latest: DrawRecord, next_draw: Optional[NextDrawInfo] = None
 ) -> int:
+    """取得下一期預計頭獎基金，資料缺失時回傳 0。"""
     if next_draw and next_draw.estimated_prize > 0:
         return next_draw.estimated_prize
     return 0
 
 
 def estimate_next_jackpot(next_draw: Optional[NextDrawInfo] = None) -> int:
+    """取得下一期多寶金額，資料缺失時回傳 0。"""
     if next_draw and next_draw.jackpot > 0:
         return next_draw.jackpot
     return 0
@@ -820,6 +828,7 @@ def format_next_money_or_warning(value: int) -> str:
 
 
 def record_to_m6_row(record: DrawRecord) -> dict[str, Any]:
+    """將單期號碼、首三獎中獎注數及每注派彩轉成 M6 欄位。"""
     return {
         "nDdate": record.draw_date,
         "N1": record.numbers[0],
@@ -839,6 +848,7 @@ def record_to_m6_row(record: DrawRecord) -> dict[str, Any]:
 
 
 def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
+    """合併並更新 M6 歷史派彩，同日保留最新資料。"""
     new_df = pd.DataFrame(
         [record_to_m6_row(record) for record in records], columns=M6_COLUMNS
     )
@@ -863,6 +873,7 @@ def create_m6_lotto_history_prize(records: list[DrawRecord]) -> None:
 def create_m4_prize_summary(
     records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None
 ) -> None:
+    """更新 M4 摘要，記錄最新一期號碼與下期日期及預計頭獎基金。"""
     latest = records[-1]
     next_draw_date, week = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     row = {
@@ -902,11 +913,13 @@ def create_m4_prize_summary(
 
 
 def format_zh_date(date_text: str) -> str:
+    """將 ISO 日期轉成中文年月日格式。"""
     dt = datetime.strptime(date_text, "%Y-%m-%d")
     return f"{dt.year}年{dt.month:02d}月{dt.day:02d}日"
 
 
 def format_zh_date_with_week(date_text: str, *, iso_date: bool = False) -> str:
+    """以中文或 ISO 日期格式顯示日期，並附上中文星期。"""
     dt = datetime.strptime(date_text, "%Y-%m-%d")
     week_text = "一二三四五六日"[dt.isoweekday() - 1]
     formatted_date = dt.date().isoformat() if iso_date else format_zh_date(date_text)
@@ -916,6 +929,7 @@ def format_zh_date_with_week(date_text: str, *, iso_date: bool = False) -> str:
 def create_m3_prize_results(
     records: list[DrawRecord], next_draw: Optional[NextDrawInfo] = None
 ) -> None:
+    """產生 M3，列出最新一期開獎派彩及下期攪珠資訊。"""
     latest = records[-1]
     next_draw_date, _ = get_next_draw_date(latest.draw_date, next_draw=next_draw)
     numbers_text = ", ".join(str(num) for num in [*latest.numbers, latest.extra_number])
@@ -972,6 +986,7 @@ def create_m3_prize_results(
 
 
 def copy_to_webapp() -> None:
+    """確認所有待同步 CSV 存在，然後複製到 WebApp 資料目錄。"""
     paths = (M2_CSV, M3_CSV, M4_CSV, M6_CSV, M7_CSV)
     for path in paths:
         if not path.exists():
@@ -981,10 +996,12 @@ def copy_to_webapp() -> None:
 
 
 def is_valid_date(value: object) -> bool:
+    """檢查去除空白後的值是否符合 YYYY-MM-DD 字串格式。"""
     return bool(DATE_PATTERN.match(str(value).strip()))
 
 
 def latest_m2_date(path: Path) -> str:
+    """讀取 M2 的 ndate 欄，找出符合日期格式的最新值。"""
     if not path.exists():
         raise FileNotFoundError(f"找不到 M2：{path}")
 
@@ -1000,6 +1017,7 @@ def latest_m2_date(path: Path) -> str:
 
 
 def parse_zh_date(value: str) -> str:
+    """從文字中擷取中文年月日並轉為 ISO 日期字串。"""
     match = ZH_DATE_PATTERN.search(value.strip())
     if match is None:
         raise ValueError(f"M3 日期格式不正確：{value}")
@@ -1007,6 +1025,7 @@ def parse_zh_date(value: str) -> str:
 
 
 def m3_dates(path: Path) -> tuple[str, str]:
+    """從 M3 讀取最新一期日期和下期開獎日期。"""
     if not path.exists():
         raise FileNotFoundError(f"找不到 M3：{path}")
 
@@ -1021,6 +1040,7 @@ def m3_dates(path: Path) -> tuple[str, str]:
 
 
 def validate_m2_m3(m2_path: Path, m3_path: Path) -> tuple[str, str]:
+    """核對 M2 與 M3 的最新開獎日期是否一致，並回傳最新與下期日期。"""
     m2_latest = latest_m2_date(m2_path)
     m3_latest, m3_next = m3_dates(m3_path)
     if m2_latest != m3_latest:
@@ -1029,6 +1049,7 @@ def validate_m2_m3(m2_path: Path, m3_path: Path) -> tuple[str, str]:
 
 
 def validate_outputs() -> tuple[str, str]:
+    """同步前核對 M2、M3 與 M6 的最新日期，並讀取 M4 的下期日期。"""
     latest_date, _ = validate_m2_m3(M2_CSV, M3_CSV)
     m4_df = pd.read_csv(M4_CSV, encoding="utf-8-sig")
     m6_df = pd.read_csv(M6_CSV, encoding="utf-8-sig")
@@ -1044,10 +1065,26 @@ def validate_outputs() -> tuple[str, str]:
 
 
 def run() -> bool:
+    """執行 M7 更新、官方資料下載、CSV 產生、核對與同步，回傳是否成功。"""
     ensure_folders()
+    separator = "-" * 40
     try:
-        run_timed_step("M7 馬會每月預定攬珠開獎日", download_fixtures_to_csv)
+        today = date.today()
+        with StringIO() as m7_log, redirect_stdout(m7_log):
+            run_timed_step("M7 馬會每月預定攬珠開獎日", download_fixtures_to_csv, today)
+            m7_output = m7_log.getvalue()
+        months = target_months(today)
+        if len(months) > 1:
+            year, month = months[-1]
+            next_month_prefix = f"{year:04d}-{month:02d}-"
+            if not any(
+                value.startswith(next_month_prefix) for value in read_existing_m7_dates()
+            ):
+                print(f"⚠️ M7 截至 {today} 仍未取得 {year} 年 {month} 月的開獎日期。")
+        print(m7_output, end="")
+        print(separator)
         records, next_draw = run_timed_step("馬會官方開獎資料下載", download_draws)
+        print(separator)
         run_timed_step("M1 最新紀錄", create_m1_latest_history, records)
         run_timed_step("M2 合併紀錄", create_m2_merged_history)
         run_timed_step(
@@ -1068,8 +1105,10 @@ def run() -> bool:
 
     print(
         f"✅ Z4 全部步驟完成｜{now_string()}\n"
+        f"{separator}\n"
         f"❤️ 最新一期：{latest_with_week}；💛 下期開獎：{next_with_week}；"
         f"💚 下期期號：{next_draw.draw_id if next_draw else '-'}\n"
+        f"{separator}\n"
         "✅已同步 M2/M3/M4/M6/M7 到 ⭕️ A_msk_lottery_data_folder。"
     )
     return True
